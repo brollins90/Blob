@@ -1,13 +1,23 @@
-﻿using System;
+﻿using Blob.Contracts.Models;
 using Blob.Contracts.Status;
+using Blob.Managers.Status;
+using System;
 
 namespace Blob.Services.Status
 {
     public class StatusService : IStatusService
     {
-        public void SendStatusToServer(string message)
+        private readonly IStatusManager _statusManager;
+
+        public StatusService(IStatusManager statusManager)
         {
-            Console.WriteLine("Got Status: {0}", message);
+            _statusManager = statusManager;
+        }
+
+        public void SendStatusToServer(StatusData statusData)
+        {
+            Console.WriteLine("Got Status: {0}", statusData);
+            _statusManager.StoreStatusData(statusData);
         }
     }
 }

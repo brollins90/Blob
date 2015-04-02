@@ -1,10 +1,17 @@
-﻿using System.ServiceModel.Activation;
+﻿using Ninject;
+using Ninject.Extensions.Wcf;
+using System.ServiceModel;
 
 namespace Blob.WcfHost.Infrastructure
 {
-    public class BlobHostFactory : ServiceHostFactory
+    public class BlobHostFactory : NinjectServiceHostFactory
     {
-        // todo: I know I will need a Custom Factory when I add DI so why not add it now
-        //public BlobHostFactory() : base() { }
+        public BlobHostFactory()
+            : base()
+        {
+            var kernel = new StandardKernel(new NinjectServiceModule());
+            kernel.Bind<ServiceHost>().To<NinjectServiceHost>();
+            SetKernel(kernel);
+        }
     }
 }

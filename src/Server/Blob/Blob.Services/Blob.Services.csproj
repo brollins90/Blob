@@ -42,6 +42,10 @@
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blob.Managers\Blob.Managers.csproj">
+      <Project>{bfb7e4d5-e72e-401d-b576-ae890e35bb52}</Project>
+      <Name>Blob.Managers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

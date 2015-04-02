@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using Blob.Contracts.Models;
+using System.ServiceModel;
 
 namespace Blob.Contracts.Status
 {
@@ -6,6 +7,6 @@ namespace Blob.Contracts.Status
     public interface IStatusService
     {
         [OperationContract(IsOneWay = true)]
-        void SendStatusToServer(string message);
+        void SendStatusToServer(StatusData statusData);
     }
 }

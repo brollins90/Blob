@@ -5,8 +5,8 @@ namespace Blob.Data
 {
     public class BlobDbContext : DbContext, IDbContext
     {
-        public BlobDbContext(string nameOrConnectionString)
-            : base(nameOrConnectionString)
+        public BlobDbContext(string connectionString)
+            : base(connectionString)
         {
         }
 
