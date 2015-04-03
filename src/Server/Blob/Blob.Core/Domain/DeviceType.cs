@@ -1,8 +1,8 @@
 ﻿
 namespace Blob.Core.Domain
 {
-    public enum DeviceType
+    public class DeviceType : BaseEntity
     {
-        COMPUTER
+        public string Name { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace Blob.WcfHost.Infrastructure
         {
             // data
             this.Bind<Blob.Data.IDbContext>().To<Blob.Data.BlobDbContext>()
-                .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDb"].ConnectionString);
+                .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
             this.Bind<Blob.Core.Data.IRepository<Blob.Core.Domain.Status>>().To<Blob.Data.EfRepository<Blob.Core.Domain.Status>>();
