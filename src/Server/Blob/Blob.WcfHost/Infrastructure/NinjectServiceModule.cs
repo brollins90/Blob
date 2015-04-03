@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using log4net;
+using Ninject.Modules;
 using System.Configuration;
 
 namespace Blob.WcfHost.Infrastructure
@@ -10,19 +11,24 @@ namespace Blob.WcfHost.Infrastructure
         /// </summary>
         public override void Load()
         {
+            LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
+
             // data
-            this.Bind<Blob.Data.IDbContext>().To<Blob.Data.BlobDbContext>()
+            Bind<Data.IDbContext>().To<Data.BlobDbContext>()
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
-            this.Bind<Blob.Core.Data.IRepository<Blob.Core.Domain.Status>>().To<Blob.Data.EfRepository<Blob.Core.Domain.Status>>();
+            Bind<Core.Data.IRepository<Core.Domain.Status>>().To<Data.EfRepository<Core.Domain.Status>>();
 
             // manager
-            this.Bind<Blob.Managers.Status.IStatusManager>().To<Blob.Managers.Status.StatusManager>();
+            Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
 
             // service
             // we wont use this layer, because it is specified in the config file.
-            this.Bind<Blob.Contracts.Status.IStatusService>().To<Blob.Services.Status.StatusService>();
+            Bind<Contracts.Status.IStatusService>().To<Services.Status.StatusService>();
+
+            // logging
+            Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));
         }
     }
 }
