@@ -1,20 +1,23 @@
-﻿using System;
+﻿using Blob.Core;
+using Blob.Core.Data;
+using log4net;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
-using Blob.Core;
-using Blob.Core.Data;
 
 namespace Blob.Data
 {
     public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
+        private readonly ILog _log;
         private readonly IDbContext _context;
         private IDbSet<T> _entities;
 
-        public EfRepository(IDbContext context)
+        public EfRepository(IDbContext context, ILog log)
         {
             _context = context;
+            _log = log;
         }
 
         public T GetById(long id)
@@ -24,6 +27,7 @@ namespace Blob.Data
 
         public void Insert(T entity)
         {
+            _log.Debug("Inserting " + entity);
             try
             {
                 if (entity == null)
@@ -48,6 +52,7 @@ namespace Blob.Data
 
         public void Update(T entity)
         {
+            _log.Debug("Updating " + entity);
             try
             {
                 if (entity == null)
@@ -71,6 +76,7 @@ namespace Blob.Data
 
         public void Delete(T entity)
         {
+            _log.Debug("Deleting " + entity);
             try
             {
                 if (entity == null)
