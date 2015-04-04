@@ -36,10 +36,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Blob.Contracts">
+      <HintPath>..\..\..\Server\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,7 +68,7 @@
       <DependentUpon>MonitorProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StaticDiskSpaceMonitor.cs" />
+    <Compile Include="ServiceDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

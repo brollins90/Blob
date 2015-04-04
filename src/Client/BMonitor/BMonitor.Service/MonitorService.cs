@@ -35,7 +35,9 @@ namespace BMonitor.Service
 
         protected override void OnStart(string[] args)
         {
-            _manager = new MonitorManager("");
+            Guid deviceId = Guid.Parse("43116fba-c370-4880-8a98-826176219ba6");
+            string path = "";
+            _manager = new MonitorManager(deviceId, path);
 
             _monitorServiceThread = new Thread(RunBMonitor);
             _monitorServiceThread.Start();
