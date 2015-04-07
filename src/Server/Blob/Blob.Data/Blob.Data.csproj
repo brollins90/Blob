@@ -59,6 +59,14 @@
     <Compile Include="Migrations\201504032145135_InitialCreate.Designer.cs">
       <DependentUpon>201504032145135_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504070247053_AddedAlertLevel.cs" />
+    <Compile Include="Migrations\201504070247053_AddedAlertLevel.Designer.cs">
+      <DependentUpon>201504070247053_AddedAlertLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504070250145_RemovedPreviousValue.cs" />
+    <Compile Include="Migrations\201504070250145_RemovedPreviousValue.Designer.cs">
+      <DependentUpon>201504070250145_RemovedPreviousValue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -76,6 +84,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201504032145135_InitialCreate.resx">
       <DependentUpon>201504032145135_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504070247053_AddedAlertLevel.resx">
+      <DependentUpon>201504070247053_AddedAlertLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504070250145_RemovedPreviousValue.resx">
+      <DependentUpon>201504070250145_RemovedPreviousValue.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

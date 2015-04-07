@@ -24,7 +24,6 @@ namespace Blob.Managers.Status
                                          DeviceId = statusData.DeviceId,
                                          MonitorDescription = statusData.MonitorDescription,
                                          MonitorName = statusData.MonitorName,
-                                         PreviousValue = statusData.PreviousValue,
                                          TimeGenerated = statusData.TimeGenerated,
                                          TimeSent = statusData.TimeSent
                                      });

@@ -16,6 +16,9 @@ namespace Blob.Contracts.Models
         public string MonitorDescription { get; set; }
 
         [DataMember]
+        public int AlertLevel { get; set; }
+
+        [DataMember]
         public DateTime TimeGenerated { get; set; }
 
         [DataMember]
@@ -24,26 +27,23 @@ namespace Blob.Contracts.Models
         [DataMember]
         public string CurrentValue { get; set; }
 
-        [DataMember]
-        public string PreviousValue { get; set; }
-
         public override string ToString()
         {
             return string.Format("StatusMessage:\n"
                 + "DeviceId: {0}\n"
                 + "MonitorName: {1}\n"
                 + "MonitorDescription: {2}\n"
-                + "TimeGenerated: {3}\n"
-                + "TimeSent: {4}\n"
-                + "CurrentValue: {5}\n"
-                + "PreviousValue{6}",
+                + "AlertLevel: {3}\n"
+                + "TimeGenerated: {4}\n"
+                + "TimeSent: {5}\n"
+                + "CurrentValue: {6}\n",
                                  DeviceId,
                                  MonitorName,
                                  MonitorDescription,
+                                 AlertLevel,
                                  TimeGenerated,
                                  TimeSent,
-                                 CurrentValue,
-                                 PreviousValue);
+                                 CurrentValue);
         }
     }
 }
