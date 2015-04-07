@@ -35,7 +35,7 @@ namespace Blob.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public new IDbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
+        public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
         {
             return base.Set<TEntity>();
         }
