@@ -2,13 +2,15 @@
 using Blob.Core.Data;
 using log4net;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Blob.Data
 {
-    public class EfRepository<T> : IRepository<T> where T : BaseEntity
+    public class EfRepository<T> : IRepository<T> where T : class
     {
         private readonly ILog _log;
         private readonly IDbContext _context;
@@ -20,9 +22,53 @@ namespace Blob.Data
             _log = log;
         }
 
-        public T GetById(long id)
+        public virtual IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
         {
-            return Entities.Find(id);
+            List<T> list;
+
+            IQueryable<T> dbQuery = _context.Set<T>();
+
+            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
+            {
+                dbQuery = dbQuery.Include<T, object>(navigationProperty);
+            }
+            list = dbQuery
+                .AsNoTracking()
+                .ToList<T>();
+            return list;
+        }
+
+        public IList<T> GetList(Func<T, bool> where, params Expression<Func<T, object>>[] navigationProperties)
+        {
+            List<T> list;
+
+            IQueryable<T> dbQuery = _context.Set<T>();
+
+            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
+            {
+                dbQuery = dbQuery.Include<T, object>(navigationProperty);
+            }
+            list = dbQuery
+                .AsNoTracking()
+                .Where(where)
+                .ToList<T>();
+            return list;
+        }
+
+        public T GetSingle(Func<T, bool> where, params Expression<Func<T, object>>[] navigationProperties)
+        {
+            T item = null;
+
+            IQueryable<T> dbQuery = _context.Set<T>();
+
+            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
+            {
+                dbQuery = dbQuery.Include<T, object>(navigationProperty);
+            }
+            item = dbQuery
+                .AsNoTracking()
+                .FirstOrDefault(where);
+            return item;
         }
 
         public void Insert(T entity)

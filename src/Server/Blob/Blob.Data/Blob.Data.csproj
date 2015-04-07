@@ -68,6 +68,10 @@
     <Compile Include="Migrations\201504070250145_RemovedPreviousValue.Designer.cs">
       <DependentUpon>201504070250145_RemovedPreviousValue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504072003214_RemoveBaseEntity.cs" />
+    <Compile Include="Migrations\201504072003214_RemoveBaseEntity.Designer.cs">
+      <DependentUpon>201504072003214_RemoveBaseEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -91,6 +95,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504070250145_RemovedPreviousValue.resx">
       <DependentUpon>201504070250145_RemovedPreviousValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504072003214_RemoveBaseEntity.resx">
+      <DependentUpon>201504072003214_RemoveBaseEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,7 +12,9 @@ namespace Blob.Data
 
         public BlobDbContext()
         {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType); 
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
         }
 
@@ -20,6 +22,8 @@ namespace Blob.Data
             : base(connectionString)
         {
             _log = log;
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
         }
 
@@ -35,7 +39,7 @@ namespace Blob.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
+        public new DbSet<TEntity> Set<TEntity>() where TEntity : class
         {
             return base.Set<TEntity>();
         }

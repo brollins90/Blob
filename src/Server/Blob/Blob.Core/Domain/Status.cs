@@ -2,8 +2,9 @@
 
 namespace Blob.Core.Domain
 {
-    public class Status : BaseEntity
+    public class Status
     {
+        public long Id { get; set; }
         public Guid DeviceId { get; set; }
         public string MonitorName { get; set; }
         public string MonitorDescription { get; set; }
