@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace BMonitor.Service
 {
-    public delegate void UseServiceDelegate<T>(T proxy);
+    public delegate void UseServiceDelegate<in T>(T proxy);
 
     public static class Service<T>
     {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Blob.Contracts.Models;
 
 namespace BMonitor.Common.Interfaces
 {
     public interface IMonitor
     {
-        string Execute();
+        StatusData Execute();
     }
 }

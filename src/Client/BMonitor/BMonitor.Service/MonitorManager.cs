@@ -9,7 +9,7 @@ namespace BMonitor.Service
 {
     public class MonitorManager
     {
-        private Guid _deviceId;
+        private readonly Guid _deviceId;
         private string _monitorPath;
         private readonly ICollection<IMonitor> _monitors;
 
@@ -32,18 +32,11 @@ namespace BMonitor.Service
         {
             foreach (IMonitor monitor in _monitors)
             {
-                string currentStatus = monitor.Execute();
-                Console.WriteLine(currentStatus);
+                StatusData statusData = monitor.Execute();
+                Console.WriteLine(statusData.CurrentValue);
 
-                StatusData statusData = new StatusData()
-                                        {
-                                            CurrentValue = currentStatus,
-                                            DeviceId = _deviceId,
-                                            MonitorDescription = "Free Disk Space: ",
-                                            MonitorName = "FreeDiskSpace",
-                                            TimeGenerated = DateTime.Now,
-                                            TimeSent = DateTime.Now
-                                        };
+                statusData.DeviceId = _deviceId;
+                statusData.TimeSent = DateTime.Now;
 
                 Service<IStatusService>.Use(statusService =>
                 {

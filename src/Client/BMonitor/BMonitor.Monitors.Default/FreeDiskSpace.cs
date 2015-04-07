@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using Blob.Contracts.Models;
 using BMonitor.Common.Extensions;
 using BMonitor.Common.Interfaces;
+using System;
+using System.IO;
 
 namespace BMonitor.Monitors.Default
 {
@@ -11,13 +13,23 @@ namespace BMonitor.Monitors.Default
             // todo: create a config
         }
 
-        public string Execute()
+        public StatusData Execute()
         {
+            StatusData status = new StatusData()
+            {
+                MonitorDescription = "Free Disk Space: ",
+                MonitorName = "FreeDiskSpace",
+                TimeGenerated = DateTime.Now
+            };
+
             DriveInfo driveInfo = new DriveInfo(@"C:");
             long freeSpace = driveInfo.TotalFreeSpace;
             long totalSize = driveInfo.TotalSize;
 
-            return "Free Disk Space: " + freeSpace.ToPrettySize() + " " + ((double)freeSpace / (double)totalSize).ToPrettyPercent();
+            status.CurrentValue = "Free Disk Space: " + freeSpace.ToPrettySize() + " " + ((double) freeSpace/(double) totalSize).ToPrettyPercent();
+
+            return status;
+
         }
     }
 }
