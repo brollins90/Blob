@@ -25,18 +25,32 @@ namespace BMonitor.Service
 
         public void Initialize()
         {
-            _monitors.Add(new FreeDiskSpace());
+            _monitors.Add(new FreeDiskSpace(
+                driveLetter: "C",
+                driveDescription: "OS",
+                unitOfMeasure: UnitOfMeasure.PERCENT,
+                warningLevel: 20,
+                criticalLevel: 10));
         }
 
         public void MonitorTick()
         {
             foreach (IMonitor monitor in _monitors)
             {
-                StatusData statusData = monitor.Execute();
-                Console.WriteLine(statusData.CurrentValue);
+                MonitorResult result = monitor.Execute();
+                StatusData statusData = new StatusData()
+                             {
+                                 AlertLevel = (int) result.AlertLevel,
+                                 CurrentValue = result.CurrentValue,
+                                 MonitorDescription = result.MonitorDescription,
+                                 MonitorName = result.MonitorName,
+                                 TimeGenerated = result.TimeGenerated,
 
-                statusData.DeviceId = _deviceId;
-                statusData.TimeSent = DateTime.Now;
+                                 DeviceId = _deviceId,
+                                 TimeSent = DateTime.Now
+                             };
+
+                Console.WriteLine(statusData.CurrentValue);
 
                 Service<IStatusService>.Use(statusService =>
                 {

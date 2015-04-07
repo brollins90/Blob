@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Blob.Contracts">
-      <HintPath>..\..\..\Server\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,7 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Prettify.cs" />
+    <Compile Include="Interfaces\AlertLevel.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />
+    <Compile Include="Interfaces\MonitorResult.cs" />
+    <Compile Include="Interfaces\UnitOfMeasure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
