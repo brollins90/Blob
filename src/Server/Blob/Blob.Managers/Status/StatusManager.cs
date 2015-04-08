@@ -1,6 +1,7 @@
 ﻿using Blob.Contracts.Models;
 using Blob.Core.Data;
 using log4net;
+using System.Threading.Tasks;
 
 namespace Blob.Managers.Status
 {
@@ -17,7 +18,7 @@ namespace Blob.Managers.Status
             _statusPerfRepository = statusPerfRepository;
         }
 
-        public async void StoreStatusData(StatusData statusData)
+        public async Task StoreStatusData(StatusData statusData)
         {
             _log.Debug("Storing status data " + statusData);
             await _statusRepository.InsertAsync(new Core.Domain.Status()
@@ -31,7 +32,7 @@ namespace Blob.Managers.Status
                                      });
         }
 
-        public async void StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData)
+        public async Task StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData)
         {
             _log.Debug("Storing status perf data " + statusPerformanceData);
 

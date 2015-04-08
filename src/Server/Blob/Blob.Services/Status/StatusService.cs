@@ -2,6 +2,7 @@
 using Blob.Contracts.Status;
 using Blob.Managers.Status;
 using log4net;
+using System.Threading.Tasks;
 
 namespace Blob.Services.Status
 {
@@ -16,16 +17,16 @@ namespace Blob.Services.Status
             _statusManager = statusManager;
         }
 
-        public void SendStatusToServer(StatusData statusData)
+        public async Task SendStatusToServer(StatusData statusData)
         {
             _log.Debug("Server received status: " + statusData);
-            _statusManager.StoreStatusData(statusData);
+            await _statusManager.StoreStatusData(statusData);
         }
 
-        public void SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
+        public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
         {
             _log.Debug("Server received perf: " + statusPerformanceData);
-            _statusManager.StoreStatusPerformanceData(statusPerformanceData);
+            await _statusManager.StoreStatusPerformanceData(statusPerformanceData);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Blob.Contracts.Models;
+using System.Threading.Tasks;
 
 namespace Blob.Managers.Status
 {
     public interface IStatusManager
     {
-        void StoreStatusData(StatusData statusData);
-        void StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData);
+        Task StoreStatusData(StatusData statusData);
+        Task StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData);
     }
 }

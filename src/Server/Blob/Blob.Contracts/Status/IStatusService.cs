@@ -1,5 +1,6 @@
 ﻿using Blob.Contracts.Models;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace Blob.Contracts.Status
 {
@@ -7,9 +8,9 @@ namespace Blob.Contracts.Status
     public interface IStatusService
     {
         [OperationContract(IsOneWay = true)]
-        void SendStatusToServer(StatusData statusData);
+        Task SendStatusToServer(StatusData statusData);
 
         [OperationContract(IsOneWay = true)]
-        void SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData);
+        Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData);
     }
 }
