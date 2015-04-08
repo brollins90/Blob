@@ -14,11 +14,12 @@ namespace Blob.WcfHost.Infrastructure
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
 
             // data
-            Bind<Data.IDbContext>().To<Data.BlobDbContext>()
+            Bind<Data.BlobDbContext>().ToSelf()//.InScope()
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
             Bind<Core.Data.IRepository<Core.Domain.Status>>().To<Data.EfRepository<Core.Domain.Status>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.Status>>().To<Data.EfRepositoryAsync<Core.Domain.Status>>();
 
             // manager
             Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();

@@ -1,18 +1,17 @@
-﻿using Blob.Core;
-using Blob.Data.Mapping;
+﻿using Blob.Data.Mapping;
 using Blob.Data.Migrations;
 using log4net;
 using System.Data.Entity;
 
 namespace Blob.Data
 {
-    public class BlobDbContext : DbContext, IDbContext
+    public class BlobDbContext : DbContext
     {
         private readonly ILog _log;
 
         public BlobDbContext()
         {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType); 
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());

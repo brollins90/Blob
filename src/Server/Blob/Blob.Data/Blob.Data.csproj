@@ -47,9 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlobDbContext.cs" />
-    <Compile Include="EfStatusRepositoryAsync.cs" />
     <Compile Include="EfRepository.cs" />
-    <Compile Include="IDbContext.cs" />
+    <Compile Include="EfRepositoryAsync.cs" />
+    <Compile Include="EfStatusRepositoryAsync.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />

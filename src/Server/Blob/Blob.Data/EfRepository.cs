@@ -1,5 +1,4 @@
-﻿using Blob.Core;
-using Blob.Core.Data;
+﻿using Blob.Core.Data;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -13,10 +12,10 @@ namespace Blob.Data
     public class EfRepository<T> : IRepository<T> where T : class
     {
         private readonly ILog _log;
-        private readonly IDbContext _context;
+        private readonly BlobDbContext _context;
         private IDbSet<T> _entities;
 
-        public EfRepository(IDbContext context, ILog log)
+        public EfRepository(BlobDbContext context, ILog log)
         {
             _context = context;
             _log = log;
@@ -28,13 +27,11 @@ namespace Blob.Data
 
             IQueryable<T> dbQuery = _context.Set<T>();
 
-            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
-            {
-                dbQuery = dbQuery.Include<T, object>(navigationProperty);
-            }
+            // include the specified navigation properties
+            dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include(navigationProperty));
             list = dbQuery
                 .AsNoTracking()
-                .ToList<T>();
+                .ToList();
             return list;
         }
 
@@ -44,27 +41,23 @@ namespace Blob.Data
 
             IQueryable<T> dbQuery = _context.Set<T>();
 
-            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
-            {
-                dbQuery = dbQuery.Include<T, object>(navigationProperty);
-            }
+            // include the specified navigation properties
+            dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include(navigationProperty));
             list = dbQuery
                 .AsNoTracking()
                 .Where(where)
-                .ToList<T>();
+                .ToList();
             return list;
         }
 
         public T GetSingle(Func<T, bool> where, params Expression<Func<T, object>>[] navigationProperties)
         {
-            T item = null;
+            T item;
 
             IQueryable<T> dbQuery = _context.Set<T>();
 
-            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
-            {
-                dbQuery = dbQuery.Include<T, object>(navigationProperty);
-            }
+            // include the specified navigation properties
+            dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include(navigationProperty));
             item = dbQuery
                 .AsNoTracking()
                 .FirstOrDefault(where);
