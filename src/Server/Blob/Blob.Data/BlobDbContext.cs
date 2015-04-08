@@ -33,14 +33,10 @@ namespace Blob.Data
             modelBuilder.Configurations.Add(new DeviceMap());
             modelBuilder.Configurations.Add(new DeviceTypeMap());
             modelBuilder.Configurations.Add(new StatusMap());
+            modelBuilder.Configurations.Add(new StatusPerfMap());
             modelBuilder.Configurations.Add(new UserMap());
 
             base.OnModelCreating(modelBuilder);
-        }
-
-        public new DbSet<TEntity> Set<TEntity>() where TEntity : class
-        {
-            return base.Set<TEntity>();
         }
     }
 }

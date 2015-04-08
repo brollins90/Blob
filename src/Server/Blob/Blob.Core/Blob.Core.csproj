@@ -37,14 +37,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseEntity.cs" />
     <Compile Include="Data\IRepositoryAsync.cs" />
     <Compile Include="Data\IRepository.cs" />
-    <Compile Include="Data\IStatusRepositoryAsync.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Device.cs" />
     <Compile Include="Domain\DeviceType.cs" />
     <Compile Include="Domain\Status.cs" />
+    <Compile Include="Domain\StatusPerf.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

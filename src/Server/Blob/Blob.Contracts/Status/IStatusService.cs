@@ -8,5 +8,8 @@ namespace Blob.Contracts.Status
     {
         [OperationContract(IsOneWay = true)]
         void SendStatusToServer(StatusData statusData);
+
+        [OperationContract(IsOneWay = true)]
+        void SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData);
     }
 }

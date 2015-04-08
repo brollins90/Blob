@@ -46,15 +46,16 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlobDbConfiguration.cs" />
     <Compile Include="BlobDbContext.cs" />
     <Compile Include="EfRepository.cs" />
     <Compile Include="EfRepositoryAsync.cs" />
-    <Compile Include="EfStatusRepositoryAsync.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
     <Compile Include="Mapping\StatusMap.cs" />
+    <Compile Include="Mapping\StatusPerfMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
     <Compile Include="Migrations\201504032145135_InitialCreate.cs" />
     <Compile Include="Migrations\201504032145135_InitialCreate.Designer.cs">
@@ -71,6 +72,10 @@
     <Compile Include="Migrations\201504072003214_RemoveBaseEntity.cs" />
     <Compile Include="Migrations\201504072003214_RemoveBaseEntity.Designer.cs">
       <DependentUpon>201504072003214_RemoveBaseEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504080350002_AddedStatusPerf.cs" />
+    <Compile Include="Migrations\201504080350002_AddedStatusPerf.Designer.cs">
+      <DependentUpon>201504080350002_AddedStatusPerf.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504072003214_RemoveBaseEntity.resx">
       <DependentUpon>201504072003214_RemoveBaseEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504080350002_AddedStatusPerf.resx">
+      <DependentUpon>201504080350002_AddedStatusPerf.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

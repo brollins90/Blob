@@ -2,7 +2,6 @@
 using Blob.Contracts.Status;
 using Blob.Managers.Status;
 using log4net;
-using System;
 
 namespace Blob.Services.Status
 {
@@ -21,6 +20,12 @@ namespace Blob.Services.Status
         {
             _log.Debug("Server received status: " + statusData);
             _statusManager.StoreStatusData(statusData);
+        }
+
+        public void SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
+        {
+            _log.Debug("Server received perf: " + statusPerformanceData);
+            _statusManager.StoreStatusPerformanceData(statusPerformanceData);
         }
     }
 }

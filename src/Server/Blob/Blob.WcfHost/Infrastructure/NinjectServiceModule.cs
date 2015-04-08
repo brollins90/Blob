@@ -14,12 +14,12 @@ namespace Blob.WcfHost.Infrastructure
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
 
             // data
-            Bind<Data.BlobDbContext>().ToSelf()//.InScope()
+            Bind<Data.BlobDbContext>().ToSelf()//.InRequestScope() // todo: request scope is not working.  see if this is what i really want.
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
-            Bind<Core.Data.IRepository<Core.Domain.Status>>().To<Data.EfRepository<Core.Domain.Status>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Status>>().To<Data.EfRepositoryAsync<Core.Domain.Status>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.StatusPerf>>().To<Data.EfRepositoryAsync<Core.Domain.StatusPerf>>();
 
             // manager
             Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
