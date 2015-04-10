@@ -1,5 +1,6 @@
 ﻿using Blob.Contracts.Models;
 using Blob.Core.Data;
+using Blob.Managers.Extensions;
 using log4net;
 using System.Threading.Tasks;
 
@@ -40,18 +41,17 @@ namespace Blob.Managers.Status
             {
                 await _statusPerfRepository.InsertAsync(new Core.Domain.StatusPerf()
                                                         {
-                                                            Critical = value.Critical,
+                                                            Critical = value.Critical.ToNullableDecimal(),
                                                             DeviceId = statusPerformanceData.DeviceId,
                                                             Label = value.Label,
-                                                            Max = value.Max,
-                                                            Min = value.Min,
+                                                            Max = value.Max.ToNullableDecimal(),
+                                                            Min = value.Min.ToNullableDecimal(),
                                                             MonitorDescription = statusPerformanceData.MonitorDescription,
                                                             MonitorName = statusPerformanceData.MonitorName,
                                                             TimeGenerated = statusPerformanceData.TimeGenerated,
-                                                            TimeSent = statusPerformanceData.TimeSent,
                                                             UnitOfMeasure = value.UnitOfMeasure,
-                                                            Value = value.Value,
-                                                            Warning = value.Warning
+                                                            Value = value.Value.ToDecimal(),
+                                                            Warning = value.Warning.ToNullableDecimal()
                                                         });
             }
         }

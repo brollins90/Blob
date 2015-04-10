@@ -1,11 +1,11 @@
+using System;
+
 namespace Blob.Data.Migrations
 {
-    using System;
-    using System.Data.Entity;
+    using Core.Domain;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Blob.Data.BlobDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<BlobDbContext>
     {
         public Configuration()
         {
@@ -13,20 +13,45 @@ namespace Blob.Data.Migrations
             ContextKey = "Blob.Data.BlobDbContext";
         }
 
-        protected override void Seed(Blob.Data.BlobDbContext context)
+        protected override void Seed(BlobDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            // DeviceTypes
+            DeviceType testDeviceTypeWinDesktop = new DeviceType() { Value = "WindowsDesktop" };
+            DeviceType testDeviceTypeWinServer = new DeviceType() { Value = "WindowsServer" };
+            context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinDesktop);
+            context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinServer);
+            context.SaveChanges();
+
+            // Customers
+            Customer testCustomer1 = new Customer() { Name = "TestCustomer1" };
+            context.Set<Customer>().AddOrUpdate(x => x.Name, testCustomer1);
+            context.SaveChanges();
+
+            // Devices
+            Device testDevice1 = new Device()
+                                 {
+                                     Id = Guid.Parse("43116fba-c370-4880-8a98-826176219ba6"),
+                                     CustomerId = testCustomer1.Id,
+                                     DeviceName = "Test Windows Desktop 1",
+                                     DeviceTypeId = testDeviceTypeWinDesktop.Id
+                                 };
+            context.Set<Device>().AddOrUpdate(x => x.Id, testDevice1);
+            context.SaveChanges();
+
+            // Status
+
+            // StatusPerf
+
+            // User
+            User testUser1 = new User()
+                             {
+                                 CustomerId = testCustomer1.Id,
+                                 Username = "user1"
+                             };
+            context.Set<User>().AddOrUpdate(x => x.Id, testUser1);
+            context.SaveChanges();
         }
     }
 }

@@ -77,6 +77,18 @@
     <Compile Include="Migrations\201504080350002_AddedStatusPerf.Designer.cs">
       <DependentUpon>201504080350002_AddedStatusPerf.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504091923285_ChangedDeviceIdToGuid.cs" />
+    <Compile Include="Migrations\201504091923285_ChangedDeviceIdToGuid.Designer.cs">
+      <DependentUpon>201504091923285_ChangedDeviceIdToGuid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504100259313_ReMappedEntities.cs" />
+    <Compile Include="Migrations\201504100259313_ReMappedEntities.Designer.cs">
+      <DependentUpon>201504100259313_ReMappedEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504100336026_AddedGeneratedKeys.cs" />
+    <Compile Include="Migrations\201504100336026_AddedGeneratedKeys.Designer.cs">
+      <DependentUpon>201504100336026_AddedGeneratedKeys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -106,6 +118,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504080350002_AddedStatusPerf.resx">
       <DependentUpon>201504080350002_AddedStatusPerf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504091923285_ChangedDeviceIdToGuid.resx">
+      <DependentUpon>201504091923285_ChangedDeviceIdToGuid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504100259313_ReMappedEntities.resx">
+      <DependentUpon>201504100259313_ReMappedEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504100336026_AddedGeneratedKeys.resx">
+      <DependentUpon>201504100336026_AddedGeneratedKeys.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
