@@ -1,4 +1,5 @@
-﻿using Blob.Contracts.Models;
+﻿using System;
+using Blob.Contracts.Models;
 using Blob.Core.Data;
 using log4net;
 using System.Threading.Tasks;
@@ -30,10 +31,15 @@ namespace Blob.Managers.Registration
 
             if (d != null)
             {
-                // this device has already been registered
+                // todo: handle this case better.  We shouldnt just blow up
+                throw new InvalidOperationException("This device has already been registered.");
             }
 
             // create device objects
+            //Device newDevice = new Device()
+            //                   {
+            //                       Customer = message.
+            //                   }
 
             // save device objects
 
