@@ -20,7 +20,7 @@ namespace Blob.Services.Registration
         public async Task<RegistrationInformation> Register(RegistrationMessage message)
         {
             _log.Debug("Server received registration message: " + message);
-            return await _registrationManager.RegisterDevice(message);
+            return await _registrationManager.RegisterDevice(message).ConfigureAwait(false);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Blob.Managers.Status
                                          MonitorName = statusData.MonitorName,
                                          TimeGenerated = statusData.TimeGenerated,
                                          TimeSent = statusData.TimeSent
-                                     });
+                                     }).ConfigureAwait(false);
         }
 
         public async Task StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData)
@@ -52,7 +52,7 @@ namespace Blob.Managers.Status
                                                             UnitOfMeasure = value.UnitOfMeasure,
                                                             Value = value.Value.ToDecimal(),
                                                             Warning = value.Warning.ToNullableDecimal()
-                                                        });
+                                                        }).ConfigureAwait(false);
             }
         }
     }

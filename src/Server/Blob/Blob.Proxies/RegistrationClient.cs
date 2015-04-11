@@ -20,7 +20,7 @@ namespace Blob.Proxies
 
         public async Task<RegistrationInformation> Register(RegistrationMessage message)
         {
-            return await Channel.Register(message);
+            return await Channel.Register(message).ConfigureAwait(false);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Blob.Managers.Registration
 
 
             // check if device is already defined
-            Device d = await _deviceRepository.GetSingleAsync(x => x.Id.ToString().Equals(message.DeviceId));
+            Device d = await _deviceRepository.GetSingleAsync(x => x.Id.ToString().Equals(message.DeviceId)).ConfigureAwait(true);
 
             if (d != null)
             {
@@ -54,7 +54,7 @@ namespace Blob.Managers.Registration
             //    MonitorName = statusData.MonitorName,
             //    TimeGenerated = statusData.TimeGenerated,
             //    TimeSent = statusData.TimeSent
-            //});
+            //}).ConfigureAwait(false);
             return null;
         }
     }

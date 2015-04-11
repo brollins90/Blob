@@ -33,7 +33,7 @@ namespace Blob.Data
 
                 // include the specified navigation properties
                 dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include(navigationProperty));
-                list = await dbQuery.AsNoTracking().ToListAsync();
+                list = await dbQuery.AsNoTracking().ToListAsync().ConfigureAwait(true);
 
                 stopwatch.Stop();
                 _log.Debug(string.Format("GetAllAsync: Timespan:{0}", stopwatch.Elapsed));
@@ -57,7 +57,7 @@ namespace Blob.Data
 
                 // include the specified navigation properties
                 dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include(navigationProperty));
-                list = await dbQuery.AsNoTracking().Where(predicate).ToListAsync();
+                list = await dbQuery.AsNoTracking().Where(predicate).ToListAsync().ConfigureAwait(true);
 
                 stopwatch.Stop();
                 _log.Debug(string.Format("GetListAsync: Timespan:{0}, predicate:{1}", stopwatch.Elapsed, predicate));
@@ -81,7 +81,7 @@ namespace Blob.Data
 
                 // include the specified navigation properties
                 dbQuery = navigationProperties.Aggregate(dbQuery, (current, navigationProperty) => current.Include(navigationProperty));
-                item = await dbQuery.AsNoTracking().FirstOrDefaultAsync(predicate);
+                item = await dbQuery.AsNoTracking().FirstOrDefaultAsync(predicate).ConfigureAwait(true);
 
                 stopwatch.Stop();
                 _log.Debug(string.Format("GetListAsync: Timespan:{0}, predicate:{1}", stopwatch.Elapsed, predicate));
@@ -101,7 +101,7 @@ namespace Blob.Data
             try
             {
                 Entities.Add(entity);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(true);
 
                 stopwatch.Stop();
                 _log.Debug(string.Format("InsertAsync: Timespan:{0}, entity:{1}", stopwatch.Elapsed, entity));
@@ -122,7 +122,7 @@ namespace Blob.Data
                 var entry = _context.Entry(entity);
                 Entities.Attach(entity);
                 entry.State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(true);
 
                 stopwatch.Stop();
                 _log.Debug(string.Format("UpdateAsync: Timespan:{0}, entity:{1}", stopwatch.Elapsed, entity));
@@ -140,9 +140,9 @@ namespace Blob.Data
 
             try
             {
-                T item = await Entities.FindAsync(entity);
+                T item = await Entities.FindAsync(entity).ConfigureAwait(true);
                 Entities.Remove(item);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(true);
 
                 stopwatch.Stop();
                 _log.Debug(string.Format("DeleteAsync: Timespan:{0}, entity:{1}", stopwatch.Elapsed, entity));

@@ -22,13 +22,13 @@ namespace Blob.Services.Status
         public async Task SendStatusToServer(StatusData statusData)
         {
             _log.Debug("Server received status: " + statusData);
-            await _statusManager.StoreStatusData(statusData);
+            await _statusManager.StoreStatusData(statusData).ConfigureAwait(false);
         }
 
         public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
         {
             _log.Debug("Server received perf: " + statusPerformanceData);
-            await _statusManager.StoreStatusPerformanceData(statusPerformanceData);
+            await _statusManager.StoreStatusPerformanceData(statusPerformanceData).ConfigureAwait(false);
         }
     }
 }

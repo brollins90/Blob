@@ -20,12 +20,12 @@ namespace Blob.Proxies
 
         public async Task SendStatusToServer(StatusData statusData)
         {
-            await Channel.SendStatusToServer(statusData);
+            await Channel.SendStatusToServer(statusData).ConfigureAwait(false);
         }
 
         public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
         {
-            await Channel.SendStatusPerformanceToServer(statusPerformanceData);
+            await Channel.SendStatusPerformanceToServer(statusPerformanceData).ConfigureAwait(false);
         }
     }
 }
