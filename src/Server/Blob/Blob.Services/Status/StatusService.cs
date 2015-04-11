@@ -2,10 +2,12 @@
 using Blob.Contracts.Status;
 using Blob.Managers.Status;
 using log4net;
+using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace Blob.Services.Status
 {
+    [ServiceBehavior(InstanceContextMode=InstanceContextMode.PerCall)]
     public class StatusService : IStatusService
     {
         private readonly ILog _log;

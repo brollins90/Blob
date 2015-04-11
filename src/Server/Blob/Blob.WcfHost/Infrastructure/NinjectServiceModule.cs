@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using System.Configuration;
 
 namespace Blob.WcfHost.Infrastructure
@@ -14,7 +15,7 @@ namespace Blob.WcfHost.Infrastructure
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
 
             // data
-            Bind<Data.BlobDbContext>().ToSelf()//.InRequestScope() // todo: request scope is not working.  see if this is what i really want.
+            Bind<Data.BlobDbContext>().ToSelf().InRequestScope() // todo: request scope is not working.  see if this is what i really want.
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
