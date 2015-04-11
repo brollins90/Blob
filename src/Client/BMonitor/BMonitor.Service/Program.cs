@@ -11,6 +11,11 @@ namespace BMonitor.Service
 
         public static void Main(string[] args)
         {
+            //System.Net.ServicePointManager.ServerCertificateValidationCallback
+            //    = ((sender, cert, chain, errors) => cert.Subject.Contains("DEV.BLOBSERVICE.RRITC.COM"));
+            System.Net.ServicePointManager.ServerCertificateValidationCallback =
+                ((sender, certificate, chain, sslPolicyErrors) => true);
+
             ProgramSettings settings = ParseCommandLine(args);
 
             MonitorService winServiceWrapper = new MonitorService();

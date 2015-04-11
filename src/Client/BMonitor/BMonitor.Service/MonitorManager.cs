@@ -1,9 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BMonitor.Common.Interfaces;
+using BMonitor.Monitors.Default;
 using Blob.Contracts.Models;
 using Blob.Contracts.Status;
-using BMonitor.Common.Interfaces;
-using BMonitor.Monitors.Default;
+using Blob.Proxies;
+using System;
+using System.Collections.Generic;
+using System.ServiceModel.Description;
+using System.ServiceModel.Security;
+using System.Threading.Tasks;
 
 namespace BMonitor.Service
 {
@@ -52,10 +56,12 @@ namespace BMonitor.Service
 
                 Console.WriteLine(statusData.CurrentValue);
 
-                Service<IStatusService>.Use(statusService =>
-                {
-                    statusService.SendStatusToServer(statusData);
-                });
+                StatusClient statusClient = new StatusClient("StatusService");
+                statusClient.ClientCredentials.UserName.UserName = "TestUser1";
+                statusClient.ClientCredentials.UserName.Password = "TestPassword1";
+                statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+
+                Task.Run(() => statusClient.SendStatusToServer(statusData));
             }
         }
     }

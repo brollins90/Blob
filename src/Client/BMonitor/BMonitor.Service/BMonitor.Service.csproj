@@ -39,9 +39,13 @@
     <Reference Include="Blob.Contracts">
       <HintPath>..\..\..\Server\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
     </Reference>
+    <Reference Include="Blob.Proxies">
+      <HintPath>..\..\..\Server\Blob\Blob.Proxies\bin\Debug\Blob.Proxies.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -68,7 +72,6 @@
       <DependentUpon>MonitorProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
