@@ -12,9 +12,8 @@ namespace Blob.Data.Mapping
 
             HasKey(x => x.Id);
             Property(x => x.Id)
-                .HasColumnType("bigint")
-                .IsRequired()
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                .HasColumnType("uniqueidentifier")
+                .IsRequired();
 
             Property(x => x.Value)
                 .HasColumnType("nvarchar").HasMaxLength(256)

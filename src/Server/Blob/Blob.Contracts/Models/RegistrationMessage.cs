@@ -10,6 +10,18 @@ namespace Blob.Contracts.Models
         public string DeviceId { get; set; }
 
         [DataMember]
+        public string DeviceKey1 { get; set; }
+
+        [DataMember]
+        public int DeviceKey1Format { get; set; }
+
+        [DataMember]
+        public string DeviceKey2 { get; set; }
+
+        [DataMember]
+        public int DeviceKey2Format { get; set; }
+
+        [DataMember]
         public string DeviceName { get; set; }
 
         [DataMember]
@@ -18,30 +30,18 @@ namespace Blob.Contracts.Models
         [DataMember]
         public DateTime TimeSent { get; set; }
 
-        [DataMember]
-        public string Username { get; set; }
-
-        [DataMember]
-        public string PasswordHash { get; set; }
-
-        [DataMember]
-        public string Key { get; set; }
-
         public override string ToString()
         {
-            return string.Format("RegistrationMessage:\n" +
-                                 "DeviceName: {0}\n" +
-                                 "DeviceType: {1}\n" +
-                                 "TimeSent: {2}\n" +
-                                 "Username: {3}\n" +
-                                 "PasswordHash: {4}\n" +
-                                 "Key{5}",
-                                 DeviceName,
-                                 DeviceType,
-                                 TimeSent,
-                                 Username,
-                                 PasswordHash,
-                                 Key);
+            return string.Format("RegistrationMessage("
+                                 + "DeviceId: " + DeviceId
+                                 + ", DeviceKey1: " + DeviceKey1
+                                 + ", DeviceKey1Format: " + DeviceKey1Format
+                                 + ", DeviceKey2: " + DeviceKey2
+                                 + ", DeviceKey2Format: " + DeviceKey2Format
+                                 + ", DeviceName: " + DeviceName
+                                 + ", DeviceType: " + DeviceType
+                                 + ", TimeSent: " + TimeSent
+                                 + ")");
         }
     }
 }

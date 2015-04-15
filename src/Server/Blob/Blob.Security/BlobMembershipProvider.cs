@@ -285,7 +285,7 @@ namespace Blob.Security
         /// <param name="status">A System.Web.Security.MembershipCreateStatus enumeration value indicating whether the user was created successfully.</param>
         /// <param name="customerId">The id from the membership data source for the customer to which the user belongs.</param>
         /// <returns>A System.Web.Security.MembershipUser object populated with the information for the newly created user.</returns>
-        public MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status, long? customerId)
+        public MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status, string customerId)
         {
             ValidatePasswordEventArgs args = new ValidatePasswordEventArgs(username, password, true);
             OnValidatingPassword(args);
@@ -323,7 +323,7 @@ namespace Blob.Security
 
                 User user = new User
                             {
-                                UserId = (Guid)providerUserKey,
+                                Id = (Guid)providerUserKey,
                                 Username = username,
                                 LastActivityDate = createDate
                             };
@@ -352,7 +352,7 @@ namespace Blob.Security
                     {
                         if (customerId != null)
                         {
-                            Customer cust = context.Set<Customer>().FirstOrDefault(c => c.Id.Equals(customerId));
+                            Customer cust = context.Set<Customer>().FirstOrDefault(c => c.Id.ToString().Equals(customerId));
                             user.Customer = cust;
                         }
 
@@ -456,7 +456,7 @@ namespace Blob.Security
         /// <returns>A System.Web.Security.MembershipUser object populated with the specified user's information from the data source.</returns>
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
         {
-            Expression<Func<UserSecurity, bool>> predicate = (us => us.User.UserId.Equals((Guid)providerUserKey));
+            Expression<Func<UserSecurity, bool>> predicate = (us => us.User.Id.Equals((Guid)providerUserKey));
             return GetUser(predicate, userIsOnline);
         }
 
@@ -494,7 +494,7 @@ namespace Blob.Security
                         user = new BlobMembershipUser(
                             Name,
                             userSecurity.User.Username,
-                            userSecurity.User.UserId,
+                            userSecurity.User.Id,
                             userSecurity.Email,
                             userSecurity.PasswordQuestion,
                             userSecurity.Comment,
@@ -505,10 +505,7 @@ namespace Blob.Security
                             userSecurity.User.LastActivityDate,
                             userSecurity.LastPasswordChangedDate,
                             userSecurity.LastLockoutDate,
-                            userSecurity.User.CustomerId)
-                               {
-                                   Id = userSecurity.User.Id
-                               };
+                            userSecurity.User.CustomerId.ToString());
 
                         if (userIsOnline)
                         {

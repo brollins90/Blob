@@ -11,12 +11,12 @@ namespace Blob.Core.Domain
 
         public Guid Id { get; set; }
         public string DeviceName { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime LastActivityDate { get; set; }
 
-        public long DeviceTypeId { get; set; }
+        public Guid DeviceTypeId { get; set; }
         public virtual DeviceType DeviceType { get; set; }
 
-        public long CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
         public virtual ICollection<Status> Statuses

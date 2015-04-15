@@ -9,7 +9,7 @@ namespace Blob.Core.Domain
         private ICollection<Device> _devices;
         private ICollection<User> _users;
 
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime CreateDate { get; set; }
 

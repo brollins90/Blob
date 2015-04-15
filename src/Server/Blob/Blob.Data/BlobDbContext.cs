@@ -40,6 +40,7 @@ namespace Blob.Data
             _log.Info("Creating model");
             modelBuilder.Configurations.Add(new CustomerMap());
             modelBuilder.Configurations.Add(new DeviceMap());
+            modelBuilder.Configurations.Add(new DeviceSecurityMap());
             modelBuilder.Configurations.Add(new DeviceTypeMap());
             modelBuilder.Configurations.Add(new RoleMap());
             modelBuilder.Configurations.Add(new StatusMap());

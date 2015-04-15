@@ -53,6 +53,7 @@
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
+    <Compile Include="Mapping\DeviceSecurityMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
     <Compile Include="Mapping\RoleMap.cs">
       <SubType>Code</SubType>
@@ -61,41 +62,9 @@
     <Compile Include="Mapping\StatusPerfMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
     <Compile Include="Mapping\UserSecurityMap.cs" />
-    <Compile Include="Migrations\201504032145135_InitialCreate.cs" />
-    <Compile Include="Migrations\201504032145135_InitialCreate.Designer.cs">
-      <DependentUpon>201504032145135_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504070247053_AddedAlertLevel.cs" />
-    <Compile Include="Migrations\201504070247053_AddedAlertLevel.Designer.cs">
-      <DependentUpon>201504070247053_AddedAlertLevel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504070250145_RemovedPreviousValue.cs" />
-    <Compile Include="Migrations\201504070250145_RemovedPreviousValue.Designer.cs">
-      <DependentUpon>201504070250145_RemovedPreviousValue.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504072003214_RemoveBaseEntity.cs" />
-    <Compile Include="Migrations\201504072003214_RemoveBaseEntity.Designer.cs">
-      <DependentUpon>201504072003214_RemoveBaseEntity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504080350002_AddedStatusPerf.cs" />
-    <Compile Include="Migrations\201504080350002_AddedStatusPerf.Designer.cs">
-      <DependentUpon>201504080350002_AddedStatusPerf.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504091923285_ChangedDeviceIdToGuid.cs" />
-    <Compile Include="Migrations\201504091923285_ChangedDeviceIdToGuid.Designer.cs">
-      <DependentUpon>201504091923285_ChangedDeviceIdToGuid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504100259313_ReMappedEntities.cs" />
-    <Compile Include="Migrations\201504100259313_ReMappedEntities.Designer.cs">
-      <DependentUpon>201504100259313_ReMappedEntities.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504100336026_AddedGeneratedKeys.cs" />
-    <Compile Include="Migrations\201504100336026_AddedGeneratedKeys.Designer.cs">
-      <DependentUpon>201504100336026_AddedGeneratedKeys.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504150456563_AddedMembership.cs" />
-    <Compile Include="Migrations\201504150456563_AddedMembership.Designer.cs">
-      <DependentUpon>201504150456563_AddedMembership.cs</DependentUpon>
+    <Compile Include="Migrations\201504152034598_NewOne.cs" />
+    <Compile Include="Migrations\201504152034598_NewOne.Designer.cs">
+      <DependentUpon>201504152034598_NewOne.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,34 +79,9 @@
       <Name>Blob.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201504032145135_InitialCreate.resx">
-      <DependentUpon>201504032145135_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504070247053_AddedAlertLevel.resx">
-      <DependentUpon>201504070247053_AddedAlertLevel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504070250145_RemovedPreviousValue.resx">
-      <DependentUpon>201504070250145_RemovedPreviousValue.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504072003214_RemoveBaseEntity.resx">
-      <DependentUpon>201504072003214_RemoveBaseEntity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504080350002_AddedStatusPerf.resx">
-      <DependentUpon>201504080350002_AddedStatusPerf.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504091923285_ChangedDeviceIdToGuid.resx">
-      <DependentUpon>201504091923285_ChangedDeviceIdToGuid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504100259313_ReMappedEntities.resx">
-      <DependentUpon>201504100259313_ReMappedEntities.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504100336026_AddedGeneratedKeys.resx">
-      <DependentUpon>201504100336026_AddedGeneratedKeys.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504150456563_AddedMembership.resx">
-      <DependentUpon>201504150456563_AddedMembership.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201504152034598_NewOne.resx">
+      <DependentUpon>201504152034598_NewOne.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

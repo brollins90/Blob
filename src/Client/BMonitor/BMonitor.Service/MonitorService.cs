@@ -35,7 +35,7 @@ namespace BMonitor.Service
 
         protected override void OnStart(string[] args)
         {
-            Guid deviceId = Guid.Parse("43116fba-c370-4880-8a98-826176219ba6");
+            Guid deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
             string path = "";
             _manager = new MonitorManager(deviceId, path);
 

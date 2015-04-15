@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Blob.Core.Domain;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Infrastructure.Annotations;
-using Blob.Core.Domain;
 
 namespace Blob.Data.Mapping
 {
@@ -10,13 +10,10 @@ namespace Blob.Data.Mapping
         {
             ToTable("UserSecurities");
 
-            // UserId is the Key
             HasKey(x => x.UserId);
             Property(x => x.UserId)
                 .HasColumnType("uniqueidentifier")
                 .IsRequired();
-            // User also requires a Foreign Key, I dont think I can specifiy that UserId
-            // is the name though.  I think it is done by convention.
             HasRequired(x => x.User).WithOptional();
 
             Property(x => x.Password)

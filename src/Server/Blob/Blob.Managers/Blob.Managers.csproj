@@ -54,6 +54,10 @@
       <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
       <Name>Blob.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blob.Security\Blob.Security.csproj">
+      <Project>{0586d78e-fb9d-484e-aab9-00d434e0f3cd}</Project>
+      <Name>Blob.Security</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

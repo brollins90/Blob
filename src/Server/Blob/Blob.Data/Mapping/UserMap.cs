@@ -12,16 +12,9 @@ namespace Blob.Data.Mapping
 
             HasKey(x => x.Id);
             Property(x => x.Id)
-                .HasColumnType("bigint")
-                .IsRequired()
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            
-            Property(x => x.UserId)
                 .HasColumnType("uniqueidentifier")
-                .IsRequired()
-                .HasColumnAnnotation(IndexAnnotation.AnnotationName,
-                new IndexAnnotation(
-                    new IndexAttribute("IX_UserUserId", 1) { IsUnique = true }));
+                .IsRequired();
+
             Property(x => x.Username)
                 .HasColumnType("nvarchar").HasMaxLength(256)
                 .IsRequired()
@@ -39,7 +32,7 @@ namespace Blob.Data.Mapping
                            .ToTable("UsersInRoles"));
 
             Property(x => x.CustomerId)
-                .HasColumnType("bigint")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             HasRequired(u => u.Customer).WithMany(c => c.Users).HasForeignKey(u => u.CustomerId);
         }

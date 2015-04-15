@@ -57,8 +57,8 @@ namespace BMonitor.Service
                 Console.WriteLine(statusData.CurrentValue);
 
                 StatusClient statusClient = new StatusClient("StatusService");
-                statusClient.ClientCredentials.UserName.UserName = "TestUser1";
-                statusClient.ClientCredentials.UserName.Password = "TestPassword1";
+                statusClient.ClientCredentials.UserName.UserName = "customerUser1";
+                statusClient.ClientCredentials.UserName.Password = "password";
                 statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
                 Task.Run(() => statusClient.SendStatusToServer(statusData));

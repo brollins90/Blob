@@ -12,23 +12,30 @@ namespace Blob.Data.Migrations
             AutomaticMigrationsEnabled = false;
             ContextKey = "Blob.Data.BlobDbContext";
         }
-
         protected override void Seed(BlobDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
             // DeviceTypes
-            DeviceType testDeviceTypeWinDesktop = new DeviceType { Value = "WindowsDesktop" };
-            DeviceType testDeviceTypeWinServer = new DeviceType { Value = "WindowsServer" };
-            context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinDesktop);
-            context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinServer);
+            DeviceType testDeviceTypeWinDesktop = new DeviceType
+                                                  {
+                                                      Id = Guid.Parse("ca20309d-de49-460d-98f7-835ff2ea463d"),
+                                                      Value = "WindowsDesktop",
+                                                  };
+            DeviceType testDeviceTypeWinServer = new DeviceType
+                                                 {
+                                                     Id = Guid.Parse("99f1d6a5-74e1-4e1c-ba19-06be0a8345cf"),
+                                                     Value = "WindowsServer",
+                                                 };
+            context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinDesktop, testDeviceTypeWinServer);
             context.SaveChanges();
 
             // Customers
             Customer testCustomer1 = new Customer
                                      {
+                                         Id = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f"),
                                          Name = "TestCustomer1",
-                                         CreateDate = DateTime.Parse("2015-04-14")
+                                         CreateDate = DateTime.Parse("2015-04-14"),
                                      };
             context.Set<Customer>().AddOrUpdate(x => x.Name, testCustomer1);
             context.SaveChanges();
@@ -36,13 +43,36 @@ namespace Blob.Data.Migrations
             // Devices
             Device testDevice1 = new Device
                                  {
-                                     Id = Guid.Parse("43116fba-c370-4880-8a98-826176219ba6"),
+                                     //Customer,
+                                     CustomerId = testCustomer1.Id,
                                      DeviceName = "Test Windows Desktop 1",
-                                     CreateDate = DateTime.Parse("2015-04-14"),
+                                     //DeviceType
                                      DeviceTypeId = testDeviceTypeWinDesktop.Id,
-                                     CustomerId = testCustomer1.Id
+                                     Id = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
+                                     LastActivityDate = DateTime.Parse("2015-04-14"),
                                  };
-            context.Set<Device>().AddOrUpdate(x => x.Id, testDevice1);
+            DeviceSecurity testDevice1Ds = new DeviceSecurity
+                                            {
+
+                                                Comment = null,
+                                                CreateDate = DateTime.Parse("2015-04-14"),
+                                                Device = testDevice1,
+                                                DeviceId = testDevice1.Id,
+                                                //FailedLoginAttemptCount,
+                                                //FailedLoginAttemptWindowStart,
+                                                IsApproved = true,
+                                                IsLockedOut = false,
+                                                Key1 = "key1",
+                                                Key1Format = 0,
+                                                Key1Salt = "",
+                                                Key2 = "key2",
+                                                Key2Format = 0,
+                                                Key2Salt = "",
+                                                //LastKey1ChangedDate,
+                                                //LastKey2ChangedDate,
+                                                //LastLoginDate
+                                            };
+            context.Set<DeviceSecurity>().AddOrUpdate(x => new { x.DeviceId }, testDevice1Ds);
             context.SaveChanges();
 
             // Roles
@@ -66,10 +96,7 @@ namespace Blob.Data.Migrations
                                 Id = Guid.Parse("8EBC5306-37B3-402B-909E-F481845ACD02"),
                                 Name = "Customer"
                             };
-            context.Set<Role>().AddOrUpdate(x => x.Name, deviceRole);
-            context.Set<Role>().AddOrUpdate(x => x.Name, adminRole);
-            context.Set<Role>().AddOrUpdate(x => x.Name, custAdminRole);
-            context.Set<Role>().AddOrUpdate(x => x.Name, custRole);
+            context.Set<Role>().AddOrUpdate(x => x.Name, deviceRole, adminRole, custAdminRole, custRole);
             context.SaveChanges();
 
             // Status
@@ -79,24 +106,35 @@ namespace Blob.Data.Migrations
             // User
             User testUser1 = new User
                              {
-                                 UserId = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"),
-                                 Username = "customerUser1",
+                                 //Customer
+                                 CustomerId = testCustomer1.Id,
+                                 Id = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"),
                                  LastActivityDate = DateTime.Parse("2015-04-14"),
-                                 CustomerId = testCustomer1.Id
+                                 Username = "customerUser1",
                              };
             UserSecurity testUser1Us = new UserSecurity
                                        {
-                                           UserId = testUser1.UserId,
-                                           User = testUser1,
-                                           Password = "password",
-                                           PasswordFormat = 0,
-                                           PasswordSalt = "",
+                                           Comment = null,
+                                           CreateDate = DateTime.Parse("2015-04-14"),
                                            Email = "testUser1@test.com",
+                                           //FailedPasswordAnswerAttemptCount,
+                                           //FailedPasswordAnswerAttemptWindowStart,
+                                           //FailedPasswordAttemptCount,
+                                           //FailedPasswordAttemptWindowStart,
                                            HasVerifiedEmail = true,
                                            IsApproved = true,
                                            IsLockedOut = false,
-                                           CreateDate = DateTime.Parse("2015-04-14"),
-                                           Comment = null,
+                                           //LastLockoutDate,
+                                           //LastLoginDate,
+                                           //LastPasswordChangedDate,
+                                           //MobilePin,
+                                           //PasswordAnswer,
+                                           Password = "password",
+                                           PasswordFormat = 0,
+                                           //PasswordQuestion,
+                                           PasswordSalt = "",
+                                           UserId = testUser1.Id,
+                                           User = testUser1,
                                        };
             context.Set<UserSecurity>().AddOrUpdate(x => new { x.UserId, x.Email }, testUser1Us);
             context.SaveChanges();
