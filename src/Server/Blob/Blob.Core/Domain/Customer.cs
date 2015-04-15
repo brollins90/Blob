@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Blob.Core.Domain
@@ -10,6 +11,7 @@ namespace Blob.Core.Domain
 
         public long Id { get; set; }
         public string Name { get; set; }
+        public DateTime CreateDate { get; set; }
 
         public virtual ICollection<Device> Devices
         {

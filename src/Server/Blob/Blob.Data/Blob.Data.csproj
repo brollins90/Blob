@@ -54,9 +54,13 @@
     <Compile Include="Mapping\CustomerMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
+    <Compile Include="Mapping\RoleMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Mapping\StatusMap.cs" />
     <Compile Include="Mapping\StatusPerfMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
+    <Compile Include="Mapping\UserSecurityMap.cs" />
     <Compile Include="Migrations\201504032145135_InitialCreate.cs" />
     <Compile Include="Migrations\201504032145135_InitialCreate.Designer.cs">
       <DependentUpon>201504032145135_InitialCreate.cs</DependentUpon>
@@ -88,6 +92,10 @@
     <Compile Include="Migrations\201504100336026_AddedGeneratedKeys.cs" />
     <Compile Include="Migrations\201504100336026_AddedGeneratedKeys.Designer.cs">
       <DependentUpon>201504100336026_AddedGeneratedKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504150456563_AddedMembership.cs" />
+    <Compile Include="Migrations\201504150456563_AddedMembership.Designer.cs">
+      <DependentUpon>201504150456563_AddedMembership.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -127,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504100336026_AddedGeneratedKeys.resx">
       <DependentUpon>201504100336026_AddedGeneratedKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504150456563_AddedMembership.resx">
+      <DependentUpon>201504150456563_AddedMembership.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

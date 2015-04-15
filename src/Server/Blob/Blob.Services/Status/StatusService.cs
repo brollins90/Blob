@@ -1,4 +1,5 @@
-﻿using Blob.Contracts.Models;
+﻿using System.Security.Permissions;
+using Blob.Contracts.Models;
 using Blob.Contracts.Status;
 using Blob.Managers.Status;
 using log4net;
@@ -19,12 +20,14 @@ namespace Blob.Services.Status
             _statusManager = statusManager;
         }
 
+        [PrincipalPermission(SecurityAction.Assert, Authenticated=true, Role="Device")]
         public async Task SendStatusToServer(StatusData statusData)
         {
             _log.Debug("Server received status: " + statusData);
             await _statusManager.StoreStatusData(statusData).ConfigureAwait(false);
         }
 
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true, Role = "Device")]
         public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
         {
             _log.Debug("Server received perf: " + statusPerformanceData);

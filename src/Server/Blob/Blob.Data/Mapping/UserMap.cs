@@ -1,5 +1,6 @@
 ﻿using Blob.Core.Domain;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Infrastructure.Annotations;
 
 namespace Blob.Data.Mapping
 {
@@ -8,8 +9,38 @@ namespace Blob.Data.Mapping
         public UserMap()
         {
             ToTable("Users");
+
             HasKey(x => x.Id);
-            Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(x => x.Id)
+                .HasColumnType("bigint")
+                .IsRequired()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            
+            Property(x => x.UserId)
+                .HasColumnType("uniqueidentifier")
+                .IsRequired()
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName,
+                new IndexAnnotation(
+                    new IndexAttribute("IX_UserUserId", 1) { IsUnique = true }));
+            Property(x => x.Username)
+                .HasColumnType("nvarchar").HasMaxLength(256)
+                .IsRequired()
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName,
+                new IndexAnnotation(
+                    new IndexAttribute("IX_UserUsername", 1) { IsUnique = true }));
+            Property(x => x.LastActivityDate)
+                .HasColumnType("datetime2")
+                .IsRequired();
+
+            HasMany(u => u.Roles)
+                .WithMany(r => r.Users)
+                .Map(m => m.MapLeftKey("UserId")
+                           .MapRightKey("RoleId")
+                           .ToTable("UsersInRoles"));
+
+            Property(x => x.CustomerId)
+                .HasColumnType("bigint")
+                .IsRequired();
             HasRequired(u => u.Customer).WithMany(c => c.Users).HasForeignKey(u => u.CustomerId);
         }
     }

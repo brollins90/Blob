@@ -11,6 +11,7 @@ namespace Blob.Core.Domain
 
         public Guid Id { get; set; }
         public string DeviceName { get; set; }
+        public DateTime CreateDate { get; set; }
 
         public long DeviceTypeId { get; set; }
         public virtual DeviceType DeviceType { get; set; }

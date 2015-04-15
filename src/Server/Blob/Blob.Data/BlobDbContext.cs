@@ -17,6 +17,15 @@ namespace Blob.Data
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
         }
 
+        public BlobDbContext(string connectionString)
+            : base(connectionString)
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
+        }
+
         public BlobDbContext(string connectionString, ILog log)
             : base(connectionString)
         {
@@ -32,9 +41,11 @@ namespace Blob.Data
             modelBuilder.Configurations.Add(new CustomerMap());
             modelBuilder.Configurations.Add(new DeviceMap());
             modelBuilder.Configurations.Add(new DeviceTypeMap());
+            modelBuilder.Configurations.Add(new RoleMap());
             modelBuilder.Configurations.Add(new StatusMap());
             modelBuilder.Configurations.Add(new StatusPerfMap());
             modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.Configurations.Add(new UserSecurityMap());
 
             base.OnModelCreating(modelBuilder);
         }

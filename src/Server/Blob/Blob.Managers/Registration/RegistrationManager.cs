@@ -10,9 +10,9 @@ namespace Blob.Managers.Registration
     public class RegistrationManager : IRegistrationManager
     {
         private readonly ILog _log;
-        private readonly IRepositoryAsync<Core.Domain.Device> _deviceRepository;
+        private readonly IRepositoryAsync<Device> _deviceRepository;
 
-        public RegistrationManager(IRepositoryAsync<Core.Domain.Device> deviceRepository, ILog log)
+        public RegistrationManager(IRepositoryAsync<Device> deviceRepository, ILog log)
         {
             _log = log;
             _deviceRepository = deviceRepository;
@@ -34,6 +34,7 @@ namespace Blob.Managers.Registration
                 // todo: handle this case better.  We shouldnt just blow up
                 throw new InvalidOperationException("This device has already been registered.");
             }
+
 
             // create device objects
             //Device newDevice = new Device()

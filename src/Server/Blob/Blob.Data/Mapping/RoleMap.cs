@@ -4,26 +4,23 @@ using System.Data.Entity.Infrastructure.Annotations;
 
 namespace Blob.Data.Mapping
 {
-    public class CustomerMap : BlobEntityTypeConfiguration<Customer>
+    public class RoleMap : BlobEntityTypeConfiguration<Role>
     {
-        public CustomerMap()
+        public RoleMap()
         {
-            ToTable("Customers");
+            ToTable("Roles");
 
             HasKey(x => x.Id);
             Property(x => x.Id)
-                .HasColumnType("bigint")
-                .IsRequired()
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                .HasColumnType("uniqueidentifier")
+                .IsRequired();
 
             Property(x => x.Name)
                 .HasColumnType("nvarchar").HasMaxLength(256)
                 .IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(
-                    new IndexAttribute("IX_CustomerName", 1) { IsUnique = true }));
-            Property(x => x.CreateDate).HasColumnType("datetime2")
-                .IsRequired();
+                    new IndexAttribute("IX_RoleName", 1) { IsUnique = true }));
         }
     }
 }

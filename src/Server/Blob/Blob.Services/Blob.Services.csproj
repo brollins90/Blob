@@ -34,14 +34,15 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Selectors" />
     <Reference Include="System.identitymodel.services" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
     <Compile Include="Registration\RegistrationService.cs" />
     <Compile Include="Status\StatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
