@@ -15,18 +15,27 @@ namespace Blob.WcfHost.Infrastructure
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
 
             // data
-            Bind<Data.BlobDbContext>().ToSelf().InRequestScope() // todo: request scope is not working.  see if this is what i really want.
+            Bind<Data.BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.Customer>>().To<Data.EfRepositoryAsync<Core.Domain.Customer>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.Device>>().To<Data.EfRepositoryAsync<Core.Domain.Device>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceSecurity>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceType>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceType>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.Role>>().To<Data.EfRepositoryAsync<Core.Domain.Role>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Status>>().To<Data.EfRepositoryAsync<Core.Domain.Status>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.StatusPerf>>().To<Data.EfRepositoryAsync<Core.Domain.StatusPerf>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.User>>().To<Data.EfRepositoryAsync<Core.Domain.User>>();
+            Bind<Core.Data.IRepositoryAsync<Core.Domain.UserSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.UserSecurity>>();
 
             // manager
+            Bind<Managers.Registration.IRegistrationManager>().To<Managers.Registration.RegistrationManager>();
             Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
 
             // service
             // we wont use this layer, because it is specified in the config file.
+            Bind<Contracts.Registration.IRegistrationService>().To<Services.Registration.RegistrationService>();
             Bind<Contracts.Status.IStatusService>().To<Services.Status.StatusService>();
 
             // logging

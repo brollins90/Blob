@@ -22,8 +22,18 @@ namespace Blob.Contracts.Models
         [DataMember]
         public DateTime TimeSent { get; set; }
 
+        private List<PerformanceDataValue> _data;
         [DataMember]
-        public List<PerformanceDataValue> Data { get; set;}
+        public List<PerformanceDataValue> Data 
+        { 
+            get { return _data ?? (_data = new List<PerformanceDataValue>()); }
+            set { _data = value; }
+        }
+
+        public void AddPerformanceDataValue(PerformanceDataValue value)
+        {
+            Data.Add(value);
+        }
 
         public override string ToString()
         {

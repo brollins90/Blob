@@ -36,7 +36,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PerformanceData.cs" />
+    <Compile Include="Models\PerformanceDataValue.cs" />
     <Compile Include="Models\RegistrationInformation.cs" />
     <Compile Include="Models\RegistrationMessage.cs" />
     <Compile Include="Models\StatusPerformanceData.cs" />
