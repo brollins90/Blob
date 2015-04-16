@@ -36,6 +36,8 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\ICommandService.cs" />
+    <Compile Include="Command\ICommandServiceCallback.cs" />
     <Compile Include="Models\PerformanceDataValue.cs" />
     <Compile Include="Models\RegistrationInformation.cs" />
     <Compile Include="Models\RegistrationMessage.cs" />

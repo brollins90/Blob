@@ -30,11 +30,13 @@ namespace Blob.WcfHost.Infrastructure
             Bind<Core.Data.IRepositoryAsync<Core.Domain.UserSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.UserSecurity>>();
 
             // manager
+            // todo: decide where i am going to store the callbacks
             Bind<Managers.Registration.IRegistrationManager>().To<Managers.Registration.RegistrationManager>();
             Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
 
             // service
             // we wont use this layer, because it is specified in the config file.
+            Bind<Contracts.Command.ICommandService>().To<Services.Command.CommandService>();
             Bind<Contracts.Registration.IRegistrationService>().To<Services.Registration.RegistrationService>();
             Bind<Contracts.Status.IStatusService>().To<Services.Status.StatusService>();
 

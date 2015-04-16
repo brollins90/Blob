@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RegistrationClient.cs" />
+    <Compile Include="CommandClient.cs" />
     <Compile Include="StatusClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
