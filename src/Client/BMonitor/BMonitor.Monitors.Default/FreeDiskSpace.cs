@@ -9,7 +9,8 @@ namespace BMonitor.Monitors.Default
     // perf
     // T0_System_Board_Ambient=15C;42;47 W2_System_Board_System_Level=238W;917;966 A0_PS_1_Current=0.8A;0;0 A1_PS_2_Current=0.8A;0;0 V20_PS_1_Voltage=120V;0;0 V21_PS_2_Voltage=120V;0;0 F0_System_Board_FAN_1=3600rpm;0;0 F1_System_Board_FAN_2=3600rpm;0;0 F2_System_Board_FAN_3=3600rpm;0;0 F3_System_Board_FAN_4=3600rpm;0;0 F4_System_Board_FAN_5=3600rpm;0;0
 
-    
+    // 'label'=value[UOM];[warn];[crit];[min];[max]
+    // 'F:'=1697GB;1490;1677;0;1863
 
     public class FreeDiskSpace : IMonitor
     {
@@ -18,6 +19,8 @@ namespace BMonitor.Monitors.Default
         private const string WARNING_TEMPLATE = "{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) (<{6}%) : WARNING";
         private const string OK_TEMPLATE = "{0}% free space ({1}GB) : OK";
         private const string UNKNOWN_TEMPLATE = "UNKNOWN";
+
+        private const string PERF_TEMPLATE = "'{0}:'={1}{2};{3};{4};{5};{6}";
 
         private readonly string _driveLetter;
         private readonly string _driveDescription;
@@ -35,14 +38,23 @@ namespace BMonitor.Monitors.Default
             _criticalLevel = criticalLevel;
         }
 
-        public MonitorResult Execute()
+        public MonitorResult Execute(bool collectPerfData = false)
         {
             MonitorResult result = new MonitorResult()
             {
                 MonitorDescription = string.Format(DESCRIPTION_TEMPLATE, _driveLetter.ToUpper(), _driveDescription),
                 MonitorName = "FreeDiskSpace",
-                TimeGenerated = DateTime.Now
+                TimeGenerated = DateTime.Now,
+                UnitOfMeasure = _unitOfMeasure
             };
+            MonitorPerf perf = new MonitorPerf
+                               {
+                                   Critical = _criticalLevel.ToString(),
+                                   Label = _driveLetter.ToUpper() + ":",
+                                   UnitOfMeasure = UnitOfMeasure.GB,
+                                   Value = null,
+                                   Warning = _warningLevel.ToString()
+                               };
 
             try
             {
@@ -50,6 +62,13 @@ namespace BMonitor.Monitors.Default
                 long freeSpace = driveInfo.TotalFreeSpace;
                 long totalSize = driveInfo.TotalSize;
                 double freePercent = Math.Round(((double) freeSpace/(double) totalSize) * 100);
+
+                double totalGb = totalSize.BytesToGb();
+                perf.Value = (totalSize - freeSpace).BytesToGb().ToString();
+                perf.Warning = (totalGb * ((100 - _warningLevel) * 0.01)).ToString();
+                perf.Critical = (totalGb * ((100 - _criticalLevel) * 0.01)).ToString();
+                perf.Min = "0";
+                perf.Max = totalGb.ToString();
 
                 double testValue = (_unitOfMeasure == UnitOfMeasure.PERCENT) ? freePercent
                     : (_unitOfMeasure == UnitOfMeasure.B) ? freeSpace
@@ -61,7 +80,7 @@ namespace BMonitor.Monitors.Default
 
                 if (testValue <= _criticalLevel)
                 {
-                    result.CurrentValue = string.Format(CRITICAL_TEMPLATE,
+                    result.Value = string.Format(CRITICAL_TEMPLATE,
                                                         driveInfo.Name,
                                                         driveInfo.VolumeLabel,
                                                         _driveDescription,
@@ -73,7 +92,7 @@ namespace BMonitor.Monitors.Default
                 } 
                 else if (testValue <= _warningLevel)
                 {
-                    result.CurrentValue = string.Format(WARNING_TEMPLATE,
+                    result.Value = string.Format(WARNING_TEMPLATE,
                                                         driveInfo.Name,
                                                         driveInfo.VolumeLabel,
                                                         _driveDescription,
@@ -85,7 +104,7 @@ namespace BMonitor.Monitors.Default
                 }
                 else
                 {
-                    result.CurrentValue = string.Format(OK_TEMPLATE,
+                    result.Value = string.Format(OK_TEMPLATE,
                                                         freePercent,
                                                         freeSpace.BytesToGb());
                     result.AlertLevel = AlertLevel.OK;
@@ -94,9 +113,12 @@ namespace BMonitor.Monitors.Default
             catch (Exception e)
             {
                 //todo: handle the exception
-                result.CurrentValue = string.Format(UNKNOWN_TEMPLATE);
+                result.Value = string.Format(UNKNOWN_TEMPLATE);
                 result.AlertLevel = AlertLevel.UNKNOWN;
             }
+
+            if (collectPerfData)
+                result.Perf.Add(perf);
 
             return result;
         }

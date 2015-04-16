@@ -42,6 +42,7 @@
     <Compile Include="Extensions\Prettify.cs" />
     <Compile Include="Interfaces\AlertLevel.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />
+    <Compile Include="Interfaces\MonitorPerf.cs" />
     <Compile Include="Interfaces\MonitorResult.cs" />
     <Compile Include="Interfaces\UnitOfMeasure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
