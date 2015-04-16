@@ -2,6 +2,7 @@
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Blob.Services.Command
 {
@@ -11,6 +12,10 @@ namespace Blob.Services.Command
         private static volatile CommandManager _connectionManager;
         private static readonly object SyncLock = new object();
         private readonly List<ICommandServiceCallback> _callbacks;
+
+        private bool runTestThread = true;
+        private ManualResetEvent _stopEvent;
+        private Thread testThread;
 
         private CommandManager()
         {
@@ -40,6 +45,12 @@ namespace Blob.Services.Command
             {
                 _callbacks.Add(callback);
                 callback.OnConnect("" + deviceId + " connected successfully.");
+
+                if (runTestThread)
+                {
+                    testThread = new Thread(RunTest);
+                    testThread.Start();
+                }
             }
             else
             {
@@ -60,6 +71,24 @@ namespace Blob.Services.Command
                 _log.Error(string.Format("Failed to remove callback for device {0}.  It was not connected.", deviceId));
                 throw new InvalidOperationException("Cannot find callback for " + deviceId);
             }
+        }
+
+        void timer_tick()
+        {
+            foreach (var x in _callbacks)
+            {
+                x.OnConnect("Test tick");
+            }
+        }
+
+        void RunTest()
+        {
+            _stopEvent = new ManualResetEvent(false);
+
+            do
+            {
+                timer_tick();
+            } while (!_stopEvent.WaitOne(1000 * 4));
         }
     }
 }

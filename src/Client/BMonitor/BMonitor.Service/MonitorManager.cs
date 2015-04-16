@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
 
@@ -20,6 +21,13 @@ namespace BMonitor.Service
 
         private Guid _deviceId;
         private string _monitorPath;
+
+        private bool _enableCommandConnection;
+        private bool _enablePerformanceMonitoring;
+        private bool _enableStatusMonitoring;
+        private bool _isRegistered;
+
+        private CommandClient commandClient;
 
         public MonitorManager()
         {
@@ -39,9 +47,37 @@ namespace BMonitor.Service
                 _deviceId = Guid.Parse("D98CC204-C422-486D-AA52-398AD622E7A5");
                 //_deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
             }
+
             _monitorPath = GetConfigValue(config["monitorPath"], @"/Monitors/");
-            
-            LoadMonitors();
+            _enableCommandConnection = Convert.ToBoolean(GetConfigValue(config["enableCommandConnection"], "true"));
+            _enablePerformanceMonitoring = Convert.ToBoolean(GetConfigValue(config["enablePerformanceMonitoring"], "false"));
+            _enableStatusMonitoring = Convert.ToBoolean(GetConfigValue(config["enableStatusMonitoring"], "false"));
+
+            if (_enableCommandConnection)
+            {
+                OpenCommandConnection();
+            }
+
+            if (_enableStatusMonitoring || _enablePerformanceMonitoring)
+            {
+                LoadMonitors();
+            }
+        }
+
+        public void OpenCommandConnection()
+        {
+            _log.Info("Creating command connection.");
+            //todo: spin up a new thread
+
+            InstanceContext callbackInstance = new InstanceContext(new CommandServiceCallbackHandler());
+
+            commandClient = new CommandClient(callbackInstance, "CommandService");
+            commandClient.ClientCredentials.UserName.UserName = "customerUser1";
+            commandClient.ClientCredentials.UserName.Password = "password";
+            commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+
+            commandClient.Connect(_deviceId);
+
         }
 
         public bool LoadMonitors()
@@ -67,6 +103,7 @@ namespace BMonitor.Service
         public void MonitorTick()
         {
             _log.Debug("Tick");
+            commandClient.Ping(_deviceId);
             foreach (IMonitor monitor in _monitors)
             {
                 _log.Debug(string.Format("Executing {0}", monitor.GetType()));

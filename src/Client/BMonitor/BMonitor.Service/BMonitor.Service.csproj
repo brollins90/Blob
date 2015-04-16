@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandServiceCallbackHandler.cs" />
     <Compile Include="MonitorService.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -7,13 +7,13 @@ namespace Blob.Proxies
 {
     public class CommandClient : ClientBase<ICommandService>, ICommandService
     {
-        public CommandClient(string endpointName)
-            : base(endpointName)
+        public CommandClient(InstanceContext callbackInstance, string endpointName)
+            : base(callbackInstance, endpointName)
         {
         }
 
-        public CommandClient(Binding binding, EndpointAddress address)
-            : base(binding, address)
+        public CommandClient(InstanceContext callbackInstance, Binding binding, EndpointAddress address)
+            : base(callbackInstance, binding, address)
         {
         }
 
