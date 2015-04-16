@@ -49,7 +49,6 @@ namespace Blob.Managers.Registration
                                 CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f"),
                                 Id = Guid.Parse(message.DeviceId),
                                 DeviceName = message.DeviceName,
-                                DeviceType = deviceType,
                                 DeviceTypeId = deviceType.Id,
                                 LastActivityDate = createDate
                             };
