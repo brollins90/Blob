@@ -1,12 +1,13 @@
-﻿using BMonitor.Common.Interfaces;
-using BMonitor.Monitors.Default;
-using Blob.Contracts.Models;
-using Blob.Contracts.Status;
+﻿using Blob.Contracts.Models;
 using Blob.Proxies;
+using BMonitor.Common.Interfaces;
+using BMonitor.Monitors.Default;
+using log4net;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel.Description;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
 
@@ -14,34 +15,63 @@ namespace BMonitor.Service
 {
     public class MonitorManager
     {
-        private readonly Guid _deviceId;
-        private string _monitorPath;
+        private readonly ILog _log;
         private readonly ICollection<IMonitor> _monitors;
 
-        public MonitorManager(Guid deviceId, string monitorPath)
-        {
-            _deviceId = deviceId;
-            _monitorPath = monitorPath;
-            _monitors = new List<IMonitor>();
+        private Guid _deviceId;
+        private string _monitorPath;
 
-            // todo: maybe move the init, but then I have to remember to call it...
-            Initialize();
+        public MonitorManager()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _monitors = new List<IMonitor>();
         }
 
-        public void Initialize()
+        public void Initialize(NameValueCollection config)
         {
+            _log.Debug("Initializing MonitorManager");
+            if (config == null)
+                throw new ArgumentNullException("config");
+
+            if (!Guid.TryParse(GetConfigValue(config["deviceId"], ""), out _deviceId))
+            {
+                _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
+                _deviceId = Guid.Parse("D98CC204-C422-486D-AA52-398AD622E7A5");
+                //_deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
+            }
+            _monitorPath = GetConfigValue(config["monitorPath"], @"/Monitors/");
+            
+            LoadMonitors();
+        }
+
+        public bool LoadMonitors()
+        {
+            _log.Info(string.Format("Loading monitors from {0}", _monitorPath));
+
+            if (_deviceId.Equals(default(Guid)))
+            {
+                _log.Warn("LoadMonitors was requested before registration was completed.");
+                return false;
+            }
+
             _monitors.Add(new FreeDiskSpace(
                 driveLetter: "C",
                 driveDescription: "OS",
                 unitOfMeasure: UnitOfMeasure.PERCENT,
                 warningLevel: 20,
                 criticalLevel: 10));
+            _log.Info("Loaded FreeDiskSpace monitor");
+            return true;
         }
 
         public void MonitorTick()
         {
+            _log.Debug("Tick");
             foreach (IMonitor monitor in _monitors)
             {
+                _log.Debug(string.Format("Executing {0}", monitor.GetType()));
+                
+                // where am i going to get all the config info?
                 MonitorResult result = monitor.Execute(collectPerfData: true);
                 StatusData statusData = new StatusData()
                              {
@@ -76,20 +106,75 @@ namespace BMonitor.Service
                     });
                 }
 
-                Console.WriteLine(statusData.CurrentValue + "|" + result.Perf.First().ToString());
+                _log.Debug(statusData.CurrentValue + "|" + result.Perf.First().ToString());
 
+                _log.Info("Creating new StatusClient");
                 StatusClient statusClient = new StatusClient("StatusService");
                 statusClient.ClientCredentials.UserName.UserName = "customerUser1";
                 statusClient.ClientCredentials.UserName.Password = "password";
                 statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
-                // send status
+                _log.Debug("Sending status and then performance message.");
+                // send
                 Task.Run(() => statusClient.SendStatusToServer(statusData));
-
-                // send perf
                 Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
-                
             }
+        }
+
+        public void RegisterDevice(string username, string password)
+        {
+            if (!_deviceId.Equals(default(Guid)))
+            {
+                _log.Error("Registration was requested even though this device is already registered.");
+                return;
+                // throw?
+            }
+
+            try
+            {
+                Guid deviceGuid = Guid.NewGuid();
+                _log.Info(string.Format("Registering this agent with the BlobService with id:{0}.", deviceGuid));
+                RegistrationMessage regMessage = new RegistrationMessage
+                                                 {
+                                                     DeviceId = deviceGuid.ToString(),
+                                                     DeviceKey1 = "key1",
+                                                     DeviceKey1Format = 0,
+                                                     DeviceKey2 = "key2",
+                                                     DeviceKey2Format = 0,
+                                                     DeviceName = "Test 1",
+                                                     DeviceType = "WindowsDesktop",
+                                                     TimeSent = DateTime.Now
+                                                 };
+                _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
+
+                RegistrationClient registrationClient = new RegistrationClient("RegistrationService");
+                registrationClient.ClientCredentials.UserName.UserName = username;
+                registrationClient.ClientCredentials.UserName.Password = password;
+                registrationClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+
+                RegistrationInformation regInfo = Task.Run(() => registrationClient.Register(regMessage)).Result;
+                _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
+
+                Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
+                _deviceId = deviceGuid;
+
+                LoadMonitors();
+            }
+            catch (Exception e)
+            {
+                _log.Error("Error while registering this agent with the server.", e);
+            }
+        }
+
+        /// <summary>
+        /// Reads a config value from the config file.
+        /// </summary>
+        /// <param name="configValue">Value name in the config file.</param>
+        /// <param name="defaultValue">Default value to return if the specified value does not exist.</param>
+        /// <returns>the value of the config element or the default specified if the element is null.</returns>
+        private static string GetConfigValue(string configValue, string defaultValue)
+        {
+            return (string.IsNullOrEmpty(configValue)) ? defaultValue : configValue;
         }
     }
 }

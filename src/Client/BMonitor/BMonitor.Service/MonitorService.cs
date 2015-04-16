@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+﻿using log4net;
+using System;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace BMonitor.Service
 {
     public partial class MonitorService : ServiceBase
     {
+        private readonly ILog _log;
         public const string SERVICE_NAME = "BMonitorService";
 
         private Thread _monitorServiceThread;
@@ -21,23 +18,29 @@ namespace BMonitor.Service
         private const int TICK_INTERVAL = 1000 * 5; // 5 seconds
 
         private MonitorManager _manager;
+        private NameValueCollection _managerConfig;
 
         public MonitorService()
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             InitializeComponent();
             ServiceName = SERVICE_NAME;
         }
 
         public void Start(string[] args)
         {
+            _log.Debug("Starting MonitorService.");
             OnStart(args);
         }
 
         protected override void OnStart(string[] args)
         {
-            Guid deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
-            string path = "";
-            _manager = new MonitorManager(deviceId, path);
+            _log.Debug("OnStart called for MonitorService.");
+
+            _managerConfig = (NameValueCollection)ConfigurationManager.GetSection("BMonitor");
+            _manager = new MonitorManager();
+            if (_manager == null || _managerConfig == null)
+                throw new InvalidOperationException("A required component of the MonitorService failed to load.");
 
             _monitorServiceThread = new Thread(RunBMonitor);
             _monitorServiceThread.Start();
@@ -45,20 +48,30 @@ namespace BMonitor.Service
 
         protected override void OnStop()
         {
+            _log.Debug("OnStop called for MonitorService.");
+
             if (_serviceStopEvent != null)
             {
                 _serviceStopEvent.Set();
+                _log.Debug("Stop event set.");
 
                 //Wait for the thread to terminate
                 TimeSpan stopTimeout = new TimeSpan(0, 0, 10);
                 _monitorServiceThread.Join(stopTimeout);
-            };
+            }
         }
-
 
         private void RunBMonitor()
         {
+            _log.Debug("MonitorService thread start.");
+
             _serviceStopEvent = new ManualResetEvent(false);
+
+            _manager.Initialize(_managerConfig);
+
+            // add as a task when i have a scheduler
+            // register first
+            _manager.RegisterDevice("customerUser1", "password");
 
             do
             {
