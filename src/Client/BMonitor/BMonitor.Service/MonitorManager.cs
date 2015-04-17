@@ -49,7 +49,7 @@ namespace BMonitor.Service
             }
 
             _monitorPath = GetConfigValue(config["monitorPath"], @"/Monitors/");
-            _enableCommandConnection = Convert.ToBoolean(GetConfigValue(config["enableCommandConnection"], "true"));
+            _enableCommandConnection = Convert.ToBoolean(GetConfigValue(config["enableCommandConnection"], "false"));
             _enablePerformanceMonitoring = Convert.ToBoolean(GetConfigValue(config["enablePerformanceMonitoring"], "false"));
             _enableStatusMonitoring = Convert.ToBoolean(GetConfigValue(config["enableStatusMonitoring"], "false"));
 
@@ -103,7 +103,12 @@ namespace BMonitor.Service
         public void MonitorTick()
         {
             _log.Debug("Tick");
-            commandClient.Ping(_deviceId);
+            
+            if (_enableCommandConnection)
+            {
+                commandClient.Ping(_deviceId);
+            }
+
             foreach (IMonitor monitor in _monitors)
             {
                 _log.Debug(string.Format("Executing {0}", monitor.GetType()));

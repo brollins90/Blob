@@ -1,7 +1,13 @@
-﻿using log4net;
+﻿using Blob.Core.Domain;
+using Blob.Data;
+using log4net;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Configuration.Provider;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Security;
 
 namespace Blob.Security
@@ -35,11 +41,13 @@ namespace Blob.Security
             base.Initialize(name, config);
 
             _applicationName = GetConfigValue(config["applicationName"], System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
+            _logExceptions = Convert.ToBoolean(GetConfigValue(config["logExceptions"], "false"));
         }
 
         #region Override Properties and Fields
 
         private string _applicationName;
+        private bool _logExceptions;
 
         /// <summary>
         /// Gets or sets the name of the application to store and retrieve role information for.
@@ -51,6 +59,15 @@ namespace Blob.Security
             set { _applicationName = value; }
         }
 
+        /// <summary>
+        /// Indicates whether to log exceptions
+        /// </summary>
+        /// <returns>true if the membership provider is configured to log exceptions; otherwise, false. The default is false.</returns>
+        public bool LogExceptions
+        {
+            get { return _logExceptions; }
+        }
+
         #endregion
 
         /// <summary>
@@ -60,7 +77,45 @@ namespace Blob.Security
         /// <param name="roleNames">A string array of the role names to add the specified user names to.</param>
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
-            throw new NotImplementedException();
+            if (roleNames.Any(roleName => !RoleExists(roleName)))
+                throw new ProviderException("Role name not found.");
+
+            foreach (string username in usernames)
+            {
+                if (username.Contains(","))
+                    throw new ArgumentException("User names cannot contain commas.");
+
+                if (roleNames.Any(roleName => IsUserInRole(username, roleName)))
+                {
+                    throw new ProviderException("User is already in role.");
+                }
+            }
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    DbSet<User> users = context.Set<User>();
+                    DbSet<Role> roles = context.Set<Role>();
+                    foreach (User u in usernames.Select(username => users.FirstOrDefault(x => x.Username.Equals(username))))
+                    {
+                        foreach (Role r in roleNames.Select(rolename => roles.FirstOrDefault(x => x.Name.Equals(rolename))))
+                        {
+                            u.Roles.Add(r);
+                            context.Entry(u).State = EntityState.Modified;
+                            context.SaveChanges();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to add users to roles.", e);
+                }
+                throw new ProviderException("Failed to add users to roles.", e);
+            }
         }
 
         /// <summary>
@@ -69,7 +124,32 @@ namespace Blob.Security
         /// <param name="roleName">The name of the role to create.</param>
         public override void CreateRole(string roleName)
         {
-            throw new NotImplementedException();
+            if (roleName.Contains(","))
+                throw new ArgumentException("Role names cannot contain commas.");
+
+            if (RoleExists(roleName))
+                throw new ProviderException("Role name already exists.");
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    context.Set<Role>().Add(new Role
+                                            {
+                                                Id = Guid.NewGuid(),
+                                                Name = roleName
+                                            });
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to create role.", e);
+                }
+                throw new ProviderException("Failed to create role.", e);
+            }
         }
 
         /// <summary>
@@ -80,7 +160,38 @@ namespace Blob.Security
         /// <returns>true if the role was successfully deleted; otherwise, false.</returns>
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    Role role = context.Set<Role>().Include("Users").FirstOrDefault(x => x.Name.Equals(roleName));
+                    
+                    if (role != null)
+                    {
+                        if (throwOnPopulatedRole && role.Users.Any())
+                        {
+                            throw new ProviderException("Unable to delete role because it is populated.");
+                        }
+
+                        List<User> usersToTouch = role.Users.ToList();
+                        usersToTouch.ForEach(x => x.Roles.Remove(role));
+                        context.SaveChanges();
+
+                        context.Entry(role).State = EntityState.Deleted;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to delete role.", e);
+                }
+                throw new ProviderException("Failed to delete role.", e);
+            }
+            return false; 
         }
 
         /// <summary>
@@ -91,7 +202,30 @@ namespace Blob.Security
         /// <returns>A string array containing the names of all the users where the user name matches usernameToMatch and the user is a member of the specified role.</returns>
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    Role role = context.Set<Role>().Include("Users").FirstOrDefault(x => x.Name.Equals(roleName));
+
+                    if (role != null)
+                    {
+                        IEnumerable<string> usersInRoleThatMatch = role.Users
+                            .Where(x => x.Username.Equals(usernameToMatch))
+                            .Select(x=>x.Username);
+                        return usersInRoleThatMatch.ToArray();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find users in role.", e);
+                }
+                throw new ProviderException("Failed to find users in role.", e);
+            }
+            return null; 
         }
 
         /// <summary>
@@ -100,7 +234,22 @@ namespace Blob.Security
         /// <returns>A string array containing the names of all the roles stored in the data source for the configured applicationName.</returns>
         public override string[] GetAllRoles()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    DbSet<Role> roles = context.Set<Role>();
+                    return roles.Select(x => x.Name).ToArray();
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get all roles.", e);
+                }
+                throw new ProviderException("Failed to get all roles.", e);
+            }
         }
 
         /// <summary>
@@ -110,7 +259,28 @@ namespace Blob.Security
         /// <returns>A string array containing the names of all the roles that the specified user is in for the configured applicationName.</returns>
         public override string[] GetRolesForUser(string username)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    User user = context.Set<User>().Include("Roles").FirstOrDefault(x => x.Username.Equals(username));
+
+                    if (user != null)
+                    {
+                        IEnumerable<string> rolesForUser = user.Roles.Select(x => x.Name);
+                        return rolesForUser.ToArray();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find roles for user.", e);
+                }
+                throw new ProviderException("Failed to find roles for user.", e);
+            }
+            return null; 
         }
 
         /// <summary>
@@ -120,7 +290,28 @@ namespace Blob.Security
         /// <returns>A string array containing the names of all the users who are members of the specified role for the configured applicationName.</returns>
         public override string[] GetUsersInRole(string roleName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    Role role = context.Set<Role>().Include("Users").FirstOrDefault(x => x.Name.Equals(roleName));
+
+                    if (role != null)
+                    {
+                        IEnumerable<string> usersForRole = role.Users.Select(x => x.Username);
+                        return usersForRole.ToArray();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find users in role.", e);
+                }
+                throw new ProviderException("Failed to find users in role.", e);
+            }
+            return null;
         }
 
         /// <summary>
@@ -131,7 +322,27 @@ namespace Blob.Security
         /// <returns>true if the specified user is in the specified role for the configured applicationName; otherwise, false.</returns>
         public override bool IsUserInRole(string username, string roleName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    User user = context.Set<User>().Include("Roles").FirstOrDefault(x => x.Username.Equals(username));
+
+                    if (user != null)
+                    {
+                        return user.Roles.Any(x => x.Name.Equals(roleName));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find if user is in role.", e);
+                }
+                throw new ProviderException("Failed to find if user is in role.", e);
+            }
+            return false;
         }
 
         /// <summary>
@@ -141,7 +352,34 @@ namespace Blob.Security
         /// <param name="roleNames">A string array of role names to remove the specified user names from.</param>
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    IQueryable<User> users = context.Set<User>().Where(u => usernames.Contains(u.Username));
+
+                    foreach (string roleName in roleNames)
+                    {
+                        Role role = context.Set<Role>().Include(r => r.Users).SingleOrDefault(r => r.Name.Equals(roleName));
+                        if (role != null)
+                        {
+                            foreach (User user in users)
+                            {
+                                role.Users.Remove(user);
+                            }
+                        }
+                    }
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to remove users from roles.", e);
+                }
+                throw new ProviderException("Failed to remove users from roles.", e);
+            }
         }
 
         /// <summary>
@@ -151,7 +389,21 @@ namespace Blob.Security
         /// <returns>true if the role name already exists in the data source for the configured applicationName; otherwise, false.</returns>
         public override bool RoleExists(string roleName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    return context.Set<Role>().Any(x=>x.Name.Equals(roleName));
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get role.", e);
+                }
+                throw new ProviderException("Failed to get role.", e);
+            }
         }
 
         /// <summary>

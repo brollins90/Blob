@@ -2,6 +2,7 @@
 using Blob.Data;
 using log4net;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Configuration.Provider;
@@ -23,11 +24,13 @@ namespace Blob.Security
         private readonly ILog _log;
         private readonly string _dbConnectionString;
         private MachineKeySection _machineKey;
+        private readonly BlobRoleProvider _roleProvider;
 
         public BlobMembershipProvider()
         {
             _log = LogManager.GetLogger("MembershipLogger");
             _dbConnectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
+            _roleProvider = new BlobRoleProvider();
         }
 
         public override void Initialize(string name, NameValueCollection config)
@@ -84,7 +87,7 @@ namespace Blob.Security
             {
                 // Get encryption and decryption key information from the configuration.  
                 Configuration cfg = WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-                _machineKey = (MachineKeySection) cfg.GetSection("system.web/machineKey");
+                _machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
                 //_machineKey = (MachineKeySection) WebConfigurationManager.GetSection("system.web/machineKey");
 
                 if (_machineKey.ValidationKey.Contains("AutoGenerate") && PasswordFormat != MembershipPasswordFormat.Clear)
@@ -96,7 +99,7 @@ namespace Blob.Security
             {
                 if (LogExceptions)
                 {
-                    _log.Debug("Failed to load the machine key.", e);
+                    _log.Error("Failed to load the machine key.", e);
                 }
                 throw; // throw this because we want it to break if this fails
             }
@@ -239,7 +242,44 @@ namespace Blob.Security
         /// <returns>true if the password was updated successfully; otherwise, false.</returns>
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {
-            throw new NotImplementedException();
+            if (!ValidateUser(username, oldPassword))
+                return false;
+
+            ValidatePasswordEventArgs args = new ValidatePasswordEventArgs(username, newPassword, true);
+            OnValidatingPassword(args);
+
+            if (args.Cancel)
+            {
+                if (args.FailureInformation != null)
+                    throw args.FailureInformation;
+
+                throw new MembershipPasswordException("Change password canceled due to new password validation failure.");
+            }
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>().FirstOrDefault(us => us.User.Username.Equals(username));
+                    if (userSecurity != null)
+                    {
+                        userSecurity.Password = EncodePassword(newPassword);
+                        userSecurity.LastPasswordChangedDate = DateTime.Now;
+                        context.Entry(userSecurity).State = EntityState.Modified;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Warn("Failed to change password.", e);
+                }
+                throw new ProviderException("Failed to change password.", e);
+            }
+            return false;
         }
 
         /// <summary>
@@ -252,7 +292,34 @@ namespace Blob.Security
         /// <returns>true if the password question and answer are updated successfully; otherwise, false.</returns>
         public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
         {
-            throw new NotImplementedException();
+            if (!ValidateUser(username, password))
+                return false;
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>().FirstOrDefault(us => us.User.Username.Equals(username));
+                    if (userSecurity != null)
+                    {
+                        userSecurity.PasswordQuestion = newPasswordQuestion;
+                        userSecurity.PasswordAnswer = newPasswordAnswer;//EncodePassword(newPasswordAnswer);
+                        // salt change??
+                        context.Entry(userSecurity).State = EntityState.Modified;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Warn("Failed to change password.", e);
+                }
+                throw new ProviderException("Failed to change password.", e);
+            }
+            return false;
         }
 
         /// <summary>
@@ -323,26 +390,32 @@ namespace Blob.Security
 
                 User user = new User
                             {
+                                //CustomerId = "",
                                 Id = (Guid)providerUserKey,
-                                Username = username,
-                                LastActivityDate = createDate
+                                LastActivityDate = createDate,
+                                Username = username
                             };
                 UserSecurity userSecurity = new UserSecurity
                                   {
-                                      Password = EncodePassword(password),
-                                      Email = email,
-                                      PasswordQuestion = passwordQuestion,
-                                      PasswordAnswer = EncodePassword(passwordAnswer),
-                                      PasswordSalt = CreateSalt(),
-                                      IsApproved = isApproved,
                                       Comment = string.Empty,
                                       CreateDate = createDate,
-                                      LastPasswordChangedDate = createDate,
-                                      IsLockedOut = false,
-                                      FailedPasswordAttemptCount = 0,
+                                      Email = email,
                                       FailedPasswordAnswerAttemptCount = 0,
+                                      FailedPasswordAnswerAttemptWindowStart = createDate,
+                                      FailedPasswordAttemptCount = 0,
+                                      FailedPasswordAttemptWindowStart = createDate,
+                                      HasVerifiedEmail = false,
+                                      IsApproved = isApproved,
+                                      IsLockedOut = false,
                                       LastLockoutDate = SqlDateTime.MinValue.Value,
                                       LastLoginDate = SqlDateTime.MinValue.Value,
+                                      LastPasswordChangedDate = createDate,
+                                      MobilePin = string.Empty,
+                                      Password = EncodePassword(password),
+                                      PasswordAnswer = EncodePassword(passwordAnswer),
+                                      PasswordFormat = (int)PasswordFormat,
+                                      PasswordQuestion = passwordQuestion,
+                                      PasswordSalt = CreateSalt(),
                                       User = user
                                   };
 
@@ -366,7 +439,7 @@ namespace Blob.Security
                 {
                     if (LogExceptions)
                     {
-                        _log.Warn("Failed to create user.", e);
+                        _log.Error("Failed to create user.", e);
                     }
                     status = MembershipCreateStatus.ProviderError;
                 }
@@ -387,7 +460,94 @@ namespace Blob.Security
         /// <returns>true if the user was successfully deleted; otherwise, false.</returns>
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>().FirstOrDefault(us => us.User.Username.Equals(username));
+                    if (userSecurity != null)
+                    {
+                        User user = context.Set<User>().Attach(userSecurity.User);
+
+                        // Delete roles
+                        _roleProvider.RemoveUsersFromRoles(new[] {username}, user.Roles.Select(x => x.Name).ToArray());
+
+                        // Remove from customer
+                        Customer customer = context.Set<Customer>().Attach(user.Customer);
+                        customer.Users.Remove(user);
+                        context.SaveChanges();
+
+                        context.Entry(user).State = EntityState.Deleted;
+                        context.Entry(userSecurity).State = EntityState.Deleted;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Warn("Failed to delete user.", e);
+                }
+                throw new ProviderException("Failed to delete user.", e);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// A helper to get a collection of membership users that match the predicate provided
+        /// </summary>
+        /// <param name="predicate">What to validate for inclusion</param>
+        /// <param name="pageIndex">The index of the page of results to return. pageIndex is zero-based.</param>
+        /// <param name="pageSize">The size of the page of results to return.</param>
+        /// <param name="totalRecords">The total number of matched users.</param>
+        /// <returns>A System.Web.Security.MembershipUserCollection collection that contains a page of pageSizeSystem.Web.Security.MembershipUser objects beginning at the page specified by pageIndex.</returns>
+        private MembershipUserCollection FindUsersBy(Func<UserSecurity, bool> predicate, int pageIndex, int pageSize, out int totalRecords)
+        {
+            int startIndex = pageSize * pageIndex;
+            MembershipUserCollection users = new MembershipUserCollection();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    List<UserSecurity> userSecurity = context.Set<UserSecurity>()
+                                              .Where(predicate)
+                                              .OrderBy(x=>x.User.Username)
+                                              .Skip(startIndex)
+                                              .Take(pageSize)
+                                              .ToList();
+
+                    totalRecords = userSecurity.Count();
+
+                    foreach (BlobMembershipUser user in userSecurity.Select(us => new BlobMembershipUser(
+                                                                                      Name,
+                                                                                      us.User.Username,
+                                                                                      us.User.Id,
+                                                                                      us.Email,
+                                                                                      us.PasswordQuestion,
+                                                                                      us.Comment,
+                                                                                      us.IsApproved,
+                                                                                      us.IsLockedOut,
+                                                                                      us.CreateDate,
+                                                                                      us.LastLoginDate,
+                                                                                      us.User.LastActivityDate,
+                                                                                      us.LastPasswordChangedDate,
+                                                                                      us.LastLockoutDate,
+                                                                                      us.User.CustomerId.ToString()))) {
+                                                                                          users.Add(user);
+                                                                                      }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Warn("Failed to find users.", e);
+                }
+                throw new ProviderException("Failed to find users.", e);
+            }
+            return users;  
         }
 
         /// <summary>
@@ -400,7 +560,7 @@ namespace Blob.Security
         /// <returns>A System.Web.Security.MembershipUserCollection collection that contains a page of pageSizeSystem.Web.Security.MembershipUser objects beginning at the page specified by pageIndex.</returns>
         public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            throw new NotImplementedException();
+            return FindUsersBy(x => x.Email.Contains(emailToMatch), pageIndex, pageSize, out totalRecords);
         }
 
         /// <summary>
@@ -413,7 +573,7 @@ namespace Blob.Security
         /// <returns>A System.Web.Security.MembershipUserCollection collection that contains a page of pageSizeSystem.Web.Security.MembershipUser objects beginning at the page specified by pageIndex.</returns>
         public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            throw new NotImplementedException();
+            return FindUsersBy(x => x.User.Username.StartsWith(usernameToMatch.Replace("%", "")), pageIndex, pageSize, out totalRecords);
         }
 
         /// <summary>
@@ -425,7 +585,7 @@ namespace Blob.Security
         /// <returns>A System.Web.Security.MembershipUserCollection collection that contains a page of pageSizeSystem.Web.Security.MembershipUser objects beginning at the page specified by pageIndex.</returns>
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
         {
-            throw new NotImplementedException();
+            return FindUsersBy(x => true, pageIndex, pageSize, out totalRecords);
         }
 
         /// <summary>
@@ -434,7 +594,26 @@ namespace Blob.Security
         /// <returns>The number of users currently accessing the application.</returns>
         public override int GetNumberOfUsersOnline()
         {
-            throw new NotImplementedException();
+            TimeSpan onlineSpan = new TimeSpan(0, Membership.UserIsOnlineTimeWindow, 0);
+            DateTime compareTime = DateTime.Now.Subtract(onlineSpan);
+            int numOnline;
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    numOnline = context.Set<UserSecurity>().Count(m => m.User.LastActivityDate > compareTime);
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Warn("Failed to get number of users online.", e);
+                }
+                throw new ProviderException("Failed to get number of users online.", e);
+            }
+            return numOnline;  
         }
 
         /// <summary>
@@ -445,7 +624,62 @@ namespace Blob.Security
         /// <returns>The password for the specified user name.</returns>
         public override string GetPassword(string username, string answer)
         {
-            throw new NotImplementedException();
+            string password;
+            string passwordAnswer;
+
+            if (!EnablePasswordRetrieval)
+            {
+                throw new ProviderException("Password Retrieval Not Enabled.");
+            }
+
+            if (PasswordFormat == MembershipPasswordFormat.Hashed)
+            {
+                throw new ProviderException("Cannot retrieve Hashed passwords.");
+            }
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>()
+                        .FirstOrDefault(x => x.User.Username.Equals(username));
+
+                    if (userSecurity != null)
+                    {
+                        if (userSecurity.IsLockedOut)
+                            throw new MembershipPasswordException("The supplied user is locked out.");
+                        password = userSecurity.Password;
+                        passwordAnswer = userSecurity.PasswordAnswer;
+                    }
+                    else
+                    {
+                        throw new MembershipPasswordException("The supplied user name is not found.");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Warn("Failed to get password for user.", e);
+                }
+                throw new ProviderException("Failed to get password for user.", e);
+            }
+
+            if (RequiresQuestionAndAnswer && !CheckPassword(answer, passwordAnswer))
+            {
+                UpdateFailureCount(username, "passwordAnswer");
+
+                throw new MembershipPasswordException("Incorrect password answer.");
+            }
+
+
+            if (PasswordFormat == MembershipPasswordFormat.Encrypted)
+            {
+                password = UnEncodePassword(password);
+            }
+
+            return password;  
         }
 
         /// <summary>
@@ -521,10 +755,8 @@ namespace Blob.Security
                 if (LogExceptions)
                 {
                     _log.Warn("Failed to get user.", e);
-                    throw new ProviderException("Failed to get user.");
                 }
-
-                throw;
+                throw new ProviderException("Failed to get user.", e);
             }
 
             return user;
@@ -556,11 +788,9 @@ namespace Blob.Security
             {
                 if (LogExceptions)
                 {
-                    _log.Warn("Failed to get username.", e);
-                    throw new ProviderException("Failed to get username.");
+                    _log.Error("Failed to get username.", e);
                 }
-
-                throw;
+                throw new ProviderException("Failed to get username.", e);
             }
 
             return username;
@@ -574,7 +804,72 @@ namespace Blob.Security
         /// <returns>The new password for the specified user.</returns>
         public override string ResetPassword(string username, string answer)
         {
-            throw new NotImplementedException();
+            if (!EnablePasswordReset)
+            {
+                throw new NotSupportedException("Password reset is not enabled.");
+            }
+
+            if (string.IsNullOrEmpty(answer) && RequiresQuestionAndAnswer)
+            {
+                UpdateFailureCount(username, "passwordAnswer");
+                throw new ProviderException("Password answer required for password reset.");
+            }
+
+            string newPassword = Membership.GeneratePassword(MinRequiredPasswordLength, MinRequiredNonAlphanumericCharacters);
+
+            ValidatePasswordEventArgs args = new ValidatePasswordEventArgs(username, newPassword, true);
+
+            OnValidatingPassword(args);
+
+            if (args.Cancel)
+                if (args.FailureInformation != null)
+                    throw args.FailureInformation;
+                else
+                    throw new MembershipPasswordException("Reset password canceled due to password validation failure.");
+
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>()
+                                                       .FirstOrDefault(x => x.User.Username.Equals(username));
+                    
+                    string passwordAnswer;
+
+                    if (userSecurity != null)
+                    {
+                        if (userSecurity.IsLockedOut)
+                            throw new MembershipPasswordException("The supplied user is locked out.");
+
+                        passwordAnswer = userSecurity.PasswordAnswer;
+                    }
+                    else
+                    {
+                        throw new MembershipPasswordException("The supplied user name is not found.");
+                    }
+
+                    if (RequiresQuestionAndAnswer && !CheckPassword(answer, passwordAnswer))
+                    {
+                        UpdateFailureCount(username, "passwordAnswer");
+
+                        throw new MembershipPasswordException("Incorrect password answer.");
+                    }
+
+                    userSecurity.Password = EncodePassword(newPassword);
+                    userSecurity.LastPasswordChangedDate = DateTime.Now;
+                    context.Entry(userSecurity).State = EntityState.Modified;
+                    context.SaveChanges();
+                    return newPassword;
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed reseting password.", e);
+                }
+                throw new ProviderException("Failed reseting password.", e);
+            }
         }
 
         /// <summary>
@@ -584,7 +879,31 @@ namespace Blob.Security
         /// <returns>true if the membership user was successfully unlocked; otherwise, false.</returns>
         public override bool UnlockUser(string userName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>()
+                                                       .FirstOrDefault(x => x.User.Username.Equals(userName));
+                    if (userSecurity != null)
+                    {
+                        userSecurity.IsLockedOut = false;
+                        userSecurity.LastLockoutDate = DateTime.Now;
+                        context.Entry(userSecurity).State = EntityState.Modified;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed unlocking user.", e);
+                }
+                throw new ProviderException("Failed unlocking user.", e);
+            }
+            return false;  
         }
 
         /// <summary>
@@ -593,7 +912,30 @@ namespace Blob.Security
         /// <param name="user">A System.Web.Security.MembershipUser object that represents the user to update and the updated information for the user.</param>
         public override void UpdateUser(MembershipUser user)
         {
-            throw new NotImplementedException();
+            BlobMembershipUser blobUser = (BlobMembershipUser)user;
+            try
+            {
+                using (BlobDbContext context = new BlobDbContext(_dbConnectionString))
+                {
+                    UserSecurity userSecurity = context.Set<UserSecurity>()
+                                                       .FirstOrDefault(x => x.User.Id.Equals((Guid)blobUser.ProviderUserKey));
+                    if (userSecurity != null)
+                    {
+                        userSecurity.Comment = blobUser.Comment;
+                        userSecurity.Email = blobUser.Email;
+                        userSecurity.IsApproved = blobUser.IsApproved;
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed updating user.", e);
+                }
+                throw new ProviderException("Failed updating user.", e);
+            }
         }
 
         /// <summary>
@@ -641,11 +983,9 @@ namespace Blob.Security
             {
                 if (LogExceptions)
                 {
-                    _log.Warn("Error validating username and password.", e);
-                    throw new ProviderException("Error validating username and password.");
+                    _log.Error("Error validating username and password.", e);
                 }
-
-                throw;
+                throw new ProviderException("Error validating username and password.", e);
             }
 
             return isValid;
@@ -726,11 +1066,9 @@ namespace Blob.Security
             {
                 if (LogExceptions)
                 {
-                    _log.Warn("Error updating failure count.", e);
-                    throw new ProviderException("Error updating failure count.");
+                    _log.Error("Error updating failure count.", e);
                 }
-
-                throw;
+                throw new ProviderException("Error updating failure count.", e);
             }
         }
 
