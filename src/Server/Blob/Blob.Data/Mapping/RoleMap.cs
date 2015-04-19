@@ -10,17 +10,21 @@ namespace Blob.Data.Mapping
         {
             ToTable("Roles");
 
+            // Id
             HasKey(x => x.Id);
             Property(x => x.Id)
                 .HasColumnType("uniqueidentifier")
                 .IsRequired();
 
+            // Name
             Property(x => x.Name)
                 .HasColumnType("nvarchar").HasMaxLength(256)
                 .IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(
                     new IndexAttribute("IX_RoleName", 1) { IsUnique = true }));
+
+            // Users
         }
     }
 }

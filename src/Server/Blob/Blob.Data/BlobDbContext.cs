@@ -2,14 +2,17 @@
 using Blob.Data.Migrations;
 using log4net;
 using System.Data.Entity;
+using Blob.Core.Identity;
+using Blob.Data.Identity;
 
 namespace Blob.Data
 {
-    public class BlobDbContext : DbContext
+    public class BlobDbContext : GenericDbContext
     {
         private readonly ILog _log;
 
         public BlobDbContext()
+            : base()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             Configuration.LazyLoadingEnabled = false;
@@ -38,17 +41,18 @@ namespace Blob.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             _log.Info("Creating model");
+
+            modelBuilder.Configurations.Add(new BlobUserClaimMap());
+            modelBuilder.Configurations.Add(new BlobUserLoginMap());
+            modelBuilder.Configurations.Add(new BlobUserRoleMap());
             modelBuilder.Configurations.Add(new CustomerMap());
             modelBuilder.Configurations.Add(new DeviceMap());
-            modelBuilder.Configurations.Add(new DeviceSecurityMap());
             modelBuilder.Configurations.Add(new DeviceTypeMap());
             modelBuilder.Configurations.Add(new RoleMap());
             modelBuilder.Configurations.Add(new StatusMap());
             modelBuilder.Configurations.Add(new StatusPerfMap());
             modelBuilder.Configurations.Add(new UserMap());
-            modelBuilder.Configurations.Add(new UserSecurityMap());
 
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

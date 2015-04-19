@@ -27,7 +27,7 @@ namespace Blob.WcfHost.Infrastructure
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Status>>().To<Data.EfRepositoryAsync<Core.Domain.Status>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.StatusPerf>>().To<Data.EfRepositoryAsync<Core.Domain.StatusPerf>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.User>>().To<Data.EfRepositoryAsync<Core.Domain.User>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.UserSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.UserSecurity>>();
+            //Bind<Core.Data.IRepositoryAsync<Core.Domain.UserSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.UserSecurity>>();
 
             // manager
             // todo: decide where i am going to store the callbacks

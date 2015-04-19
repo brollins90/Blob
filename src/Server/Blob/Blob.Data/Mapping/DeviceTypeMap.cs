@@ -10,11 +10,13 @@ namespace Blob.Data.Mapping
         {
             ToTable("DeviceTypes");
 
+            // Id
             HasKey(x => x.Id);
             Property(x => x.Id)
                 .HasColumnType("uniqueidentifier")
                 .IsRequired();
 
+            // Value
             Property(x => x.Value)
                 .HasColumnType("nvarchar").HasMaxLength(256)
                 .IsRequired()

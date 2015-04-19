@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Blob.Core.Identity;
+using System;
 
 namespace Blob.Core.Domain
 {
-    public class User
+    public class BlobUserClaim : GenericUserClaim<Guid> { }
+    public class BlobUserLogin : GenericUserLogin<Guid> { }
+    public class BlobUserRole : GenericUserRole<Guid> { }
+
+    public class User : GenericUser<Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
     {
-        public Guid Id { get; set; }
-        public string Username { get; set; }
-        public DateTime LastActivityDate { get; set; }
-
-        public virtual ICollection<Role> Roles { get; set; }
-
-        public Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
     }
 }

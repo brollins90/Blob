@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Blob.Core.Identity;
+using System;
 
 namespace Blob.Core.Domain
 {
-    public class Role
+    public class Role : GenericRole<Guid, BlobUserRole>
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-
-        public virtual ICollection<User> Users { get; set; }
     }
 }

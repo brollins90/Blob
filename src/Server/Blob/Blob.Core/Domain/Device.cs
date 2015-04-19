@@ -6,17 +6,11 @@ namespace Blob.Core.Domain
 {
     public class Device
     {
-        private ICollection<Status> _statuses;
-        private ICollection<StatusPerf> _statusPerfs;
+        public virtual Guid Id { get; set; }
+        public virtual string DeviceName { get; set; }
+        public virtual DateTime LastActivityDate { get; set; }
 
-        public Guid Id { get; set; }
-        public string DeviceName { get; set; }
-        public DateTime LastActivityDate { get; set; }
-
-        public Guid DeviceTypeId { get; set; }
         public virtual DeviceType DeviceType { get; set; }
-
-        public Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
         public virtual ICollection<Status> Statuses
@@ -24,11 +18,13 @@ namespace Blob.Core.Domain
             get { return _statuses ?? (new Collection<Status>()); }
             protected set { _statuses = value; }
         }
+        private ICollection<Status> _statuses;
 
         public virtual ICollection<StatusPerf> StatusPerfs
         {
             get { return _statusPerfs ?? (new Collection<StatusPerf>()); }
             protected set { _statusPerfs = value; }
         }
+        private ICollection<StatusPerf> _statusPerfs;
     }
 }

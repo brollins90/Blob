@@ -7,6 +7,8 @@ namespace Blob.Proxies
 {
     public class CommandClient : ClientBase<ICommandService>, ICommandService
     {
+        public Action<Exception> ClientErrorHandler = null;
+
         public CommandClient(InstanceContext callbackInstance, string endpointName)
             : base(callbackInstance, endpointName)
         {
@@ -19,17 +21,46 @@ namespace Blob.Proxies
 
         public void Connect(Guid deviceId)
         {
-            Channel.Connect(deviceId);
+            try
+            {
+                Channel.Connect(deviceId);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public void Disconnect(Guid deviceId)
         {
-            Channel.Disconnect(deviceId);
+            try
+            {
+                Channel.Disconnect(deviceId);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public void Ping(Guid deviceId)
         {
-            Channel.Ping(deviceId);
+            try
+            {
+                Channel.Ping(deviceId);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        private void HandleError(Exception ex)
+        {
+            if (ClientErrorHandler != null)
+                ClientErrorHandler(ex);
+            else
+                throw new Exception("Server exception.", ex);
         }
     }
 }
