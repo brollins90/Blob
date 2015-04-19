@@ -21,7 +21,7 @@ namespace Blob.WcfHost.Infrastructure
             // core
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Customer>>().To<Data.EfRepositoryAsync<Core.Domain.Customer>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Device>>().To<Data.EfRepositoryAsync<Core.Domain.Device>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceSecurity>>();
+            //Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceSecurity>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceType>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceType>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Role>>().To<Data.EfRepositoryAsync<Core.Domain.Role>>();
             Bind<Core.Data.IRepositoryAsync<Core.Domain.Status>>().To<Data.EfRepositoryAsync<Core.Domain.Status>>();

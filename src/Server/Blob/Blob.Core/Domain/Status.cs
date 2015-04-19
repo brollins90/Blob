@@ -12,6 +12,7 @@ namespace Blob.Core.Domain
         public virtual DateTime TimeSent { get; set; }
         public virtual string CurrentValue { get; set; }
 
+        public virtual Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
     }
 }

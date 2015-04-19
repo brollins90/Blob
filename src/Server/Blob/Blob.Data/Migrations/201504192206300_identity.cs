@@ -3,7 +3,7 @@ namespace Blob.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class MovedToIdentity2 : DbMigration
+    public partial class identity : DbMigration
     {
         public override void Up()
         {
@@ -16,16 +16,19 @@ namespace Blob.Data.Migrations
             DropIndex("dbo.UserSecurities", "IX_UserSecurityEmail");
             DropIndex("dbo.UsersInRoles", new[] { "UserId" });
             DropIndex("dbo.UsersInRoles", new[] { "RoleId" });
-            RenameColumn(table: "dbo.Devices", name: "CustomerId", newName: "Customer_Id");
-            RenameColumn(table: "dbo.Users", name: "CustomerId", newName: "Customer_Id");
-            RenameColumn(table: "dbo.Devices", name: "DeviceTypeId", newName: "DeviceType_Id");
-            RenameColumn(table: "dbo.Statuses", name: "DeviceId", newName: "Device_Id");
-            RenameColumn(table: "dbo.StatusPerfs", name: "DeviceId", newName: "Device_Id");
-            RenameIndex(table: "dbo.Devices", name: "IX_CustomerId", newName: "IX_Customer_Id");
-            RenameIndex(table: "dbo.Devices", name: "IX_DeviceTypeId", newName: "IX_DeviceType_Id");
-            RenameIndex(table: "dbo.Statuses", name: "IX_DeviceId", newName: "IX_Device_Id");
-            RenameIndex(table: "dbo.StatusPerfs", name: "IX_DeviceId", newName: "IX_Device_Id");
-            RenameIndex(table: "dbo.Users", name: "IX_CustomerId", newName: "IX_Customer_Id");
+            CreateTable(
+                "dbo.UserRoles",
+                c => new
+                    {
+                        RoleId = c.Guid(nullable: false),
+                        UserId = c.Guid(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.RoleId, t.UserId })
+                .ForeignKey("dbo.Roles", t => t.RoleId, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.RoleId)
+                .Index(t => t.UserId);
+            
             CreateTable(
                 "dbo.UserClaims",
                 c => new
@@ -52,23 +55,10 @@ namespace Blob.Data.Migrations
                 .ForeignKey("dbo.Users", t => t.User_Id)
                 .Index(t => t.User_Id);
             
-            CreateTable(
-                "dbo.UserRoles",
-                c => new
-                    {
-                        RoleId = c.Guid(nullable: false),
-                        UserId = c.Guid(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.RoleId, t.UserId })
-                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .ForeignKey("dbo.Roles", t => t.RoleId, cascadeDelete: true)
-                .Index(t => t.RoleId)
-                .Index(t => t.UserId);
-            
-            AddColumn("dbo.Users", "PasswordHash", c => c.String());
-            AddColumn("dbo.Users", "SecurityStamp", c => c.String());
             AddColumn("dbo.Users", "Email", c => c.String());
             AddColumn("dbo.Users", "EmailConfirmed", c => c.Boolean(nullable: false));
+            AddColumn("dbo.Users", "PasswordHash", c => c.String());
+            AddColumn("dbo.Users", "SecurityStamp", c => c.String());
             AddColumn("dbo.Users", "AccessFailedCount", c => c.Int(nullable: false));
             AddColumn("dbo.Users", "LockoutEnabled", c => c.Boolean(nullable: false));
             AddColumn("dbo.Users", "LockoutEndDateUtc", c => c.DateTime());
@@ -141,37 +131,27 @@ namespace Blob.Data.Migrations
                     })
                 .PrimaryKey(t => t.DeviceId);
             
-            DropForeignKey("dbo.UserRoles", "RoleId", "dbo.Roles");
             DropForeignKey("dbo.UserRoles", "UserId", "dbo.Users");
             DropForeignKey("dbo.UserLogins", "User_Id", "dbo.Users");
             DropForeignKey("dbo.UserClaims", "UserId", "dbo.Users");
-            DropIndex("dbo.UserRoles", new[] { "UserId" });
-            DropIndex("dbo.UserRoles", new[] { "RoleId" });
+            DropForeignKey("dbo.UserRoles", "RoleId", "dbo.Roles");
             DropIndex("dbo.UserLogins", new[] { "User_Id" });
             DropIndex("dbo.UserClaims", new[] { "UserId" });
+            DropIndex("dbo.UserRoles", new[] { "UserId" });
+            DropIndex("dbo.UserRoles", new[] { "RoleId" });
             DropColumn("dbo.Users", "TwoFactorEnabled");
             DropColumn("dbo.Users", "PhoneNumberConfirmed");
             DropColumn("dbo.Users", "PhoneNumber");
             DropColumn("dbo.Users", "LockoutEndDateUtc");
             DropColumn("dbo.Users", "LockoutEnabled");
             DropColumn("dbo.Users", "AccessFailedCount");
-            DropColumn("dbo.Users", "EmailConfirmed");
-            DropColumn("dbo.Users", "Email");
             DropColumn("dbo.Users", "SecurityStamp");
             DropColumn("dbo.Users", "PasswordHash");
-            DropTable("dbo.UserRoles");
+            DropColumn("dbo.Users", "EmailConfirmed");
+            DropColumn("dbo.Users", "Email");
             DropTable("dbo.UserLogins");
             DropTable("dbo.UserClaims");
-            RenameIndex(table: "dbo.Users", name: "IX_Customer_Id", newName: "IX_CustomerId");
-            RenameIndex(table: "dbo.StatusPerfs", name: "IX_Device_Id", newName: "IX_DeviceId");
-            RenameIndex(table: "dbo.Statuses", name: "IX_Device_Id", newName: "IX_DeviceId");
-            RenameIndex(table: "dbo.Devices", name: "IX_DeviceType_Id", newName: "IX_DeviceTypeId");
-            RenameIndex(table: "dbo.Devices", name: "IX_Customer_Id", newName: "IX_CustomerId");
-            RenameColumn(table: "dbo.StatusPerfs", name: "Device_Id", newName: "DeviceId");
-            RenameColumn(table: "dbo.Statuses", name: "Device_Id", newName: "DeviceId");
-            RenameColumn(table: "dbo.Devices", name: "DeviceType_Id", newName: "DeviceTypeId");
-            RenameColumn(table: "dbo.Users", name: "Customer_Id", newName: "CustomerId");
-            RenameColumn(table: "dbo.Devices", name: "Customer_Id", newName: "CustomerId");
+            DropTable("dbo.UserRoles");
             CreateIndex("dbo.UsersInRoles", "RoleId");
             CreateIndex("dbo.UsersInRoles", "UserId");
             CreateIndex("dbo.UserSecurities", "Email", unique: true, name: "IX_UserSecurityEmail");

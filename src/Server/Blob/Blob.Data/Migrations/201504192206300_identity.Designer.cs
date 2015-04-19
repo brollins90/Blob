@@ -7,13 +7,13 @@ namespace Blob.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class MovedToIdentity2 : IMigrationMetadata
+    public sealed partial class identity : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(MovedToIdentity2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(identity));
         
         string IMigrationMetadata.Id
         {
-            get { return "201504190545021_MovedToIdentity2"; }
+            get { return "201504192206300_identity"; }
         }
         
         string IMigrationMetadata.Source

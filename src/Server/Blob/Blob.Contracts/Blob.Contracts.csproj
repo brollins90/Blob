@@ -49,7 +49,7 @@
     <Compile Include="Registration\IRegistrationService.cs" />
     <Compile Include="Security\IMembershipService.cs" />
     <Compile Include="Security\IRoleService.cs" />
-    <Compile Include="Security\IIdentityManager.cs" />
+    <Compile Include="Security\IUserManagerService.cs" />
     <Compile Include="Status\IStatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\StatusData.cs" />

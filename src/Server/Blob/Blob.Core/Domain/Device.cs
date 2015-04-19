@@ -10,7 +10,10 @@ namespace Blob.Core.Domain
         public virtual string DeviceName { get; set; }
         public virtual DateTime LastActivityDate { get; set; }
 
+        public virtual Guid DeviceTypeId { get; set; }
         public virtual DeviceType DeviceType { get; set; }
+
+        public virtual Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
         public virtual ICollection<Status> Statuses

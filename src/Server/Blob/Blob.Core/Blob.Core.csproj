@@ -52,12 +52,10 @@
     <Compile Include="Domain\User.cs" />
     <Compile Include="Domain\UserSecurity.cs" />
     <Compile Include="Identity\GenericRole.cs" />
-    <Compile Include="Identity\GenericRoleStore.cs" />
     <Compile Include="Identity\GenericUser.cs" />
     <Compile Include="Identity\GenericUserClaim.cs" />
     <Compile Include="Identity\GenericUserLogin.cs" />
     <Compile Include="Identity\GenericUserRole.cs" />
-    <Compile Include="Identity\GenericUserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

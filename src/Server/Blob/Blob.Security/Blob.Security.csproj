@@ -52,16 +52,19 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlobIdentityStore.cs" />
-    <Compile Include="BlobMembershipProvider.cs" />
-    <Compile Include="BlobMembershipUser.cs" />
-    <Compile Include="BlobRoleProvider.cs" />
     <Compile Include="BlobIdentityManager.cs" />
+    <Compile Include="BlobServiceAuthorizationManager.cs" />
+    <Compile Include="BlobUserValidator.cs" />
+    <Compile Include="BlobRoleStore.cs" />
+    <Compile Include="BlobUserManager.cs" />
+    <Compile Include="BlobUserStore.cs" />
+    <Compile Include="BlobIdentityValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

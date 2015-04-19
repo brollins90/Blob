@@ -16,6 +16,9 @@ namespace BMonitor.Service
 {
     public class MonitorManager
     {
+        private string Username = "customerUser1";
+        private string Password = "";//"password";
+
         private readonly ILog _log;
         private readonly ICollection<IMonitor> _monitors;
 
@@ -44,8 +47,8 @@ namespace BMonitor.Service
             if (!Guid.TryParse(GetConfigValue(config["deviceId"], ""), out _deviceId))
             {
                 _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
-                _deviceId = Guid.Parse("D98CC204-C422-486D-AA52-398AD622E7A5");
-                //_deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
+                //_deviceId = Guid.Parse("D98CC204-C422-486D-AA52-398AD622E7A5");
+                _deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
             }
 
             _monitorPath = GetConfigValue(config["monitorPath"], @"/Monitors/");
@@ -72,8 +75,8 @@ namespace BMonitor.Service
             InstanceContext callbackInstance = new InstanceContext(new CommandServiceCallbackHandler());
 
             commandClient = new CommandClient(callbackInstance, "CommandService");
-            commandClient.ClientCredentials.UserName.UserName = "customerUser1";
-            commandClient.ClientCredentials.UserName.Password = "password";
+            commandClient.ClientCredentials.UserName.UserName = Username;
+            commandClient.ClientCredentials.UserName.Password = Password;
             commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
             commandClient.Connect(_deviceId);
@@ -152,14 +155,14 @@ namespace BMonitor.Service
 
                 _log.Info("Creating new StatusClient");
                 StatusClient statusClient = new StatusClient("StatusService");
-                statusClient.ClientCredentials.UserName.UserName = "customerUser1";
-                statusClient.ClientCredentials.UserName.Password = "password";
+                statusClient.ClientCredentials.UserName.UserName = Username;
+                statusClient.ClientCredentials.UserName.Password = Password;
                 statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
                 _log.Debug("Sending status and then performance message.");
                 // send
                 Task.Run(() => statusClient.SendStatusToServer(statusData));
-                Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
+                //Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
             }
         }
 

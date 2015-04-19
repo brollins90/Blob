@@ -57,7 +57,11 @@ namespace Blob.Data.Mapping
                 .HasColumnType("decimal").HasPrecision(18, 5)
                 .IsOptional();
 
-            HasRequired(s => s.Device).WithMany(d => d.StatusPerfs);
+            // Device
+            //Property(x => x.DeviceId)
+            //    .HasColumnType("uniqueidentifier")
+            //    .IsRequired();
+            //HasRequired(s => s.Device).WithMany(d => d.StatusPerfs).HasForeignKey(s => s.DeviceId);
         }
     }
 }

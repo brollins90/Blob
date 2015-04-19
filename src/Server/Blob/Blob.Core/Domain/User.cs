@@ -9,6 +9,7 @@ namespace Blob.Core.Domain
 
     public class User : GenericUser<Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
     {
+        public virtual Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
     }
 }

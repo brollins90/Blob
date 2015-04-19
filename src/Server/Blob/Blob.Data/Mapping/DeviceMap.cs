@@ -25,14 +25,18 @@ namespace Blob.Data.Mapping
                 .IsRequired();
 
             // DeviceType
-            HasRequired(d => d.DeviceType).WithMany();
+            Property(x => x.DeviceTypeId).HasColumnType("uniqueidentifier");
+            HasRequired(d => d.DeviceType).WithMany().HasForeignKey(d => d.DeviceTypeId);
 
             // Customer
-            HasRequired(d => d.Customer).WithMany(c => c.Devices);
+            Property(x => x.CustomerId).HasColumnType("uniqueidentifier");
+            HasRequired(d => d.Customer).WithMany(c => c.Devices).HasForeignKey(d => d.CustomerId);
 
             // Statuses
+            //HasMany(d => d.Statuses).WithRequired().HasForeignKey(s => s.DeviceId);
 
             // StatusPerfs
+            //HasMany(d => d.StatusPerfs).WithRequired().HasForeignKey(s => s.DeviceId);
         }
     }
 }

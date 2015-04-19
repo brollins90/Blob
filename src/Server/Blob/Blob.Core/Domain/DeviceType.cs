@@ -4,7 +4,7 @@ namespace Blob.Core.Domain
 {
     public class DeviceType
     {
-        public Guid Id { get; set; }
-        public string Value { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual string Value { get; set; }
     }
 }

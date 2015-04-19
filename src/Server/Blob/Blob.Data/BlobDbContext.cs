@@ -1,18 +1,20 @@
-﻿using Blob.Data.Mapping;
+﻿using System;
+using Blob.Data.Mapping;
 using Blob.Data.Migrations;
 using log4net;
 using System.Data.Entity;
+using Blob.Core.Domain;
 using Blob.Core.Identity;
 using Blob.Data.Identity;
 
 namespace Blob.Data
 {
-    public class BlobDbContext : GenericDbContext
+    public class BlobDbContext : GenericDbContext<User,Role,Guid,BlobUserLogin, BlobUserRole,BlobUserClaim>
     {
         private readonly ILog _log;
 
         public BlobDbContext()
-            : base()
+            : base("BlobDbContext")
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             Configuration.LazyLoadingEnabled = false;

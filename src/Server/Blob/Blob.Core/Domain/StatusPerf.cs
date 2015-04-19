@@ -16,6 +16,7 @@ namespace Blob.Core.Domain
         public virtual decimal? Min { get; set; }
         public virtual decimal? Max { get; set; }
 
+        public virtual Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
     }
 }

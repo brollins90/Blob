@@ -72,8 +72,18 @@ namespace Blob.Data.Mapping
                 .HasColumnType("datetime2")
                 .IsRequired();
 
+            //// Roles
+            //HasMany(u => u.Roles)
+            //    .WithMany(r => r.Users)
+            //    .Map(m => m.MapLeftKey("UserId")
+            //               .MapRightKey("RoleId")
+            //               .ToTable("UsersInRoles"));
+
             // Customer
-            HasRequired(u => u.Customer).WithMany(c => c.Users);
+            Property(x => x.CustomerId)
+                .HasColumnType("uniqueidentifier")
+                .IsRequired();
+            HasRequired(u => u.Customer).WithMany(c => c.Users).HasForeignKey(u => u.CustomerId);
         }
     }
 }
