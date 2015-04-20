@@ -4,15 +4,15 @@ namespace Blob.Core.Domain
 {
     public class Status
     {
-        public virtual long Id { get; set; }
-        public virtual string MonitorName { get; set; }
-        public virtual string MonitorDescription { get; set; }
-        public virtual int AlertLevel { get; set; }
-        public virtual DateTime TimeGenerated { get; set; }
-        public virtual DateTime TimeSent { get; set; }
-        public virtual string CurrentValue { get; set; }
+        public long Id { get; set; }
+        public string MonitorName { get; set; }
+        public string MonitorDescription { get; set; }
+        public int AlertLevel { get; set; }
+        public DateTime TimeGenerated { get; set; }
+        public DateTime TimeSent { get; set; }
+        public string CurrentValue { get; set; }
 
-        public virtual Guid DeviceId { get; set; }
+        public Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
     }
 }

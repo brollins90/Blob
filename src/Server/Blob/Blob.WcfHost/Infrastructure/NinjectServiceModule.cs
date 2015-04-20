@@ -19,15 +19,8 @@ namespace Blob.WcfHost.Infrastructure
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
             // core
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.Customer>>().To<Data.EfRepositoryAsync<Core.Domain.Customer>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.Device>>().To<Data.EfRepositoryAsync<Core.Domain.Device>>();
-            //Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceSecurity>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.DeviceType>>().To<Data.EfRepositoryAsync<Core.Domain.DeviceType>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.Role>>().To<Data.EfRepositoryAsync<Core.Domain.Role>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.Status>>().To<Data.EfRepositoryAsync<Core.Domain.Status>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.StatusPerf>>().To<Data.EfRepositoryAsync<Core.Domain.StatusPerf>>();
-            Bind<Core.Data.IRepositoryAsync<Core.Domain.User>>().To<Data.EfRepositoryAsync<Core.Domain.User>>();
-            //Bind<Core.Data.IRepositoryAsync<Core.Domain.UserSecurity>>().To<Data.EfRepositoryAsync<Core.Domain.UserSecurity>>();
+            Bind<Core.Data.IAccountRepository>().To<Data.Repositories.AccountRepository>();
+            Bind<Core.Data.IStatusRepository>().To<Data.Repositories.StatusRepository>();
 
             // manager
             // todo: decide where i am going to store the callbacks

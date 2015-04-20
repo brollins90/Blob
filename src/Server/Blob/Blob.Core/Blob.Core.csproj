@@ -40,17 +40,15 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\IRepositoryAsync.cs" />
-    <Compile Include="Data\IRepository.cs" />
+    <Compile Include="Data\IAccountRepository.cs" />
+    <Compile Include="Data\IStatusRepository.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Device.cs" />
-    <Compile Include="Domain\DeviceSecurity.cs" />
     <Compile Include="Domain\DeviceType.cs" />
     <Compile Include="Domain\Role.cs" />
     <Compile Include="Domain\Status.cs" />
     <Compile Include="Domain\StatusPerf.cs" />
     <Compile Include="Domain\User.cs" />
-    <Compile Include="Domain\UserSecurity.cs" />
     <Compile Include="Identity\GenericRole.cs" />
     <Compile Include="Identity\GenericUser.cs" />
     <Compile Include="Identity\GenericUserClaim.cs" />

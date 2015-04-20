@@ -27,10 +27,9 @@ namespace Blob.Data.Mapping
             // CreateDate
             Property(x => x.CreateDate).HasColumnType("datetime2")
                 .IsRequired();
-            
-            // Devices
 
-            // Users
+            // Devices ??
+            // Users  ??
         }
     }
 }

@@ -4,12 +4,11 @@ using Blob.Data.Migrations;
 using log4net;
 using System.Data.Entity;
 using Blob.Core.Domain;
-using Blob.Core.Identity;
 using Blob.Data.Identity;
 
 namespace Blob.Data
 {
-    public class BlobDbContext : GenericDbContext<User,Role,Guid,BlobUserLogin, BlobUserRole,BlobUserClaim>
+    public class BlobDbContext : GenericDbContext<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
     {
         private readonly ILog _log;
 

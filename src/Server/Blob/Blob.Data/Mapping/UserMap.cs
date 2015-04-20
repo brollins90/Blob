@@ -47,13 +47,12 @@ namespace Blob.Data.Mapping
                 .IsRequired();
         }
     }
-
     public class UserMap : BlobEntityTypeConfiguration<User>
     {
         public UserMap()
         {
             ToTable("Users");
-            
+
             // Id
             HasKey(x => x.Id);
             Property(x => x.Id)
@@ -67,12 +66,13 @@ namespace Blob.Data.Mapping
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(
                     new IndexAttribute("IX_UserUsername", 1) { IsUnique = true }));
+
             // LastActivityDate
             Property(x => x.LastActivityDate)
                 .HasColumnType("datetime2")
                 .IsRequired();
 
-            //// Roles
+            // Roles
             //HasMany(u => u.Roles)
             //    .WithMany(r => r.Users)
             //    .Map(m => m.MapLeftKey("UserId")

@@ -117,10 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Target" xml:space="preserve">
-    <value>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</value>
+  <data name="DbValidationFailed" xml:space="preserve">
+    <value>Database Validation failed</value>
   </data>
-  <data name="DefaultSchema" xml:space="preserve">
-    <value>dbo</value>
+  <data name="DuplicateEmail" xml:space="preserve">
+    <value>Email {0} is already taken</value>
+  </data>
+  <data name="DuplicateUserName" xml:space="preserve">
+    <value>User name {0} is already taken</value>
+  </data>
+  <data name="EntityFailedValidation" xml:space="preserve">
+    <value>Entity Type {0} failed validation</value>
+  </data>
+  <data name="ExternalLoginExists" xml:space="preserve">
+    <value>A user with that external login already exists</value>
+  </data>
+  <data name="IdentityV1SchemaError" xml:space="preserve">
+    <value>The model backing the &amp;apos;ApplicationDbContext&amp;apos; context has changed since the database was created. This could have happened because the model used by ASP.NET Identity Framework has changed or the model being used in your application has changed. To resolve this issue, you need to update your database. Consider using Code First Migrations to update the database (http://go.microsoft.com/fwlink/?LinkId=301867).  Before you update your database using Code First Migrations, please disable the schema consistency ch [rest of string was truncated]&amp;quot;;.</value>
+  </data>
+  <data name="IncorrectType" xml:space="preserve">
+    <value>Incorrect type, expected type of {0}</value>
+  </data>
+  <data name="PropertyCannotBeEmpty" xml:space="preserve">
+    <value>{0} cannot be null or empty</value>
+  </data>
+  <data name="RoleAlreadyExists" xml:space="preserve">
+    <value>Role {0} already exists</value>
+  </data>
+  <data name="RoleIsNotEmpty" xml:space="preserve">
+    <value>Role is not empty</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Role {0} does not exist</value>
+  </data>
+  <data name="UserAlreadyInRole" xml:space="preserve">
+    <value>User already in role</value>
+  </data>
+  <data name="UserIdNotFound" xml:space="preserve">
+    <value>The UserId cannot be found</value>
+  </data>
+  <data name="UserLoginAlreadyExists" xml:space="preserve">
+    <value>UserLogin already exists for loginProvider: {0} with providerKey: {1}.</value>
+  </data>
+  <data name="UserNameNotFound" xml:space="preserve">
+    <value>User {0} does not exist</value>
+  </data>
+  <data name="UserNotInRole" xml:space="preserve">
+    <value>User is not in role</value>
+  </data>
+  <data name="ValueCannotBeNullOrEmpty" xml:space="preserve">
+    <value>Value cannot be null or empty</value>
   </data>
 </root>

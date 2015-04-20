@@ -6,9 +6,9 @@ namespace Blob.Core.Domain
 {
     public class Customer
     {
-        public virtual Guid Id { get; set; }
-        public virtual string Name { get; set; }
-        public virtual DateTime CreateDate { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public DateTime CreateDate { get; set; }
 
         public virtual ICollection<Device> Devices
         {

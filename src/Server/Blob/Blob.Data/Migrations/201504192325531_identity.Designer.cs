@@ -13,7 +13,7 @@ namespace Blob.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201504192206300_identity"; }
+            get { return "201504192325531_identity"; }
         }
         
         string IMigrationMetadata.Source

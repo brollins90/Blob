@@ -22,6 +22,7 @@ namespace Blob.Security
                         Trace.TraceWarning(msg);
                         //throw new FaultException(msg);//the client actually will receive MessageSecurityException. But if I throw MessageSecurityException, the runtime will give FaultException to client without clear message.
                     }
+                    Trace.TraceWarning(String.Format("Good Username {0} with correct password {1}", userName, password));
                 }
 
             }

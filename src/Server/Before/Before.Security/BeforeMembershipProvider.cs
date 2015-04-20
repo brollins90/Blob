@@ -1,12 +1,8 @@
-﻿using Blob.Core.Domain;
-using Blob.Data;
+﻿using Blob.Security;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Configuration;
-using System.Configuration.Provider;
-using System.Data.Entity;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,110 +11,25 @@ using System.Text;
 using System.Web.Configuration;
 using System.Web.Security;
 
-namespace Blob.Security
+namespace Before.Security
 {
-    // http://blog.ianchivers.com/2012/03/entity-framework-custom-membership.html
 
-    public class BlobMembershipProvider : MembershipProvider
+    public class BeforeMembershipProvider : MembershipProvider
     {
         private readonly ILog _log;
-        private readonly string _dbConnectionString;
-        private MachineKeySection _machineKey;
         private readonly BlobRoleProvider _roleProvider;
+        private readonly BlobMembershipProvider _membershipProvider;
 
-        public BlobMembershipProvider()
+        public BeforeMembershipProvider()
         {
             _log = LogManager.GetLogger("MembershipLogger");
-            _dbConnectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
+            _membershipProvider = new BlobMembershipProvider();
             _roleProvider = new BlobRoleProvider();
         }
 
         public override void Initialize(string name, NameValueCollection config)
         {
-            _log.Debug("Initializing BlobMembershipProvider");
-            if (config == null)
-                throw new ArgumentNullException("config");
-
-            if (string.IsNullOrEmpty(name))
-                name = "BlobMembershipManager";
-
-            if (string.IsNullOrEmpty(config["description"]))
-            {
-                config.Remove("description");
-                config.Add("description", "Blob membership manager");
-            }
-
-            base.Initialize(name, config);
-
-            ApplicationName = GetConfigValue(config["applicationName"], System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-            _enablePasswordReset = Convert.ToBoolean(GetConfigValue(config["enablePasswordReset"], "true"));
-            _enablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(config["enablePasswordRetrieval"], "true"));
-            _logExceptions = Convert.ToBoolean(GetConfigValue(config["logExceptions"], "false"));
-            _maxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(config["maxInvalidPasswordAttempts"], "5"));
-            _minRequiredNonAlphanumericCharacters = Convert.ToInt32(GetConfigValue(config["minRequiredNonAlphanumericCharacters"], "1"));
-            _minRequiredPasswordLength = Convert.ToInt32(GetConfigValue(config["minRequiredPasswordLength"], "7"));
-            _passwordAttemptWindow = Convert.ToInt32(GetConfigValue(config["passwordAttemptWindow"], "10"));
-            _passwordStrengthRegularExpression = Convert.ToString(GetConfigValue(config["passwordStrengthRegularExpression"], ""));
-            _requiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
-            _requiresUniqueEmail = Convert.ToBoolean(GetConfigValue(config["requiresUniqueEmail"], "true"));
-
-            string tempFormat = config["passwordFormat"];
-            if (string.IsNullOrEmpty(tempFormat))
-            {
-                tempFormat = "Hashed";
-            }
-
-            switch (tempFormat)
-            {
-                case "Hashed":
-                    _passwordFormat = MembershipPasswordFormat.Hashed;
-                    break;
-                case "Encrypted":
-                    _passwordFormat = MembershipPasswordFormat.Encrypted;
-                    break;
-                case "Clear":
-                    _passwordFormat = MembershipPasswordFormat.Clear;
-                    break;
-                default:
-                    throw new ProviderException("Password format is not supported.");
-            }
-
-            try
-            {
-                // Get encryption and decryption key information from the configuration.  
-                Configuration cfg = WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-                _machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
-                //_machineKey = (MachineKeySection) WebConfigurationManager.GetSection("system.web/machineKey");
-
-                if (_machineKey.ValidationKey.Contains("AutoGenerate") && PasswordFormat != MembershipPasswordFormat.Clear)
-                {
-                    throw new ProviderException("Hashed or Encrypted passwords are not supported with auto-generated keys.");
-                }
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to load the machine key.", e);
-                }
-                throw; // throw this because we want it to break if this fails
-            }
         }
-
-        #region Override Properties and Fields
-
-        private string _applicationName;
-        private bool _enablePasswordReset;
-        private bool _enablePasswordRetrieval;
-        private bool _logExceptions;
-        private int _maxInvalidPasswordAttempts;
-        private int _minRequiredNonAlphanumericCharacters;
-        private int _minRequiredPasswordLength;
-        private string _passwordStrengthRegularExpression;
-        private bool _requiresQuestionAndAnswer;
-        private bool _requiresUniqueEmail;
-        private int _passwordAttemptWindow;
-        private MembershipPasswordFormat _passwordFormat;
 
         /// <summary>
         /// The name of the application using the custom membership provider.
@@ -389,35 +300,35 @@ namespace Blob.Security
                 }
 
                 User user = new User
-                            {
-                                //CustomerId = "",
-                                Id = (Guid)providerUserKey,
-                                LastActivityDate = createDate,
-                                Username = username
-                            };
+                {
+                    //CustomerId = "",
+                    Id = (Guid)providerUserKey,
+                    LastActivityDate = createDate,
+                    Username = username
+                };
                 UserSecurity userSecurity = new UserSecurity
-                                  {
-                                      Comment = string.Empty,
-                                      CreateDate = createDate,
-                                      Email = email,
-                                      FailedPasswordAnswerAttemptCount = 0,
-                                      FailedPasswordAnswerAttemptWindowStart = createDate,
-                                      FailedPasswordAttemptCount = 0,
-                                      FailedPasswordAttemptWindowStart = createDate,
-                                      HasVerifiedEmail = false,
-                                      IsApproved = isApproved,
-                                      IsLockedOut = false,
-                                      LastLockoutDate = SqlDateTime.MinValue.Value,
-                                      LastLoginDate = SqlDateTime.MinValue.Value,
-                                      LastPasswordChangedDate = createDate,
-                                      MobilePin = string.Empty,
-                                      Password = EncodePassword(password),
-                                      PasswordAnswer = EncodePassword(passwordAnswer),
-                                      PasswordFormat = (int)PasswordFormat,
-                                      PasswordQuestion = passwordQuestion,
-                                      PasswordSalt = CreateSalt(),
-                                      User = user
-                                  };
+                {
+                    Comment = string.Empty,
+                    CreateDate = createDate,
+                    Email = email,
+                    FailedPasswordAnswerAttemptCount = 0,
+                    FailedPasswordAnswerAttemptWindowStart = createDate,
+                    FailedPasswordAttemptCount = 0,
+                    FailedPasswordAttemptWindowStart = createDate,
+                    HasVerifiedEmail = false,
+                    IsApproved = isApproved,
+                    IsLockedOut = false,
+                    LastLockoutDate = SqlDateTime.MinValue.Value,
+                    LastLoginDate = SqlDateTime.MinValue.Value,
+                    LastPasswordChangedDate = createDate,
+                    MobilePin = string.Empty,
+                    Password = EncodePassword(password),
+                    PasswordAnswer = EncodePassword(passwordAnswer),
+                    PasswordFormat = (int)PasswordFormat,
+                    PasswordQuestion = passwordQuestion,
+                    PasswordSalt = CreateSalt(),
+                    User = user
+                };
 
                 try
                 {
@@ -470,7 +381,7 @@ namespace Blob.Security
                         User user = context.Set<User>().Attach(userSecurity.User);
 
                         // Delete roles
-                        _roleProvider.RemoveUsersFromRoles(new[] {username}, user.Roles.Select(x => x.Name).ToArray());
+                        _roleProvider.RemoveUsersFromRoles(new[] { username }, user.Roles.Select(x => x.Name).ToArray());
 
                         // Remove from customer
                         Customer customer = context.Set<Customer>().Attach(user.Customer);
@@ -513,7 +424,7 @@ namespace Blob.Security
                 {
                     List<UserSecurity> userSecurity = context.Set<UserSecurity>()
                                               .Where(predicate)
-                                              .OrderBy(x=>x.User.Username)
+                                              .OrderBy(x => x.User.Username)
                                               .Skip(startIndex)
                                               .Take(pageSize)
                                               .ToList();
@@ -534,9 +445,10 @@ namespace Blob.Security
                                                                                       us.User.LastActivityDate,
                                                                                       us.LastPasswordChangedDate,
                                                                                       us.LastLockoutDate,
-                                                                                      us.User.CustomerId.ToString()))) {
-                                                                                          users.Add(user);
-                                                                                      }
+                                                                                      us.User.CustomerId.ToString())))
+                    {
+                        users.Add(user);
+                    }
                 }
             }
             catch (Exception e)
@@ -547,7 +459,7 @@ namespace Blob.Security
                 }
                 throw new ProviderException("Failed to find users.", e);
             }
-            return users;  
+            return users;
         }
 
         /// <summary>
@@ -613,7 +525,7 @@ namespace Blob.Security
                 }
                 throw new ProviderException("Failed to get number of users online.", e);
             }
-            return numOnline;  
+            return numOnline;
         }
 
         /// <summary>
@@ -679,7 +591,7 @@ namespace Blob.Security
                 password = UnEncodePassword(password);
             }
 
-            return password;  
+            return password;
         }
 
         /// <summary>
@@ -833,7 +745,7 @@ namespace Blob.Security
                 {
                     UserSecurity userSecurity = context.Set<UserSecurity>()
                                                        .FirstOrDefault(x => x.User.Username.Equals(username));
-                    
+
                     string passwordAnswer;
 
                     if (userSecurity != null)
@@ -903,7 +815,7 @@ namespace Blob.Security
                 }
                 throw new ProviderException("Failed unlocking user.", e);
             }
-            return false;  
+            return false;
         }
 
         /// <summary>

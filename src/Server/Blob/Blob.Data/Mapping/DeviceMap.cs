@@ -32,11 +32,8 @@ namespace Blob.Data.Mapping
             Property(x => x.CustomerId).HasColumnType("uniqueidentifier");
             HasRequired(d => d.Customer).WithMany(c => c.Devices).HasForeignKey(d => d.CustomerId);
 
-            // Statuses
-            //HasMany(d => d.Statuses).WithRequired().HasForeignKey(s => s.DeviceId);
-
-            // StatusPerfs
-            //HasMany(d => d.StatusPerfs).WithRequired().HasForeignKey(s => s.DeviceId);
+            // Status ??
+            // StatusPerf ??
         }
     }
 }

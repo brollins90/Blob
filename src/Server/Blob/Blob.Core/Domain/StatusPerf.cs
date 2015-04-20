@@ -4,19 +4,19 @@ namespace Blob.Core.Domain
 {
     public class StatusPerf
     {
-        public virtual long Id { get; set; }
-        public virtual string MonitorName { get; set; }
-        public virtual string MonitorDescription { get; set; }
-        public virtual DateTime TimeGenerated { get; set; }
-        public virtual string Label { get; set; }
-        public virtual string UnitOfMeasure { get; set; }
-        public virtual decimal Value { get; set; }
-        public virtual decimal? Warning { get; set; }
-        public virtual decimal? Critical { get; set; }
-        public virtual decimal? Min { get; set; }
-        public virtual decimal? Max { get; set; }
+        public long Id { get; set; }
+        public string MonitorName { get; set; }
+        public string MonitorDescription { get; set; }
+        public DateTime TimeGenerated { get; set; }
+        public string Label { get; set; }
+        public string UnitOfMeasure { get; set; }
+        public decimal Value { get; set; }
+        public decimal? Warning { get; set; }
+        public decimal? Critical { get; set; }
+        public decimal? Min { get; set; }
+        public decimal? Max { get; set; }
 
-        public virtual Guid DeviceId { get; set; }
+        public Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
     }
 }

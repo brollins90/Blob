@@ -11,7 +11,8 @@ namespace Blob.Core.Identity
             Id = Guid.NewGuid().ToString();
         }
 
-        public GenericUser(string userName) : this()
+        public GenericUser(string userName)
+            : this()
         {
             UserName = userName;
         }
@@ -34,7 +35,7 @@ namespace Blob.Core.Identity
 
         public virtual string Email { get; set; }
         public virtual bool EmailConfirmed { get; set; }
-        
+
         public virtual string PasswordHash { get; set; }
         public virtual string SecurityStamp { get; set; }
 

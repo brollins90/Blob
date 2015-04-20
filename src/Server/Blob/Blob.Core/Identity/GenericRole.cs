@@ -11,7 +11,8 @@ namespace Blob.Core.Identity
             Id = Guid.NewGuid().ToString();
         }
 
-        public GenericRole(string roleName) : this()
+        public GenericRole(string roleName)
+            : this()
         {
             Name = roleName;
         }

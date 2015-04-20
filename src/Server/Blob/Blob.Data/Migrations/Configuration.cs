@@ -42,12 +42,12 @@ namespace Blob.Data.Migrations
 
             // Devices
             Device testDevice1 = new Device
-            {
-                                    //Customer = testCustomer1,
-                                    CustomerId = testCustomer1.Id,
-                                    DeviceName = "Test Windows Desktop 1",
-                                    //DeviceType = testDeviceTypeWinDesktop,
-                                    DeviceTypeId = testDeviceTypeWinDesktop.Id,
+                                 {
+                                     //Customer,
+                                     CustomerId = testCustomer1.Id,
+                                     DeviceName = "Test Windows Desktop 1",
+                                     //DeviceType
+                                     DeviceTypeId = testDeviceTypeWinDesktop.Id,
                                      Id = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
                                      LastActivityDate = DateTime.Parse("2015-04-14"),
                                  };
@@ -73,27 +73,8 @@ namespace Blob.Data.Migrations
             //                                    //LastLoginDate
             //                                };
             //context.Set<DeviceSecurity>().AddOrUpdate(x => new { x.DeviceId }, testDevice1Ds);
-
             context.Set<Device>().AddOrUpdate(x => new { x.Id }, testDevice1);
             context.SaveChanges();
-            
-            // Status
-
-            Status status1 = new Status
-            {
-                AlertLevel = 0,
-                CurrentValue = "0",
-                DeviceId = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
-                MonitorDescription = "test description",
-                MonitorName = "name",
-                TimeGenerated = DateTime.Now,
-                TimeSent = DateTime.Now
-            };
-            context.Set<Status>().AddOrUpdate(x => x.Id, status1);
-            context.SaveChanges();
-
-            // StatusPerf
-
 
             // Roles
             Role deviceRole = new Role
@@ -119,26 +100,49 @@ namespace Blob.Data.Migrations
             context.Set<Role>().AddOrUpdate(x => x.Name, deviceRole, adminRole, custAdminRole, custRole);
             context.SaveChanges();
 
+            // Status
+            Status status1 = new Status
+            {
+                AlertLevel = 0,
+                CurrentValue = "0",
+                DeviceId = testDevice1.Id,
+                //Id = 5,
+                MonitorDescription = "Description",
+                MonitorName = "Name",
+                TimeGenerated = DateTime.Now,
+                TimeSent = DateTime.Now,
+            };
+            context.Set<Status>().AddOrUpdate(x => new { x.DeviceId, x.TimeGenerated }, status1);
+            context.SaveChanges();
+
+            // StatusPerf
+
+            // Status
+            StatusPerf statusPerf1 = new StatusPerf
+            {
+                Critical = null,
+                DeviceId = testDevice1.Id,
+                Label = "PerfLabelTest",
+                MonitorDescription = "Perf Description",
+                MonitorName = "Perf Name",
+                TimeGenerated = DateTime.Now,
+                Max = null,
+                Min = null,
+                UnitOfMeasure = "GB",
+                Value = 7,
+                Warning = null,
+            };
+            context.Set<StatusPerf>().AddOrUpdate(x => new { x.DeviceId, x.TimeGenerated }, statusPerf1);
+            context.SaveChanges();
 
             // User
             User testUser1 = new User
-            {
-                //Customer = testCustomer1,
-                CustomerId = testCustomer1.Id,
+                             {
+                                 //Customer
+                                 CustomerId = testCustomer1.Id,
                                  Id = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"),
                                  LastActivityDate = DateTime.Parse("2015-04-14"),
                                  UserName = "customerUser1",
-                                 
-                                 AccessFailedCount = 0,
-                                 Email = "",
-                                 EmailConfirmed = false,
-                                 LockoutEnabled = false,
-                                 LockoutEndDateUtc = null,
-                                 PasswordHash = "",
-                                 PhoneNumber = "",
-                                 PhoneNumberConfirmed = false,
-                                 SecurityStamp = "",
-                                 TwoFactorEnabled = false
                              };
             //UserSecurity testUser1Us = new UserSecurity
             //                           {
@@ -161,11 +165,11 @@ namespace Blob.Data.Migrations
             //                               PasswordFormat = 0,
             //                               //PasswordQuestion,
             //                               PasswordSalt = "",
-            //                               //UserId = testUser1.Id,
+            //                               UserId = testUser1.Id,
             //                               User = testUser1,
             //                           };
             //context.Set<UserSecurity>().AddOrUpdate(x => new { x.UserId, x.Email }, testUser1Us);
-            context.Set<User>().AddOrUpdate(x => new { x.Id, x.UserName, x.Email }, testUser1);
+            context.Set<User>().AddOrUpdate(x => x.Id, testUser1);
             context.SaveChanges();
         }
     }
