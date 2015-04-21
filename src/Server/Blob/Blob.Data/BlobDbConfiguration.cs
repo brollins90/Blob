@@ -7,7 +7,7 @@ namespace Blob.Data
     {
         public BlobDbConfiguration()
         {
-            SetExecutionStrategy("System.Data.SqlClient", () => new SqlAzureExecutionStrategy());
+            //SetExecutionStrategy("System.Data.SqlClient", () => new SqlAzureExecutionStrategy());
         }
     }
 }

@@ -37,17 +37,14 @@ namespace Blob.Contracts.Models
 
         public override string ToString()
         {
-            return string.Format("StatusPerformanceData:\n"
-                + "DeviceId: {0}\n"
-                + "MonitorName: {1}\n"
-                + "MonitorDescription: {2}\n"
-                + "TimeGenerated: {3}\n"
-                + "TimeSent: {4}\n",
-                                 DeviceId,
-                                 MonitorName,
-                                 MonitorDescription,
-                                 TimeGenerated,
-                                 TimeSent);
+            return string.Format("StatusPerformanceData("
+                                 + "DeviceId: " + DeviceId
+                                 + ", MonitorName: " + MonitorName
+                                 + ", MonitorDescription: " + MonitorDescription
+                                 + ", TimeGenerated: " + TimeGenerated
+                                 + ", TimeSent: " + TimeSent
+                                 + ", Count: " + Data.Count
+                                 + ")");
         }
     }
 }

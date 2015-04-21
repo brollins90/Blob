@@ -25,6 +25,8 @@ namespace Blob.Data.Repositories
                 throw new ArgumentNullException("log");
             }
             _log = log;
+            _log.Debug("Constructing AccountRepository");
+
             Context = context;
 
             AutoSaveChanges = true;
@@ -42,22 +44,29 @@ namespace Blob.Data.Repositories
 
         public Task CreateCustomerAsync(Customer customer)
         {
+            _log.Debug("CreateCustomerAsync");
             ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         public Task<Device> FindCustomerByIdAsync(Customer customer)
         {
+            _log.Debug("FindCustomerByIdAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         public Task UpdateCustomerAsync(Customer customer)
         {
+            _log.Debug("UpdateCustomerAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         public Task DeleteCustomerAsync(Customer customer)
         {
+            _log.Debug("DeleteCustomerAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
@@ -66,6 +75,7 @@ namespace Blob.Data.Repositories
 
         public void Dispose()
         {
+            _log.Debug("Dispose");
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -78,6 +88,7 @@ namespace Blob.Data.Repositories
 
         protected virtual void Dispose(bool disposing)
         {
+            _log.Debug("Dispose(" + disposing + ")");
             if (DisposeContext && disposing && Context != null)
             {
                 Context.Dispose();

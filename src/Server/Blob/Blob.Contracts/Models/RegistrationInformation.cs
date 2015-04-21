@@ -13,11 +13,10 @@ namespace Blob.Contracts.Models
 
         public override string ToString()
         {
-            return string.Format("RegistrationInformation:\n" +
-                                 "DeviceId: {0}\n" +
-                                 "TimeSent: {1}\n",
-                                 DeviceId,
-                                 TimeSent);
+            return string.Format("RegistrationInformation("
+                                 + "DeviceId: " + DeviceId
+                                 + ", TimeSent: " + TimeSent
+                                 + ")");
         }
     }
 }

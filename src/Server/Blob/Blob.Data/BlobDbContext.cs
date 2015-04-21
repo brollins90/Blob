@@ -16,6 +16,7 @@ namespace Blob.Data
             : base("BlobDbContext")
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobDbContext");
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
@@ -25,6 +26,7 @@ namespace Blob.Data
             : base(connectionString)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobDbContext");
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
@@ -34,6 +36,7 @@ namespace Blob.Data
             : base(connectionString)
         {
             _log = log;
+            _log.Debug("Constructing BlobDbContext");
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
@@ -41,7 +44,7 @@ namespace Blob.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            _log.Info("Creating model");
+            _log.Debug("Creating model");
 
             modelBuilder.Configurations.Add(new BlobUserClaimMap());
             modelBuilder.Configurations.Add(new BlobUserLoginMap());
@@ -53,7 +56,6 @@ namespace Blob.Data
             modelBuilder.Configurations.Add(new StatusMap());
             modelBuilder.Configurations.Add(new StatusPerfMap());
             modelBuilder.Configurations.Add(new UserMap());
-
         }
     }
 }

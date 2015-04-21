@@ -142,6 +142,7 @@ namespace Blob.Data.Migrations
                                  CustomerId = testCustomer1.Id,
                                  Id = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"),
                                  LastActivityDate = DateTime.Parse("2015-04-14"),
+                                 PasswordHash = "password",
                                  UserName = "customerUser1",
                              };
             //UserSecurity testUser1Us = new UserSecurity

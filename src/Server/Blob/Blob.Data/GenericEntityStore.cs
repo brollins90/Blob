@@ -1,13 +1,18 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using log4net;
 
 namespace Blob.Data
 {
     internal class GenericEntityStore<TEntity> where TEntity : class
     {
+        private readonly ILog _log;
+
         public GenericEntityStore(DbContext context)
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing GenericEntityStore for " + typeof(TEntity));
             Context = context;
             DbEntitySet = context.Set<TEntity>();
         }

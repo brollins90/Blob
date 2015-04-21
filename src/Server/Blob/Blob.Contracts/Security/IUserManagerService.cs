@@ -3,16 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace Blob.Contracts.Security
 {
-    public interface IUserManagerService<TUser, TKey>
+    [ServiceContract]
+    public interface IUserManagerService : IUserManagerService<IUser, string> { }
+
+    [ServiceContract]
+    public interface IUserManagerService<TUser, TKey> : ISignInManagerService<TUser, TKey>, IAuthenticationManagerService
         where TUser : class, IUser<TKey>
         where TKey : IEquatable<TKey>
     {
+        [OperationContract]
+        void SetProvider(string providerName);
+
         IPasswordHasher PasswordHasher { [OperationContract] get; }
         IIdentityValidator<TUser> UserValidator { [OperationContract] get; }
         IIdentityValidator<string> PasswordValidator { [OperationContract] get; }
@@ -41,16 +49,16 @@ namespace Blob.Contracts.Security
         Task<ClaimsIdentity> CreateIdentityAsync(TUser user, string authenticationType);
 
         [DebuggerStepThrough]
-        [OperationContract]
-        Task<IdentityResult> CreateAsync(TUser user);
+        [OperationContract(Name = "CreateUserAsync")]
+        Task<IdentityResultDto> CreateAsync(TUser user);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> UpdateAsync(TUser user);
+        Task<IdentityResultDto> UpdateAsync(TUser user);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> DeleteAsync(TUser user);
+        Task<IdentityResultDto> DeleteAsync(TUser user);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -61,11 +69,11 @@ namespace Blob.Contracts.Security
         Task<TUser> FindByNameAsync(string userName);
 
         [DebuggerStepThrough]
-        [OperationContract]
-        Task<IdentityResult> CreateAsync(TUser user, string password);
+        [OperationContract(Name = "CreateUserAsyncWithPassword")]
+        Task<IdentityResultDto> CreateAsync(TUser user, string password);
 
         [DebuggerStepThrough]
-        [OperationContract]
+        [OperationContract(Name = "FindUserAsync")]
         Task<TUser> FindAsync(string userName, string password);
 
         [DebuggerStepThrough]
@@ -78,15 +86,15 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> AddPasswordAsync(TKey userId, string password);
+        Task<IdentityResultDto> AddPasswordAsync(TKey userId, string password);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> ChangePasswordAsync(TKey userId, string currentPassword, string newPassword);
+        Task<IdentityResultDto> ChangePasswordAsync(TKey userId, string currentPassword, string newPassword);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> RemovePasswordAsync(TKey userId);
+        Task<IdentityResultDto> RemovePasswordAsync(TKey userId);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -94,37 +102,37 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> UpdateSecurityStampAsync(TKey userId);
+        Task<IdentityResultDto> UpdateSecurityStampAsync(TKey userId);
 
         [OperationContract]
         Task<string> GeneratePasswordResetTokenAsync(TKey userId);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> ResetPasswordAsync(TKey userId, string token, string newPassword);
+        Task<IdentityResultDto> ResetPasswordAsync(TKey userId, string token, string newPassword);
 
-        [OperationContract]
-        Task<TUser> FindAsync(UserLoginInfo login);
-
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<IdentityResult> RemoveLoginAsync(TKey userId, UserLoginInfo login);
+        [OperationContract(Name = "FindLoginAsync")]
+        Task<TUser> FindAsync(UserLoginInfoDto login);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> AddLoginAsync(TKey userId, UserLoginInfo login);
+        Task<IdentityResultDto> RemoveLoginAsync(TKey userId, UserLoginInfoDto login);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IList<UserLoginInfo>> GetLoginsAsync(TKey userId);
+        Task<IdentityResultDto> AddLoginAsync(TKey userId, UserLoginInfoDto login);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> AddClaimAsync(TKey userId, Claim claim);
+        Task<IList<UserLoginInfoDto>> GetLoginsAsync(TKey userId);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> RemoveClaimAsync(TKey userId, Claim claim);
+        Task<IdentityResultDto> AddClaimAsync(TKey userId, Claim claim);
+
+        [DebuggerStepThrough]
+        [OperationContract]
+        Task<IdentityResultDto> RemoveClaimAsync(TKey userId, Claim claim);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -132,19 +140,19 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> AddToRoleAsync(TKey userId, string role);
+        Task<IdentityResultDto> AddToRoleAsync(TKey userId, string role);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> AddToRolesAsync(TKey userId, string[] roles);
+        Task<IdentityResultDto> AddToRolesAsync(TKey userId, string[] roles);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> RemoveFromRoleAsync(TKey userId, string role);
+        Task<IdentityResultDto> RemoveFromRoleAsync(TKey userId, string role);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> RemoveFromRolesAsync(TKey userId, string[] roles);
+        Task<IdentityResultDto> RemoveFromRolesAsync(TKey userId, string[] roles);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -160,7 +168,7 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> SetEmailAsync(TKey userId, string email);
+        Task<IdentityResultDto> SetEmailAsync(TKey userId, string email);
 
         [OperationContract]
         Task<TUser> FindByEmailAsync(string email);
@@ -170,35 +178,35 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> ConfirmEmailAsync(TKey userId, string token);
+        Task<IdentityResultDto> ConfirmEmailAsync(TKey userId, string token);
 
         [DebuggerStepThrough]
         [OperationContract]
         Task<bool> IsEmailConfirmedAsync(TKey userId);
 
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<string> GetPhoneNumberAsync(TKey userId);
+        //[DebuggerStepThrough]
+        //[OperationContract]
+        //Task<string> GetPhoneNumberAsync(TKey userId);
 
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<IdentityResult> SetPhoneNumberAsync(TKey userId, string phoneNumber);
+        //[DebuggerStepThrough]
+        //[OperationContract]
+        //Task<IdentityResultDto> SetPhoneNumberAsync(TKey userId, string phoneNumber);
 
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<IdentityResult> ChangePhoneNumberAsync(TKey userId, string phoneNumber, string token);
+        //[DebuggerStepThrough]
+        //[OperationContract]
+        //Task<IdentityResultDto> ChangePhoneNumberAsync(TKey userId, string phoneNumber, string token);
 
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<bool> IsPhoneNumberConfirmedAsync(TKey userId);
+        //[DebuggerStepThrough]
+        //[OperationContract]
+        //Task<bool> IsPhoneNumberConfirmedAsync(TKey userId);
 
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<string> GenerateChangePhoneNumberTokenAsync(TKey userId, string phoneNumber);
+        //[DebuggerStepThrough]
+        //[OperationContract]
+        //Task<string> GenerateChangePhoneNumberTokenAsync(TKey userId, string phoneNumber);
 
-        [DebuggerStepThrough]
-        [OperationContract]
-        Task<bool> VerifyChangePhoneNumberTokenAsync(TKey userId, string token, string phoneNumber);
+        //[DebuggerStepThrough]
+        //[OperationContract]
+        //Task<bool> VerifyChangePhoneNumberTokenAsync(TKey userId, string token, string phoneNumber);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -225,7 +233,7 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> NotifyTwoFactorTokenAsync(TKey userId, string twoFactorProvider, string token);
+        Task<IdentityResultDto> NotifyTwoFactorTokenAsync(TKey userId, string twoFactorProvider, string token);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -233,7 +241,7 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> SetTwoFactorEnabledAsync(TKey userId, bool enabled);
+        Task<IdentityResultDto> SetTwoFactorEnabledAsync(TKey userId, bool enabled);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -249,7 +257,7 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> SetLockoutEnabledAsync(TKey userId, bool enabled);
+        Task<IdentityResultDto> SetLockoutEnabledAsync(TKey userId, bool enabled);
 
         [DebuggerStepThrough]
         [OperationContract]
@@ -261,30 +269,79 @@ namespace Blob.Contracts.Security
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> SetLockoutEndDateAsync(TKey userId, DateTimeOffset lockoutEnd);
+        Task<IdentityResultDto> SetLockoutEndDateAsync(TKey userId, DateTimeOffset lockoutEnd);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> AccessFailedAsync(TKey userId);
+        Task<IdentityResultDto> AccessFailedAsync(TKey userId);
 
         [DebuggerStepThrough]
         [OperationContract]
-        Task<IdentityResult> ResetAccessFailedCountAsync(TKey userId);
+        Task<IdentityResultDto> ResetAccessFailedCountAsync(TKey userId);
 
         [DebuggerStepThrough]
         [OperationContract]
         Task<int> GetAccessFailedCountAsync(TKey userId);
     }
 
-    //[DataContract]
-    //public class IdentityResult
-    //{
-    //    public bool Success { get; set; }
-    //    public IEnumerable<string> Errors
-    //    {
-    //        get { return _errors ?? (_errors = new List<string>()); }
-    //        set { _errors = value; }
-    //    }
-    //    private IEnumerable<string> _errors;
-    //}
+    [DataContract]
+    public class IdentityResultDto// : IdentityResult
+    {
+        public IdentityResultDto(params string[] errors) : this((IEnumerable<string>)errors) { }
+        public IdentityResultDto(IEnumerable<string> errors)
+        {
+            if (errors == null)
+            {
+                errors = new[] {"error"};
+            }
+            _succeeded = false;
+            _errors = errors;
+        }
+        public IdentityResultDto(bool success)
+        {
+            _succeeded = success;
+            _errors = new string[0];
+        }
+        public IdentityResultDto(IdentityResult res)
+        {
+            _succeeded = res.Succeeded;
+            _errors = res.Errors.ToList();
+        }
+        public new bool Succeeded { get { return _succeeded; } }
+        protected bool _succeeded;
+        public new IEnumerable<string> Errors { get { return _errors; } }
+        protected IEnumerable<string> _errors;
+    }
+
+    [DataContract]
+    public class UserLoginInfoDto
+    {
+
+        public UserLoginInfoDto(string loginProvider, string providerKey)
+        {
+            LoginProvider = loginProvider;
+            ProviderKey = providerKey;
+        }
+
+        // Summary:
+        //     Provider for the linked login, i.e. Facebook, Google, etc.
+        public string LoginProvider { get; set; }
+        //
+        // Summary:
+        //     User specific key for the login provider
+        public string ProviderKey { get; set; }
+    }
+
+    public static class IdentityUtil
+    {
+        public static IdentityResultDto ToDto(this IdentityResult res)
+        {
+            return new IdentityResultDto(res);
+        }
+
+        public static UserLoginInfo ToLoginInfo(this UserLoginInfoDto res)
+        {
+            return new UserLoginInfo(res.LoginProvider, res.ProviderKey);
+        }
+    }
 }

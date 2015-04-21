@@ -10,9 +10,16 @@ namespace Blob.Core.Data
         // Device
 
         Task CreateDeviceAsync(Device device);
-        Task<Device> FindDeviceByIdAsync(Guid deviceId);
+        Task<Device> FindDeviceByIdAsync(Guid id);
         Task UpdateDeviceAsync(Device device);
         Task DeleteDeviceAsync(Device device);
+
+        // DeviceType
+        Task CreateDeviceTypeAsync(DeviceType deviceType);
+        Task<DeviceType>FindDeviceTypeByIdAsync(Guid id);
+        Task<DeviceType> FindDeviceTypeByValueAsync(string value);
+        Task UpdateDeviceTypeAsync(DeviceType deviceType);
+        Task DeleteDeviceTypeAsync(DeviceType deviceType);
 
 
         // Status

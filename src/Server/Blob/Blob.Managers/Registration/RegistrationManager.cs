@@ -16,65 +16,52 @@ namespace Blob.Managers.Registration
         public RegistrationManager(IAccountRepository accountRepository, IStatusRepository statusRepository, ILog log)
         {
             _log = log;
+            _log.Debug("Constructing RegistrationManager");
             _accountRepository = accountRepository;
             _statusRepository = statusRepository;
         }
 
         public async Task<RegistrationInformation> RegisterDevice(RegistrationMessage message)
         {
-            throw new NotImplementedException();
-            //_log.Debug("RegistrationManager registering device " + message.DeviceId);
-            //// Authenticate user is done, it is required in the service
+            _log.Debug("RegistrationManager registering device " + message.DeviceId);
+            // Authenticate user is done, it is required in the service
 
-            //// check if device is already defined
-            //Device d = await _deviceRepository.GetSingleAsync(x => x.Id.ToString().Equals(message.DeviceId)).ConfigureAwait(true);
+            Guid deviceId = Guid.Parse(message.DeviceId);
+            // check if device is already defined
+            Device d = await _statusRepository.FindDeviceByIdAsync(deviceId).ConfigureAwait(true);
 
-            //if (d != null)
-            //{
-            //    throw new InvalidOperationException("This device has already been registered.");
-            //}
+            if (d != null)
+            {
+                throw new InvalidOperationException("This device has already been registered.");
+            }
 
-            //DateTime createDate = DateTime.Now;
+            DateTime createDate = DateTime.Now;
 
-            //DeviceType deviceType = await _deviceTypeRepository.GetSingleAsync(x => x.Value.Equals(message.DeviceType)).ConfigureAwait(true);
-            // //create device objects
-            //Device device = new Device
-            //                {
-            //                     Customer = null,
-            //                    //CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f"),
-            //                    Id = Guid.Parse(message.DeviceId),
-            //                    DeviceName = message.DeviceName,
-            //                    DeviceType = deviceType,
-            //                    LastActivityDate = createDate
-            //                };
-            ////DeviceSecurity deviceSecurity = new DeviceSecurity
-            ////                        {
-            ////                            Comment = null,
-            ////                            CreateDate = createDate,
-            ////                            Device = device,
-            ////                            DeviceId = device.Id,
-            ////                            IsApproved = true, // todo: ???
-            ////                            IsLockedOut = false,
-            ////                            Key1 = message.DeviceKey1,
-            ////                            Key1Format = (int) DeviceSecurityKeyFormat.CLEAR,
-            ////                            Key1Salt = "",
-            ////                            Key2 = message.DeviceKey2,
-            ////                            Key2Format = (int) DeviceSecurityKeyFormat.CLEAR,
-            ////                            Key2Salt = ""
-            ////                        };
+            DeviceType deviceType = await _statusRepository.FindDeviceTypeByValueAsync(message.DeviceType).ConfigureAwait(true);
 
-            //// save device objects
-            //await _deviceRepository.InsertAsync(device).ConfigureAwait(true);
-            ////await _deviceSecurityRepository.InsertAsync(deviceSecurity).ConfigureAwait(true);
+            // todo, get the customerid from the principal
+            Guid customerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
+            //create device objects
+            Device device = new Device
+                            {
+                                CustomerId = customerId,
+                                Id = Guid.Parse(message.DeviceId),
+                                DeviceName = message.DeviceName,
+                                DeviceType = deviceType,
+                                LastActivityDate = createDate
+                            };
 
-            //// return results
+            // save device objects
+            await _statusRepository.CreateDeviceAsync(device).ConfigureAwait(true);
 
-            //RegistrationInformation returnInfo = new RegistrationInformation
-            //                                     {
-            //                                         DeviceId = device.Id.ToString(),
-            //                                         TimeSent = DateTime.Now
-            //                                     };
-            //return returnInfo;
+            // return results
+
+            RegistrationInformation returnInfo = new RegistrationInformation
+                                                 {
+                                                     DeviceId = device.Id.ToString(),
+                                                     TimeSent = DateTime.Now
+                                                 };
+            return returnInfo;
         }
     }
 }

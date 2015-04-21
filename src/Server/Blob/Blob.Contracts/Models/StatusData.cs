@@ -29,21 +29,15 @@ namespace Blob.Contracts.Models
 
         public override string ToString()
         {
-            return string.Format("StatusMessage:\n"
-                + "DeviceId: {0}\n"
-                + "MonitorName: {1}\n"
-                + "MonitorDescription: {2}\n"
-                + "AlertLevel: {3}\n"
-                + "TimeGenerated: {4}\n"
-                + "TimeSent: {5}\n"
-                + "CurrentValue: {6}\n",
-                                 DeviceId,
-                                 MonitorName,
-                                 MonitorDescription,
-                                 AlertLevel,
-                                 TimeGenerated,
-                                 TimeSent,
-                                 CurrentValue);
+            return string.Format("StatusData("
+                                 + "DeviceId: " + DeviceId
+                                 + ", MonitorName: " + MonitorName
+                                 + ", MonitorDescription: " + MonitorDescription
+                                 + ", AlertLevel: " + AlertLevel
+                                 + ", TimeGenerated: " + TimeGenerated
+                                 + ", TimeSent: " + TimeSent
+                                 + ", CurrentValue: " + CurrentValue
+                                 + ")");
         }
     }
 }

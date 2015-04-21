@@ -2,6 +2,9 @@
 using Ninject.Modules;
 using Ninject.Web.Common;
 using System.Configuration;
+using System.Data.Entity;
+using Blob.Data;
+using Blob.Security;
 
 namespace Blob.WcfHost.Infrastructure
 {
@@ -18,6 +21,14 @@ namespace Blob.WcfHost.Infrastructure
             Bind<Data.BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
+
+            Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
+                .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
+
+            Bind<Security.BlobUserStore>().ToSelf().InRequestScope();
+            Bind<Security.BlobUserManager>().ToSelf().InRequestScope();
+
+
             // core
             Bind<Core.Data.IAccountRepository>().To<Data.Repositories.AccountRepository>();
             Bind<Core.Data.IStatusRepository>().To<Data.Repositories.StatusRepository>();
@@ -30,6 +41,7 @@ namespace Blob.WcfHost.Infrastructure
             // service
             // we wont use this layer, because it is specified in the config file.
             Bind<Contracts.Command.ICommandService>().To<Services.Command.CommandService>();
+            Bind<Contracts.Security.IUserManagerService>().To<BlobUserManagerAdapter>();
             Bind<Contracts.Registration.IRegistrationService>().To<Services.Registration.RegistrationService>();
             Bind<Contracts.Status.IStatusService>().To<Services.Status.StatusService>();
 

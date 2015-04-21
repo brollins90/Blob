@@ -17,7 +17,7 @@ namespace BMonitor.Service
     public class MonitorManager
     {
         private string Username = "customerUser1";
-        private string Password = "";//"password";
+        private string Password = "password";
 
         private readonly ILog _log;
         private readonly ICollection<IMonitor> _monitors;

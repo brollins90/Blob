@@ -5,13 +5,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.ServiceModel;
+using log4net;
 
 namespace Blob.Security
 {
     public class BlobServiceAuthorizationManager : ServiceAuthorizationManager
     {
+        private readonly ILog _log;
+
+        public BlobServiceAuthorizationManager()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobServiceAuthorizationManager");
+        }
+
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
+            _log.Debug("CheckAccessCore");
             using (var context = new BlobDbContext())
             using (var userStore = new BlobUserStore(context))
             {

@@ -1,16 +1,25 @@
 ﻿using Blob.Data;
+using log4net;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Diagnostics;
 using System.IdentityModel.Selectors;
-using System.ServiceModel;
 
 namespace Blob.Security
 {
-    public class BlobIdentityValidator : UserNamePasswordValidator
+    public class BlobUserNamePasswordValidator : UserNamePasswordValidator
     {
+        private readonly ILog _log;
+
+        public BlobUserNamePasswordValidator()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobUserNamePasswordValidator");
+        }
+
         public override void Validate(string userName, string password)
         {
+            _log.Debug(string.Format("Validate ({0}, {1})", userName, password));
             using (var context = new BlobDbContext())
             {
                 using (var userManager = new BlobUserManager(new BlobUserStore(context)))

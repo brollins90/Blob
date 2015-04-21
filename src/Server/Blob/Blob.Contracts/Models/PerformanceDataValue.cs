@@ -28,21 +28,15 @@ namespace Blob.Contracts.Models
 
         public override string ToString()
         {
-            return string.Format("PerformanceDataValue:\n"
-                + "Label: {0}\n"
-                + "Value: {1}\n"
-                + "UnitOfMeasure: {2}\n"
-                + "Warning: {3}\n"
-                + "Critical: {4}\n"
-                + "Min: {5}\n"
-                + "Max: {6}\n",
-                                 Label,
-                                 Value,
-                                 UnitOfMeasure,
-                                 Warning,
-                                 Critical,
-                                 Min,
-                                 Max);
+            return string.Format("PerformanceDataValue("
+                                 + "Label: " + Label
+                                 + ", Value: " + Value
+                                 + ", UnitOfMeasure: " + UnitOfMeasure
+                                 + ", Warning: " + Warning
+                                 + ", Critical: " + Critical
+                                 + ", Min: " + Min
+                                 + ", Max: " + Max
+                                 + ")");
         }
     }
 }

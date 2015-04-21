@@ -29,6 +29,8 @@ namespace Blob.Data.Repositories
                 throw new ArgumentNullException("log");
             }
             _log = log;
+            _log.Debug("Constructing StatusRepository");
+
             Context = context;
 
             AutoSaveChanges = true;
@@ -44,14 +46,19 @@ namespace Blob.Data.Repositories
         public bool AutoSaveChanges { get; set; }
 
 
+        #region Device
 
         public Task CreateDeviceAsync(Device device)
         {
+            _log.Debug("CreateDeviceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         public async Task<Device> FindDeviceByIdAsync(Guid deviceId)
         {
+            _log.Debug("FindDeviceByIdAsync");
+            ThrowIfDisposed();
             ThrowIfDisposed();
 
             Device device = await _deviceStore.GetByIdAsync(deviceId).WithCurrentCulture();
@@ -66,16 +73,68 @@ namespace Blob.Data.Repositories
 
         public Task UpdateDeviceAsync(Device device)
         {
+            _log.Debug("UpdateDeviceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         public Task DeleteDeviceAsync(Device device)
         {
+            _log.Debug("DeleteDeviceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
+        #endregion
+
+
+        #region DeviceType
+
+
+        public Task CreateDeviceTypeAsync(DeviceType deviceType)
+        {
+            _log.Debug("CreateDeviceTypeAsync");
+            ThrowIfDisposed();
+            throw new NotImplementedException();
+        }
+
+        public Task<DeviceType> FindDeviceTypeByIdAsync(Guid id)
+        {
+            _log.Debug("FindDeviceTypeByIdAsync");
+            ThrowIfDisposed();
+            throw new NotImplementedException();
+            // return a NOT SET object type if null
+        }
+
+        public Task<DeviceType> FindDeviceTypeByValueAsync(string value)
+        {
+            _log.Debug("FindDeviceTypeByValueAsync");
+            ThrowIfDisposed();
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateDeviceTypeAsync(DeviceType deviceType)
+        {
+            _log.Debug("UpdateDeviceTypeAsync");
+            ThrowIfDisposed();
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteDeviceTypeAsync(DeviceType deviceType)
+        {
+            _log.Debug("DeleteDeviceTypeAsync");
+            ThrowIfDisposed();
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+
+        #region Status
+
         public virtual async Task<IList<Status>> GetStatusAsync(Device device)
         {
+            _log.Debug("GetStatusAsync");
             ThrowIfDisposed();
             if (device == null)
                 throw new ArgumentNullException("device");
@@ -86,6 +145,7 @@ namespace Blob.Data.Repositories
 
         public virtual Task AddStatusAsync(Device device, Status status)
         {
+            _log.Debug("AddStatusAsync");
             ThrowIfDisposed();
             if (device == null)
                 throw new ArgumentNullException("device");
@@ -99,6 +159,8 @@ namespace Blob.Data.Repositories
 
         public virtual Task RemoveStatusAsync(Device device, Status status)
         {
+            _log.Debug("RemoveStatusAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
             //    ThrowIfDisposed();
             //    if (device == null)
@@ -126,27 +188,46 @@ namespace Blob.Data.Repositories
             }
         }
 
+        #endregion
+
+
+        #region Performance
+
 
         public Task<IList<Status>> GetPerformanceAsync(Device device)
         {
+            _log.Debug("GetPerformanceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         public Task AddPerformanceAsync(Device device, StatusPerf statusPerf)
         {
-            throw new NotImplementedException();
+            _log.Debug("AddPerformanceAsync");
+            ThrowIfDisposed();
+            if (device == null)
+                throw new ArgumentNullException("device");
+            if (statusPerf == null)
+                throw new ArgumentNullException("statusPerf");
+
+            _performanceStore.Add(statusPerf);
+            Context.SaveChangesAsync(); // ??
+            return Task.FromResult(0);
         }
 
         public Task RemovePerformanceAsync(Device device, StatusPerf statusPerf)
         {
+            _log.Debug("RemovePerformanceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
-
+        #endregion
 
 
         public void Dispose()
         {
+            _log.Debug("Dispose");
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -159,6 +240,7 @@ namespace Blob.Data.Repositories
 
         protected virtual void Dispose(bool disposing)
         {
+            _log.Debug("Dispose(" + disposing + ")");
             if (DisposeContext && disposing && Context != null)
             {
                 Context.Dispose();

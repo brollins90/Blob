@@ -15,6 +15,7 @@ namespace Blob.Managers.Status
         public StatusManager(IStatusRepository statusRepository, ILog log)
         {
             _log = log;
+            _log.Debug("Constructing StatusManager");
             _statusRepository = statusRepository;
         }
 
