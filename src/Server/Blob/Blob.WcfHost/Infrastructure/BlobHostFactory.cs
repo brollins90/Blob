@@ -3,7 +3,6 @@ using log4net;
 using Ninject;
 using Ninject.Extensions.Wcf;
 using System.ServiceModel;
-using Blob.Security;
 
 namespace Blob.WcfHost.Infrastructure
 {

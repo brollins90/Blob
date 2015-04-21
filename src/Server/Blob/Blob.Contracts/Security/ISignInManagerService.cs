@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace Blob.Contracts.Security
 {

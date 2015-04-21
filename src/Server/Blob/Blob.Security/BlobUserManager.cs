@@ -42,7 +42,14 @@ namespace Blob.Security
             }
             Store = store;
             UserValidator = new BlobUserValidator(this);
-            PasswordValidator = new BlobPasswordValidator(3);
+            PasswordValidator = new PasswordValidator
+                                {
+                                    RequireDigit = false,
+                                    RequiredLength = 0,
+                                    RequireLowercase = false,
+                                    RequireNonLetterOrDigit = false,
+                                    RequireUppercase = false
+                                };
             PasswordHasher = new BlobPasswordHasher();
             ClaimsIdentityFactory = new BlobClaimsIdentityFactory();
         }

@@ -1,9 +1,7 @@
 ﻿using Blob.Contracts.Security;
-using Blob.Core.Domain;
-using Blob.Core.Identity;
 using Microsoft.AspNet.Identity;
+using log4net;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
@@ -13,7 +11,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using log4net;
 
 namespace Blob.Proxies
 {
@@ -56,7 +53,7 @@ namespace Blob.Proxies
         /// it should then pass the object to DisposeProvider to close
         /// the connection.
         /// </summary>
-        private IUserManagerService RemoteProvider()
+        protected IUserManagerService RemoteProvider()
         {
             if (_channelFactory == null)
             {
@@ -73,7 +70,7 @@ namespace Blob.Proxies
         /// This method should be called to handle closing the 
         /// connected proxy object.
         /// </summary>
-        private void DisposeRemoteProvider(IMembershipService remoteProvider)
+        private void DisposeRemoteProvider(IUserManagerService remoteProvider)
         {
             _log.Debug("Disposing of remote provider.");
 
@@ -126,26 +123,1487 @@ namespace Blob.Proxies
 
         public void SetProvider(string providerName)
         {
+            // This isnt really part of the client side, just needed on the server side
+            throw new NotImplementedException();
+        }
+        
+
+        #region UserManager
+
+        
+        public IPasswordHasher PasswordHasher
+        {
+            get
+            {
+                IPasswordHasher output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.PasswordHasher;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IIdentityValidator<IUser> UserValidator
+        {
+            get
+            {
+                IIdentityValidator<IUser> output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.UserValidator;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IIdentityValidator<string> PasswordValidator
+        {
+            get
+            {
+                IIdentityValidator<string> output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.PasswordValidator;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IClaimsIdentityFactory<IUser, string> ClaimsIdentityFactory
+        {
+            get
+            {
+                IClaimsIdentityFactory<IUser,string> output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.ClaimsIdentityFactory;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IIdentityMessageService EmailService
+        {
+            get
+            {
+                IIdentityMessageService output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.EmailService;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IIdentityMessageService SmsService
+        {
+            get
+            {
+                IIdentityMessageService output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SmsService;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IUserTokenProvider<IUser, string> UserTokenProvider
+        {
+            get
+            {
+                IUserTokenProvider<IUser,string> output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.UserTokenProvider;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool UserLockoutEnabledByDefault
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.UserLockoutEnabledByDefault;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public int MaxFailedAccessAttemptsBeforeLockout
+        {
+            get
+            {
+                int output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.MaxFailedAccessAttemptsBeforeLockout;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public TimeSpan DefaultAccountLockoutTimeSpan
+        {
+            get
+            {
+                TimeSpan output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.DefaultAccountLockoutTimeSpan;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserTwoFactor
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserTwoFactor;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserPassword
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserPassword;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserSecurityStamp
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserSecurityStamp;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserRole
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserRole;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserLogin
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserLogin;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserEmail
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserEmail;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserPhoneNumber
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserPhoneNumber;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserClaim
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserClaim;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsUserLockout
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsUserLockout;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public bool SupportsQueryableUsers
+        {
+            get
+            {
+                bool output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.SupportsQueryableUsers;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IQueryable<IUser> Users
+        {
+            get
+            {
+                IQueryable<IUser> output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.Users;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public IDictionary<string, IUserTokenProvider<IUser, string>> TwoFactorProviders
+        {
+            get
+            {
+                IDictionary<string, IUserTokenProvider<IUser, string>> output;
+
+                try
+                {
+                    var remoteProvider = RemoteProvider();
+                    output = remoteProvider.TwoFactorProviders;
+                    DisposeRemoteProvider(remoteProvider);
+                }
+                catch (Exception e)
+                {
+                    if (LogExceptions)
+                    {
+                        _log.Error("Failed to get property.", e);
+                    }
+                    throw;
+                }
+                return output;
+            }
+        }
+
+        public async Task<ClaimsIdentity> CreateIdentityAsync(IUser user, string authenticationType)
+        {
+            ClaimsIdentity output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.CreateIdentityAsync(user, authenticationType);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to create identity.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> CreateAsync(IUser user)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.CreateAsync(user);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to create user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> UpdateAsync(IUser user)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.UpdateAsync(user);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to update user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> DeleteAsync(IUser user)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.DeleteAsync(user);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to delete user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IUser> FindByIdAsync(string userId)
+        {
+            IUser output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.FindByIdAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+        
+        public async Task<IUser> FindByNameAsync(string userName)
+        {
+            IUser output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.FindByNameAsync(userName);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> CreateAsync(IUser user, string password)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.CreateAsync(user, password);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to create user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IUser> FindAsync(string userName, string password)
+        {
+            IUser output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.FindAsync(userName, password);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<bool> CheckPasswordAsync(IUser user, string password)
+        {
+            bool output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.CheckPasswordAsync(user, password);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to check password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<bool> HasPasswordAsync(string userId)
+        {
+            bool output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.HasPasswordAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to check for password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> AddPasswordAsync(string userId, string password)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.AddPasswordAsync(userId, password);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to add password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.ChangePasswordAsync(userId, currentPassword, newPassword);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to change password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> RemovePasswordAsync(string userId)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.RemovePasswordAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to remove password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<string> GetSecurityStampAsync(string userId)
+        {
+            string output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GetSecurityStampAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get security stamp.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> UpdateSecurityStampAsync(string userId)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.UpdateSecurityStampAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to update security stamp.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(string userId)
+        {
+            string output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GeneratePasswordResetTokenAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to generate password reset token.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> ResetPasswordAsync(string userId, string token, string newPassword)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.ResetPasswordAsync(userId, token, newPassword);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to reset password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IUser> FindAsync(UserLoginInfoDto login)
+        {
+            IUser output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.FindAsync(login);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find login.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> RemoveLoginAsync(string userId, UserLoginInfoDto login)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.RemoveLoginAsync(userId, login);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to remove login.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> AddLoginAsync(string userId, UserLoginInfoDto login)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.AddLoginAsync(userId, login);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to add login.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
+        {
+            IList<UserLoginInfoDto> output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GetLoginsAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get logins.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> AddClaimAsync(string userId, Claim claim)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.AddClaimAsync(userId, claim);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to add claim.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> RemoveClaimAsync(string userId, Claim claim)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.RemoveClaimAsync(userId, claim);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to remove claim.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IList<Claim>> GetClaimsAsync(string userId)
+        {
+            IList<Claim> output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GetClaimsAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get claims.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> AddToRoleAsync(string userId, string role)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.AddToRoleAsync(userId, role);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to add user to role.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> AddToRolesAsync(string userId, string[] roles)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.AddToRolesAsync(userId, roles);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to add user to roles.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> RemoveFromRoleAsync(string userId, string role)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.RemoveFromRoleAsync(userId, role);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to remove user from role.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> RemoveFromRolesAsync(string userId, string[] roles)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.RemoveFromRolesAsync(userId, roles);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to remove user from roles.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IList<string>> GetRolesAsync(string userId)
+        {
+            IList<string> output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GetRolesAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get roles.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<bool> IsInRoleAsync(string userId, string role)
+        {
+            bool output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.IsInRoleAsync(userId, role);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get if user is in role.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<string> GetEmailAsync(string userId)
+        {
+            string output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GetEmailAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get if user is in role.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> SetEmailAsync(string userId, string email)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.SetEmailAsync(userId, email);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to set email.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IUser> FindByEmailAsync(string email)
+        {
+            IUser output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.FindByEmailAsync(email);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find by email.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+        {
+            string output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GenerateEmailConfirmationTokenAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to generate email token.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<IdentityResultDto> ConfirmEmailAsync(string userId, string token)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.ConfirmEmailAsync(userId, token);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to confirm email.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<bool> IsEmailConfirmedAsync(string userId)
+        {
+            bool output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.IsEmailConfirmedAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to find if email is confirmed.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        //public Task<string> GetPhoneNumberAsync(string userId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<IdentityResultDto> SetPhoneNumberAsync(string userId, string phoneNumber)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<IdentityResultDto> ChangePhoneNumberAsync(string userId, string phoneNumber, string token)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<bool> IsPhoneNumberConfirmedAsync(string userId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<string> GenerateChangePhoneNumberTokenAsync(string userId, string phoneNumber)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<bool> VerifyChangePhoneNumberTokenAsync(string userId, string token, string phoneNumber)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<bool> VerifyUserTokenAsync(string userId, string purpose, string token)
+        {
+            bool output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.VerifyUserTokenAsync(userId,purpose,token);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to verify user token.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public async Task<string> GenerateUserTokenAsync(string purpose, string userId)
+        {
+            string output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GenerateUserTokenAsync(purpose, userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to generate user token.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public void RegisterTwoFactorProvider(string twoFactorProvider, IUserTokenProvider<IUser, string> provider)
+        {
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                remoteProvider.RegisterTwoFactorProvider(twoFactorProvider, provider);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to register two factor provider.", e);
+                }
+                throw;
+            }
+        }
+
+        public async Task<IList<string>> GetValidTwoFactorProvidersAsync(string userId)
+        {
+            IList<string> output;
+
+            try
+            {
+                IUserManagerService remoteProvider = RemoteProvider();
+                output = await remoteProvider.GetValidTwoFactorProvidersAsync(userId);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to get valid two factor providers.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
+        public Task<bool> VerifyTwoFactorTokenAsync(string userId, string twoFactorProvider, string token)
+        {
             throw new NotImplementedException();
         }
 
-        
+        public Task<string> GenerateTwoFactorTokenAsync(string userId, string twoFactorProvider)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task<IdentityResultDto> NotifyTwoFactorTokenAsync(string userId, string twoFactorProvider, string token)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task<bool> GetTwoFactorEnabledAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task<IdentityResultDto> SetTwoFactorEnabledAsync(string userId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task SendEmailAsync(string userId, string subject, string body)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task SendSmsAsync(string userId, string message)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task<bool> IsLockedOutAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task<IdentityResultDto> SetLockoutEnabledAsync(string userId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public Task<bool> GetLockoutEnabledAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResultDto> SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResultDto> AccessFailedAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityResultDto> ResetAccessFailedCountAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetAccessFailedCountAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
 
         #region IAuthenticationManagerService - Microsoft.Owin.Security.IAuthenticationManager
 
@@ -272,7 +1730,7 @@ namespace Blob.Proxies
             throw new NotImplementedException();
         }
 
-#endregion 
+        #endregion
 
         #region ISignInManagerService - SignInManager
 
@@ -453,449 +1911,6 @@ namespace Blob.Proxies
         #endregion
 
 
-        #region UserManager
-
-
-        private IUserManagerService<User, Guid> _userManager;
-        private IPasswordHasher _passwordHasher;
-        private IIdentityValidator<IUser> _userValidator;
-        private IIdentityValidator<string> _passwordValidator;
-        private IClaimsIdentityFactory<IUser, string> _claimsIdentityFactory;
-        private IIdentityMessageService _emailService;
-        private IIdentityMessageService _smsService;
-        private IUserTokenProvider<IUser, string> _userTokenProvider;
-        private bool _userLockoutEnabledByDefault;
-        private int _maxFailedAccessAttemptsBeforeLockout;
-        private TimeSpan _defaultAccountLockoutTimeSpan;
-        private bool _supportsUserTwoFactor;
-        private bool _supportsUserPassword;
-        private bool _supportsUserSecurityStamp;
-        private bool _supportsUserRole;
-        private bool _supportsUserLogin;
-        private bool _supportsUserEmail;
-        private bool _supportsUserPhoneNumber;
-        private bool _supportsUserClaim;
-        private bool _supportsUserLockout;
-        private bool _supportsQueryableUsers;
-        private IQueryable<IUser> _users;
-        private IDictionary<string, IUserTokenProvider<IUser, string>> _twoFactorProviders;
-
-        public IPasswordHasher PasswordHasher
-        {
-            get { return _passwordHasher; }
-        }
-
-        public IIdentityValidator<IUser> UserValidator
-        {
-            get { return _userValidator; }
-        }
-
-        public IIdentityValidator<string> PasswordValidator
-        {
-            get { return _passwordValidator; }
-        }
-
-        public IClaimsIdentityFactory<IUser, string> ClaimsIdentityFactory
-        {
-            get { return _claimsIdentityFactory; }
-        }
-
-        public IIdentityMessageService EmailService
-        {
-            get { return _emailService; }
-        }
-
-        public IIdentityMessageService SmsService
-        {
-            get { return _smsService; }
-        }
-
-        public IUserTokenProvider<IUser, string> UserTokenProvider
-        {
-            get { return _userTokenProvider; }
-        }
-
-        public bool UserLockoutEnabledByDefault
-        {
-            get { return _userLockoutEnabledByDefault; }
-        }
-
-        public int MaxFailedAccessAttemptsBeforeLockout
-        {
-            get { return _maxFailedAccessAttemptsBeforeLockout; }
-        }
-
-        public TimeSpan DefaultAccountLockoutTimeSpan
-        {
-            get { return _defaultAccountLockoutTimeSpan; }
-        }
-
-        public bool SupportsUserTwoFactor
-        {
-            get { return _supportsUserTwoFactor; }
-        }
-
-        public bool SupportsUserPassword
-        {
-            get { return _supportsUserPassword; }
-        }
-
-        public bool SupportsUserSecurityStamp
-        {
-            get { return _supportsUserSecurityStamp; }
-        }
-
-        public bool SupportsUserRole
-        {
-            get { return _supportsUserRole; }
-        }
-
-        public bool SupportsUserLogin
-        {
-            get { return _supportsUserLogin; }
-        }
-
-        public bool SupportsUserEmail
-        {
-            get { return _supportsUserEmail; }
-        }
-
-        public bool SupportsUserPhoneNumber
-        {
-            get { return _supportsUserPhoneNumber; }
-        }
-
-        public bool SupportsUserClaim
-        {
-            get { return _supportsUserClaim; }
-        }
-
-        public bool SupportsUserLockout
-        {
-            get { return _supportsUserLockout; }
-        }
-
-        public bool SupportsQueryableUsers
-        {
-            get { return _supportsQueryableUsers; }
-        }
-
-        public IQueryable<IUser> Users
-        {
-            get { return _users; }
-        }
-
-        public IDictionary<string, IUserTokenProvider<IUser, string>> TwoFactorProviders
-        {
-            get { return _twoFactorProviders; }
-        }
-
-        public Task<ClaimsIdentity> CreateIdentityAsync(IUser user, string authenticationType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> CreateAsync(IUser user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> UpdateAsync(IUser user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> DeleteAsync(IUser user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IUser> FindByIdAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IUser> FindByNameAsync(string userName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> CreateAsync(IUser user, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IUser> FindAsync(string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> CheckPasswordAsync(IUser user, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> HasPasswordAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> AddPasswordAsync(string userId, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> RemovePasswordAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetSecurityStampAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> UpdateSecurityStampAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GeneratePasswordResetTokenAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> ResetPasswordAsync(string userId, string token, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IUser> FindAsync(UserLoginInfoDto login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> RemoveLoginAsync(string userId, UserLoginInfoDto login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> AddLoginAsync(string userId, UserLoginInfoDto login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> AddClaimAsync(string userId, Claim claim)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> RemoveClaimAsync(string userId, Claim claim)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Claim>> GetClaimsAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> AddToRoleAsync(string userId, string role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> AddToRolesAsync(string userId, string[] roles)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> RemoveFromRoleAsync(string userId, string role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> RemoveFromRolesAsync(string userId, string[] roles)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<string>> GetRolesAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsInRoleAsync(string userId, string role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetEmailAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> SetEmailAsync(string userId, string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IUser> FindByEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GenerateEmailConfirmationTokenAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> ConfirmEmailAsync(string userId, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsEmailConfirmedAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public Task<string> GetPhoneNumberAsync(string userId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<IdentityResultDto> SetPhoneNumberAsync(string userId, string phoneNumber)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<IdentityResultDto> ChangePhoneNumberAsync(string userId, string phoneNumber, string token)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<bool> IsPhoneNumberConfirmedAsync(string userId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<string> GenerateChangePhoneNumberTokenAsync(string userId, string phoneNumber)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<bool> VerifyChangePhoneNumberTokenAsync(string userId, string token, string phoneNumber)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public Task<bool> VerifyUserTokenAsync(string userId, string purpose, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GenerateUserTokenAsync(string purpose, string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterTwoFactorProvider(string twoFactorProvider, IUserTokenProvider<IUser, string> provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<string>> GetValidTwoFactorProvidersAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> VerifyTwoFactorTokenAsync(string userId, string twoFactorProvider, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GenerateTwoFactorTokenAsync(string userId, string twoFactorProvider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> NotifyTwoFactorTokenAsync(string userId, string twoFactorProvider, string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> GetTwoFactorEnabledAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> SetTwoFactorEnabledAsync(string userId, bool enabled)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SendEmailAsync(string userId, string subject, string body)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SendSmsAsync(string userId, string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsLockedOutAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> SetLockoutEnabledAsync(string userId, bool enabled)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> GetLockoutEnabledAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> AccessFailedAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityResultDto> ResetAccessFailedCountAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> GetAccessFailedCountAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         public void Dispose()
         {

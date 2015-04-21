@@ -59,7 +59,6 @@ namespace Blob.Data.Repositories
         {
             _log.Debug("FindDeviceByIdAsync");
             ThrowIfDisposed();
-            ThrowIfDisposed();
 
             Device device = await _deviceStore.GetByIdAsync(deviceId).WithCurrentCulture();
             if (device != null)
@@ -153,7 +152,7 @@ namespace Blob.Data.Repositories
                 throw new ArgumentNullException("status");
 
             _statusStore.Add(status);
-            Context.SaveChangesAsync(); // ??
+            SaveChanges();
             return Task.FromResult(0);
         }
 
@@ -211,7 +210,7 @@ namespace Blob.Data.Repositories
                 throw new ArgumentNullException("statusPerf");
 
             _performanceStore.Add(statusPerf);
-            Context.SaveChangesAsync(); // ??
+            SaveChanges();
             return Task.FromResult(0);
         }
 
@@ -223,6 +222,15 @@ namespace Blob.Data.Repositories
         }
 
         #endregion
+
+        protected int SaveChanges()
+        {
+            _log.Debug("Saving changes...");
+            ThrowIfDisposed();
+            int numChanges = Context.SaveChanges(); // todo, is this async??
+            _log.Debug(string.Format("Saved {0} changes", numChanges));
+            return numChanges;
+        }
 
 
         public void Dispose()

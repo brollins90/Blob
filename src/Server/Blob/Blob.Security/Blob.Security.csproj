@@ -62,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncHelper.cs" />
+    <Compile Include="AuthenticationOperationInvoker.cs" />
+    <Compile Include="AuthorizedMethodAttribute.cs" />
     <Compile Include="BlobClaimsIdentityFactory.cs" />
     <Compile Include="BlobIdentityManager.cs" />
     <Compile Include="BlobPasswordHasher.cs" />

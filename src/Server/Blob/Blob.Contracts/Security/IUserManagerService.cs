@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Claims;
+using System.Security.Permissions;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace Blob.Contracts.Security
         where TKey : IEquatable<TKey>
     {
         [OperationContract]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Customer")]
         void SetProvider(string providerName);
 
         IPasswordHasher PasswordHasher { [OperationContract] get; }
@@ -294,23 +296,21 @@ namespace Blob.Contracts.Security
             {
                 errors = new[] {"error"};
             }
-            _succeeded = false;
-            _errors = errors;
+            Succeeded = false;
+            Errors = errors;
         }
         public IdentityResultDto(bool success)
         {
-            _succeeded = success;
-            _errors = new string[0];
+            Succeeded = success;
+            Errors = new string[0];
         }
         public IdentityResultDto(IdentityResult res)
         {
-            _succeeded = res.Succeeded;
-            _errors = res.Errors.ToList();
+            Succeeded = res.Succeeded;
+            Errors = res.Errors.ToList();
         }
-        public new bool Succeeded { get { return _succeeded; } }
-        protected bool _succeeded;
-        public new IEnumerable<string> Errors { get { return _errors; } }
-        protected IEnumerable<string> _errors;
+        public bool Succeeded { get; private set; }
+        public IEnumerable<string> Errors { get; private set; }
     }
 
     [DataContract]

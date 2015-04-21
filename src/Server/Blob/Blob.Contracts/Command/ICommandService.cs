@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Permissions;
 using System.ServiceModel;
 
 namespace Blob.Contracts.Command
@@ -10,12 +11,15 @@ namespace Blob.Contracts.Command
     public interface ICommandService
     {
         [OperationContract(IsOneWay = true)]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
         void Connect(Guid deviceId);
 
         [OperationContract(IsOneWay = true)]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
         void Disconnect(Guid deviceId);
 
         [OperationContract(IsOneWay = true)]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
         void Ping(Guid deviceId);
     }
 }

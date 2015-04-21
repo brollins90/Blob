@@ -1,10 +1,9 @@
-﻿using log4net;
+﻿using Blob.Security;
+using log4net;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using System.Configuration;
 using System.Data.Entity;
-using Blob.Data;
-using Blob.Security;
 
 namespace Blob.WcfHost.Infrastructure
 {
@@ -25,9 +24,8 @@ namespace Blob.WcfHost.Infrastructure
             Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
-            Bind<Security.BlobUserStore>().ToSelf().InRequestScope();
-            Bind<Security.BlobUserManager>().ToSelf().InRequestScope();
-
+            Bind<BlobUserStore>().ToSelf().InRequestScope();
+            Bind<BlobUserManager>().ToSelf().InRequestScope();
 
             // core
             Bind<Core.Data.IAccountRepository>().To<Data.Repositories.AccountRepository>();
