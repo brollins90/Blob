@@ -1,6 +1,4 @@
-﻿using Blob.Core.Identity;
-using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Utilities;
@@ -10,6 +8,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Blob.Core.Identity;
+using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {

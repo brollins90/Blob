@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
@@ -11,18 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Before.Models;
+using Blob.Contracts.Security;
 using Blob.Proxies;
 
 namespace Before
 {
-    public static class IdentityUtil
-    {
-        public static ApplicationUser ToApplicationUser(this IUser<string> iUser)
-        {
-            return iUser as ApplicationUser;
-        }
-    }
-
     public class EmailService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)
@@ -41,19 +36,27 @@ namespace Before
         }
     }
 
-    public class ApplicationUser : IUser, IUser<string>
+    public class ApplicationUser : UserDto, IUser, IUser<string>
     {
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationIdentityManager manager)
+        public ApplicationUser() { }
+        public ApplicationUser(UserDto userDto)
+        {
+            // populate other fields if we want to
+            this.Id = userDto.Id;
+            this.UserName = userDto.UserName;
+        }
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            var userIdentity = await manager.CreateIdentityAsync(this as UserDto, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
         }
 
-        public string Id { get; private set; }
+        //public string Id { get; private set; }
 
-        public string UserName { get; set; }
+        //public string UserName { get; set; }
 
         public string Email { get; set; }
         public string PasswordHash { get; set; }
@@ -61,32 +64,46 @@ namespace Before
     }
 
 
-    public class ApplicationIdentityManager : IdentityManagerClient
-    {
-        public ApplicationUser FindById(string userId)
-        {
-            return (base.FindByIdAsync(userId)).Result.ToApplicationUser();
-        }
+    
+    //{
+    ////    public ApplicationUser FindById(string userId)
+    ////    {
+    ////        return (base.FindByIdAsync(userId)).Result.ToApplicationUser();
+    ////    }
 
-        public static ApplicationIdentityManager Create(IdentityFactoryOptions<ApplicationIdentityManager> options, IOwinContext context)
-        {
-            var manager = new ApplicationIdentityManager();
-            return manager;
-        }
-    }
+    ////    public static ApplicationIdentityManagerProxy Create(IdentityFactoryOptions<ApplicationIdentityManagerProxy> options, IOwinContext context)
+    ////    {
+    ////        var manager = new ApplicationIdentityManagerProxy();
+    ////        NameValueCollection config = (NameValueCollection)ConfigurationManager.GetSection("BlobProxy");
+    ////        if (config == null)
+    ////        {
+    ////            throw new Exception();
+    ////        }
+    ////        manager.Initialize("IdentityManagerClient", config);
+    ////        return manager;
+    ////    }
+    //}
 
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-    //public class ApplicationUserManager : IdentityManagerClient
-    //{
-    //    public ApplicationUser FindById(string userId)
+    public class ApplicationUserManager : IdentityManagerClient
+    //public class ApplicationUserManager : UserManager<IUser>
+    {
+    //    private readonly ApplicationIdentityManagerProxy _userManagerProxy;
+
+    //    public ApplicationUserManager() : base(new NullStore())
     //    {
-    //        return (base.FindByIdAsync(userId)).Result.ToApplicationUser();
+    //        _userManagerProxy = new ApplicationIdentityManagerProxy();
     //    }
 
-    //    public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
-    //    {
-    //        var manager = new ApplicationUserManager();
-    //        //var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+        public ApplicationUser FindById(string userId)
+        {
+            return new ApplicationUser(FindByIdAsync(userId).Result);
+        }
+
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
+        {
+            var manager = new ApplicationUserManager();
+            //var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
     //        //// Configure validation logic for usernames
     //        //manager.UserValidator = new UserValidator<ApplicationUser>(manager)
     //        //{
@@ -128,11 +145,12 @@ namespace Before
     //        //    manager.UserTokenProvider = 
     //        //        new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
     //        //}
-    //        return manager;
-    //    }
-    //}
+            return manager;
+        }
+    }
 
     //// Configure the application sign-in manager which is used in this application.
+    //public class ApplicationSignInManager : IUserSignInService
     //public class ApplicationSignInManager : SignInManager<IUser, string>
     //{
     //    public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
@@ -140,14 +158,23 @@ namespace Before
     //    {
     //    }
 
-    //    public override Task<ClaimsIdentity> CreateUserIdentityAsync(IUser user)
-    //    {
-    //        return user.ToApplicationUser().GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
-    //    }
+    //    //public override Task<ClaimsIdentity> CreateUserIdentityAsync(IUser user)
+    //    //{
+    //    //    return user.ToApplicationUser().GenerateUserIdentityAsync();
+    //    //}
 
     //    public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
     //    {
     //        return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
     //    }
+    //}
+    //internal class NullStore : IUserStore<IUser>
+    //{
+    //    public void Dispose() { return; }
+    //    public Task CreateAsync(IUser user) { throw new NotImplementedException(); }
+    //    public Task UpdateAsync(IUser user) { throw new NotImplementedException(); }
+    //    public Task DeleteAsync(IUser user) { throw new NotImplementedException(); }
+    //    public Task<IUser> FindByIdAsync(string userId) { throw new NotImplementedException(); }
+    //    public Task<IUser> FindByNameAsync(string userName) { throw new NotImplementedException(); }
     //}
 }

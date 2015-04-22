@@ -20,7 +20,7 @@ namespace Before
 
 
             //app.CreatePerOwinContext<Blob.Proxies.IdentityManagerClient>(IdentityManagerClient.Create);
-            app.CreatePerOwinContext<ApplicationIdentityManager>(ApplicationIdentityManager.Create);
+            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             //app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
             // Enable the application to use a cookie to store information for the signed in user

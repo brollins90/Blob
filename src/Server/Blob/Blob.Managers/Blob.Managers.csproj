@@ -46,6 +46,10 @@
     <Compile Include="Extensions\Parsing.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
@@ -58,10 +62,6 @@
       <Project>{0586d78e-fb9d-484e-aab9-00d434e0f3cd}</Project>
       <Name>Blob.Security</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

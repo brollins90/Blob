@@ -24,8 +24,8 @@ namespace Blob.WcfHost.Infrastructure
             Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
 
-            Bind<BlobUserStore>().ToSelf().InRequestScope();
-            Bind<BlobUserManager>().ToSelf().InRequestScope();
+            //Bind<BlobUserStore>().ToSelf().InRequestScope();
+            //Bind<BlobUserManager>().ToSelf().InRequestScope();
 
             // core
             Bind<Core.Data.IAccountRepository>().To<Data.Repositories.AccountRepository>();
@@ -39,7 +39,7 @@ namespace Blob.WcfHost.Infrastructure
             // service
             // we wont use this layer, because it is specified in the config file.
             Bind<Contracts.Command.ICommandService>().To<Services.Command.CommandService>();
-            Bind<Contracts.Security.IUserManagerService>().To<BlobUserManagerAdapter>();
+            //Bind<Contracts.Security.IUserManagerService>().To<BlobUserManagerAdapter>();
             Bind<Contracts.Registration.IRegistrationService>().To<Services.Registration.RegistrationService>();
             Bind<Contracts.Status.IStatusService>().To<Services.Status.StatusService>();
 
