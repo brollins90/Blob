@@ -56,60 +56,6 @@ namespace Blob.Data.Repositories
 
         #region Device
 
-        public Task CreateDeviceAsync(Device device)
-        {
-            _log.Debug("CreateDeviceAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
-        public async Task<Device> FindDeviceByIdAsync(Guid deviceId)
-        {
-            _log.Debug("FindDeviceByIdAsync");
-            ThrowIfDisposed();
-
-            Device device = await _deviceStore.GetByIdAsync(deviceId).WithCurrentCulture();
-            if (device != null)
-            {
-                await _customerStore.DbEntitySet.Where(x => x.Id.Equals(device.CustomerId)).LoadAsync().WithCurrentCulture();
-                await _deviceTypeStore.Where(x => x.Id.Equals(device.DeviceTypeId)).LoadAsync().WithCurrentCulture();
-
-                await EnsureStatusLoaded(device).WithCurrentCulture();
-                //await EnsurePerformanceLoaded(device).WithCurrentCulture();
-                //await EnsureLogsLoaded(device).WithCurrentCulture();
-            }
-            return device;
-        }
-
-        public async Task<IList<Device>> FindDevicesByForCustomerAsync(Guid customerId)
-        {
-            _log.Debug("FindDevicesByForCustomerAsync");
-            ThrowIfDisposed();
-
-            Customer customer = await _customerStore.GetByIdAsync(customerId).WithCurrentCulture();
-            if (customer != null)
-            {
-                IList<Device> devices;
-                if (AreDevicesLoaded(customer))
-                {
-                    devices = customer.Devices.Where(x => x.CustomerId == customerId).ToList();
-                }
-                else
-                {
-                    devices = await _deviceStore.DbEntitySet.Where(x => x.CustomerId == customerId).ToListAsync().WithCurrentCulture();
-                }
-                return devices;
-            }
-            return null;
-        }
-
-        public Task UpdateDeviceAsync(Device device)
-        {
-            _log.Debug("UpdateDeviceAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
         public Task DeleteDeviceAsync(Device device)
         {
             _log.Debug("DeleteDeviceAsync");
@@ -140,15 +86,7 @@ namespace Blob.Data.Repositories
             return Context.Entry(customer).Collection(u => u.Devices).IsLoaded;
         }
 
-        private async Task EnsureDevicesLoaded(Customer customer)
-        {
-            if (!AreDevicesLoaded(customer))
-            {
-                var customerId = customer.Id;
-                await _deviceStore.DbEntitySet.Where(x => x.CustomerId.Equals(customerId)).LoadAsync().WithCurrentCulture();
-                Context.Entry(customer).Collection(u => u.Devices).IsLoaded = true;
-            }
-        }
+        
 
         #endregion
 
@@ -192,7 +130,7 @@ namespace Blob.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IList<Status>> FindStatusForDeviceAsync(Guid deviceId)
+        public Task<IList<Status>> FindStatusesForDeviceAsync(Guid deviceId)
         {
             throw new NotImplementedException();
         }
@@ -202,7 +140,7 @@ namespace Blob.Data.Repositories
 
         #region Status
 
-        public virtual async Task<IList<Status>> GetStatusAsync(Device device)
+        public virtual async Task<IList<Status>> FindStatusByIdAsync(Device device)
         {
             _log.Debug("GetStatusAsync");
             ThrowIfDisposed();
@@ -250,26 +188,11 @@ namespace Blob.Data.Repositories
             throw new NotImplementedException();
         }
 
-        Task<IList<StatusPerf>> IStatusRepository.GetPerformanceAsync(Device device)
+        Task<IList<StatusPerf>> IStatusRepository.GetPerformanceByIdAsync(Device device)
         {
             _log.Debug("GetPerformanceAsync");
             ThrowIfDisposed();
             throw new NotImplementedException();
-        }
-
-        private bool AreStatusLoaded(Device device)
-        {
-            return Context.Entry(device).Collection(u => u.Statuses).IsLoaded;
-        }
-
-        private async Task EnsureStatusLoaded(Device device)
-        {
-            if (!AreStatusLoaded(device))
-            {
-                var deviceId = device.Id;
-                await _statusStore.Where(x => x.DeviceId.Equals(deviceId)).LoadAsync().WithCurrentCulture();
-                Context.Entry(device).Collection(u => u.Statuses).IsLoaded = true;
-            }
         }
 
         #endregion

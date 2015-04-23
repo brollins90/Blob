@@ -105,7 +105,7 @@ namespace Blob.Managers.Blob
 
         public async Task<IList<Core.Domain.Status>> GetStatusForDeviceAsync(Guid deviceId)
         {
-            return await _statusRepository.FindStatusForDeviceAsync(deviceId).ConfigureAwait(false);
+            return await _statusRepository.FindStatusesForDeviceAsync(deviceId).ConfigureAwait(false);
         }
 
         public async Task<IList<StatusPerf>> GetPerformanceForDeviceAsync(Guid deviceId)

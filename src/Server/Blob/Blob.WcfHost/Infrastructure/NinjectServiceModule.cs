@@ -7,6 +7,9 @@ using Ninject.Web.Common;
 
 namespace Blob.WcfHost.Infrastructure
 {
+    /// <summary>
+    /// Ninject Container
+    /// </summary>
     public class NinjectServiceModule : NinjectModule
     {
         public override void Load()

@@ -9,6 +9,9 @@ namespace Blob.WcfHost.Infrastructure
 {
     public class BlobHostFactory : NinjectServiceHostFactory
     {
+        /// <summary>
+        /// Create a ServiceHostFactory that supports Ninject DI
+        /// </summary>
         public BlobHostFactory()
         {
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("\n\n\n\nStarting host factory");
@@ -18,6 +21,12 @@ namespace Blob.WcfHost.Infrastructure
             SetKernel(kernel);
         }
 
+        /// <summary>
+        /// Create a WCF ServiceHost.  This is the primary registration point for non injectable components
+        /// </summary>
+        /// <param name="serviceType"></param>
+        /// <param name="baseAddresses"></param>
+        /// <returns></returns>
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
         {
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("CreateServiceHost");
