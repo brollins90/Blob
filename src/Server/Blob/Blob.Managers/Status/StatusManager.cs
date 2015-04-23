@@ -1,9 +1,9 @@
-﻿using Blob.Contracts.Models;
+﻿using System.Threading.Tasks;
+using Blob.Contracts.Models;
 using Blob.Core.Data;
 using Blob.Core.Domain;
 using Blob.Managers.Extensions;
 using log4net;
-using System.Threading.Tasks;
 
 namespace Blob.Managers.Status
 {

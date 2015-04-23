@@ -72,14 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IdentityManagerClientAuthentication.cs" />
-    <Compile Include="IdentityManagerClientSignIn.cs" />
     <Compile Include="IdentityManagerClientUser.cs" />
-    <Compile Include="MembershipClient.cs" />
-    <Compile Include="ProxyUserManager.cs" />
     <Compile Include="RegistrationClient.cs" />
     <Compile Include="CommandClient.cs" />
-    <Compile Include="RoleClient.cs" />
     <Compile Include="StatusClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskExtensions.cs" />

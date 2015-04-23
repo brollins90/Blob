@@ -1,19 +1,20 @@
-﻿using Blob.Contracts.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Blob.Contracts.Models;
 using Blob.Core.Data;
 using Blob.Core.Domain;
 using log4net;
-using System;
-using System.Threading.Tasks;
 
-namespace Blob.Managers.Registration
+namespace Blob.Managers.Blob
 {
-    public class RegistrationManager : IRegistrationManager
+    public class BlobManager : IBlobManager
     {
         private readonly ILog _log;
         private readonly IAccountRepository _accountRepository;
         private readonly IStatusRepository _statusRepository;
 
-        public RegistrationManager(IAccountRepository accountRepository, IStatusRepository statusRepository, ILog log)
+        public BlobManager(IAccountRepository accountRepository, IStatusRepository statusRepository, ILog log)
         {
             _log = log;
             _log.Debug("Constructing RegistrationManager");
@@ -28,7 +29,7 @@ namespace Blob.Managers.Registration
 
             Guid deviceId = Guid.Parse(message.DeviceId);
             // check if device is already defined
-            Device d = await _statusRepository.FindDeviceByIdAsync(deviceId).ConfigureAwait(true);
+            Device d = await GetDeviceByIdAsync(deviceId).ConfigureAwait(true);
 
             if (d != null)
             {
@@ -62,6 +63,42 @@ namespace Blob.Managers.Registration
                                                      TimeSent = DateTime.Now
                                                  };
             return returnInfo;
+        }
+
+        public async Task DeleteDeviceAsync(Guid deviceId)
+        {
+            _log.Debug("DeleteDeviceAsync " + deviceId);
+            // Authenticate user is done, it is required in the service
+
+            Device d = await GetDeviceByIdAsync(deviceId).ConfigureAwait(true);
+            await _statusRepository.DeleteDeviceAsync(d).ConfigureAwait(false);
+        }
+
+        public async Task<Device> GetDeviceByIdAsync(Guid deviceId)
+        {
+            return await _statusRepository.FindDeviceByIdAsync(deviceId).ConfigureAwait(false);
+        }
+
+        public async Task<IList<Device>> FindDevicesForCustomer(Guid customerId)
+        {
+            return await _statusRepository.FindDevicesByForCustomerAsync(customerId).ConfigureAwait(false);
+        }
+
+        public async Task UpdateDeviceAsync(Device device)
+        {
+            _log.Debug("DeleteDeviceAsync " + device.Id);
+
+            await _statusRepository.DeleteDeviceAsync(device).ConfigureAwait(false);
+        }
+
+        public async Task<IList<Core.Domain.Status>> GetStatusForDeviceAsync(Guid deviceId)
+        {
+            return await _statusRepository.FindStatusForDeviceAsync(deviceId).ConfigureAwait(false);
+        }
+
+        public async Task<IList<StatusPerf>> GetPerformanceForDeviceAsync(Guid deviceId)
+        {
+            return await _statusRepository.FindPerformanceForDeviceAsync(deviceId).ConfigureAwait(false);
         }
     }
 }

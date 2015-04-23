@@ -1,15 +1,12 @@
-﻿using Blob.Data;
-using log4net;
-using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IdentityModel.Selectors;
 using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Core.Domain;
+using Blob.Data;
 using Blob.Data.Identity;
+using log4net;
 
-namespace Blob.Security
+namespace Blob.Security.Sam
 {
     public class BlobUserNamePasswordValidator : UserNamePasswordValidator
     {
@@ -28,23 +25,25 @@ namespace Blob.Security
             {
                 using (BlobUserManager userManager = new BlobUserManager(new BlobUserStore(context)))
                 {
-                    User user = AsyncHelper.RunSync(() => userManager.FindByNameAsync2(userName));
-                    _log.Debug("Got user: " + user);
+                    _log.Debug(string.Format("Validating username: {0} with password {1}", userName, password));
 
-                    if (user == null)
+                    string msg;
+
+                    if (userManager.CheckUserNamePasswordAsync(userName, password).Result)
                     {
-                        var msg = String.Format("Unknown Username {0} or incorrect password {1}", userName, password);
+                        msg = string.Format("Valid User {0} with correct password {1}", userName, password);
                         Trace.TraceWarning(msg);
-                        throw new FaultException(msg); //the client actually will receive MessageSecurityException. But if I throw MessageSecurityException, the runtime will give FaultException to client without clear message.
+                        _log.Debug(msg);
                     }
                     else
                     {
-                        Trace.TraceWarning(String.Format("Good Username {0} with correct password {1}", userName, password));
+                        msg = String.Format("Unknown Username {0} or incorrect password {1}", userName, password);
+                        Trace.TraceWarning(msg);
+                        _log.Debug(msg);
+                        throw new FaultException(msg); //the client actually will receive MessageSecurityException. But if I throw MessageSecurityException, the runtime will give FaultException to client without clear message.
                     }
                 }
-
             }
-
         }
     }
 }

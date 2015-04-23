@@ -1,7 +1,7 @@
-﻿using Blob.Contracts.Command;
-using System;
+﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using Blob.Contracts.Command;
 
 namespace Blob.Proxies
 {

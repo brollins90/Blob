@@ -1,7 +1,6 @@
-﻿using Blob.Core.Data;
-using System;
-using System.Data.Entity;
+﻿using System;
 using System.Threading.Tasks;
+using Blob.Core.Data;
 using Blob.Core.Domain;
 using log4net;
 

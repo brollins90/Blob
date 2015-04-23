@@ -1,12 +1,12 @@
-﻿using Blob.Core.Data;
-using Blob.Core.Domain;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
+using Blob.Core.Data;
+using Blob.Core.Domain;
+using log4net;
 
 namespace Blob.Data.Repositories
 {
@@ -15,6 +15,7 @@ namespace Blob.Data.Repositories
         private readonly ILog _log;
         private readonly IDbSet<Status> _statusStore;
         private readonly IDbSet<StatusPerf> _performanceStore;
+        private GenericEntityStore<Customer> _customerStore;
         private GenericEntityStore<Device> _deviceStore;
         private bool _disposed;
 
@@ -34,6 +35,7 @@ namespace Blob.Data.Repositories
             Context = context;
 
             AutoSaveChanges = true;
+            _customerStore = new GenericEntityStore<Customer>(context);
             _deviceStore = new GenericEntityStore<Device>(context);
             _statusStore = Context.Set<Status>();
             _performanceStore = Context.Set<StatusPerf>();
@@ -70,6 +72,28 @@ namespace Blob.Data.Repositories
             return device;
         }
 
+        public async Task<IList<Device>> FindDevicesByForCustomerAsync(Guid customerId)
+        {
+            _log.Debug("FindDevicesByForCustomerAsync");
+            ThrowIfDisposed();
+
+            Customer customer = await _customerStore.GetByIdAsync(customerId).WithCurrentCulture();
+            if (customer != null)
+            {
+                IList<Device> devices;
+                if (AreDevicesLoaded(customer))
+                {
+                    devices = customer.Devices.Where(x => x.CustomerId == customerId).ToList();
+                }
+                else
+                {
+                    devices = await _deviceStore.DbEntitySet.Where(x => x.CustomerId == customerId).ToListAsync().WithCurrentCulture();
+                }
+                return devices;
+            }
+            return null;
+        }
+
         public Task UpdateDeviceAsync(Device device)
         {
             _log.Debug("UpdateDeviceAsync");
@@ -79,9 +103,42 @@ namespace Blob.Data.Repositories
 
         public Task DeleteDeviceAsync(Device device)
         {
-            _log.Debug("DeleteDeviceAsync");
+            //_log.Debug("DeleteDeviceAsync");
+            //ThrowIfDisposed();
+            //if (device == null)
+            //{
+            //    throw new ArgumentNullException("device");
+            //}
+            //var d = await _deviceStore.DbEntitySet.SingleOrDefaultAsync(x => x.Id.Equals(device.Id);
+            //if (d != null)
+            //{
+            //    var deviceId = d.Id;
+            //    var customerId = user.Id;
+            //    var userRole = await _userRoles.FirstOrDefaultAsync(r => roleId.Equals(r.RoleId) && r.UserId.Equals(userId)).WithCurrentCulture();
+            //    if (userRole != null)
+            //    {
+            //        _userRoles.Remove(userRole);
+            //    }
+            //}
+
+
             ThrowIfDisposed();
             throw new NotImplementedException();
+        }
+
+        private bool AreDevicesLoaded(Customer customer)
+        {
+            return Context.Entry(customer).Collection(u => u.Devices).IsLoaded;
+        }
+
+        private async Task EnsureDevicesLoaded(Customer customer)
+        {
+            if (!AreDevicesLoaded(customer))
+            {
+                var customerId = customer.Id;
+                await _deviceStore.DbEntitySet.Where(x => x.CustomerId.Equals(customerId)).LoadAsync().WithCurrentCulture();
+                Context.Entry(customer).Collection(u => u.Devices).IsLoaded = true;
+            }
         }
 
         #endregion
@@ -123,6 +180,11 @@ namespace Blob.Data.Repositories
         {
             _log.Debug("DeleteDeviceTypeAsync");
             ThrowIfDisposed();
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<Status>> FindStatusForDeviceAsync(Guid deviceId)
+        {
             throw new NotImplementedException();
         }
 
@@ -170,6 +232,16 @@ namespace Blob.Data.Repositories
             //    // need to load the status before we remove it
             //    _statusStore.Remove(status);
             //    return Task.FromResult(0);
+        }
+
+        public Task<IList<StatusPerf>> FindPerformanceForDeviceAsync(Guid deviceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IList<StatusPerf>> IStatusRepository.GetPerformanceAsync(Device device)
+        {
+            throw new NotImplementedException();
         }
 
         private bool AreStatusLoaded(Device device)

@@ -1,14 +1,15 @@
 ﻿using System.Security.Permissions;
+using System.ServiceModel;
+using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.Status;
 using Blob.Managers.Status;
 using log4net;
-using System.ServiceModel;
-using System.Threading.Tasks;
 
 namespace Blob.Services.Status
 {
-    [ServiceBehavior(InstanceContextMode=InstanceContextMode.PerCall)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
     public class StatusService : IStatusService
     {
         private readonly ILog _log;
@@ -20,14 +21,16 @@ namespace Blob.Services.Status
             _statusManager = statusManager;
         }
 
-        [PrincipalPermission(SecurityAction.Assert, Authenticated=true, Role="Device")]
+        [OperationBehavior]
+        [PrincipalPermission(SecurityAction.Assert, Role="Device")]
         public async Task SendStatusToServer(StatusData statusData)
         {
             _log.Debug("Server received status: " + statusData);
             await _statusManager.StoreStatusData(statusData).ConfigureAwait(false);
         }
 
-        [PrincipalPermission(SecurityAction.Assert, Authenticated = true, Role = "Device")]
+        [OperationBehavior]
+        [PrincipalPermission(SecurityAction.Assert, Role = "Device")]
         public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
         {
             _log.Debug("Server received perf: " + statusPerformanceData);

@@ -63,19 +63,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncHelper.cs" />
+    <Compile Include="AuthenticationManagerExtensions.cs" />
     <Compile Include="AuthenticationOperationInvoker.cs" />
     <Compile Include="AuthorizedMethodAttribute.cs" />
     <Compile Include="BlobClaimsIdentityFactory.cs" />
     <Compile Include="BlobIdentityManager.cs" />
-    <Compile Include="BlobPasswordHasher.cs" />
-    <Compile Include="BlobPasswordValidator.cs" />
-    <Compile Include="BlobServiceAuthorizationManager.cs" />
+    <Compile Include="Identity\BlobPasswordHasher.cs" />
+    <Compile Include="Identity\BlobPasswordValidator.cs" />
+    <Compile Include="Sam\BlobServiceAuthorizationManager.cs" />
     <Compile Include="BlobUserManagerAdapter.cs" />
-    <Compile Include="BlobUserValidator.cs" />
     <Compile Include="BlobRoleStore.cs" />
     <Compile Include="BlobUserManager.cs" />
-    <Compile Include="BlobUserStore.cs" />
-    <Compile Include="BlobUserNamePasswordValidator.cs" />
+    <Compile Include="Sam\BlobUserNamePasswordValidator.cs" />
+    <Compile Include="Identity\BlobUserValidator.cs" />
     <Compile Include="WcfMessageLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -109,6 +109,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,27 +1,24 @@
-﻿using Blob.Contracts.Security;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
+using Blob.Contracts.Security;
+using log4net;
 
 namespace Blob.Proxies
 {
-    public partial class IdentityManagerClient : 
-        //UserManager<IUser, string>,
-        IIdentityService//,
-        //ISignInManagerService<IUser, string>,
-        //IAuthenticationManagerService
+    public class IdentityManagerClient : 
+        IIdentityService
     {
         private readonly ILog _log;
         private static ChannelFactory<IIdentityService> _channelFactory;
         private string Username = "customerUser1";
         private string Password = "password";
 
-        public IdentityManagerClient()// : base(new NullStore()) 
+        public IdentityManagerClient()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         }
@@ -45,11 +42,6 @@ namespace Blob.Proxies
             }
         }
 
-        /// <summary>
-        /// After the caller has completed its work with the object,
-        /// it should then pass the object to DisposeProvider to close
-        /// the connection.
-        /// </summary>
         protected IIdentityService RemoteProvider()
         {
             if (_channelFactory == null)
@@ -67,10 +59,6 @@ namespace Blob.Proxies
             return provider;
         }
 
-        /// <summary>
-        /// This method should be called to handle closing the 
-        /// connected proxy object.
-        /// </summary>
         private void DisposeRemoteProvider(IIdentityService remoteProvider)
         {
             _log.Debug("Disposing of remote provider.");
@@ -82,10 +70,6 @@ namespace Blob.Proxies
 
         private NameValueCollection Config { get; set; }
 
-        /// <summary>
-        /// Indicates whether to log exceptions
-        /// </summary>
-        /// <returns>true if the membership provider is configured to log exceptions; otherwise, false. The default is false.</returns>
         public bool LogExceptions
         {
             get
@@ -125,181 +109,9 @@ namespace Blob.Proxies
         public void SetProvider(string providerName)
         {
             // This isnt really part of the client side, just needed on the server side
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         
-
-        //#region UserManager
-
-        
-        //public IPasswordHasher PasswordHasher
-        //{
-        //    get
-        //    {
-        //        IPasswordHasher output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.PasswordHasher;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IIdentityValidator<UserDto> UserValidator
-        //{
-        //    get
-        //    {
-        //        IIdentityValidator<UserDto> output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.UserValidator;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IIdentityValidator<string> PasswordValidator
-        //{
-        //    get
-        //    {
-        //        IIdentityValidator<string> output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.PasswordValidator;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IClaimsIdentityFactory<UserDto, string> ClaimsIdentityFactory
-        //{
-        //    get
-        //    {
-        //        IClaimsIdentityFactory<UserDto,string> output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.ClaimsIdentityFactory;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IIdentityMessageService EmailService
-        //{
-        //    get
-        //    {
-        //        IIdentityMessageService output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.EmailService;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IIdentityMessageService SmsService
-        //{
-        //    get
-        //    {
-        //        IIdentityMessageService output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.SmsService;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IUserTokenProvider<UserDto, string> UserTokenProvider
-        //{
-        //    get
-        //    {
-        //        IUserTokenProvider<UserDto,string> output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.UserTokenProvider;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
         public bool UserLockoutEnabledByDefault
         {
             get
@@ -308,7 +120,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.UserLockoutEnabledByDefault;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -332,7 +144,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.MaxFailedAccessAttemptsBeforeLockout;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -356,7 +168,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.DefaultAccountLockoutTimeSpan;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -380,7 +192,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserTwoFactor;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -404,7 +216,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserPassword;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -428,7 +240,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserSecurityStamp;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -452,7 +264,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserRole;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -476,7 +288,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserLogin;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -500,7 +312,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserEmail;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -524,7 +336,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserPhoneNumber;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -548,7 +360,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserClaim;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -572,7 +384,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsUserLockout;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -596,7 +408,7 @@ namespace Blob.Proxies
 
                 try
                 {
-                    var remoteProvider = RemoteProvider();
+                    IIdentityService remoteProvider = RemoteProvider();
                     output = remoteProvider.SupportsQueryableUsers;
                     DisposeRemoteProvider(remoteProvider);
                 }
@@ -611,54 +423,6 @@ namespace Blob.Proxies
                 return output;
             }
         }
-
-        //public IQueryable<UserDto> Users
-        //{
-        //    get
-        //    {
-        //        IQueryable<UserDto> output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.Users;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
-
-        //public IDictionary<string, IUserTokenProvider<UserDto, string>> TwoFactorProviders
-        //{
-        //    get
-        //    {
-        //        IDictionary<string, IUserTokenProvider<UserDto, string>> output;
-
-        //        try
-        //        {
-        //            var remoteProvider = RemoteProvider();
-        //            output = remoteProvider.TwoFactorProviders;
-        //            DisposeRemoteProvider(remoteProvider);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to get property.", e);
-        //            }
-        //            throw;
-        //        }
-        //        return output;
-        //    }
-        //}
 
         public async Task AddClaimAsync(string userId, Claim claim)
         {
@@ -1210,79 +974,47 @@ namespace Blob.Proxies
         }
 
 
+        public async Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType)
+        {
+            ClaimsIdentity output;
 
+            try
+            {
+                IIdentityService remoteProvider = RemoteProvider();
+                output = await remoteProvider.CreateIdentityAsync(user, authenticationType);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to create identity.", e);
+                }
+                throw;
+            }
+            return output;
+        }
 
+        public async Task<IdentityResultDto> CreateAsync(UserDto user, string password)
+        {
+            IdentityResultDto output;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public Task<bool> IsLockedOutAsync(string userId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task AccessFailedAsync(string userId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
-
-
-
-        //public async Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType)
-        //{
-        //    ClaimsIdentity output;
-
-        //    try
-        //    {
-        //        IIdentityStoreService remoteProvider = RemoteProvider();
-        //        output = await remoteProvider.CreateIdentityAsync(user, authenticationType);
-        //        DisposeRemoteProvider(remoteProvider);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        if (LogExceptions)
-        //        {
-        //            _log.Error("Failed to create identity.", e);
-        //        }
-        //        throw;
-        //    }
-        //    return output;
-        //}
-
-        //public async Task CreateAsync(UserDto user, string password)
-        //{
-        //    IdentityResultDto output;
-
-        //    try
-        //    {
-        //        IIdentityStoreService remoteProvider = RemoteProvider();
-        //        output = await remoteProvider.CreateAsync(user, password);
-        //        DisposeRemoteProvider(remoteProvider);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        if (LogExceptions)
-        //        {
-        //            _log.Error("Failed to create user.", e);
-        //        }
-        //        throw;
-        //    }
-        //    return output;
-        //}
+            try
+            {
+                IIdentityService remoteProvider = RemoteProvider();
+                output = await remoteProvider.CreateAsync(user as UserDto, password);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to create user.", e);
+                }
+                throw;
+            }
+            return output;
+        }
 
         //public async Task<UserDto> FindAsync(string userName, string password)
         //{

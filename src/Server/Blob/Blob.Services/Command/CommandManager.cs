@@ -1,8 +1,8 @@
-﻿using Blob.Contracts.Command;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Blob.Contracts.Command;
+using log4net;
 
 namespace Blob.Services.Command
 {

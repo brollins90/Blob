@@ -1,28 +1,25 @@
-﻿using Blob.Security;
+﻿using System;
+using System.Configuration;
+using System.Data.Entity;
 using log4net;
 using Ninject.Modules;
 using Ninject.Web.Common;
-using System.Configuration;
-using System.Data.Entity;
 
 namespace Blob.WcfHost.Infrastructure
 {
     public class NinjectServiceModule : NinjectModule
     {
-        /// <summary>
-        /// Loads the module into the kernel.
-        /// </summary>
         public override void Load()
         {
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
 
+            String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
             // data
             Bind<Data.BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
-                .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
-
+                .WithConstructorArgument("connectionString", connectionString);
 
             Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
-                .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString);
+                .WithConstructorArgument("connectionString", connectionString);
 
             //Bind<BlobUserStore>().ToSelf().InRequestScope();
             //Bind<BlobUserManager>().ToSelf().InRequestScope();
@@ -33,7 +30,7 @@ namespace Blob.WcfHost.Infrastructure
 
             // manager
             // todo: decide where i am going to store the callbacks
-            Bind<Managers.Registration.IRegistrationManager>().To<Managers.Registration.RegistrationManager>();
+            Bind<Managers.Blob.IBlobManager>().To<Managers.Blob.BlobManager>();
             Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
 
             // service

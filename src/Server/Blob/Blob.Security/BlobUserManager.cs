@@ -1,22 +1,19 @@
-﻿using Blob.Contracts.Security;
-using Blob.Core.Domain;
-using log4net;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Configuration.Provider;
 using System.Data.Entity.Utilities;
 using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Configuration;
+using Blob.Contracts.Security;
+using Blob.Core.Domain;
 using Blob.Data.Identity;
+using Blob.Security.Identity;
+using log4net;
+using Microsoft.AspNet.Identity;
 
 namespace Blob.Security
 {
@@ -41,7 +38,7 @@ namespace Blob.Security
                 throw new ArgumentNullException("store");
             }
             Store = store;
-            //UserValidator = new BlobUserValidator(this);
+            UserValidator = new BlobUserValidator(this);
             PasswordValidator = new PasswordValidator
                                 {
                                     RequireDigit = false,
@@ -50,8 +47,8 @@ namespace Blob.Security
                                     RequireNonLetterOrDigit = false,
                                     RequireUppercase = false
                                 };
-            //PasswordHasher = new BlobPasswordHasher();
-            //ClaimsIdentityFactory = new BlobClaimsIdentityFactory();
+            PasswordHasher = new BlobPasswordHasher();
+            ClaimsIdentityFactory = new BlobClaimsIdentityFactory();
         }
 
         public void Initialize(string name, NameValueCollection config)
@@ -203,7 +200,7 @@ namespace Blob.Security
         }
         private IIdentityValidator<string> _passwordValidator;
 
-        public IClaimsIdentityFactory<User, Guid> ClaimsIdentityFactory
+        public BlobClaimsIdentityFactory ClaimsIdentityFactory
         {
             get
             {
@@ -220,7 +217,7 @@ namespace Blob.Security
                 _claimsIdentityFactory = value;
             }
         }
-        private IClaimsIdentityFactory<User, Guid> _claimsIdentityFactory;
+        private BlobClaimsIdentityFactory _claimsIdentityFactory;
 
         public IIdentityMessageService EmailService
         {
@@ -958,130 +955,6 @@ namespace Blob.Security
             await passwordStore.SetPasswordHashAsync(user, passwordHash).WithCurrentCulture();
         }
 
-        ///// <summary>
-        /////     Returns true if the password is valid for the user
-        ///// </summary>
-        ///// <param name="user"></param>
-        ///// <param name="password"></param>
-        ///// <returns></returns>
-        //public new virtual async Task<bool> CheckPasswordAsync(User user, string password)
-        //{
-        //    ThrowIfDisposed();
-        //    var passwordStore = GetPasswordStore();
-        //    if (user == null)
-        //    {
-        //        return false;
-        //    }
-        //    return await VerifyPasswordAsync(passwordStore, user, password).WithCurrentCulture();
-        //}
-
-        ///// <summary>
-        /////     Add a user password only if one does not already exist
-        ///// </summary>
-        ///// <param name="userId"></param>
-        ///// <param name="password"></param>
-        ///// <returns></returns>
-        //public new virtual async Task<IdentityResultDto> AddPasswordAsync(Guid userId, string password)
-        //{
-        //    ThrowIfDisposed();
-        //    var passwordStore = GetPasswordStore();
-        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
-        //    if (user == null)
-        //    {
-        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-        //            userId));
-        //    }
-        //    var hash = await passwordStore.GetPasswordHashAsync(user).WithCurrentCulture();
-        //    if (hash != null)
-        //    {
-        //        return new IdentityResult(Resources.UserAlreadyHasPassword).ToDto();
-        //    }
-        //    var result = await UpdatePassword(passwordStore, user, password).WithCurrentCulture();
-        //    if (!result.Succeeded)
-        //    {
-        //        return result;
-        //    }
-        //    return await UpdateAsync(user).WithCurrentCulture();
-        //}
-
-        ///// <summary>
-        /////     Change a user password
-        ///// </summary>
-        ///// <param name="userId"></param>
-        ///// <param name="currentPassword"></param>
-        ///// <param name="newPassword"></param>
-        ///// <returns></returns>
-        //public new virtual async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword,
-        //    string newPassword)
-        //{
-        //    ThrowIfDisposed();
-        //    var passwordStore = GetPasswordStore();
-        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
-        //    if (user == null)
-        //    {
-        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-        //            userId));
-        //    }
-        //    if (await VerifyPasswordAsync(passwordStore, user, currentPassword).WithCurrentCulture())
-        //    {
-        //        var result = await UpdatePassword(passwordStore, user, newPassword).WithCurrentCulture();
-        //        if (!result.Succeeded)
-        //        {
-        //            return result;
-        //        }
-        //        return await UpdateAsync(user).WithCurrentCulture();
-        //    }
-        //    return IdentityResult.Failed(Resources.PasswordMismatch).ToDto();
-        //}
-
-        ///// <summary>
-        /////     Remove a user's password
-        ///// </summary>
-        ///// <param name="userId"></param>
-        ///// <returns></returns>
-        //public new virtual async Task<IdentityResultDto> RemovePasswordAsync(Guid userId)
-        //{
-        //    ThrowIfDisposed();
-        //    var passwordStore = GetPasswordStore();
-        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
-        //    if (user == null)
-        //    {
-        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-        //            userId));
-        //    }
-        //    await passwordStore.SetPasswordHashAsync(user, null).WithCurrentCulture();
-        //    await UpdateSecurityStampInternal(user).WithCurrentCulture();
-        //    return await UpdateAsync(user).WithCurrentCulture();
-        //}
-
-        //protected new virtual async Task<IdentityResultDto> UpdatePassword(IUserPasswordStore<User, Guid> passwordStore,
-        //    User user, string newPassword)
-        //{
-        //    var result = await PasswordValidator.ValidateAsync(newPassword).WithCurrentCulture();
-        //    if (!result.Succeeded)
-        //    {
-        //        return result.ToDto();
-        //    }
-        //    await
-        //        passwordStore.SetPasswordHashAsync(user, PasswordHasher.HashPassword(newPassword)).WithCurrentCulture();
-        //    await UpdateSecurityStampInternal(user).WithCurrentCulture();
-        //    return IdentityResult.Success.ToDto();
-        //}
-
-        ///// <summary>
-        /////     By default, retrieves the hashed password from the user store and calls PasswordHasher.VerifyHashPassword
-        ///// </summary>
-        ///// <param name="store"></param>
-        ///// <param name="user"></param>
-        ///// <param name="password"></param>
-        ///// <returns></returns>
-        //protected new virtual async Task<bool> VerifyPasswordAsync(IUserPasswordStore<User, Guid> store, User user,
-        //    string password)
-        //{
-        //    var hash = await store.GetPasswordHashAsync(user).WithCurrentCulture();
-        //    return PasswordHasher.VerifyHashedPassword(hash, password) != PasswordVerificationResult.Failed;
-        //}
-
         protected IUserPasswordStore<User, Guid> GetPasswordStore()
         {
             var cast = Store as IUserPasswordStore<User, Guid>;
@@ -1437,6 +1310,17 @@ namespace Blob.Security
             return UserConverter.UserFromUserDto(user);
         }
 
+        public async Task<User> FindByEmailAsync2(string email)
+        {
+            ThrowIfDisposed();
+            var user = await FindByEmailAsync(email).WithCurrentCulture();
+            if (user == null)
+            {
+                return null;
+            }
+            return UserConverter.UserFromUserDto(user);
+        }
+        
         public async Task<User> FindByIdAsync2(Guid userId)
         {
             ThrowIfDisposed();
@@ -1467,55 +1351,383 @@ namespace Blob.Security
 
         #endregion
 
+        #region IUserTokenProviderService
 
-
-
-
-
-
-
-
-        ///// <summary>
-        /////     Creates a ClaimsIdentity representing the user
-        ///// </summary>
-        ///// <param name="user"></param>
-        ///// <param name="authenticationType"></param>
-        ///// <returns></returns>
-        //public new virtual Task<ClaimsIdentity> CreateIdentityAsync(User user, string authenticationType)
+        //public Task<string> GenerateAsync(string purpose, string userId)
         //{
         //    ThrowIfDisposed();
-        //    if (user == null)
-        //    {
-        //        throw new ArgumentNullException("user");
-        //    }
-        //    return ClaimsIdentityFactory.CreateAsync(this, user, authenticationType);
+        //    return _manager.GenerateAsync(purpose, userId.ToGuid());
         //}
 
+        //public Task<bool> IsValidProviderForUserAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.IsValidProviderForUserAsync(userId.ToGuid());
+        //}
+
+        //public Task NotifyAsync(string token, string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.GenerateAsync(purpose, userId.ToGuid());
+        //}
+        //public Task<bool> ValidateAsync(string purpose, string token, string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.ValidateAsync(purpose, token, userId.ToGuid());
+        //}
+
+        #endregion
+
+        #region IUserTwoFactorStoreService
+
+        //public Task<bool> GetTwoFactorEnabledAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.GetTwoFactorEnabledAsync(userId.ToGuid());
+        //}
+
+        //public Task SetTwoFactorEnabledAsync(string userId, bool enabled)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.SetTwoFactorEnabledAsync(userId.ToGuid(), enabled);
+        //}
+
+        #endregion
+
+
+
+        public async Task<bool> CheckUserNamePasswordAsync(string userName, string password)
+        {
+            ThrowIfDisposed();
+            User user = await FindByNameAsync2(userName);
+            return await CheckPasswordAsync(user, password).WithCurrentCulture();
+        }
+        
+        public async Task<bool> CheckPasswordAsync(User user, string password)
+        {
+            ThrowIfDisposed();
+            var passwordStore = GetPasswordStore();
+            if (user == null)
+            {
+                return false;
+            }
+            return await VerifyPasswordAsync(passwordStore, user, password).WithCurrentCulture();
+        }
+
+        /// <summary>
+        ///     By default, retrieves the hashed password from the user store and calls PasswordHasher.VerifyHashPassword
+        /// </summary>
+        /// <param name="store"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        protected async Task<bool> VerifyPasswordAsync(IUserPasswordStore<User, Guid> store, User user,
+            string password)
+        {
+            var hash = await store.GetPasswordHashAsync(user).WithCurrentCulture();
+            return PasswordHasher.VerifyHashedPassword(hash, password) != PasswordVerificationResult.Failed;
+        }
+
         ///// <summary>
-        /////     Create a user with the given password
+        /////     Add a user password only if one does not already exist
         ///// </summary>
-        ///// <param name="user"></param>
+        ///// <param name="userId"></param>
         ///// <param name="password"></param>
         ///// <returns></returns>
-        //public new virtual async Task<IdentityResultDto> CreateAsync(User user, string password)
+        //public new virtual async Task<IdentityResultDto> AddPasswordAsync(Guid userId, string password)
         //{
         //    ThrowIfDisposed();
         //    var passwordStore = GetPasswordStore();
+        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
         //    if (user == null)
         //    {
-        //        throw new ArgumentNullException("user");
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
         //    }
-        //    if (password == null)
+        //    var hash = await passwordStore.GetPasswordHashAsync(user).WithCurrentCulture();
+        //    if (hash != null)
         //    {
-        //        throw new ArgumentNullException("password");
+        //        return new IdentityResult(Resources.UserAlreadyHasPassword).ToDto();
         //    }
         //    var result = await UpdatePassword(passwordStore, user, password).WithCurrentCulture();
         //    if (!result.Succeeded)
         //    {
         //        return result;
         //    }
-        //    return await CreateAsync(user).WithCurrentCulture();
+        //    return await UpdateAsync(user).WithCurrentCulture();
         //}
+
+        ///// <summary>
+        /////     Change a user password
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="currentPassword"></param>
+        ///// <param name="newPassword"></param>
+        ///// <returns></returns>
+        //public new virtual async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword,
+        //    string newPassword)
+        //{
+        //    ThrowIfDisposed();
+        //    var passwordStore = GetPasswordStore();
+        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    if (await VerifyPasswordAsync(passwordStore, user, currentPassword).WithCurrentCulture())
+        //    {
+        //        var result = await UpdatePassword(passwordStore, user, newPassword).WithCurrentCulture();
+        //        if (!result.Succeeded)
+        //        {
+        //            return result;
+        //        }
+        //        return await UpdateAsync(user).WithCurrentCulture();
+        //    }
+        //    return IdentityResult.Failed(Resources.PasswordMismatch).ToDto();
+        //}
+
+        ///// <summary>
+        /////     Remove a user's password
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public new virtual async Task<IdentityResultDto> RemovePasswordAsync(Guid userId)
+        //{
+        //    ThrowIfDisposed();
+        //    var passwordStore = GetPasswordStore();
+        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    await passwordStore.SetPasswordHashAsync(user, null).WithCurrentCulture();
+        //    await UpdateSecurityStampInternal(user).WithCurrentCulture();
+        //    return await UpdateAsync(user).WithCurrentCulture();
+        //}
+
+        protected async Task<IdentityResultDto> UpdatePassword(UserDto user, string newPassword)
+        {
+            var result = await PasswordValidator.ValidateAsync(newPassword).WithCurrentCulture();
+            if (!result.Succeeded)
+            {
+                return new IdentityResultDto {Succeeded = false, Errors = result.Errors};
+            }
+            await
+                SetPasswordHashAsync(user.Id.ToGuid(), PasswordHasher.HashPassword(newPassword)).WithCurrentCulture();
+            //await UpdateSecurityStampInternal(user).WithCurrentCulture();
+            return new IdentityResultDto { Succeeded = true };
+        }
+
+
+        #region ISignInService
+
+        //public Guid ConvertIdFromString(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return default(Guid);
+        //    }
+        //    return (Guid)Convert.ChangeType(id, typeof(string), CultureInfo.InvariantCulture);
+        //}
+
+        //public string ConvertIdToString(Guid id)
+        //{
+        //    return Convert.ToString(id, CultureInfo.InvariantCulture);
+        //}
+
+        //public Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto userDto)
+        //{
+        //    User user = FindByIdAsync2(userDto.Id.ToGuid()).Result;
+        //    return this.CreateIdentityAsync(user, "Blake");
+        //    //return this.CreateIdentityAsync(user, AuthenticationType);
+        //}
+
+        //public Task SignInAsync(UserDto user, bool isPersistent, bool rememberBrowser)
+        //{
+        //    //var userIdentity = await CreateUserIdentityAsync(user).WithCurrentCulture();
+        //    //// Clear any partial cookies from external or two factor partial sign ins
+        //    //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
+        //    //if (rememberBrowser)
+        //    //{
+        //    //    var rememberBrowserIdentity = AuthenticationManager.CreateTwoFactorRememberBrowserIdentity(ConvertIdToString(user.Id));
+        //    //    AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
+        //    //}
+        //    //else
+        //    //{
+        //    //    AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity);
+        //    //}
+        //}
+
+        //public async Task<bool> SendTwoFactorCodeAsync(string provider)
+        //{
+        //    var userId = await GetVerifiedUserIdAsync().WithCurrentCulture();
+        //    //if (userId == null)
+        //    //{
+        //    //    return false;
+        //    //}
+
+        //    var token = await UserManager.GenerateTwoFactorTokenAsync(userId, provider).WithCurrentCulture();
+        //    // See IdentityConfig.cs to plug in Email/SMS services to actually send the code
+        //    await UserManager.NotifyTwoFactorTokenAsync(userId, provider, token).WithCurrentCulture();
+        //    return true;
+        //}
+
+        //public async Task<Guid> GetVerifiedUserIdAsync()
+        //{
+        //    var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.TwoFactorCookie).WithCurrentCulture();
+        //    if (result != null && result.Identity != null && !String.IsNullOrEmpty(result.Identity.GetUserId()))
+        //    {
+        //        return ConvertIdFromString(result.Identity.GetUserId());
+        //    }
+        //    return default(Guid);
+        //}
+
+        //public async Task<bool> HasBeenVerifiedAsync()
+        //{
+        //    return await GetVerifiedUserIdAsync().WithCurrentCulture() != null;
+        //}
+
+        //public async Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
+        //{
+        //    var userId = await GetVerifiedUserIdAsync().WithCurrentCulture();
+        //    if (userId == null)
+        //    {
+        //        return SignInStatus.Failure;
+        //    }
+        //    var user = await UserManager.FindByIdAsync(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        return SignInStatus.Failure;
+        //    }
+        //    if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
+        //    {
+        //        return SignInStatus.LockedOut;
+        //    }
+        //    if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code).WithCurrentCulture())
+        //    {
+        //        // When token is verified correctly, clear the access failed count used for lockout
+        //        await UserManager.ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
+        //        await SignInAsync(user, isPersistent, rememberBrowser).WithCurrentCulture();
+        //        return SignInStatus.Success;
+        //    }
+        //    // If the token is incorrect, record the failure which also may cause the user to be locked out
+        //    await UserManager.AccessFailedAsync(user.Id).WithCurrentCulture();
+        //    return SignInStatus.Failure;
+        //}
+
+        //public async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
+        //{
+        //    var user = await UserManager.FindAsync(new UserLoginInfoDto(loginInfo.Login.LoginProvider, loginInfo.Login.ProviderKey)).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        return SignInStatus.Failure;
+        //    }
+        //    if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
+        //    {
+        //        return SignInStatus.LockedOut;
+        //    }
+        //    return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
+        //}
+
+        //private async Task<SignInStatus> SignInOrTwoFactor(User user, bool isPersistent)
+        //{
+        //    var id = Convert.ToString(user.Id);
+        //    if (await UserManager.GetTwoFactorEnabledAsync(user.Id).WithCurrentCulture()
+        //        && (await UserManager.GetValidTwoFactorProvidersAsync(user.Id).WithCurrentCulture()).Count > 0
+        //        && !await AuthenticationManager.TwoFactorBrowserRememberedAsync(id).WithCurrentCulture())
+        //    {
+        //        var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
+        //        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
+        //        AuthenticationManager.SignIn(identity);
+        //        return SignInStatus.RequiresVerification;
+        //    }
+        //    await SignInAsync(user, isPersistent, false).WithCurrentCulture();
+        //    return SignInStatus.Success;
+        //}
+
+        public async Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        {
+            return SignInStatusDto.Success;
+            ////if (UserManager == null)
+            ////{
+            ////    return SignInStatus.Failure;
+            ////}
+            //var user = await FindByNameAsync2(userName).WithCurrentCulture();
+            //if (user == null)
+            //{
+            //    return SignInStatusDto.Failure;
+            //}
+            ////if (await IsLockedOutAsync(user.Id).WithCurrentCulture())
+            ////{
+            ////    return SignInStatus.LockedOut;
+            ////}
+            //if (await CheckPasswordAsync(user, password).WithCurrentCulture())
+            //{
+            //    await ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
+            //    return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
+            //}
+            ////if (shouldLockout)
+            ////{
+            ////    // If lockout is requested, increment access failed count which might lock out the user
+            ////    await AccessFailedAsync(user.Id).WithCurrentCulture();
+            ////    if (await IsLockedOutAsync(user.Id).WithCurrentCulture())
+            ////    {
+            ////        return SignInStatus.LockedOut;
+            ////    }
+            ////}
+            ////return SignInStatus.Failure;
+        }
+
+        public Task<ClaimsIdentity> CreateIdentityAsync(UserDto userDto, string authenticationType)
+        {
+            ThrowIfDisposed(); 
+            User user = FindByIdAsync2(userDto.Id.ToGuid()).Result;
+            if (user == null)
+            {
+                throw new ArgumentNullException("userDto");
+            }
+            return ClaimsIdentityFactory.CreateAsync(this, user, authenticationType);
+        }
+
+
+        #endregion
+
+
+
+        /// <summary>
+        ///     Create a user with the given password
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public async Task<IdentityResultDto> CreateAsync(UserDto user, string password)
+        {
+            ThrowIfDisposed();
+            var passwordStore = GetPasswordStore();
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            var result = await UpdatePassword(user, password).WithCurrentCulture();
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            await CreateAsync(user).WithCurrentCulture();
+            return new IdentityResultDto {Succeeded = true};
+        }
+
+
+
+
+
+
 
         ///// <summary>
         /////     Return a user with the specified username and password or null if there is no match.
@@ -2053,159 +2265,7 @@ namespace Blob.Security
         //private IUserManagerService<User, Guid> _userManager;
 
 
-        //public Task<ClaimsIdentity> CreateUserIdentityAsync(User user)
-        //{
-        //    return UserManager.CreateIdentityAsync(user, AuthenticationType);
-        //}
 
-        //public Guid ConvertIdFromString(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return default(Guid);
-        //    }
-        //    return (Guid)Convert.ChangeType(id, typeof(string), CultureInfo.InvariantCulture);
-        //}
-
-        //public string ConvertIdToString(Guid id)
-        //{
-        //    return Convert.ToString(id, CultureInfo.InvariantCulture);
-        //}
-
-        //public async Task SignInAsync(User user, bool isPersistent, bool rememberBrowser)
-        //{
-        //    var userIdentity = await CreateUserIdentityAsync(user).WithCurrentCulture();
-        //    // Clear any partial cookies from external or two factor partial sign ins
-        //    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
-        //    if (rememberBrowser)
-        //    {
-        //        var rememberBrowserIdentity = AuthenticationManager.CreateTwoFactorRememberBrowserIdentity(ConvertIdToString(user.Id));
-        //        AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
-        //    }
-        //    else
-        //    {
-        //        AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity);
-        //    }
-        //}
-
-        //public async Task<bool> SendTwoFactorCodeAsync(string provider)
-        //{
-        //    var userId = await GetVerifiedUserIdAsync().WithCurrentCulture();
-        //    //if (userId == null)
-        //    //{
-        //    //    return false;
-        //    //}
-
-        //    var token = await UserManager.GenerateTwoFactorTokenAsync(userId, provider).WithCurrentCulture();
-        //    // See IdentityConfig.cs to plug in Email/SMS services to actually send the code
-        //    await UserManager.NotifyTwoFactorTokenAsync(userId, provider, token).WithCurrentCulture();
-        //    return true;
-        //}
-
-        //public async Task<Guid> GetVerifiedUserIdAsync()
-        //{
-        //    var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.TwoFactorCookie).WithCurrentCulture();
-        //    if (result != null && result.Identity != null && !String.IsNullOrEmpty(result.Identity.GetUserId()))
-        //    {
-        //        return ConvertIdFromString(result.Identity.GetUserId());
-        //    }
-        //    return default(Guid);
-        //}
-
-        //public async Task<bool> HasBeenVerifiedAsync()
-        //{
-        //    return await GetVerifiedUserIdAsync().WithCurrentCulture() != null;
-        //}
-
-        //public async Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
-        //{
-        //    var userId = await GetVerifiedUserIdAsync().WithCurrentCulture();
-        //    if (userId == null)
-        //    {
-        //        return SignInStatus.Failure;
-        //    }
-        //    var user = await UserManager.FindByIdAsync(userId).WithCurrentCulture();
-        //    if (user == null)
-        //    {
-        //        return SignInStatus.Failure;
-        //    }
-        //    if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-        //    {
-        //        return SignInStatus.LockedOut;
-        //    }
-        //    if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code).WithCurrentCulture())
-        //    {
-        //        // When token is verified correctly, clear the access failed count used for lockout
-        //        await UserManager.ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
-        //        await SignInAsync(user, isPersistent, rememberBrowser).WithCurrentCulture();
-        //        return SignInStatus.Success;
-        //    }
-        //    // If the token is incorrect, record the failure which also may cause the user to be locked out
-        //    await UserManager.AccessFailedAsync(user.Id).WithCurrentCulture();
-        //    return SignInStatus.Failure;
-        //}
-
-        //public async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
-        //{
-        //    var user = await UserManager.FindAsync(new UserLoginInfoDto(loginInfo.Login.LoginProvider, loginInfo.Login.ProviderKey)).WithCurrentCulture();
-        //    if (user == null)
-        //    {
-        //        return SignInStatus.Failure;
-        //    }
-        //    if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-        //    {
-        //        return SignInStatus.LockedOut;
-        //    }
-        //    return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
-        //}
-
-        //private async Task<SignInStatus> SignInOrTwoFactor(User user, bool isPersistent)
-        //{
-        //    var id = Convert.ToString(user.Id);
-        //    if (await UserManager.GetTwoFactorEnabledAsync(user.Id).WithCurrentCulture()
-        //        && (await UserManager.GetValidTwoFactorProvidersAsync(user.Id).WithCurrentCulture()).Count > 0
-        //        && !await AuthenticationManager.TwoFactorBrowserRememberedAsync(id).WithCurrentCulture())
-        //    {
-        //        var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
-        //        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
-        //        AuthenticationManager.SignIn(identity);
-        //        return SignInStatus.RequiresVerification;
-        //    }
-        //    await SignInAsync(user, isPersistent, false).WithCurrentCulture();
-        //    return SignInStatus.Success;
-        //}
-
-        //public async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
-        //{
-        //    if (UserManager == null)
-        //    {
-        //        return SignInStatus.Failure;
-        //    }
-        //    var user = await UserManager.FindByNameAsync(userName).WithCurrentCulture();
-        //    if (user == null)
-        //    {
-        //        return SignInStatus.Failure;
-        //    }
-        //    if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-        //    {
-        //        return SignInStatus.LockedOut;
-        //    }
-        //    if (await UserManager.CheckPasswordAsync(user, password).WithCurrentCulture())
-        //    {
-        //        await UserManager.ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
-        //        return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
-        //    }
-        //    if (shouldLockout)
-        //    {
-        //        // If lockout is requested, increment access failed count which might lock out the user
-        //        await UserManager.AccessFailedAsync(user.Id).WithCurrentCulture();
-        //        if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-        //        {
-        //            return SignInStatus.LockedOut;
-        //        }
-        //    }
-        //    return SignInStatus.Failure;
-        //}
 
         //#endregion
 

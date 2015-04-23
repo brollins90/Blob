@@ -18,23 +18,23 @@ using Blob.Proxies;
 
 namespace Before
 {
-    public class EmailService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
-        }
-    }
+    //public class EmailService : IIdentityMessageService
+    //{
+    //    public Task SendAsync(IdentityMessage message)
+    //    {
+    //        // Plug in your email service here to send an email.
+    //        return Task.FromResult(0);
+    //    }
+    //}
 
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
-        }
-    }
+    //public class SmsService : IIdentityMessageService
+    //{
+    //    public Task SendAsync(IdentityMessage message)
+    //    {
+    //        // Plug in your SMS service here to send a text message.
+    //        return Task.FromResult(0);
+    //    }
+    //}
 
     public class ApplicationUser : UserDto, IUser, IUser<string>
     {
@@ -42,58 +42,26 @@ namespace Before
         public ApplicationUser(UserDto userDto)
         {
             // populate other fields if we want to
-            this.Id = userDto.Id;
-            this.UserName = userDto.UserName;
+            Id = userDto.Id;
+            UserName = userDto.UserName;
         }
 
-        //public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
-        //{
-        //    // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-        //    var userIdentity = await manager.CreateIdentityAsync(this as UserDto, DefaultAuthenticationTypes.ApplicationCookie);
-        //    // Add custom user claims here
-        //    return userIdentity;
-        //}
-
-        //public string Id { get; private set; }
-
-        //public string UserName { get; set; }
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            ClaimsIdentity userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Add custom user claims here
+            return userIdentity;
+        }
 
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
     }
 
-
-    
-    //{
-    ////    public ApplicationUser FindById(string userId)
-    ////    {
-    ////        return (base.FindByIdAsync(userId)).Result.ToApplicationUser();
-    ////    }
-
-    ////    public static ApplicationIdentityManagerProxy Create(IdentityFactoryOptions<ApplicationIdentityManagerProxy> options, IOwinContext context)
-    ////    {
-    ////        var manager = new ApplicationIdentityManagerProxy();
-    ////        NameValueCollection config = (NameValueCollection)ConfigurationManager.GetSection("BlobProxy");
-    ////        if (config == null)
-    ////        {
-    ////            throw new Exception();
-    ////        }
-    ////        manager.Initialize("IdentityManagerClient", config);
-    ////        return manager;
-    ////    }
-    //}
-
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : IdentityManagerClient
-    //public class ApplicationUserManager : UserManager<IUser>
     {
-    //    private readonly ApplicationIdentityManagerProxy _userManagerProxy;
-
-    //    public ApplicationUserManager() : base(new NullStore())
-    //    {
-    //        _userManagerProxy = new ApplicationIdentityManagerProxy();
-    //    }
+        private ApplicationUserManager() { }
 
         public ApplicationUser FindById(string userId)
         {
@@ -102,7 +70,14 @@ namespace Before
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager();
+            ApplicationUserManager manager = new ApplicationUserManager();
+            NameValueCollection config = (NameValueCollection)ConfigurationManager.GetSection("BlobProxy");
+            if (config == null)
+            {
+                throw new Exception();
+            }
+            manager.Initialize("IdentityManagerClient", config);
+
             //var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
     //        //// Configure validation logic for usernames
     //        //manager.UserValidator = new UserValidator<ApplicationUser>(manager)
@@ -149,7 +124,7 @@ namespace Before
         }
     }
 
-    //// Configure the application sign-in manager which is used in this application.
+    // Configure the application sign-in manager which is used in this application.
     //public class ApplicationSignInManager : IUserSignInService
     //public class ApplicationSignInManager : SignInManager<IUser, string>
     //{

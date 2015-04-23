@@ -1,5 +1,4 @@
-﻿using Blob.Core.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
@@ -9,6 +8,7 @@ using System.Data.Entity.Infrastructure.Annotations;
 using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
+using Blob.Core.Identity;
 
 namespace Blob.Data.Identity
 {

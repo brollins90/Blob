@@ -24,7 +24,7 @@ namespace Blob.Contracts.Security
     public class IdentityResultDto
     {
         [DataMember]
-        public bool Succeeded { get; private set; }
+        public bool Succeeded { get; set; }
 
         [DataMember]
         public IEnumerable<string> Errors

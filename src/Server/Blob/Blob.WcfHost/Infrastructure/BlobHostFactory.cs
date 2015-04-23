@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ServiceModel;
+using Blob.Security.Sam;
 using log4net;
 using Ninject;
 using Ninject.Extensions.Wcf;
-using System.ServiceModel;
 
 namespace Blob.WcfHost.Infrastructure
 {
@@ -21,9 +22,9 @@ namespace Blob.WcfHost.Infrastructure
         {
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("CreateServiceHost");
 
-            var host = base.CreateServiceHost(serviceType, baseAddresses);
+            ServiceHost host = base.CreateServiceHost(serviceType, baseAddresses);
             host.Authentication.ServiceAuthenticationManager = new ServiceAuthenticationManager();
-            //host.Authorization.ServiceAuthorizationManager = new BlobServiceAuthorizationManager();
+            host.Authorization.ServiceAuthorizationManager = new BlobServiceAuthorizationManager();
             return host;
         }
     }

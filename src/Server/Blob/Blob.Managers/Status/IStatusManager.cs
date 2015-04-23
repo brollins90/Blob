@@ -1,5 +1,5 @@
-﻿using Blob.Contracts.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Blob.Contracts.Models;
 
 namespace Blob.Managers.Status
 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -11,14 +9,13 @@ namespace Blob.Contracts.Security
     public interface IIdentityService : IIdentityService<string> { }
 
     [ServiceContract]
-    public interface IIdentityService<TUserIdType> : IDisposable, 
+    public interface IIdentityService<in TUserIdType> :
         IIdentityStore<TUserIdType>
-        //ISignInManagerService<TUserIdType>
+        //ISignInService<TUserIdType>
         //IAuthenticationManagerService
         where TUserIdType : IEquatable<TUserIdType>
     {
         [OperationContract]
-        //[PrincipalPermission(SecurityAction.Demand, Role = "Customer")]
         void SetProvider(string providerName);
 
         //IPasswordHasher PasswordHasher { [OperationContract] get; }
@@ -34,14 +31,11 @@ namespace Blob.Contracts.Security
         //IQueryable<TUser> Users { [OperationContract] get; }
         //IDictionary<string, IUserTokenProvider<TUser, TKey>> TwoFactorProviders { [OperationContract] get; }
 
-        //[DebuggerStepThrough]
-        //[OperationContract]
-        //Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType);
+        [OperationContract]
+        Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType);
 
-
-        //[DebuggerStepThrough]
-        //[OperationContract(Name = "CreateUserAsyncWithPassword")]
-        //Task<IdentityResultDto> CreateAsync(UserDto user, string password);
+        [OperationContract(Name = "CreateUserAsyncWithPassword")]
+        Task<IdentityResultDto> CreateAsync(UserDto user, string password);
 
         //[DebuggerStepThrough]
         //[OperationContract(Name = "FindUserAsync")]
@@ -127,23 +121,39 @@ namespace Blob.Contracts.Security
 
     }
 
-    public interface ISignInManagerService<TUserIdType> : IDisposable
-           where TUserIdType : IEquatable<TUserIdType>
-        {
-            TUserIdType ConvertIdFromString(string id);
-            string ConvertIdToString(TUserIdType id);
-            Task<System.Security.Claims.ClaimsIdentity> CreateUserIdentityAsync(UserDto user);
-            Task<SignInStatusDto> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent);
-            Task<TUserIdType> GetVerifiedUserIdAsync();
-            Task<bool> HasBeenVerifiedAsync();
-            Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout);
-            Task<bool> SendTwoFactorCodeAsync(string provider);
-            Task SignInAsync(UserDto user, bool isPersistent, bool rememberBrowser);
-            Task<SignInStatusDto> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser);
-            IAuthenticationManagerService AuthenticationManager { get; set; }
-            string AuthenticationType { get; set; }
-            //IUserManagerService<TUserIdType> UserManager { get; set; }
-        }
+    //public interface ISignInManager<TUserIdType> : IDisposable
+    //       where TUserIdType : IEquatable<TUserIdType>
+    //{
+    //    Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto user);
+    //    //Task<SignInStatusDto> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent);
+    //    //Task<TUserIdType> GetVerifiedUserIdAsync();
+    //    //Task<bool> HasBeenVerifiedAsync();
+    //    Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout);
+    //    //Task<bool> SendTwoFactorCodeAsync(string provider);
+    //    Task SignInAsync(UserDto user, bool isPersistent, bool rememberBrowser);
+    //    //Task<SignInStatusDto> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser);
+    //    //IAuthenticationManagerService AuthenticationManager { get; set; }
+    //    //string AuthenticationType { get; set; }
+    //    //IUserManagerService<TUserIdType> UserManager { get; set; }
+    //}
+
+    //public interface ISignInService<TUserIdType> : IDisposable
+    //       where TUserIdType : IEquatable<TUserIdType>
+    //{
+    //    TUserIdType ConvertIdFromString(string id);
+    //    string ConvertIdToString(TUserIdType id);
+    //    Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto user);
+    //    //Task<SignInStatusDto> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent);
+    //    //Task<TUserIdType> GetVerifiedUserIdAsync();
+    //    //Task<bool> HasBeenVerifiedAsync();
+    //    Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout);
+    //    //Task<bool> SendTwoFactorCodeAsync(string provider);
+    //    Task SignInAsync(UserDto user, bool isPersistent, bool rememberBrowser);
+    //    //Task<SignInStatusDto> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser);
+    //    //IAuthenticationManagerService AuthenticationManager { get; set; }
+    //    //string AuthenticationType { get; set; }
+    //    //IUserManagerService<TUserIdType> UserManager { get; set; }
+    //}
 
 
     

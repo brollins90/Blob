@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Security;
 using Blob.Core.Domain;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 
 namespace Blob.Security
 {
@@ -39,11 +36,6 @@ namespace Blob.Security
         {
             return Guid.Parse(s);
         }
-
-        //public static StringUser ToStringUser(this User user)
-        //{
-        //    return new StringUser { Id = user.Id.ToString(), UserName = user.UserName };
-        //}
     }
 
 
@@ -629,35 +621,101 @@ namespace Blob.Security
 
         //#endregion
 
-        
+        #region ISignInService
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public Task<ClaimsIdentity> CreateIdentityAsync(IUser user, string authenticationType)
+        //public string ConvertIdFromString(string id)
         //{
         //    ThrowIfDisposed();
-        //    return _manager.CreateIdentityAsync(UserConverter.UserFromIUser(user), authenticationType);
+        //    return id;
         //}
 
-        //public Task<IdentityResultDto> CreateAsync(IUser user, string password)
+        //public string ConvertIdToString(string id)
         //{
         //    ThrowIfDisposed();
-        //    return _manager.CreateAsync(UserConverter.UserFromIUser(user), password);
+        //    return id;
         //}
+
+        //public Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto user)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.CreateUserIdentityAsync(user);
+        //}
+
+        //public Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.ExternalSignInAsync(loginInfo, isPersistent);
+        //}
+
+        //public Task<string> GetVerifiedUserIdAsync()
+        //{
+        //    ThrowIfDisposed();
+        //    Guid t = _manager.GetVerifiedUserIdAsync().Result;
+        //    return Task.FromResult(t.ToString());
+        //}
+
+        //public Task<bool> HasBeenVerifiedAsync()
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.HasBeenVerifiedAsync();
+        //}
+
+        //public Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
+        //}
+
+        ////public Task<bool> SendTwoFactorCodeAsync(string provider)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    return _manager.SendTwoFactorCodeAsync(provider);
+        ////}
+
+        //public async Task SignInAsync(UserDto user, bool isPersistent, bool rememberBrowser)
+        //{
+        //    ThrowIfDisposed();
+        //    await _manager.SignInAsync(user, isPersistent, rememberBrowser);
+        //}
+
+        //public Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
+        //}
+
+
+        #endregion
+
+        public Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType)
+        {
+            ThrowIfDisposed();
+            return _manager.CreateIdentityAsync(user, authenticationType);
+        }
+
+        public Task<IdentityResultDto> CreateAsync(UserDto user, string password)
+        {
+            ThrowIfDisposed();
+            return _manager.CreateAsync(user, password);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //public Task<IUser> FindAsync(string userName, string password)
         //{
@@ -804,67 +862,6 @@ namespace Blob.Security
         //        //ThrowIfDisposed();
         //        //_manager.UserManager = value;
         //    }
-        //}
-
-        //public string ConvertIdFromString(string id)
-        //{
-        //    ThrowIfDisposed();
-        //    return id; // no passthrough
-        //}
-
-        //public string ConvertIdToString(string id)
-        //{
-        //    ThrowIfDisposed();
-        //    return id; // no passthrough
-        //}
-
-        //public Task<ClaimsIdentity> CreateUserIdentityAsync(IUser user)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.CreateUserIdentityAsync(UserConverter.UserFromIUser(user));
-        //}
-
-        //public Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.ExternalSignInAsync(loginInfo, isPersistent);
-        //}
-
-        //public Task<string> GetVerifiedUserIdAsync()
-        //{
-        //    ThrowIfDisposed();
-        //    Guid t = _manager.GetVerifiedUserIdAsync().Result;
-        //    return Task.FromResult(t.ToString());
-        //}
-
-        //public Task<bool> HasBeenVerifiedAsync()
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.HasBeenVerifiedAsync();
-        //}
-
-        //public Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
-        //}
-
-        //public Task<bool> SendTwoFactorCodeAsync(string provider)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.SendTwoFactorCodeAsync(provider);
-        //}
-
-        //public async Task SignInAsync(IUser user, bool isPersistent, bool rememberBrowser)
-        //{
-        //    ThrowIfDisposed();
-        //    await _manager.SignInAsync(UserConverter.UserFromIUser(user), isPersistent, rememberBrowser);
-        //}
-
-        //public Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
         //}
 
         //public AuthenticationResponseChallenge AuthenticationResponseChallenge
