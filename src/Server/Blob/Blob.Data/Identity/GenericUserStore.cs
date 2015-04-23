@@ -8,23 +8,16 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Blob.Core.Domain;
 using Blob.Core.Identity;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {
-    //public class GenericUserStore<TUser> :
-    //    GenericUserStore<TUser, GenericRole, string, GenericUserLogin, GenericUserRole, GenericUserClaim>,
-    //    IUserStore<TUser> where TUser : GenericUser
-    //{
-    //    public GenericUserStore()
-    //        : this(new GenericDbContext())
-    //    {
-    //        DisposeContext = true;
-    //    }
-
-    //    public GenericUserStore(DbContext context) : base(context) {}
-    //}
+    public class BlobUserStore : GenericUserStore<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
+    {
+        public BlobUserStore(DbContext context) : base(context) { }
+    }
 
     public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IUserLoginStore<TUser, TKey>,

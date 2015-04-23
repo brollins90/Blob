@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\IAccountRepository.cs" />
+    <Compile Include="Data\IIdentityStore.cs" />
     <Compile Include="Data\IStatusRepository.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Device.cs" />

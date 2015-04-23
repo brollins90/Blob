@@ -11,7 +11,9 @@ namespace Blob.Contracts.Security
     public interface IIdentityService : IIdentityService<string> { }
 
     [ServiceContract]
-    public interface IIdentityService<TUserIdType> : IDisposable, ISignInManagerService<TUserIdType>
+    public interface IIdentityService<TUserIdType> : IDisposable, 
+        IIdentityStore<TUserIdType>
+        //ISignInManagerService<TUserIdType>
         //IAuthenticationManagerService
         where TUserIdType : IEquatable<TUserIdType>
     {
@@ -29,16 +31,6 @@ namespace Blob.Contracts.Security
         bool UserLockoutEnabledByDefault { [OperationContract] get; }
         int MaxFailedAccessAttemptsBeforeLockout { [OperationContract] get; }
         TimeSpan DefaultAccountLockoutTimeSpan { [OperationContract] get; }
-        bool SupportsUserTwoFactor { [OperationContract] get; }
-        bool SupportsUserPassword { [OperationContract] get; }
-        bool SupportsUserSecurityStamp { [OperationContract] get; }
-        bool SupportsUserRole { [OperationContract] get; }
-        bool SupportsUserLogin { [OperationContract] get; }
-        bool SupportsUserEmail { [OperationContract] get; }
-        bool SupportsUserPhoneNumber { [OperationContract] get; }
-        bool SupportsUserClaim { [OperationContract] get; }
-        bool SupportsUserLockout { [OperationContract] get; }
-        bool SupportsQueryableUsers { [OperationContract] get; }
         //IQueryable<TUser> Users { [OperationContract] get; }
         //IDictionary<string, IUserTokenProvider<TUser, TKey>> TwoFactorProviders { [OperationContract] get; }
 
@@ -154,18 +146,5 @@ namespace Blob.Contracts.Security
         }
 
 
-
-        //public static class IdentityUtil
-        //{
-        //    public static IdentityResultDto ToDto(this IdentityResult res)
-        //    {
-        //        return new IdentityResultDto(res);
-        //    }
-
-        //    public static UserLoginInfo ToLoginInfo(this UserLoginInfoDto res)
-        //    {
-        //        return new UserLoginInfo(res.LoginProvider, res.ProviderKey);
-        //    }
-        //}
     
 }

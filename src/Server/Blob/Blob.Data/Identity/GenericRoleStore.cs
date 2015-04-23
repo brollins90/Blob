@@ -1,24 +1,18 @@
-﻿using Blob.Core.Identity;
-using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Data.Entity;
 using System.Data.Entity.SqlServer.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
+using Blob.Core.Domain;
+using Blob.Core.Identity;
+using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {
-    //public class GenericRoleStore<TRole> : GenericRoleStore<TRole, string, GenericUserRole>, IQueryableRoleStore<TRole>
-    //    where TRole : GenericRole, new()
-    //{
-    //    public GenericRoleStore()
-    //        :base(new GenericDbContext())
-    //    {
-    //        DisposeContext = true;
-    //    }
-
-    //    public GenericRoleStore(DbContext context) : base(context) { } 
-    //}
+    public class BlobRoleStore : GenericRoleStore<Role, Guid, BlobUserRole>
+    {
+        public BlobRoleStore(DbContext context) : base(context) { }
+    }
 
     public class GenericRoleStore<TRole, TKey, TUserRole> : IQueryableRoleStore<TRole, TKey>
         where TUserRole : GenericUserRole<TKey>, new()

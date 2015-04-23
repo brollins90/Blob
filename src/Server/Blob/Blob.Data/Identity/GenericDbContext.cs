@@ -12,59 +12,6 @@ using System.Linq;
 
 namespace Blob.Data.Identity
 {
-    //public class GenericDbContext :
-    //    GenericDbContext<GenericUser, GenericRole, string, GenericUserLogin, GenericUserRole, GenericUserClaim>
-    //{
-    //    public GenericDbContext()
-    //        : this("DefaultConnection") { }
-
-    //    public GenericDbContext(string connectionString)
-    //        : base(connectionString) { }
-
-    //    public GenericDbContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
-    //        : base(existingConnection, model, contextOwnsConnection) { }
-
-    //    public GenericDbContext(DbCompiledModel model)
-    //        : base(model) { }
-
-    //    public GenericDbContext(DbConnection existingConnection, bool contextOwnsConnection)
-    //        : base(existingConnection, contextOwnsConnection) { }
-
-    //    public GenericDbContext(string connectionString, DbCompiledModel model)
-    //        : base(connectionString, model) { }
-    //}
-
-    //public class GenericDbContext<TUser> :
-    //    GenericDbContext<TUser, GenericRole, string, GenericUserLogin, GenericUserRole, GenericUserClaim>
-    //    where TUser : GenericUser
-    //{
-    //    public GenericDbContext()
-    //        : this("DefaultConnection") { }
-
-    //    public GenericDbContext(string connectionString)
-    //        : this(connectionString, true) { }
-
-    //    public GenericDbContext(string connectionString, bool throwIfV1Schema)
-    //        : base(connectionString)
-    //    {
-    //        if (throwIfV1Schema)
-    //            throw new InvalidOperationException();
-    //        throw new InvalidOperationException();
-    //    }
-
-    //    public GenericDbContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
-    //        : base(existingConnection, model, contextOwnsConnection) { }
-
-    //    public GenericDbContext(DbCompiledModel model)
-    //        : base(model) { }
-
-    //    public GenericDbContext(DbConnection existingConnection, bool contextOwnsConnection)
-    //        : base(existingConnection, contextOwnsConnection) { }
-
-    //    public GenericDbContext(string connectionString, DbCompiledModel model)
-    //        : base(connectionString, model) { }
-    //}
-
     public class GenericDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> : DbContext
         where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim>
         where TRole : GenericRole<TKey, TUserRole>

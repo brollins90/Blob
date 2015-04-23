@@ -1,5 +1,5 @@
-﻿using Blob.Core.Domain;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Blob.Core.Domain;
 
 namespace Blob.Core.Data
 {

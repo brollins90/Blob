@@ -1,10 +1,10 @@
 ﻿using System;
-using Blob.Data.Mapping;
-using Blob.Data.Migrations;
-using log4net;
 using System.Data.Entity;
 using Blob.Core.Domain;
 using Blob.Data.Identity;
+using Blob.Data.Mapping;
+using Blob.Data.Migrations;
+using log4net;
 
 namespace Blob.Data
 {
