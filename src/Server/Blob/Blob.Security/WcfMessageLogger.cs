@@ -22,15 +22,28 @@ namespace Blob.Security
         public object AfterReceiveRequest(ref Message request, IClientChannel channel,
             InstanceContext instanceContext)
         {
-            _log.Debug("\n" + request);
-            Debug.Write(request.ToString());
+            if (request != null)
+            {
+                _log.Debug("\n" + request);
+                //Debug.Write(request.ToString());
+            }
+            else
+            {
+                _log.Debug("AfterReceiveRequest was called, but the request was null.");
+            }
             return null;
         }
 
         public void BeforeSendReply(ref Message reply, object correlationState)
         {
-            _log.Debug("\n" + reply);
-            Debug.Write(reply.ToString());
+            if (reply != null)
+            {
+                _log.Debug("\n" + reply);
+            }
+            else
+            {
+                _log.Debug("BeforeSendReply was called, but the reply was null.");
+            }
         }
 
         #endregion

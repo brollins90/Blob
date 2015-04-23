@@ -23,7 +23,7 @@ namespace Blob.WcfHost.Infrastructure
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("CreateServiceHost");
 
             ServiceHost host = base.CreateServiceHost(serviceType, baseAddresses);
-            host.Authentication.ServiceAuthenticationManager = new ServiceAuthenticationManager();
+            //host.Authentication.ServiceAuthenticationManager = new BlobServiceAuthenticationManager();
             host.Authorization.ServiceAuthorizationManager = new BlobServiceAuthorizationManager();
             return host;
         }

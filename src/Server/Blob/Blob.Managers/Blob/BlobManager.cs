@@ -17,14 +17,21 @@ namespace Blob.Managers.Blob
         public BlobManager(IAccountRepository accountRepository, IStatusRepository statusRepository, ILog log)
         {
             _log = log;
-            _log.Debug("Constructing RegistrationManager");
+            _log.Debug("Constructing BlobManager");
             _accountRepository = accountRepository;
             _statusRepository = statusRepository;
         }
 
+
+        // Customer
+        public async Task<IList<Customer>> GetAllCustomersAsync()
+        {
+            return await _accountRepository.GetAllCustomersAsync().ConfigureAwait(false);
+        }
+
         public async Task<RegistrationInformation> RegisterDevice(RegistrationMessage message)
         {
-            _log.Debug("RegistrationManager registering device " + message.DeviceId);
+            _log.Debug("BlobManager registering device " + message.DeviceId);
             // Authenticate user is done, it is required in the service
 
             Guid deviceId = Guid.Parse(message.DeviceId);
@@ -72,6 +79,11 @@ namespace Blob.Managers.Blob
 
             Device d = await GetDeviceByIdAsync(deviceId).ConfigureAwait(true);
             await _statusRepository.DeleteDeviceAsync(d).ConfigureAwait(false);
+        }
+
+        public async Task<IList<Device>> GetAllDevicesAsync()
+        {
+            return await _accountRepository.GetAllDevicesAsync().ConfigureAwait(false);
         }
 
         public async Task<Device> GetDeviceByIdAsync(Guid deviceId)

@@ -13,24 +13,10 @@ namespace Blob.Data
         private readonly ILog _log;
 
         public BlobDbContext()
-            : base("BlobDbContext")
-        {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _log.Debug("Constructing BlobDbContext");
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
-        }
+            : this("BlobDbContext") { }
 
         public BlobDbContext(string connectionString)
-            : base(connectionString)
-        {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _log.Debug("Constructing BlobDbContext");
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
-        }
+            : this(connectionString, LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)) { }
 
         public BlobDbContext(string connectionString, ILog log)
             : base(connectionString)

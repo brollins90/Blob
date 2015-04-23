@@ -13,6 +13,12 @@ namespace Before
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //    name: "Device",
+            //    url: "Device/{action}/{id}",
+            //    defaults: new { controller = "Device", action = "Index", id = UrlParameter.Optional }
+            //);
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

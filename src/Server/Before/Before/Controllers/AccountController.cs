@@ -154,11 +154,11 @@ namespace Before.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDto user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                IdentityResultDto result = await UserManager.CreateAsync(user, model.Password);
+                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user.ToDto(), isPersistent:false, rememberBrowser:false);
                     
                      //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                      //Send an email with this link

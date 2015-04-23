@@ -9,7 +9,7 @@ using log4net;
 namespace Blob.Services.Status
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-    [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+    //[PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
     public class StatusService : IStatusService
     {
         private readonly ILog _log;
@@ -22,7 +22,7 @@ namespace Blob.Services.Status
         }
 
         [OperationBehavior]
-        [PrincipalPermission(SecurityAction.Assert, Role="Device")]
+        [PrincipalPermission(SecurityAction.Assert, Role = "Device")]
         public async Task SendStatusToServer(StatusData statusData)
         {
             _log.Debug("Server received status: " + statusData);

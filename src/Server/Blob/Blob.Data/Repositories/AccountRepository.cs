@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using Blob.Core.Data;
 using Blob.Core.Domain;
@@ -12,6 +15,10 @@ namespace Blob.Data.Repositories
         private GenericEntityStore<Customer> _customerStore;
         private GenericEntityStore<Device> _deviceStore;
         private bool _disposed;
+
+        public AccountRepository(BlobDbContext context) 
+            :this(context,
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)) { }
 
         public AccountRepository(BlobDbContext context, ILog log)
         {
@@ -38,8 +45,12 @@ namespace Blob.Data.Repositories
         public bool DisposeContext { get; set; }
 
         public bool AutoSaveChanges { get; set; }
-
-
+        
+        public async Task<IList<Customer>> GetAllCustomersAsync()
+        {
+            IList<Customer> customers = await _customerStore.DbEntitySet.Where(x => true).ToListAsync();
+            return customers;
+        }
 
         public Task CreateCustomerAsync(Customer customer)
         {
@@ -48,7 +59,7 @@ namespace Blob.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Device> FindCustomerByIdAsync(Customer customer)
+        public Task<Customer> FindCustomerByIdAsync(Guid customerId)
         {
             _log.Debug("FindCustomerByIdAsync");
             ThrowIfDisposed();
@@ -62,6 +73,11 @@ namespace Blob.Data.Repositories
             throw new NotImplementedException();
         }
 
+        public Task DeleteCustomerAsync(Guid customerId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task DeleteCustomerAsync(Customer customer)
         {
             _log.Debug("DeleteCustomerAsync");
@@ -69,6 +85,18 @@ namespace Blob.Data.Repositories
             throw new NotImplementedException();
         }
 
+
+
+        public async Task<Device> FindDeviceByIdAsync(Guid deviceId)
+        {
+            Device device = await _deviceStore.DbEntitySet.FirstOrDefaultAsync(x => x.Id.Equals(deviceId));
+            return device;
+        }
+        public async Task<IList<Device>> GetAllDevicesAsync()
+        {
+            IList<Device> devices = await _deviceStore.DbEntitySet.Where(x => true).ToListAsync();
+            return devices;
+        }
 
 
 

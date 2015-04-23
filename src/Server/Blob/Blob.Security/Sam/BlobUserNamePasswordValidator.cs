@@ -21,6 +21,14 @@ namespace Blob.Security.Sam
         public override void Validate(string userName, string password)
         {
             _log.Debug(string.Format("Validate ({0}, {1})", userName, password));
+            Guid g;
+            if (Guid.TryParse(userName, out g))
+            {
+                // assume this is a device and not a user
+                _log.Debug("Validating Device " + g);
+                return;
+            }
+
             using (BlobDbContext context = new BlobDbContext())
             {
                 using (BlobUserManager userManager = new BlobUserManager(new BlobUserStore(context)))
@@ -41,6 +49,7 @@ namespace Blob.Security.Sam
                         Trace.TraceWarning(msg);
                         _log.Debug(msg);
                         throw new FaultException(msg); //the client actually will receive MessageSecurityException. But if I throw MessageSecurityException, the runtime will give FaultException to client without clear message.
+
                     }
                 }
             }

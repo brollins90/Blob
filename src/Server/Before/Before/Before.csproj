@@ -15,7 +15,7 @@
     <AssemblyName>Before</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -47,6 +47,12 @@
     </Reference>
     <Reference Include="Blob.Core">
       <HintPath>..\..\Blob\Blob.Core\bin\Debug\Blob.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Blob.Data">
+      <HintPath>..\..\Blob\Blob.Data\bin\Debug\Blob.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Blob.Managers">
+      <HintPath>..\..\Blob\Blob.Managers\bin\Debug\Blob.Managers.dll</HintPath>
     </Reference>
     <Reference Include="Blob.Proxies">
       <HintPath>..\..\Blob\Blob.Proxies\bin\Debug\Blob.Proxies.dll</HintPath>
@@ -171,6 +177,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Extensions.cs" />
@@ -251,6 +258,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Device\Index.cshtml" />
+    <Content Include="Views\Device\Create.cshtml" />
+    <Content Include="Views\Device\Delete.cshtml" />
+    <Content Include="Views\Device\Details.cshtml" />
+    <Content Include="Views\Device\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -277,7 +289,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>18920</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:18920/</IISUrl>
+          <IISUrl>http://localhost:5002</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -16,8 +16,11 @@ namespace BMonitor.Service
 {
     public class MonitorManager
     {
-        private string Username = "customerUser1";
-        private string Password = "password";
+        private string User_Username = "customerUser1";
+        private string User_password = "password";
+        private string Username;
+        private string Password;
+
 
         private readonly ILog _log;
         private readonly ICollection<IMonitor> _monitors;
@@ -36,6 +39,8 @@ namespace BMonitor.Service
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _monitors = new List<IMonitor>();
+            Username = User_Username;
+            Password = User_password;
         }
 
         public void Initialize(NameValueCollection config)
@@ -47,9 +52,19 @@ namespace BMonitor.Service
             if (!Guid.TryParse(GetConfigValue(config["deviceId"], ""), out _deviceId))
             {
                 _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
-                //_deviceId = Guid.Parse("D98CC204-C422-486D-AA52-398AD622E7A5");
-                _deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
+                _isRegistered = false;
+                Username = User_Username;
+                Password = User_password;
+
+                //_deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
             }
+            else
+            {
+                _isRegistered = true;
+                Username = _deviceId.ToString();
+                Password = _deviceId.ToString();
+            }
+
 
             _monitorPath = GetConfigValue(config["monitorPath"], @"/Monitors/");
             _enableCommandConnection = Convert.ToBoolean(GetConfigValue(config["enableCommandConnection"], "false"));
@@ -69,17 +84,20 @@ namespace BMonitor.Service
 
         public void OpenCommandConnection()
         {
-            _log.Info("Creating command connection.");
-            //todo: spin up a new thread
+            if (_isRegistered && _enableCommandConnection)
+            {
+                _log.Info("Creating command connection.");
+                //todo: spin up a new thread
 
-            InstanceContext callbackInstance = new InstanceContext(new CommandServiceCallbackHandler());
+                InstanceContext callbackInstance = new InstanceContext(new CommandServiceCallbackHandler());
 
-            commandClient = new CommandClient(callbackInstance, "CommandService");
-            commandClient.ClientCredentials.UserName.UserName = Username;
-            commandClient.ClientCredentials.UserName.Password = Password;
-            commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+                commandClient = new CommandClient(callbackInstance, "CommandService");
+                commandClient.ClientCredentials.UserName.UserName = Username;
+                commandClient.ClientCredentials.UserName.Password = Password;
+                commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
-            commandClient.Connect(_deviceId);
+                commandClient.Connect(_deviceId);
+            }
 
         }
 
@@ -107,7 +125,7 @@ namespace BMonitor.Service
         {
             _log.Debug("Tick");
             
-            if (_enableCommandConnection)
+            if (_enableCommandConnection) // && connection is open
             {
                 commandClient.Ping(_deviceId);
             }

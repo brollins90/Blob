@@ -62,17 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncHelper.cs" />
-    <Compile Include="AuthenticationManagerExtensions.cs" />
-    <Compile Include="AuthenticationOperationInvoker.cs" />
-    <Compile Include="AuthorizedMethodAttribute.cs" />
     <Compile Include="BlobClaimsIdentityFactory.cs" />
-    <Compile Include="BlobIdentityManager.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />
     <Compile Include="Sam\BlobServiceAuthorizationManager.cs" />
     <Compile Include="BlobUserManagerAdapter.cs" />
-    <Compile Include="BlobRoleStore.cs" />
     <Compile Include="BlobUserManager.cs" />
     <Compile Include="Sam\BlobUserNamePasswordValidator.cs" />
     <Compile Include="Identity\BlobUserValidator.cs" />

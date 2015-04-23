@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.ServiceModel;
+using System.Text;
 using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Data.Identity;
@@ -23,13 +24,26 @@ namespace Blob.Security.Sam
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
             _log.Debug("CheckAccessCore");
+            
+            IIdentity identity = operationContext.ServiceSecurityContext.PrimaryIdentity;
+
+            Guid g;
+            if (Guid.TryParse(identity.Name, out g))
+            {
+                // assume this is a device and not a user
+                _log.Debug("Found a device.  add the device role and return"); 
+                operationContext.ServiceSecurityContext.AuthorizationContext
+                             .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, new [] {"Device"});
+
+                return true;
+            }
+
             using (BlobDbContext context = new BlobDbContext())
             {
                 using (BlobUserStore userStore = new BlobUserStore(context))
                 {
                     using (BlobUserManager userManager = new BlobUserManager(userStore))
                     {
-                        IIdentity identity = operationContext.ServiceSecurityContext.PrimaryIdentity;
                         User user = userManager.FindByNameAsync2(identity.Name).Result;
                         _log.Debug("Got user: " + user);
 
@@ -51,5 +65,16 @@ namespace Blob.Security.Sam
 
             }
         }
+
+        //protected void logRoles(OperationContext operationContext)
+        //{
+        //    var p = operationContext.ServiceSecurityContext.AuthorizationContext
+        //                            .Properties["Principal"];
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.Append("bsam - ");
+        //    sb.Append(p.)
+            
+        //}
+
     }
 }

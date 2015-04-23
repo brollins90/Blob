@@ -7,7 +7,7 @@ using log4net;
 namespace Blob.Services.Command
 {
     [ServiceBehavior]
-    [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+    //[PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
     public class CommandService : ICommandService
     {
         private readonly ILog _log;
@@ -26,7 +26,7 @@ namespace Blob.Services.Command
         }
 
         [OperationBehavior]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
+        [PrincipalPermission(SecurityAction.Assert, Role = "Device")]
         public void Connect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Connect: {0}", deviceId));

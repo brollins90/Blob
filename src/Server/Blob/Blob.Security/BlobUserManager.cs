@@ -1714,12 +1714,19 @@ namespace Blob.Security
             {
                 throw new ArgumentNullException("password");
             }
+
+            if (user.Id == null || Guid.Empty.Equals(Guid.Parse(user.Id)))
+            {
+                throw new Exception();
+                user.Id = Guid.NewGuid().ToString();
+            }
+
+            await CreateAsync(user).WithCurrentCulture();
             var result = await UpdatePassword(user, password).WithCurrentCulture();
             if (!result.Succeeded)
             {
                 return result;
             }
-            await CreateAsync(user).WithCurrentCulture();
             return new IdentityResultDto {Succeeded = true};
         }
 

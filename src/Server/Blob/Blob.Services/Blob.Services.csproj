@@ -40,8 +40,6 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationOperationInvoker.cs" />
-    <Compile Include="BlakeAttribute.cs" />
     <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Command\CommandService.cs" />
     <Compile Include="Registration\RegistrationService.cs" />

@@ -33,22 +33,6 @@ namespace Blob.Contracts.Security
             set { _errors = value; }
         }
         private IEnumerable<string> _errors;
-
-        //public IdentityResultDto(bool success)
-        //{
-        //    Succeeded = success;
-        //    Errors = new string[0];
-        //}
-
-        //public IdentityResultDto(IEnumerable<string> errors)
-        //{
-        //    if (errors == null)
-        //    {
-        //        errors = new[] { "error" };
-        //    }
-        //    Succeeded = false;
-        //    Errors = errors;
-        //}
     }
 
 
@@ -83,11 +67,5 @@ namespace Blob.Contracts.Security
         public string LoginProvider { get; set; }
         [DataMember]
         public string ProviderKey { get; set; }
-
-        //public UserLoginInfoDto(string loginProvider, string providerKey)
-        //{
-        //    LoginProvider = loginProvider;
-        //    ProviderKey = providerKey;
-        //}
     }
 }

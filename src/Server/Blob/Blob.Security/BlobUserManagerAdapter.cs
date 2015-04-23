@@ -9,36 +9,6 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Security
 {
-    public class StringUser : IUser
-    {
-        public string Id { get; set; }
-        public string UserName { get; set; }
-    }
-
-    public static class UserConverter
-    {
-
-        public static User UserFromUserDto(UserDto user)
-        {
-            return (user == null)
-                ? null
-                : new User { Id = Guid.Parse(user.Id), UserName = user.UserName };
-        }
-
-        public static UserDto DtoFromUser(User user)
-        {
-            return (user == null)
-                ? null
-                : new UserDto { Id = user.Id.ToString(), UserName = user.UserName };
-        }
-
-        public static Guid ToGuid(this string s)
-        {
-            return Guid.Parse(s);
-        }
-    }
-
-
     [ServiceBehavior]
     public class BlobUserManagerAdapter : IIdentityService
     {
@@ -1059,6 +1029,34 @@ namespace Blob.Security
             ThrowIfDisposed();
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+    }
+    public class StringUser : IUser
+    {
+        public string Id { get; set; }
+        public string UserName { get; set; }
+    }
+
+    public static class UserConverter
+    {
+
+        public static User UserFromUserDto(UserDto user)
+        {
+            return (user == null)
+                ? null
+                : new User { Id = Guid.Parse(user.Id), UserName = user.UserName };
+        }
+
+        public static UserDto DtoFromUser(User user)
+        {
+            return (user == null)
+                ? null
+                : new UserDto { Id = user.Id.ToString(), UserName = user.UserName };
+        }
+
+        public static Guid ToGuid(this string s)
+        {
+            return Guid.Parse(s);
         }
     }
 }

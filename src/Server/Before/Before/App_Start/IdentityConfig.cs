@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
@@ -38,12 +39,20 @@ namespace Before
 
     public class ApplicationUser : UserDto, IUser, IUser<string>
     {
-        public ApplicationUser() { }
+        public ApplicationUser()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
         public ApplicationUser(UserDto userDto)
         {
             // populate other fields if we want to
             Id = userDto.Id;
             UserName = userDto.UserName;
+        }
+
+        public UserDto ToDto()
+        {
+            return new UserDto {Id = Id, UserName = UserName};
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
@@ -152,4 +161,24 @@ namespace Before
     //    public Task<IUser> FindByIdAsync(string userId) { throw new NotImplementedException(); }
     //    public Task<IUser> FindByNameAsync(string userName) { throw new NotImplementedException(); }
     //}
+
+
+    public static class Helper
+    {
+        public static string GetCustomerId(this IIdentity identity)
+        {
+            return Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f").ToString();
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            var ci = identity as ClaimsIdentity;
+            if (ci != null)
+            {
+                return ci.FindFirstValue("customerid");
+                //return ci.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+            }
+            return null;
+        }
+    }
 }

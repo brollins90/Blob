@@ -13,11 +13,16 @@ namespace Blob.Data.Repositories
     public class StatusRepository : IStatusRepository, IDisposable
     {
         private readonly ILog _log;
+        private readonly IDbSet<DeviceType> _deviceTypeStore; 
         private readonly IDbSet<Status> _statusStore;
         private readonly IDbSet<StatusPerf> _performanceStore;
         private GenericEntityStore<Customer> _customerStore;
         private GenericEntityStore<Device> _deviceStore;
         private bool _disposed;
+
+        public StatusRepository(BlobDbContext context) 
+            :this(context,
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)) { }
 
         public StatusRepository(BlobDbContext context, ILog log)
         {
@@ -37,6 +42,7 @@ namespace Blob.Data.Repositories
             AutoSaveChanges = true;
             _customerStore = new GenericEntityStore<Customer>(context);
             _deviceStore = new GenericEntityStore<Device>(context);
+            _deviceTypeStore = Context.Set<DeviceType>();
             _statusStore = Context.Set<Status>();
             _performanceStore = Context.Set<StatusPerf>();
         }
@@ -65,6 +71,9 @@ namespace Blob.Data.Repositories
             Device device = await _deviceStore.GetByIdAsync(deviceId).WithCurrentCulture();
             if (device != null)
             {
+                await _customerStore.DbEntitySet.Where(x => x.Id.Equals(device.CustomerId)).LoadAsync().WithCurrentCulture();
+                await _deviceTypeStore.Where(x => x.Id.Equals(device.DeviceTypeId)).LoadAsync().WithCurrentCulture();
+
                 await EnsureStatusLoaded(device).WithCurrentCulture();
                 //await EnsurePerformanceLoaded(device).WithCurrentCulture();
                 //await EnsureLogsLoaded(device).WithCurrentCulture();
@@ -103,7 +112,7 @@ namespace Blob.Data.Repositories
 
         public Task DeleteDeviceAsync(Device device)
         {
-            //_log.Debug("DeleteDeviceAsync");
+            _log.Debug("DeleteDeviceAsync");
             //ThrowIfDisposed();
             //if (device == null)
             //{
@@ -236,11 +245,15 @@ namespace Blob.Data.Repositories
 
         public Task<IList<StatusPerf>> FindPerformanceForDeviceAsync(Guid deviceId)
         {
+            _log.Debug("FindPerformanceForDeviceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
         Task<IList<StatusPerf>> IStatusRepository.GetPerformanceAsync(Device device)
         {
+            _log.Debug("GetPerformanceAsync");
+            ThrowIfDisposed();
             throw new NotImplementedException();
         }
 

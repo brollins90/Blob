@@ -9,7 +9,7 @@ using log4net;
 namespace Blob.Services.Registration
 {
     [ServiceBehavior]
-    [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+    //[PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
     public class RegistrationService : IRegistrationService
     {
         private readonly ILog _log;

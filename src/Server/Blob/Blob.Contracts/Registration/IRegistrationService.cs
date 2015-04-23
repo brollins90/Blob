@@ -1,7 +1,7 @@
 ﻿using System.Security.Permissions;
-using Blob.Contracts.Models;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using Blob.Contracts.Models;
 
 namespace Blob.Contracts.Registration
 {
