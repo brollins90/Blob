@@ -231,14 +231,14 @@ namespace Blob.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task FindDeviceTypeByIdAsync(Guid deviceTypeId)
+        public async Task<DeviceType> FindDeviceTypeByIdAsync(Guid deviceTypeId)
         {
             _log.Debug(string.Format("FindDeviceTypeByIdAsync({0})", deviceTypeId));
             ThrowIfDisposed();
             throw new NotImplementedException();
         }
 
-        public async Task FindDeviceTypeByValueAsync(string value)
+        public async Task<DeviceType> FindDeviceTypeByValueAsync(string value)
         {
             _log.Debug(string.Format("FindDeviceTypeByValueAsync({0})", value));
             ThrowIfDisposed();

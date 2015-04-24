@@ -13,11 +13,9 @@ namespace Blob.Data.Repositories
     public class StatusRepository : IStatusRepository, IDisposable
     {
         private readonly ILog _log;
-        private readonly IDbSet<DeviceType> _deviceTypeStore; 
         private readonly IDbSet<Status> _statusStore;
         private readonly IDbSet<StatusPerf> _performanceStore;
-        private GenericEntityStore<Customer> _customerStore;
-        private GenericEntityStore<Device> _deviceStore;
+        private readonly IAccountRepository _accountRepository;
         private bool _disposed;
 
         public StatusRepository(BlobDbContext context) 
@@ -40,11 +38,9 @@ namespace Blob.Data.Repositories
             Context = context;
 
             AutoSaveChanges = true;
-            _customerStore = new GenericEntityStore<Customer>(context);
-            _deviceStore = new GenericEntityStore<Device>(context);
-            _deviceTypeStore = Context.Set<DeviceType>();
             _statusStore = Context.Set<Status>();
             _performanceStore = Context.Set<StatusPerf>();
+            _accountRepository = new AccountRepository(context);
         }
 
         protected internal BlobDbContext Context { get; private set; }
@@ -54,102 +50,7 @@ namespace Blob.Data.Repositories
         public bool AutoSaveChanges { get; set; }
 
 
-        #region Device
-
-        public Task DeleteDeviceAsync(Device device)
-        {
-            _log.Debug("DeleteDeviceAsync");
-            //ThrowIfDisposed();
-            //if (device == null)
-            //{
-            //    throw new ArgumentNullException("device");
-            //}
-            //var d = await _deviceStore.DbEntitySet.SingleOrDefaultAsync(x => x.Id.Equals(device.Id);
-            //if (d != null)
-            //{
-            //    var deviceId = d.Id;
-            //    var customerId = user.Id;
-            //    var userRole = await _userRoles.FirstOrDefaultAsync(r => roleId.Equals(r.RoleId) && r.UserId.Equals(userId)).WithCurrentCulture();
-            //    if (userRole != null)
-            //    {
-            //        _userRoles.Remove(userRole);
-            //    }
-            //}
-
-
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
-        private bool AreDevicesLoaded(Customer customer)
-        {
-            return Context.Entry(customer).Collection(u => u.Devices).IsLoaded;
-        }
-
-        
-
-        #endregion
-
-
-        #region DeviceType
-
-
-        public Task CreateDeviceTypeAsync(DeviceType deviceType)
-        {
-            _log.Debug("CreateDeviceTypeAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
-        public Task<DeviceType> FindDeviceTypeByIdAsync(Guid id)
-        {
-            _log.Debug("FindDeviceTypeByIdAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-            // return a NOT SET object type if null
-        }
-
-        public Task<DeviceType> FindDeviceTypeByValueAsync(string value)
-        {
-            _log.Debug("FindDeviceTypeByValueAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateDeviceTypeAsync(DeviceType deviceType)
-        {
-            _log.Debug("UpdateDeviceTypeAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteDeviceTypeAsync(DeviceType deviceType)
-        {
-            _log.Debug("DeleteDeviceTypeAsync");
-            ThrowIfDisposed();
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Status>> FindStatusesForDeviceAsync(Guid deviceId)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-
         #region Status
-
-        public virtual async Task<IList<Status>> FindStatusByIdAsync(Device device)
-        {
-            _log.Debug("GetStatusAsync");
-            ThrowIfDisposed();
-            if (device == null)
-                throw new ArgumentNullException("device");
-
-            await EnsureStatusLoaded(device).WithCurrentCulture();
-            return device.Statuses.ToList();
-        }
 
         public virtual Task AddStatusAsync(Device device, Status status)
         {
@@ -163,6 +64,30 @@ namespace Blob.Data.Repositories
             _statusStore.Add(status);
             SaveChanges();
             return Task.FromResult(0);
+        }
+
+        public async Task<IList<Status>> FindStatusesForDeviceAsync(Guid deviceid)
+        {
+            _log.Debug("GetStatusAsync");
+            ThrowIfDisposed();
+            Device device = await _accountRepository.FindDeviceByIdAsync(deviceid);
+            if (device == null)
+                throw new ArgumentNullException("deviceid");
+
+            await EnsureStatusLoaded(device).WithCurrentCulture();
+            return device.Statuses.ToList();
+        }
+
+        public async Task<Status> GetStatusByIdAsync(long statusId)
+        {
+            _log.Debug("GetStatusAsync");
+            ThrowIfDisposed();
+
+            if (device == null)
+                throw new ArgumentNullException("device");
+
+            await EnsureStatusLoaded(device).WithCurrentCulture();
+            return device.Statuses.ToList();
         }
 
         public virtual Task RemoveStatusAsync(Device device, Status status)
