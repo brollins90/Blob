@@ -28,6 +28,11 @@ namespace Blob.Data
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
         }
 
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Device> Devices { get; set; }
+        public DbSet<Status> DeviceStatuses { get; set; }
+        public DbSet<StatusPerf> DevicePerfDatas { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             _log.Debug("Creating model");

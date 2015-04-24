@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Utilities;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using Blob.Core.Domain;
-using Microsoft.AspNet.Identity;
 
 namespace Blob.Security
 {

@@ -54,7 +54,6 @@ namespace Blob.Proxies
             }
 
             IIdentityService provider = _channelFactory.CreateChannel();
-            provider.SetProvider(ProxyProviderName);
 
             return provider;
         }
@@ -104,13 +103,6 @@ namespace Blob.Proxies
             set { _proxyProviderName = value; }
         }
         private string _proxyProviderName;
-
-
-        public void SetProvider(string providerName)
-        {
-            // This isnt really part of the client side, just needed on the server side
-            //throw new NotImplementedException();
-        }
         
         public bool UserLockoutEnabledByDefault
         {
@@ -1002,7 +994,7 @@ namespace Blob.Proxies
             try
             {
                 IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.CreateAsync(user as UserDto, password);
+                output = await remoteProvider.CreateAsync(user, password);
                 DisposeRemoteProvider(remoteProvider);
             }
             catch (Exception e)

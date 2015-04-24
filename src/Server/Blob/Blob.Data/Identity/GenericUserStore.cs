@@ -202,7 +202,11 @@ namespace Blob.Data.Identity
             user.LastActivityDate = DateTime.Now; // change this to 0
             user.LockoutEnabled = false; //todo:
             user.LockoutEndDateUtc = DateTime.Now;
-            (user as User).CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
+            
+            User user1 = user as User;
+            if (user1 != null) 
+                user1.CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
+
             _userStore.Create(user);
             await SaveChanges().WithCurrentCulture();
         }
@@ -670,6 +674,7 @@ namespace Blob.Data.Identity
             _disposed = true;
             Context = null;
             _roleStore = null;
+            _userStore = null;
         }
 
 

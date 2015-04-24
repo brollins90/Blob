@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity.ModelConfiguration;
+// ReSharper disable DoNotCallOverridableMethodsInConstructor
 
 namespace Blob.Data.Mapping
 {

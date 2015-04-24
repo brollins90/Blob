@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
+// ReSharper disable DoNotCallOverridableMethodsInConstructor
 
 namespace Blob.Core.Identity
 {

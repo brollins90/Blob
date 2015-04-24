@@ -1,6 +1,6 @@
-﻿using Blob.Core.Domain;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Infrastructure.Annotations;
+using Blob.Core.Domain;
 
 namespace Blob.Data.Mapping
 {

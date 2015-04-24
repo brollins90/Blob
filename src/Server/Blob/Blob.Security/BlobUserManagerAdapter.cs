@@ -20,12 +20,6 @@ namespace Blob.Security
             _manager = manager;
         }
 
-        public void SetProvider(string providerName)
-        {
-            ThrowIfDisposed();
-            _manager.SetProvider(providerName);
-        }
-
         //public IPasswordHasher PasswordHasher
         //{
         //    get

@@ -13,9 +13,6 @@ namespace Blob.Contracts.Security
         IIdentityStore<TUserIdType>
         where TUserIdType : IEquatable<TUserIdType>
     {
-        [OperationContract]
-        void SetProvider(string providerName);
-
         bool UserLockoutEnabledByDefault { [OperationContract] get; }
         int MaxFailedAccessAttemptsBeforeLockout { [OperationContract] get; }
         TimeSpan DefaultAccountLockoutTimeSpan { [OperationContract] get; }

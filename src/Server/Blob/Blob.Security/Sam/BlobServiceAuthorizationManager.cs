@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.ServiceModel;
-using System.Text;
 using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Data.Identity;

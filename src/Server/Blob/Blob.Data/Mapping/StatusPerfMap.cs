@@ -1,5 +1,5 @@
-﻿using Blob.Core.Domain;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Blob.Core.Domain;
 
 namespace Blob.Data.Mapping
 {

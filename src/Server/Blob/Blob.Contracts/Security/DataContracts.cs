@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Claims;
+// ReSharper disable InconsistentNaming
 
 namespace Blob.Contracts.Security
 {

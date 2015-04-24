@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Configuration.Provider;
 using System.Data.Entity.Utilities;
 using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Configuration;
@@ -17,21 +18,14 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Security
 {
-    public class BlobUserManager : //UserManager<User, Guid>,
-        IIdentityService<Guid>
+    public class BlobUserManager : IIdentityService<Guid>
     {
         private readonly ILog _log;
-        private readonly string _dbConnectionString;
 
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="store">The IUserStore is responsible for commiting changes via the UpdateAsync/CreateAsync methods</param>
         public BlobUserManager(BlobUserStore store)
             //: base(store)
         {
             _log = LogManager.GetLogger("MembershipLogger");
-            _dbConnectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
 
             if (store == null)
             {
@@ -64,7 +58,7 @@ namespace Blob.Security
 
                 try
                 {
-                    if (MachineKey.ValidationKey.Contains("AutoGenerate")/* && PasswordFormat != MembershipPasswordFormat.Clear */)
+                    if (MachineKey.ValidationKey.Contains("AutoGenerate"))
                     {
                         throw new ProviderException("Hashed or Encrypted passwords are not supported with auto-generated keys.");
                     }
@@ -75,7 +69,7 @@ namespace Blob.Security
                     {
                         _log.Error("Failed to load the machine key.", e);
                     }
-                    throw; // throw this because we want it to break if this fails
+                    throw;
                 }
             }
             catch (Exception e)
@@ -123,25 +117,6 @@ namespace Blob.Security
             }
         }
         private bool? _logExceptions;
-
-        public void SetProvider(string providerName)
-        {
-            // i guess this was used in the older code.  we dont really need to init anything because this is already the class...
-        }
-        //    _internalProvider = Membership.Provider;
-        //    //try
-        //    //{
-        //    //    _internalProvider = (String.IsNullOrWhiteSpace(providerName))
-        //    //        ? Membership.Provider :
-        //    //        Membership.Providers[providerName];
-        //    //}
-        //    //catch
-        //    //{
-        //    //    throw;
-        //    //    _internalProvider = Membership.Provider;
-        //    //}
-        //}
-        //private MembershipProvider _internalProvider;
 
         public IPasswordHasher PasswordHasher
         {
@@ -865,9 +840,7 @@ namespace Blob.Security
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
                     userId));
             }
-            var logins = await loginStore.GetLoginsAsync(user).WithCurrentCulture();
-            throw new NotImplementedException();
-            //return null;
+            return loginStore.GetLoginsAsync(user).Result.Select(login => login.ToDto()).ToList();
         }
 
         /// <summary>
@@ -894,11 +867,9 @@ namespace Blob.Security
             //await UpdateSecurityStampInternal(user).WithCurrentCulture();
             await UpdateAsync2(user).WithCurrentCulture();
         }
-
-        // IUserLoginStore methods
+        
         protected IUserLoginStore<User, Guid> GetLoginStore()
         {
-            // todo:
             var cast = Store as IUserLoginStore<User, Guid>;
             if (cast == null)
             {
@@ -1211,7 +1182,7 @@ namespace Blob.Security
         /// <summary>
         ///     Create a user with no password
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userDto"></param>
         /// <returns></returns>
         public async Task CreateAsync(UserDto userDto)
         {
@@ -1238,7 +1209,7 @@ namespace Blob.Security
         /// <summary>
         ///     Delete a user
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         public async Task DeleteAsync(Guid userId)
         {
@@ -1279,7 +1250,7 @@ namespace Blob.Security
         /// <summary>
         ///     Update a user
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userDto"></param>
         /// <returns></returns>
         public async Task UpdateAsync(UserDto userDto)
         {
@@ -1647,9 +1618,9 @@ namespace Blob.Security
         //    return SignInStatus.Success;
         //}
 
-        public async Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        public Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
-            return SignInStatusDto.Success;
+            return Task.FromResult(SignInStatusDto.Success);
             ////if (UserManager == null)
             ////{
             ////    return SignInStatus.Failure;
@@ -1705,7 +1676,7 @@ namespace Blob.Security
         public async Task<IdentityResultDto> CreateAsync(UserDto user, string password)
         {
             ThrowIfDisposed();
-            var passwordStore = GetPasswordStore();
+            //var passwordStore = GetPasswordStore();
             if (user == null)
             {
                 throw new ArgumentNullException("user");
@@ -1718,7 +1689,7 @@ namespace Blob.Security
             if (user.Id == null || Guid.Empty.Equals(Guid.Parse(user.Id)))
             {
                 throw new Exception();
-                user.Id = Guid.NewGuid().ToString();
+                //user.Id = Guid.NewGuid().ToString();
             }
 
             await CreateAsync(user).WithCurrentCulture();
@@ -2531,6 +2502,11 @@ namespace Blob.Security
         public static UserLoginInfo ToLoginInfo(this UserLoginInfoDto res)
         {
             return new UserLoginInfo(res.LoginProvider, res.ProviderKey);
+        }
+
+        public static UserLoginInfoDto ToDto(this UserLoginInfo res)
+        {
+            return new UserLoginInfoDto { LoginProvider = res.LoginProvider, ProviderKey = res.ProviderKey };
         }
     }
 }
