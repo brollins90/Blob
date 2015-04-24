@@ -34,7 +34,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\ICommandService.cs" />

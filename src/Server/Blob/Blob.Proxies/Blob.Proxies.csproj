@@ -34,15 +34,9 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Channels" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IdentityManagerClientUser.cs" />
@@ -56,13 +50,6 @@
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Blob.Core\Blob.Core.csproj">
-      <Project>{A8395CBD-FDD2-4A90-8A9E-719B8266773F}</Project>
-      <Name>Blob.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
