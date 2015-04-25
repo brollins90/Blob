@@ -386,7 +386,7 @@ namespace Blob.Security
         ///     When disposing, actually dipose the store
         /// </summary>
         /// <param name="disposing"></param>
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing && !IsDisposed)
             {

@@ -61,6 +61,7 @@
     <Compile Include="Identity\GenericUserStore.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
+    <Compile Include="Mapping\KeyPairMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
     <Compile Include="Mapping\RoleMap.cs">
@@ -76,6 +77,10 @@
     <Compile Include="Migrations\201504192325531_identity.cs" />
     <Compile Include="Migrations\201504192325531_identity.Designer.cs">
       <DependentUpon>201504192325531_identity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504251720232_KeyPairs.cs" />
+    <Compile Include="Migrations\201504251720232_KeyPairs.Designer.cs">
+      <DependentUpon>201504251720232_KeyPairs.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504192325531_identity.resx">
       <DependentUpon>201504192325531_identity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504251720232_KeyPairs.resx">
+      <DependentUpon>201504251720232_KeyPairs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

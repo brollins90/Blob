@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Proxies", "Blob.Proxie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Security", "Blob.Security\Blob.Security.csproj", "{0586D78E-FB9D-484E-AAB9-00D434E0F3CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Crypto", "Blob.Crypto\Blob.Crypto.csproj", "{92B3D72D-41E9-45E5-9841-156392D16853}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{0586D78E-FB9D-484E-AAB9-00D434E0F3CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0586D78E-FB9D-484E-AAB9-00D434E0F3CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0586D78E-FB9D-484E-AAB9-00D434E0F3CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B3D72D-41E9-45E5-9841-156392D16853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B3D72D-41E9-45E5-9841-156392D16853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B3D72D-41E9-45E5-9841-156392D16853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B3D72D-41E9-45E5-9841-156392D16853}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

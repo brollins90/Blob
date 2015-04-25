@@ -1020,11 +1020,11 @@ namespace Blob.Security
 
         public void Dispose()
         {
-            ThrowIfDisposed();
             Dispose(true);
             GC.SuppressFinalize(this);
         }
     }
+
     public class StringUser : IUser
     {
         public string Id { get; set; }

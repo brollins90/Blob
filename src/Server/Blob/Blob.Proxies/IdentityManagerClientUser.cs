@@ -67,7 +67,8 @@ namespace Blob.Proxies
         }
 
 
-        private NameValueCollection Config { get; set; }
+        protected internal NameValueCollection Config { get; private set; }
+        protected internal bool IsDisposed { get; private set; }
 
         public bool LogExceptions
         {
@@ -1587,12 +1588,27 @@ namespace Blob.Proxies
 
         //#endregion
 
-
-
         public void Dispose()
         {
-            //todo, actually do...
-            //throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && !IsDisposed)
+            {
+                //Store.Dispose();
+                IsDisposed = true;
+            }
         }
     }
 
