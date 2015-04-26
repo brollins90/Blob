@@ -4,6 +4,6 @@ namespace Blob.Contracts.Commands
 {
     public class PrintLine2Command : ICommand
     {
-        public string OutputString { get; set; }
+        public string DifferentOutputString { get; set; }
     }
 }

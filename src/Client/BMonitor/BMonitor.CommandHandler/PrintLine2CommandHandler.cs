@@ -8,7 +8,7 @@ namespace BMonitor.CommandHandler
     {
         public void Handle(PrintLine2Command command)
         {
-            Console.WriteLine(" -------" + command.OutputString);
+            Console.WriteLine(" -------" + command.DifferentOutputString);
         }
     }
 }

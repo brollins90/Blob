@@ -2,6 +2,7 @@
 using System.Security.Permissions;
 using System.ServiceModel;
 using Blob.Contracts.Command;
+using Blob.Managers.Command;
 using log4net;
 
 namespace Blob.Services.Command
@@ -11,12 +12,10 @@ namespace Blob.Services.Command
     public class CommandService : ICommandService
     {
         private readonly ILog _log;
-        //private readonly ICommandManager _commandManager;
 
         public CommandService(ILog log)
         {
             _log = log;
-            //_registrationManager = registrationManager;
         }
 
 
