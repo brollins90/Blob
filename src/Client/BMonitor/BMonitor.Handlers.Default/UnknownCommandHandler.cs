@@ -2,9 +2,10 @@
 using Blob.Contracts.Command;
 using log4net;
 
-namespace BMonitor.CommandHandler
+namespace BMonitor.Handlers.Default
 {
-    public class UnknownCommandHandler : ICommandHandler<ICommand>
+    public class UnknownCommandHandler<TCmd> : ICommandHandler<TCmd>
+        where TCmd : ICommand
     {
         private readonly ILog _log;
 
@@ -13,11 +14,11 @@ namespace BMonitor.CommandHandler
             _log = log;
         }
 
-        public void Handle(ICommand command)
+        public void Handle(TCmd command)
         {
             string msg = string.Format("Received an unknown command.  The type is {0}", command.GetType());
             _log.Error(msg);
-            //throw new InvalidOperationException(msg);
+            throw new InvalidOperationException(msg);
         }
     }
 }

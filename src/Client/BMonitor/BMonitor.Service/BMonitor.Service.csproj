@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="BMonitorNinjectModule.cs" />
     <Compile Include="CommandServiceCallbackHandler.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="MonitorService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -102,6 +103,10 @@
     <ProjectReference Include="..\BMonitor.Common\BMonitor.Common.csproj">
       <Project>{4c1c9b97-e90d-45bf-be89-48cfe705c211}</Project>
       <Name>BMonitor.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BMonitor.Handlers.Default\BMonitor.Handlers.Default.csproj">
+      <Project>{06021f46-fb77-4814-a077-e3e2fdb0e04c}</Project>
+      <Name>BMonitor.Handlers.Default</Name>
     </ProjectReference>
     <ProjectReference Include="..\BMonitor.Monitors.Default\BMonitor.Monitors.Default.csproj">
       <Project>{2b4db739-5c6e-4e6e-bd95-3dc9d1653b32}</Project>

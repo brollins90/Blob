@@ -1,8 +1,11 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.Linq;
+using System.ServiceModel;
 using Blob.Contracts.Command;
-using Blob.Contracts.Commands;
 using Blob.Proxies;
 using BMonitor.CommandHandler;
+using BMonitor.Handlers.Default;
+using BMonitor.Service.Extensions;
 using log4net;
 using Ninject;
 using Ninject.Modules;
@@ -36,71 +39,35 @@ namespace BMonitor.Service
                 .WithConstructorArgument("endpointName", "CommandService");
 
             // Command handlers
-            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>))
-                .To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler))
-                .WhenInjectedInto(typeof(BMonitor.CommandHandler.ExceptionCommandHandlerDecorator<PrintLineCommand>));
-            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>))
-                .To(typeof(BMonitor.CommandHandler.ExceptionCommandHandlerDecorator<PrintLineCommand>))
-                .WhenInjectedInto(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator<PrintLineCommand>));
-            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>))
-                .To(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator<PrintLineCommand>));
+            Type commandHandlerType = typeof (ICommandHandler<>);
+            Type openUnknownCommandHandler = typeof (UnknownCommandHandler<>);
+            Type openExceptionCommandHandler = typeof(ExceptionCommandHandlerDecorator<>);
+            Type openLoggingCommandHandler = typeof(LoggingCommandHandlerDecorator<>);
 
+            // Bind defaults
+            Bind(commandHandlerType).To(openUnknownCommandHandler).WhenInjectedInto(openExceptionCommandHandler);
+            Bind(commandHandlerType).To(openExceptionCommandHandler).WhenInjectedInto(openLoggingCommandHandler);
+            Bind(commandHandlerType).To(openLoggingCommandHandler);
 
+            // Load more handlers
+            string commandHandlerLocation = "BMonitor.CommandHandler";
+            // todo: load assembly from file
+            var typesInHandlerAssembly = typeof(PrintLineCommandHandler).Assembly.GetTypes();
+            var foundCommandHandlers = typesInHandlerAssembly.GetBindingDefinitionOf(commandHandlerType);
 
+            foreach (var definedCommandHandler in foundCommandHandlers.GetDefinitionsWhereClosedGeneric())
+            {
+                Bind(commandHandlerType.MakeGenericType(definedCommandHandler.GenericType))                                 // ICommandHandler<PrintLineCommand>
+                    .To(definedCommandHandler.Implementation)                                                               // PrintLineCommandHandler
+                    .WhenInjectedInto(openExceptionCommandHandler.MakeGenericType(definedCommandHandler.GenericType));    // ExceptionCommandHandlerDecorator<PrintLineCommand>
 
+                Bind(commandHandlerType.MakeGenericType(definedCommandHandler.GenericType))                                 // ICommandHandler<PrintLineCommand>
+                    .To(openExceptionCommandHandler.MakeGenericType(definedCommandHandler.GenericType))                   // ExceptionCommandHandlerDecorator<PrintLineCommand>
+                    .WhenInjectedInto(openLoggingCommandHandler.MakeGenericType(definedCommandHandler.GenericType));      // LoggingCommandHandlerDecorator<PrintLineCommand>
 
-
-
-            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator));
-            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler))
-            //    .WhenInjectedInto(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator));
-
-
-
-
-
-
-
-
-            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<>)).To(typeof(BMonitor.CommandHandler.UnknownCommandHandler));
-
-
-            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.ExceptionWrappingCommandHandler))
-            //    .WhenInjectedInto(typeof(BMonitor.CommandHandler.LoggingCommandHandler));
-
-            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler));
-            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLine2Command>)).To(typeof(BMonitor.CommandHandler.PrintLine2CommandHandler));
-            
-            
-            //Bind(typeof(ExceptionWrappingCommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler));
-            //Bind(typeof(ICommandHandler<>)).To(typeof(BMonitor.CommandHandler.ExceptionWrappingCommandHandler<>));
-            //Bind(typeof(ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.ExceptionWrappingCommandHandler<PrintLineCommand>));
-
-
-
-            //Bind<ProxyGenerator>().ToConstant(new ProxyGenerator());
-
-            ////ChannelFactoryCache.Add<ICommandService>(Uri,Binding(endpoint), null));
-            //Bind<ICommandService>().ToWcfClient();
-
-            //Bind<CommandClient>().ToSelf()
-            //    .WithConstructorArgument("callbackInstance", x => x.Kernel.Get<ICommandServiceCallback>());
-
-            //Bind<Func<ICommandServiceCallback>>().ToMethod(c => () => OperationContext.Current.GetCallbackChannel<ICommandServiceCallback>());
-            ////Bind<>
-            //Bind<>
-            //Tuple<Type,Type>[] commandHandlers = new[] {PrintLineCommand};
-
-            //IEnumerable<Type> definedCommands = 
-            //AppDomain.CurrentDomain.GetAssemblies()
-            //           .SelectMany(t => t.GetTypes())
-            //           .Where(t => t.IsClass && t.Namespace == @namespace)
-            //foreach (Tuple<Type, Type> curent in commandHandlers)
-            //{
-            //    curent.Item1.
-            //    var command = typeof(curent.T1)
-            //}
-
+                Bind(commandHandlerType.MakeGenericType(definedCommandHandler.GenericType))                                 // ICommandHandler<PrintLineCommand>
+                    .To(openLoggingCommandHandler.MakeGenericType(definedCommandHandler.GenericType));                    // LoggingCommandHandlerDecorator<PrintLineCommand>
+            }
         }
     }
 }

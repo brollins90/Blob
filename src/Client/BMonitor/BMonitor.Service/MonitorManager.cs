@@ -1,17 +1,15 @@
-﻿using Blob.Contracts.Models;
-using Blob.Proxies;
-using BMonitor.Common.Interfaces;
-using BMonitor.Monitors.Default;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
-using Blob.Contracts.Command;
+using Blob.Contracts.Models;
+using Blob.Proxies;
+using BMonitor.Common.Interfaces;
+using BMonitor.Monitors.Default;
+using log4net;
 using Ninject;
 
 namespace BMonitor.Service

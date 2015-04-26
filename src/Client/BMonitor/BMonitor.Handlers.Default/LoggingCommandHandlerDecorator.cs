@@ -1,9 +1,10 @@
 ﻿using Blob.Contracts.Command;
 using log4net;
 
-namespace BMonitor.CommandHandler
+namespace BMonitor.Handlers.Default
 {
     public class LoggingCommandHandlerDecorator<TCmd> : ICommandHandler<TCmd>
+        where TCmd : ICommand
     {
         private readonly ICommandHandler<TCmd> _wrappedHandler;
         private readonly ILog _log;

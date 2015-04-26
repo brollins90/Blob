@@ -1,8 +1,9 @@
 ﻿
 namespace Blob.Contracts.Command
 {
-    public interface ICommandHandler<TCommand>
+    public interface ICommandHandler<in TCmd>
+        where TCmd : ICommand
     {
-        void Handle(TCommand command);
+        void Handle(TCmd command);
     }
 }

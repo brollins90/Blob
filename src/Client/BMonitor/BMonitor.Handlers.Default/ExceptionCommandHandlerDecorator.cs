@@ -1,20 +1,25 @@
 ﻿using System;
 using System.ServiceModel;
 using Blob.Contracts.Command;
+using log4net;
 
-namespace BMonitor.CommandHandler
+namespace BMonitor.Handlers.Default
 {
-    public class ExceptionCommandHandlerDecorator<TCmd> : ICommandHandler<TCmd>
+    public class ExceptionCommandHandlerDecorator<TCmd> : ICommandHandler<TCmd> 
+        where TCmd : ICommand
     {
         private readonly ICommandHandler<TCmd> _wrappedHandler;
+        private readonly ILog _log;
 
-        public ExceptionCommandHandlerDecorator(ICommandHandler<TCmd> wrappedHandler)
+        public ExceptionCommandHandlerDecorator(ILog log, ICommandHandler<TCmd> wrappedHandler)
         {
+            _log = log;
             _wrappedHandler = wrappedHandler;
         }
 
         public void Handle(TCmd command)
         {
+            _log.Debug("handleing in ExceptionCommandHandlerDecorator");
             try
             {
                 _wrappedHandler.Handle(command);
