@@ -33,13 +33,18 @@
     <Reference Include="Blob.Contracts">
       <HintPath>..\..\..\Server\Blob\Blob.Proxies\bin\Debug\Blob.Contracts.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionWrappingCommandHandler.cs" />
+    <Compile Include="LoggingCommandHandlerDecorator.cs" />
+    <Compile Include="ExceptionCommandHandlerDecorator.cs" />
     <Compile Include="PrintLine2CommandHandler.cs" />
+    <Compile Include="UnknownCommandHandler.cs" />
     <Compile Include="PrintLineCommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -48,6 +53,9 @@
       <Project>{4c1c9b97-e90d-45bf-be89-48cfe705c211}</Project>
       <Name>BMonitor.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -36,8 +36,42 @@ namespace BMonitor.Service
                 .WithConstructorArgument("endpointName", "CommandService");
 
             // Command handlers
-            //Bind<BCommandHandler<PrintLineCommand>>().To<PrintLineCommandHandler>();
-            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler));
+            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>))
+                .To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler))
+                .WhenInjectedInto(typeof(BMonitor.CommandHandler.ExceptionCommandHandlerDecorator<PrintLineCommand>));
+            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>))
+                .To(typeof(BMonitor.CommandHandler.ExceptionCommandHandlerDecorator<PrintLineCommand>))
+                .WhenInjectedInto(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator<PrintLineCommand>));
+            Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>))
+                .To(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator<PrintLineCommand>));
+
+
+
+
+
+
+
+            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator));
+            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler))
+            //    .WhenInjectedInto(typeof(BMonitor.CommandHandler.LoggingCommandHandlerDecorator));
+
+
+
+
+
+
+
+
+            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<>)).To(typeof(BMonitor.CommandHandler.UnknownCommandHandler));
+
+
+            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.ExceptionWrappingCommandHandler))
+            //    .WhenInjectedInto(typeof(BMonitor.CommandHandler.LoggingCommandHandler));
+
+            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler));
+            //Bind(typeof(Blob.Contracts.Command.ICommandHandler<PrintLine2Command>)).To(typeof(BMonitor.CommandHandler.PrintLine2CommandHandler));
+            
+            
             //Bind(typeof(ExceptionWrappingCommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.PrintLineCommandHandler));
             //Bind(typeof(ICommandHandler<>)).To(typeof(BMonitor.CommandHandler.ExceptionWrappingCommandHandler<>));
             //Bind(typeof(ICommandHandler<PrintLineCommand>)).To(typeof(BMonitor.CommandHandler.ExceptionWrappingCommandHandler<PrintLineCommand>));

@@ -167,7 +167,7 @@ start scheduler
             
             if (_enableCommandConnection) // && connection is open
             {
-                commandClient.Ping(_deviceId);
+                //commandClient.Ping(_deviceId);
             }
 
             foreach (IMonitor monitor in _monitors)
