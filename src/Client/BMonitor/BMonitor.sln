@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Monitors.Default",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Service", "BMonitor.Service\BMonitor.Service.csproj", "{2D20637B-6603-434A-B05F-C67C27BCB639}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.CommandHandler", "BMonitor.CommandHandler\BMonitor.CommandHandler.csproj", "{7BB02A6A-9B98-4875-9537-8AAC046FEEC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2D20637B-6603-434A-B05F-C67C27BCB639}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D20637B-6603-434A-B05F-C67C27BCB639}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D20637B-6603-434A-B05F-C67C27BCB639}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BB02A6A-9B98-4875-9537-8AAC046FEEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BB02A6A-9B98-4875-9537-8AAC046FEEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BB02A6A-9B98-4875-9537-8AAC046FEEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BB02A6A-9B98-4875-9537-8AAC046FEEC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

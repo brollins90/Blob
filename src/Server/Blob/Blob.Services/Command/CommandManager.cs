@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+//using Blob.Commands;
 using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
 using log4net;
 
 namespace Blob.Services.Command
@@ -13,9 +15,9 @@ namespace Blob.Services.Command
         private static readonly object SyncLock = new object();
         private readonly List<ICommandServiceCallback> _callbacks;
 
-        //private bool runTestThread = true;
-        //private ManualResetEvent _stopEvent;
-        //private Thread _testThread;
+        private bool runTestThread = true;
+        private ManualResetEvent _stopEvent;
+        private Thread _testThread;
 
         private CommandManager()
         {
@@ -49,11 +51,11 @@ namespace Blob.Services.Command
                 _callbacks.Add(callback);
                 callback.OnConnect("" + deviceId + " connected successfully.");
 
-                //if (runTestThread)
-                //{
-                //    _testThread = new Thread(RunTest);
-                //    _testThread.Start();
-                //}
+                if (runTestThread)
+                {
+                    _testThread = new Thread(RunTest);
+                    _testThread.Start();
+                }
             }
             else
             {
@@ -84,23 +86,32 @@ namespace Blob.Services.Command
             }
         }
 
-        //void timer_tick()
-        //{
-        //    foreach (var x in _callbacks)
-        //    {
-        //        x.OnConnect("Test tick");
-        //    }
-        //}
+        private int blakei = 0;
+        void timer_tick()
+        {
+            _log.Debug("CommandManager tick " + blakei++);
+            foreach (var x in _callbacks)
+            {
+                ICommand cmd;
+                if ((blakei % 3) == 0)
+                    cmd = new Blob.Contracts.Commands.PrintLineCommand { OutputString = "command 1 execution" };
+                else 
+                    cmd = new Blob.Contracts.Commands.PrintLine2Command { OutputString = "the other execution (2)" };
 
-        //void RunTest()
-        //{
-        //    _stopEvent = new ManualResetEvent(false);
+                _log.Debug("executing " + cmd + " on " + x);
+                x.ExecuteCommand(cmd);
+            }
+        }
 
-        //    do
-        //    {
-        //        timer_tick();
-        //    } while (!_stopEvent.WaitOne(1000 * 4));
-        //}
+        void RunTest()
+        {
+            _stopEvent = new ManualResetEvent(false);
+
+            do
+            {
+                timer_tick();
+            } while (!_stopEvent.WaitOne(1000 * 4));
+        }
 
         public void Dispose()
         {

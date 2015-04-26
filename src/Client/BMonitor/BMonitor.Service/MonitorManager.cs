@@ -11,17 +11,53 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
+using Blob.Contracts.Command;
+using Ninject;
 
 namespace BMonitor.Service
 {
     public class MonitorManager
     {
+        /*
+         
+
+
+create
+
+init
+
+start
+
+if ! init
+throw
+
+if need reg
+start reg
+
+else 
+
+while not done
+
+if command
+start command listener
+
+if mon
+start scheduler
+
+
+
+
+*/
+
+
+
         private string User_Username = "customerUser1";
         private string User_password = "password";
         private string Username;
         private string Password;
 
 
+        private readonly IKernel _kernel;
         private readonly ILog _log;
         private readonly ICollection<IMonitor> _monitors;
 
@@ -33,11 +69,13 @@ namespace BMonitor.Service
         private bool _enableStatusMonitoring;
         private bool _isRegistered;
 
+        //private ICommandService commandClient;
         private CommandClient commandClient;
 
-        public MonitorManager()
+        public MonitorManager(IKernel kernel)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _kernel = kernel;
             _monitors = new List<IMonitor>();
             Username = User_Username;
             Password = User_password;
@@ -89,9 +127,11 @@ namespace BMonitor.Service
                 _log.Info("Creating command connection.");
                 //todo: spin up a new thread
 
-                InstanceContext callbackInstance = new InstanceContext(new CommandServiceCallbackHandler());
+                //ICommandService 
+                commandClient = _kernel.Get<CommandClient>();
 
-                commandClient = new CommandClient(callbackInstance, "CommandService");
+
+                //commandClient = new CommandClient(callbackInstance, "CommandService");
                 commandClient.ClientCredentials.UserName.UserName = Username;
                 commandClient.ClientCredentials.UserName.Password = Password;
                 commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;

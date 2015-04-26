@@ -13,9 +13,19 @@ namespace Blob.WcfHost.Infrastructure
     /// </summary>
     public class NinjectServiceModule : NinjectModule
     {
+        private readonly ILog _log;
+
+        public NinjectServiceModule()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        }
+
+        /// <summary>
+        /// Registers the required dependencies with the service
+        /// </summary>
         public override void Load()
         {
-            LogManager.GetLogger(typeof(BlobHostFactory)).Info("Registering Ninject dependencies");
+            _log.Info("Registering Ninject dependencies");
 
             String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
             

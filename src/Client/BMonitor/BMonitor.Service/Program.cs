@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ServiceProcess;
 using System.Threading;
+using log4net;
+using Ninject;
 
 namespace BMonitor.Service
 {
@@ -11,17 +13,19 @@ namespace BMonitor.Service
 
         public static void Main(string[] args)
         {
-            //System.Net.ServicePointManager.ServerCertificateValidationCallback
-            //    = ((sender, cert, chain, errors) => cert.Subject.Contains("DEV.BLOBSERVICE.RRITC.COM"));
-            System.Net.ServicePointManager.ServerCertificateValidationCallback =
-                ((sender, certificate, chain, sslPolicyErrors) => true);
+            ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+            // override the callback to validate the server certificate.  This is a hack for early dev ONLY
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
 
             ProgramSettings settings = ParseCommandLine(args);
 
-            MonitorService winServiceWrapper = new MonitorService();
+            StandardKernel kernel = new StandardKernel(new BMonitorNinjectModule());
+            MonitorService winServiceWrapper = kernel.Get<MonitorService>();
 
             if (settings.RunAsConsole)
             {
+                _log.Info("Starting service...");
                 Console.WriteLine("Starting service...");
                 winServiceWrapper.Start(args);
                 Console.CancelKeyPress += (o, e) =>
@@ -30,15 +34,18 @@ namespace BMonitor.Service
                     CancelKeyStopEvent.Set();
                 };
 
+                _log.Info("Press Ctrl+C or Ctrl+Break to quit");
                 Console.WriteLine("Press Ctrl+C or Ctrl+Break to quit");
                 CancelKeyStopEvent.WaitOne();
 
+                _log.Info("Stopping service...");
                 Console.WriteLine("Stopping service...");
                 winServiceWrapper.Stop();
             }
             else
             {
                 // have the SCM run the service for us
+                _log.Info("Passing MonitorService to the SCM.");
                 ServiceBase.Run(winServiceWrapper);
             }
         }

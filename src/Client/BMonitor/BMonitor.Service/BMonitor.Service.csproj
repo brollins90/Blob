@@ -37,13 +37,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Blob.Contracts">
-      <HintPath>..\..\..\Server\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
+      <HintPath>..\..\..\Server\Blob\Blob.Proxies\bin\Debug\Blob.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Blob.Proxies">
       <HintPath>..\..\..\Server\Blob\Blob.Proxies\bin\Debug\Blob.Proxies.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -53,6 +62,7 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BMonitorNinjectModule.cs" />
     <Compile Include="CommandServiceCallbackHandler.cs" />
     <Compile Include="MonitorService.cs">
       <SubType>Component</SubType>
@@ -77,12 +88,17 @@
       <DependentUpon>MonitorProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToWcfClientExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BMonitor.CommandHandler\BMonitor.CommandHandler.csproj">
+      <Project>{7bb02a6a-9b98-4875-9537-8aac046feec0}</Project>
+      <Name>BMonitor.CommandHandler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BMonitor.Common\BMonitor.Common.csproj">
       <Project>{4c1c9b97-e90d-45bf-be89-48cfe705c211}</Project>
       <Name>BMonitor.Common</Name>
@@ -97,6 +113,7 @@
       <DependentUpon>MonitorProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

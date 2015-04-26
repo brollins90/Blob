@@ -4,11 +4,13 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.ServiceProcess;
 using System.Threading;
+using Ninject;
 
 namespace BMonitor.Service
 {
     public partial class MonitorService : ServiceBase
     {
+        private readonly IKernel _kernel;
         private readonly ILog _log;
         public const string SERVICE_NAME = "BMonitorService";
 
@@ -20,9 +22,10 @@ namespace BMonitor.Service
         private MonitorManager _manager;
         private NameValueCollection _managerConfig;
 
-        public MonitorService()
+        public MonitorService(IKernel kernel, ILog log)
         {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _kernel = kernel;
+            _log = log;
             InitializeComponent();
             ServiceName = SERVICE_NAME;
         }
@@ -38,7 +41,7 @@ namespace BMonitor.Service
             _log.Debug("OnStart called for MonitorService.");
 
             _managerConfig = (NameValueCollection)ConfigurationManager.GetSection("BMonitor");
-            _manager = new MonitorManager();
+            _manager = _kernel.Get<MonitorManager>();
             if (_manager == null || _managerConfig == null)
                 throw new InvalidOperationException("A required component of the MonitorService failed to load.");
 
