@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Linq;
 using System.ServiceModel;
 using Blob.Contracts.Command;
 using Blob.Proxies;
-using BMonitor.CommandHandler;
+using BMonitor.Handlers.Custom;
 using BMonitor.Handlers.Default;
 using BMonitor.Service.Extensions;
 using log4net;
 using Ninject;
 using Ninject.Modules;
 
-namespace BMonitor.Service
+namespace BMonitor.Service.Infrastructure
 {
-    public class BMonitorNinjectModule : NinjectModule
+    public class DependencyInjection : NinjectModule
     {
         private readonly ILog _log;
 
-        public BMonitorNinjectModule()
+        public DependencyInjection()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         }
@@ -29,7 +28,7 @@ namespace BMonitor.Service
             Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));
 
             // Service
-            Bind<MonitorService>().ToSelf();
+            Bind<ServiceHostBase>().ToSelf();
             Bind<MonitorManager>().ToSelf();
 
             // Callback

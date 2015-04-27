@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
+using BMonitor.Service;
+using BMonitor.Service.Infrastructure;
 using log4net;
 using Ninject;
 
-namespace BMonitor.Service
+namespace BMonitor.WindowsService
 {
     public static class Program
     {
@@ -15,12 +18,16 @@ namespace BMonitor.Service
         {
             ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-            // override the callback to validate the server certificate.  This is a hack for early dev ONLY
-            System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
-
             ProgramSettings settings = ParseCommandLine(args);
 
-            StandardKernel kernel = new StandardKernel(new BMonitorNinjectModule());
+            IKernel kernel = new StandardKernel();
+            //List<string> modules = new List<string>
+            //                       {
+            //                            typeof(Program).AssemblyQualifiedName,
+            //                            typeof(MonitorManager).AssemblyQualifiedName
+            //                        };
+            kernel.Load(new DependencyInjection());
+
             MonitorService winServiceWrapper = kernel.Get<MonitorService>();
 
             if (settings.RunAsConsole)

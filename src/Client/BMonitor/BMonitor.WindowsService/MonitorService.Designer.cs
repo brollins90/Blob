@@ -1,4 +1,4 @@
-﻿namespace BMonitor.Service
+﻿namespace BMonitor.WindowsService
 {
     partial class MonitorService
     {

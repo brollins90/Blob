@@ -1,12 +1,13 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.ServiceProcess;
 using System.Threading;
+using BMonitor.Service;
+using log4net;
 using Ninject;
 
-namespace BMonitor.Service
+namespace BMonitor.WindowsService
 {
     public partial class MonitorService : ServiceBase
     {

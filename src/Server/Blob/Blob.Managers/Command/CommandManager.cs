@@ -118,14 +118,25 @@ namespace Blob.Managers.Command
             ICommand cmd;
             if ((blakei % 3) == 0)
                 cmd = new PrintLineCommand { OutputString = "command 1 execution" };
+            else if (((blakei + 1) % 3) == 0)
+                cmd = new CmdExecuteCommand { CommandString = @"dir >> c:\_\fromACommand.txt" };
             else
                 cmd = new PrintLine2Command { DifferentOutputString = "the other execution (2)" };
 
+            //if (blakei == 0)
+            //    cmd = new PrintLine2Command { DifferentOutputString = "the other execution (2)" };
+            //else if (blakei == 1)
+            //    cmd = new CmdExecuteCommand { CommandString = @"dir >> c:\_\fromACommand.txt" };
+            //else 
+            //    cmd = new PrintLineCommand {OutputString = "command 1 execution"};
+            //blakei++ ;
+            //blakei %= 2;
+            // hard code test device id
             Guid x = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a");
             _log.Debug("queueing " + cmd + " on " + x);
             QueueCommand(x, cmd);
-
         }
+
         void timer_tick()
         {
             _log.Debug("CommandManager tick " + blakei++);

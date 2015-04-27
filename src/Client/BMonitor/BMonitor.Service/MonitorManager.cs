@@ -18,7 +18,7 @@ namespace BMonitor.Service
     {
         /*
          
-
+        http://adrianhesketh.com/2015/03/17/wcf-client-proxy-creation-performance-with-ninject/
 
 create
 
@@ -72,6 +72,12 @@ start scheduler
 
         public MonitorManager(IKernel kernel)
         {
+
+            // override the callback to validate the server certificate.  This is a hack for early dev ONLY
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
+
+
+
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _kernel = kernel;
             _monitors = new List<IMonitor>();
