@@ -3,6 +3,6 @@ namespace BMonitor.Common.Interfaces
 {
     public interface IMonitor
     {
-        MonitorResult Execute(bool collectPerfData = false);
+        ResultData Execute(bool collectPerfData = false);
     }
 }

@@ -45,13 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertLevel.cs" />
     <Compile Include="Extensions\Prettify.cs" />
-    <Compile Include="Interfaces\AlertLevel.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />
-    <Compile Include="Interfaces\MonitorPerf.cs" />
-    <Compile Include="Interfaces\MonitorResult.cs" />
-    <Compile Include="Interfaces\UnitOfMeasure.cs" />
+    <Compile Include="PerformanceData.cs" />
+    <Compile Include="ResultData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Range.cs" />
+    <Compile Include="Threshold.cs" />
+    <Compile Include="UnitOfMeasure.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

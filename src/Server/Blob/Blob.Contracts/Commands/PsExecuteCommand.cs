@@ -3,9 +3,9 @@ using Blob.Contracts.Command;
 
 namespace Blob.Contracts.Commands
 {
-    public class CmdExecuteCommand : ICommand
+    public class PsExecuteCommand : ICommand
     {
-        public string CommandString { get; set; }
+        public string PsScript { get; set; }
         private ICollection<string> Arguments { get; set; }
     }
 }

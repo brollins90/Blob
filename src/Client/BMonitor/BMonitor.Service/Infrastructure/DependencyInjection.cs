@@ -3,7 +3,7 @@ using System.ServiceModel;
 using Blob.Contracts.Command;
 using Blob.Proxies;
 using BMonitor.Handlers.Custom;
-using BMonitor.Handlers.Default;
+using BMonitor.Handlers;
 using BMonitor.Service.Extensions;
 using log4net;
 using Ninject;

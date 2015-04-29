@@ -90,13 +90,13 @@
       <Project>{861f4e97-e039-4eee-8b99-df345e7ad902}</Project>
       <Name>BMonitor.Handlers.Custom</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BMonitor.Handlers.Default\BMonitor.Handlers.Default.csproj">
-      <Project>{06021f46-fb77-4814-a077-e3e2fdb0e04c}</Project>
-      <Name>BMonitor.Handlers.Default</Name>
+    <ProjectReference Include="..\BMonitor.Handlers\BMonitor.Handlers.csproj">
+      <Project>{639a1b6c-b4f4-4acb-9562-a48bbee8aa74}</Project>
+      <Name>BMonitor.Handlers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BMonitor.Monitors.Default\BMonitor.Monitors.Default.csproj">
-      <Project>{2b4db739-5c6e-4e6e-bd95-3dc9d1653b32}</Project>
-      <Name>BMonitor.Monitors.Default</Name>
+    <ProjectReference Include="..\BMonitor.Monitors\BMonitor.Monitors.csproj">
+      <Project>{a7811934-d990-4f77-9013-e66fe9513144}</Project>
+      <Name>BMonitor.Monitors</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

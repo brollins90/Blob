@@ -7,8 +7,9 @@ using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Proxies;
+using BMonitor.Common;
 using BMonitor.Common.Interfaces;
-using BMonitor.Monitors.Default;
+using BMonitor.Monitors;
 using log4net;
 using Ninject;
 
@@ -155,12 +156,18 @@ start scheduler
                 return false;
             }
 
-            _monitors.Add(new FreeDiskSpace(
-                driveLetter: "C",
-                driveDescription: "OS",
-                unitOfMeasure: UnitOfMeasure.PERCENT,
-                warningLevel: 20,
-                criticalLevel: 10));
+            _monitors.Add(new FreeDiskSpace(driveLetter: "C", driveDescription: "OS"));
+                //,
+                //unitOfMeasure: UoM.Percent,
+                //warningLevel: 20,
+                //criticalLevel: 10)
+                //);
+            //_monitors.Add(new TestMon(
+            //    driveLetter: "C",
+            //    driveDescription: "OS",
+            //    unitOfMeasure: UnitOfMeasure.PERCENT,
+            //    warningLevel: 20,
+            //    criticalLevel: 10));
             _log.Info("Loaded FreeDiskSpace monitor");
             return true;
         }
@@ -179,7 +186,7 @@ start scheduler
                 _log.Debug(string.Format("Executing {0}", monitor.GetType()));
                 
                 // where am i going to get all the config info?
-                MonitorResult result = monitor.Execute(collectPerfData: true);
+                ResultData result = monitor.Execute(true);
                 StatusData statusData = new StatusData()
                              {
                                  AlertLevel = (int) result.AlertLevel,
@@ -190,30 +197,36 @@ start scheduler
                                  TimeGenerated = result.TimeGenerated,
                                  TimeSent = DateTime.Now
                              };
-                StatusPerformanceData spd = new StatusPerformanceData
-                {
-                    DeviceId = _deviceId,
-                    MonitorDescription = result.MonitorDescription,
-                    MonitorName = result.MonitorName,
-                    TimeGenerated = result.TimeGenerated,
-                    TimeSent = DateTime.Now
-                };
 
-                foreach (MonitorPerf perf in result.Perf)
+                StatusPerformanceData spd = null;
+                if (_enablePerformanceMonitoring && result.Perf.Any())
                 {
-                    spd.AddPerformanceDataValue(new PerformanceDataValue
+                    spd = new StatusPerformanceData
+                                                {
+                                                    DeviceId = _deviceId,
+                                                    MonitorDescription = result.MonitorDescription,
+                                                    MonitorName = result.MonitorName,
+                                                    TimeGenerated = result.TimeGenerated,
+                                                    TimeSent = DateTime.Now
+                                                };
+
+                    foreach (PerformanceData perf in result.Perf)
                     {
-                        Critical = perf.Critical,
-                        Label = perf.Label,
-                        Max = perf.Max,
-                        Min = perf.Min,
-                        UnitOfMeasure = perf.UnitOfMeasure.ToString(),
-                        Value = perf.Value,
-                        Warning = perf.Warning
-                    });
-                }
+                        spd.AddPerformanceDataValue(new PerformanceDataValue
+                                                    {
+                                                        Critical = perf.Critical,
+                                                        Label = perf.Label,
+                                                        Max = perf.Max,
+                                                        Min = perf.Min,
+                                                        UnitOfMeasure = perf.UnitOfMeasure,
+                                                        Value = perf.Value,
+                                                        Warning = perf.Warning
+                                                    });
+                    }
 
-                _log.Debug(statusData.CurrentValue + "|" + result.Perf.First().ToString());
+                    _log.Debug(statusData.CurrentValue + "|" + result.Perf.FirstOrDefault().ToString());
+                }
+                _log.Debug(statusData);
 
                 _log.Info("Creating new StatusClient");
                 StatusClient statusClient = new StatusClient("StatusService");
@@ -221,10 +234,18 @@ start scheduler
                 statusClient.ClientCredentials.UserName.Password = Password;
                 statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
-                _log.Debug("Sending status and then performance message.");
+
                 // send
-                Task.Run(() => statusClient.SendStatusToServer(statusData));
-                //Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
+                if (_enableStatusMonitoring)
+                {
+                    _log.Debug("Sending status message.");
+                    Task.Run(() => statusClient.SendStatusToServer(statusData));
+                }
+                if (_enablePerformanceMonitoring && spd != null)
+                {
+                    _log.Debug("Sending performance message.");
+                    Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
+                }
             }
         }
 
