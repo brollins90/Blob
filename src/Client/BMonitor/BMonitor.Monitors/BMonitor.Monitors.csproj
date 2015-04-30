@@ -35,7 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseMonitor.cs" />
+    <Compile Include="PerfMonMonitor.cs" />
     <Compile Include="FreeDiskSpace - Copy.cs" />
+    <Compile Include="PerformanceCounterManager.cs" />
     <Compile Include="TestMon.cs" />
     <Compile Include="FreeDiskSpace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

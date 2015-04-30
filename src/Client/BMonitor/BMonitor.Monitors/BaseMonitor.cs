@@ -1,9 +1,10 @@
-﻿using BMonitor.Common;
+﻿using System;
+using BMonitor.Common;
 using BMonitor.Common.Interfaces;
 
 namespace BMonitor.Monitors
 {
-    public abstract class BaseMonitor : IMonitor
+    public abstract class BaseMonitor : IMonitor, IDisposable
     {
         protected abstract string MonitorName { get; }
         protected abstract string MonitorDescription { get; }
@@ -38,5 +39,9 @@ namespace BMonitor.Monitors
         }
 
         public abstract ResultData Execute(bool collectPerfData = false);
+
+        public void Dispose()
+        {
+        }
     }
 }

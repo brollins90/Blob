@@ -161,14 +161,14 @@ start scheduler
                 //unitOfMeasure: UoM.Percent,
                 //warningLevel: 20,
                 //criticalLevel: 10)
-                //);
-            //_monitors.Add(new TestMon(
-            //    driveLetter: "C",
-            //    driveDescription: "OS",
-            //    unitOfMeasure: UnitOfMeasure.PERCENT,
-            //    warningLevel: 20,
-            //    criticalLevel: 10));
+            //);
             _log.Info("Loaded FreeDiskSpace monitor");
+
+            _monitors.Add(new PerfMonMonitor("Memory", "Available Bytes"));
+            _log.Info("Loaded Memory monitor");
+
+            _monitors.Add(new PerfMonMonitor("Processor", "% Processor Time", "_Total"));
+            _log.Info("Loaded Processor monitor");
             return true;
         }
 
