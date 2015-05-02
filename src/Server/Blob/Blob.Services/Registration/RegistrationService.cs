@@ -13,12 +13,12 @@ namespace Blob.Services.Registration
     public class RegistrationService : IRegistrationService
     {
         private readonly ILog _log;
-        private readonly IBlobManager _blobManager;
+        private readonly IBlobCommandManager _blobCommandManager;
 
-        public RegistrationService(IBlobManager blobManager, ILog log)
+        public RegistrationService(IBlobCommandManager blobCommandManager, ILog log)
         {
             _log = log;
-            _blobManager = blobManager;
+            _blobCommandManager = blobCommandManager;
         }
 
         [OperationBehavior]
@@ -26,7 +26,7 @@ namespace Blob.Services.Registration
         public async Task<RegistrationInformation> Register(RegistrationMessage message)
         {
             _log.Debug("RegistrationService received registration message: " + message);
-            return await _blobManager.RegisterDeviceAsync(message).ConfigureAwait(false);
+            return await _blobCommandManager.RegisterDeviceAsync(message).ConfigureAwait(false);
         }
     }
 }

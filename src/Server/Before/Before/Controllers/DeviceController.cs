@@ -11,23 +11,18 @@ using log4net;
 namespace Before.Controllers
 {
     [Authorize]
-    [RoutePrefix("device")]
-    [Route("{action=index}")]
-    public class DeviceController : Controller
+    //[RoutePrefix("device")]
+    //[Route("{action=index}")]
+    public class DeviceController : BaseController
     {
-        private ILog _log;
-        private readonly IBlobManager _blobManager;
+        public DeviceController(IBlobCommandManager manager) : base(manager) { }
 
-        public DeviceController(BlobManager manager, ILog log)
-        {
-            _blobManager = manager;
-            _log = log;
-        }
-
-        [Route("index")]
+        //
+        // GET: device/index/{customerId}
+        //[Route("index")]
         public async Task<ActionResult> Index(Guid? selectedCustomer)
         {
-            IList<Customer> customers = await _blobManager.GetAllCustomersAsync();
+            IList<Customer> customers = await BlobCommandManager.GetAllCustomersAsync();
             ViewBag.SelectedCustomer = new SelectList(customers, "Id", "Name", selectedCustomer);
             Guid customerId = selectedCustomer.GetValueOrDefault();
 
@@ -36,16 +31,16 @@ namespace Before.Controllers
             IList<Device> devices;
             if (customerId.Equals(Guid.Parse("00000000-0000-0000-0000-000000000000"))) //Guid.Parse("79720728-171C-48A4-A866-5F905C8FDB9F")
             {
-                devices = await _blobManager.GetAllDevicesAsync();
+                devices = await BlobCommandManager.GetAllDevicesAsync();
             }
             else
             {
-                devices = await _blobManager.FindDevicesForCustomerAsync(customerId);
+                devices = await BlobCommandManager.FindDevicesForCustomerAsync(customerId);
             }
             return View(devices.ToList());
         }
 
-        [Route("details")]
+        //[Route("details")]
         public async Task<ActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -53,7 +48,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            Device device = await BlobCommandManager.GetDeviceByIdAsync(id.Value);
             if (device == null)
             {
                 return HttpNotFound();
@@ -63,7 +58,7 @@ namespace Before.Controllers
             return View(device);
         }
 
-        [Route("edit")]
+        //[Route("edit")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -71,7 +66,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            Device device = await BlobCommandManager.GetDeviceByIdAsync(id.Value);
             if (device == null)
             {
                 return HttpNotFound();
@@ -82,7 +77,7 @@ namespace Before.Controllers
         }
 
         [HttpPost]
-        [Route("edit")]
+        //[Route("edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, FormCollection collection)
         {
@@ -91,7 +86,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            Device device = await BlobCommandManager.GetDeviceByIdAsync(id.Value);
             if (device == null)
             {
                 return HttpNotFound();
@@ -105,7 +100,7 @@ namespace Before.Controllers
                     {
                         device.DeviceName = collection["deviceName"];
 
-                        await _blobManager.UpdateDeviceAsync(device);
+                        await BlobCommandManager.UpdateDeviceAsync(device);
 
                         return RedirectToAction("Index");
                     }
@@ -120,7 +115,7 @@ namespace Before.Controllers
             return View(device);
         }
 
-        [Route("delete")]
+        //[Route("delete")]
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -128,7 +123,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            Device device = await BlobCommandManager.GetDeviceByIdAsync(id.Value);
             if (device == null)
             {
                 return HttpNotFound();
@@ -137,15 +132,16 @@ namespace Before.Controllers
         }
 
         [HttpPost]
-        [Route("delete")]
+        //[Route("delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            await _blobManager.RemoveDeviceByIdAsync(id);
+            await BlobCommandManager.RemoveDeviceByIdAsync(id);
 
             return RedirectToAction("Index");
         }
 
+        #region Helpers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -157,8 +153,9 @@ namespace Before.Controllers
 
         private async Task PopulateDeviceTypeDropDownList(object selectedDeviceType = null)
         {
-            var deviceTypes = await _blobManager.GetAllDeviceTypesAsync();
+            var deviceTypes = await BlobCommandManager.GetAllDeviceTypesAsync();
             ViewBag.DeviceType = new SelectList(deviceTypes, "DeviceType", "Value", selectedDeviceType);
         }
+        #endregion
     }
 }

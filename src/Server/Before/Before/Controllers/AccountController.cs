@@ -1,25 +1,19 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Before.Models;
+using Before.ViewModels;
 using Blob.Contracts.Security;
-using Blob.Proxies;
 using log4net;
 
 namespace Before.Controllers
 {
     [Authorize]
-    [RoutePrefix("account")]
-    [Route("{action=index}")]
+    //[RoutePrefix("account")]
+    //[Route("{action=index}")]
     public class AccountController : Controller
     {
         private ILog _log;
@@ -31,13 +25,14 @@ namespace Before.Controllers
             _log = log;
         }
 
-        public BeforeUserManager UserManager { get; set; }
+        protected BeforeUserManager UserManager { get; set; }
 
-        public BeforeSignInManager SignInManager { get; set; }
+        protected BeforeSignInManager SignInManager { get; set; }
 
         //
         // GET: /Account/Login
         [AllowAnonymous]
+        //[Route("login")]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -46,8 +41,9 @@ namespace Before.Controllers
 
         //
         // POST: /Account/Login
-        [HttpPost]
         [AllowAnonymous]
+        [HttpPost]
+        //[Route("login")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
@@ -63,19 +59,89 @@ namespace Before.Controllers
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                //case SignInStatus.RequiresVerification:
-                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
-            if (!ModelState.IsValid)
+        }
+
+        //
+        // GET: /Account/Register
+        [AllowAnonymous]
+        //[Route("register")]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+        [AllowAnonymous]
+        [HttpPost]
+        //[Route("register")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-                return View(model);
+                BeforeUser user = new BeforeUser { UserName = model.UserName };
+                IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user.ToDto(), isPersistent: false, rememberBrowser: false);
+
+                    //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                    //Send an email with this link
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
             }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
+        // GET: /Account/CreateUser
+        //[Route("createuser")]
+        public ActionResult CreateUser()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/CreateUser
+        [HttpPost]
+        //[Route("createuser")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateUser(CreateUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                BeforeUser user = new BeforeUser { UserName = model.UserName };
+                IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), string.Empty);
+                //if (result.Succeeded)
+                //{
+                //    await SignInManager.SignInAsync(user.ToDto(), isPersistent: false, rememberBrowser: false);
+
+                //    //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                //    //Send an email with this link
+                //    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                //    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                //    return RedirectToAction("Index", "Home");
+                //}
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         ////
@@ -122,44 +188,6 @@ namespace Before.Controllers
         //}
 
         //
-        // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                BeforeUser user = new BeforeUser { UserName = model.UserName };
-                IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user.ToDto(), isPersistent:false, rememberBrowser:false);
-                    
-                     //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                     //Send an email with this link
-                     //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                     //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        //
         // GET: /Account/ConfirmEmail
         //[AllowAnonymous]
         //public async Task<ActionResult> ConfirmEmail(string userId, string code)
@@ -172,13 +200,13 @@ namespace Before.Controllers
         //    return View(result.Succeeded ? "ConfirmEmail" : "Error");
         //}
 
-        //
-        // GET: /Account/ForgotPassword
-        [AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
+        ////
+        //// GET: /Account/ForgotPassword
+        //[AllowAnonymous]
+        //public ActionResult ForgotPassword()
+        //{
+        //    return View();
+        //}
 
         //
         // POST: /Account/ForgotPassword
@@ -210,19 +238,19 @@ namespace Before.Controllers
 
         //
         // GET: /Account/ForgotPasswordConfirmation
-        [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult ForgotPasswordConfirmation()
+        //{
+        //    return View();
+        //}
 
         //
         // GET: /Account/ResetPassword
-        [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult ResetPassword(string code)
+        //{
+        //    return code == null ? View("Error") : View();
+        //}
 
         //
         // POST: /Account/ResetPassword
@@ -252,22 +280,22 @@ namespace Before.Controllers
 
         //
         // GET: /Account/ResetPasswordConfirmation
-        [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult ResetPasswordConfirmation()
+        //{
+        //    return View();
+        //}
 
         //
         // POST: /Account/ExternalLogin
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-        }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult ExternalLogin(string provider, string returnUrl)
+        //{
+        //    // Request a redirect to the external login provider
+        //    return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+        //}
 
         //
         // GET: /Account/SendCode
@@ -384,11 +412,11 @@ namespace Before.Controllers
 
         //
         // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult ExternalLoginFailure()
+        //{
+        //    return View();
+        //}
 
         protected override void Dispose(bool disposing)
         {

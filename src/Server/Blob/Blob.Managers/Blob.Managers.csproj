@@ -43,9 +43,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blob\BlobQueryManager.cs" />
     <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Blob\BlobManager.cs" />
+    <Compile Include="Blob\BlobCommandManager.cs" />
     <Compile Include="Status\StatusManager.cs" />
     <Compile Include="Extensions\Parsing.cs" />
   </ItemGroup>

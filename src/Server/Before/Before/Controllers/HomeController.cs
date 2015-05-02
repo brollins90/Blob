@@ -3,21 +3,21 @@
 namespace Before.Controllers
 {
     [Authorize]
-    [RoutePrefix("home")]
-    [Route("{action=index}")]
+    //[RoutePrefix("home")]
+    //[Route("{action=index}")]
     public class HomeController : Controller
     {
         [AllowAnonymous]
-        [Route]
-        [Route("~/")]
-        [Route("index")]
+        //[Route]
+        //[Route("~/")]
+        //[Route("index")]
         public ActionResult Index()
         {
             return View();
         }
 
         [AllowAnonymous]
-        [Route("about")]
+        //[Route("about")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -26,7 +26,7 @@ namespace Before.Controllers
         }
 
         [AllowAnonymous]
-        [Route("contact")]
+        //[Route("contact")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

@@ -10,9 +10,11 @@ using log4net;
 
 namespace Blob.Managers.Blob
 {
-    public interface IBlobManager
+    public interface IBlobCommandManager
     {
         Task<IList<Customer>> GetAllCustomersAsync();
+        Task<Customer> GetCustomerByIdAsync(Guid customerId);
+        Task UpdateCustomerAsync(Customer customer);
 
         Task RemoveDeviceByIdAsync(Guid deviceId);
         Task<IList<Device>> GetAllDevicesAsync();
@@ -23,13 +25,15 @@ namespace Blob.Managers.Blob
         Task<IList<DeviceType>> GetAllDeviceTypesAsync();
 
         Task<RegistrationInformation> RegisterDeviceAsync(RegistrationMessage message);
+
+        Task<IList<User>> FindUsersForCustomerAsync(Guid customerId);
     }
 
-    public class BlobManager : IBlobManager
+    public class BlobCommandManager : IBlobCommandManager
     {
         private readonly ILog _log;
 
-        public BlobManager(BlobDbContext context, ILog log)
+        public BlobCommandManager(BlobDbContext context, ILog log)
         {
             _log = log;
             _log.Debug("Constructing BlobManager");
@@ -45,6 +49,20 @@ namespace Blob.Managers.Blob
                 .Include(x => x.Devices)
                 .Include(x => x.Users)
                 .ToListAsync().ConfigureAwait(false);
+        }
+
+        public async Task<Customer> GetCustomerByIdAsync(Guid customerId)
+        {
+            return await Context.Customers
+                .Include(x => x.Devices)
+                .Include(x => x.Users)
+                .SingleAsync(x => x.Id.Equals(customerId)).ConfigureAwait(false);
+        }
+
+        public async Task UpdateCustomerAsync(Customer customer)
+        {
+            Context.Entry(customer).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         // Device
@@ -136,6 +154,13 @@ namespace Blob.Managers.Blob
                                                      TimeSent = DateTime.Now
                                                  };
             return returnInfo;
+        }
+
+        public async Task<IList<User>> FindUsersForCustomerAsync(Guid customerId)
+        {
+            return await Context.Users
+                .Include(x => x.Customer)
+                .Where(x => x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);   
         }
     }
 }

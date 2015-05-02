@@ -59,6 +59,11 @@
     <Compile Include="Status\IStatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\StatusData.cs" />
+    <Compile Include="ViewModels\CustomerSummaryViewModel.cs" />
+    <Compile Include="ViewModels\DeviceQueryModel.cs" />
+    <Compile Include="ViewModels\PerformanceRecordQueryModel.cs" />
+    <Compile Include="ViewModels\StatusRecordQueryModel.cs" />
+    <Compile Include="ViewModels\UserQueryModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
