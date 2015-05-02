@@ -201,7 +201,6 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Infrastructure\Extensions\BlobSecurityUtils.cs" />
     <Compile Include="Infrastructure\Extensions\EnumUtils.cs" />
     <Compile Include="Infrastructure\Extensions\MvcUtils.cs" />
@@ -255,26 +254,17 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Device\Index.cshtml" />
-    <Content Include="Views\Device\Delete.cshtml" />
-    <Content Include="Views\Device\Details.cshtml" />
-    <Content Include="Views\Device\Edit.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Device.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\AlertStatusIcon.cshtml" />
-    <Content Include="Views\Shared\_Device.cshtml" />
     <Content Include="Views\Customer\Details.cshtml" />
     <Content Include="Views\Customer\Edit.cshtml" />
-    <Content Include="Views\Customer\_UserList.cshtml" />
-    <Content Include="Views\Customer\_DeviceList.cshtml" />
+    <Content Include="Views\Shared\_UserList.cshtml" />
+    <Content Include="Views\Shared\_DeviceList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

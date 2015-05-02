@@ -1,4 +1,5 @@
 ﻿@using Before.Infrastructure.Extensions
+@using Before.ViewModels
 @model IEnumerable<Before.ViewModels.DeviceViewModel>
 
 <div class="panel panel-default">
@@ -28,7 +29,27 @@
 
         @foreach (var item in Model)
         {
-            <tr>
+            string statusCssClass = "status-unknown";
+            switch (item.CurrentStatus)
+            {
+                case StatusValue.Critical:
+                    statusCssClass = "status-critical";
+                    break;
+                case StatusValue.Information:
+                    statusCssClass = "status-information";
+                    break;
+                case StatusValue.Ok:
+                    statusCssClass = "status-ok";
+                    break;
+                case StatusValue.Unknown:
+                    statusCssClass = "status-unknown";
+                    break;
+                case StatusValue.Warning:
+                    statusCssClass = "status-warning";
+                    break;
+            }
+            
+            <tr class="@statusCssClass">
                 <td>
                     @Html.DisplayFor(modelItem => item.CurrentStatus)
                 </td>

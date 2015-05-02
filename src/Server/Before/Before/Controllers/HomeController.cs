@@ -3,21 +3,17 @@
 namespace Before.Controllers
 {
     [Authorize]
-    //[RoutePrefix("home")]
-    //[Route("{action=index}")]
     public class HomeController : Controller
     {
+        // GET: /home/index/
         [AllowAnonymous]
-        //[Route]
-        //[Route("~/")]
-        //[Route("index")]
         public ActionResult Index()
         {
             return View();
         }
 
+        // GET: /home/about/
         [AllowAnonymous]
-        //[Route("about")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -25,8 +21,8 @@ namespace Before.Controllers
             return View();
         }
 
+        // GET: /home/contact/
         [AllowAnonymous]
-        //[Route("contact")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

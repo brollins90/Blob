@@ -6,41 +6,36 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blob.Core.Domain;
 using Blob.Managers.Blob;
-using log4net;
 
 namespace Before.Controllers
 {
     [Authorize]
-    //[RoutePrefix("device")]
-    //[Route("{action=index}")]
     public class DeviceController : BaseController
     {
         public DeviceController(IBlobCommandManager manager) : base(manager) { }
 
-        //
-        // GET: device/index/{customerId}
-        //[Route("index")]
-        public async Task<ActionResult> Index(Guid? selectedCustomer)
-        {
-            IList<Customer> customers = await BlobCommandManager.GetAllCustomersAsync();
-            ViewBag.SelectedCustomer = new SelectList(customers, "Id", "Name", selectedCustomer);
-            Guid customerId = selectedCustomer.GetValueOrDefault();
+        //// GET: /device/index/{customerId}
+        //public async Task<ActionResult> Index(Guid? selectedCustomer)
+        //{
+        //    IList<Customer> customers = await BlobCommandManager.GetAllCustomersAsync();
+        //    ViewBag.SelectedCustomer = new SelectList(customers, "Id", "Name", selectedCustomer);
+        //    Guid customerId = selectedCustomer.GetValueOrDefault();
 
-            //Guid customerId = Guid.Parse(User.Identity.GetCustomerId());
+        //    //Guid customerId = Guid.Parse(User.Identity.GetCustomerId());
 
-            IList<Device> devices;
-            if (customerId.Equals(Guid.Parse("00000000-0000-0000-0000-000000000000"))) //Guid.Parse("79720728-171C-48A4-A866-5F905C8FDB9F")
-            {
-                devices = await BlobCommandManager.GetAllDevicesAsync();
-            }
-            else
-            {
-                devices = await BlobCommandManager.FindDevicesForCustomerAsync(customerId);
-            }
-            return View(devices.ToList());
-        }
+        //    IList<Device> devices;
+        //    if (customerId.Equals(Guid.Parse("00000000-0000-0000-0000-000000000000"))) //Guid.Parse("79720728-171C-48A4-A866-5F905C8FDB9F")
+        //    {
+        //        devices = await BlobCommandManager.GetAllDevicesAsync();
+        //    }
+        //    else
+        //    {
+        //        devices = await BlobCommandManager.FindDevicesForCustomerAsync(customerId);
+        //    }
+        //    return View(devices.ToList());
+        //}
 
-        //[Route("details")]
+        // GET: /device/details/{id}
         public async Task<ActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -58,7 +53,7 @@ namespace Before.Controllers
             return View(device);
         }
 
-        //[Route("edit")]
+        // GET: /device/edit/{id}
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -76,8 +71,8 @@ namespace Before.Controllers
             return View(device);
         }
 
+        // POST: /device/edit/{id}
         [HttpPost]
-        //[Route("edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, FormCollection collection)
         {
@@ -115,7 +110,7 @@ namespace Before.Controllers
             return View(device);
         }
 
-        //[Route("delete")]
+        // GET: /device/delete/{id}
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -131,8 +126,8 @@ namespace Before.Controllers
             return View(device);
         }
 
+        // POST: /device/deleteconfirmed/{id}
         [HttpPost]
-        //[Route("delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {

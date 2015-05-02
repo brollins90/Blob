@@ -12,38 +12,28 @@ using log4net;
 namespace Before.Controllers
 {
     [Authorize]
-    //[RoutePrefix("account")]
-    //[Route("{action=index}")]
     public class AccountController : Controller
     {
-        private ILog _log;
-
-        public AccountController(BeforeUserManager userManager, BeforeSignInManager signInManager, ILog log)
+        public AccountController(BeforeUserManager userManager, BeforeSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            _log = log;
         }
 
         protected BeforeUserManager UserManager { get; set; }
-
         protected BeforeSignInManager SignInManager { get; set; }
 
-        //
-        // GET: /Account/Login
+        // GET: /account/login
         [AllowAnonymous]
-        //[Route("login")]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
-        //
-        // POST: /Account/Login
+        // POST: /account/login
         [AllowAnonymous]
         [HttpPost]
-        //[Route("login")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
@@ -66,20 +56,25 @@ namespace Before.Controllers
             }
         }
 
-        //
-        // GET: /Account/Register
+        // POST: /account/logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOut()
+        {
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: /account/register
         [AllowAnonymous]
-        //[Route("register")]
         public ActionResult Register()
         {
             return View();
         }
 
-        //
-        // POST: /Account/Register
+        // POST: /account/register
         [AllowAnonymous]
         [HttpPost]
-        //[Route("register")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -106,18 +101,14 @@ namespace Before.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/CreateUser
-        //[Route("createuser")]
+        // GET: /account/createuser
         public ActionResult CreateUser()
         {
             return View();
         }
 
-        //
-        // POST: /Account/CreateUser
+        // POST: /account/createuser
         [HttpPost]
-        //[Route("createuser")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateUser(CreateUserViewModel model)
         {
@@ -399,16 +390,6 @@ namespace Before.Controllers
         //    ViewBag.ReturnUrl = returnUrl;
         //    return View(model);
         //}
-
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
-        {
-            AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
-        }
 
         //
         // GET: /Account/ExternalLoginFailure
