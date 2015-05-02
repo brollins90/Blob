@@ -4,7 +4,7 @@
     ViewBag.Title = "Devices";
 }
 
-<h2>Courses</h2>
+<h2>Devices</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,7 +13,7 @@
 @using (Html.BeginForm())
 {
     <p>
-        Select Department: @Html.DropDownList("SelectedCustomer", "All")
+        Select Customer: @Html.DropDownList("SelectedCustomer", "All")
         <input type="submit" value="Filter" />
     </p>
 }

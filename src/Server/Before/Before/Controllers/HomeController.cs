@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Before.Controllers
 {
+    [Authorize]
+    [RoutePrefix("home")]
+    [Route("{action=index}")]
     public class HomeController : Controller
     {
+        [AllowAnonymous]
+        [Route]
+        [Route("~/")]
+        [Route("index")]
         public ActionResult Index()
         {
             return View();
         }
 
+        [AllowAnonymous]
+        [Route("about")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -20,6 +25,8 @@ namespace Before.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        [Route("contact")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

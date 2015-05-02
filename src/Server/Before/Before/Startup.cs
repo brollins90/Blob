@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 using Microsoft.Owin;
 using Owin;
 
@@ -12,7 +15,12 @@ namespace Before
         public void Configuration(IAppBuilder app)
         {
             SSLValidator.OverrideValidation();
-            ConfigureAuth(app);
+
+            RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterRoutes(RouteTable.Routes);
+            RegisterBundles(BundleTable.Bundles);
+            var container = RegisterSimpleInjector(app);
+            ConfigureAuth(app, container);
         }
     }
 

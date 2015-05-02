@@ -30,6 +30,7 @@ namespace Blob.Data
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Device> Devices { get; set; }
+        public DbSet<DeviceType> DeviceTypes { get; set; }
         public DbSet<Status> DeviceStatuses { get; set; }
         public DbSet<StatusPerf> DevicePerfDatas { get; set; }
         public DbSet<KeyPair> Keys { get; set; }

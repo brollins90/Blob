@@ -5,55 +5,36 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Before.App_Start;
+using Before.Infrastructure.Extensions;
+using Before.Infrastructure.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Before.Models;
 using Blob.Contracts.Security;
 using Blob.Proxies;
+using log4net;
 
 namespace Before.Controllers
 {
     [Authorize]
+    [RoutePrefix("account")]
+    [Route("{action=index}")]
     public class AccountController : Controller
     {
-        public AccountController()
-        {
-        }
+        private ILog _log;
 
-        public AccountController(ApplicationUserManager userManager)
+        public AccountController(BeforeUserManager userManager, BeforeSignInManager signInManager, ILog log)
         {
             UserManager = userManager;
+            SignInManager = signInManager;
+            _log = log;
         }
-        
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().Get<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-        private ApplicationUserManager _userManager;
 
-        public BeforeSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<BeforeSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
-        }
-        private BeforeSignInManager _signInManager;
+        public BeforeUserManager UserManager { get; set; }
 
-        
+        public BeforeSignInManager SignInManager { get; set; }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -75,23 +56,26 @@ namespace Before.Controllers
                 return View(model);
             }
 
-            //// This doesn't count login failures towards account lockout
-            //// To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.UserNameOrEmail, model.Password, model.RememberMe, shouldLockout: false);
-            //switch (SvcConvert.SignInStatusFromDto(result))
-            //{
-            //    case SignInStatus.Success:
-            //        return RedirectToLocal(returnUrl);
-            //    case SignInStatus.LockedOut:
-            //        return View("Lockout");
-            //    case SignInStatus.RequiresVerification:
-            //        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-            //    case SignInStatus.Failure:
-            //    default:
-            //        ModelState.AddModelError("", "Invalid login attempt.");
-            //        return View(model);
-            //}
-            return RedirectToLocal(returnUrl);
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            SignInStatusDto resultDto = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            switch (resultDto.ToResult())
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                //case SignInStatus.RequiresVerification:
+                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
         }
 
         ////
@@ -154,7 +138,7 @@ namespace Before.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                BeforeUser user = new BeforeUser { UserName = model.UserName };
                 IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), model.Password);
                 if (result.Succeeded)
                 {
@@ -410,10 +394,10 @@ namespace Before.Controllers
         {
             if (disposing)
             {
-                if (_userManager != null)
+                if (UserManager != null)
                 {
-                    _userManager.Dispose();
-                    _userManager = null;
+                    UserManager.Dispose();
+                    UserManager = null;
                 }
             }
 

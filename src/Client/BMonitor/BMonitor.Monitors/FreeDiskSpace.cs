@@ -113,5 +113,14 @@ namespace BMonitor.Monitors
             }
             return result;
         }
+
+        //public string GetFreeSpace()
+        //{
+        //    ManagementObject disk = new ManagementObject("win32_logicaldisk.deviceid=\"c:\"");
+        //    disk.Get();
+        //    string freespace = disk["FreeSpace"].ToString();
+        //    Console.WriteLine(freespace);
+        //    return freespace;
+        //}
     }
 }

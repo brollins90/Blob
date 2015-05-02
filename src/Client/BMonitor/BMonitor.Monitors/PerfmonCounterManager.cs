@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace BMonitor.Monitors
 {
-    public class PerformanceCounterManager
+    public class PerfmonCounterManager : IDisposable
     {
-        private PerformanceCounterManager()
+        // http://blogs.msdn.com/b/bclteam/archive/2006/06/02/618156.aspx
+        // http://geekswithblogs.net/akraus1/archive/2009/05/27/132456.aspx
+        private PerfmonCounterManager()
         {
             Counters = new Dictionary<string, PerformanceCounter>();
 
@@ -19,11 +21,11 @@ namespace BMonitor.Monitors
             //PerformanceCounter _processorCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
 
-        public static PerformanceCounterManager Instance
+        public static PerfmonCounterManager Instance
         {
-            get { return _instance ?? (_instance = new PerformanceCounterManager()); }   
+            get { return _instance ?? (_instance = new PerfmonCounterManager()); }   
         }
-        private static PerformanceCounterManager _instance;
+        private static PerfmonCounterManager _instance;
 
         public Dictionary<string, PerformanceCounter> Counters { get; private set; }
 
@@ -45,6 +47,15 @@ namespace BMonitor.Monitors
 
             Counters.Add(s, counter);
             return Counters[s];
+        }
+
+        public void Dispose()
+        {
+            foreach (var counter in Counters.Values)
+            {
+                counter.Dispose();
+            }
+            Counters = null;
         }
     }
 }

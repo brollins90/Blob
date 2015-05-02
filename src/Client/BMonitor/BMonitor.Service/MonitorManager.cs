@@ -15,7 +15,7 @@ using Ninject;
 
 namespace BMonitor.Service
 {
-    public class MonitorManager
+    public class MonitorManager : IDisposable
     {
         /*
          
@@ -303,6 +303,12 @@ start scheduler
         private static string GetConfigValue(string configValue, string defaultValue)
         {
             return (string.IsNullOrEmpty(configValue)) ? defaultValue : configValue;
+        }
+
+        public void Dispose()
+        {
+            PerfmonCounterManager manager = PerfmonCounterManager.Instance;
+            manager.Dispose();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using Blob.Contracts.Command;
 using Blob.Proxies;
@@ -49,10 +50,10 @@ namespace BMonitor.Service.Infrastructure
             Bind(commandHandlerType).To(openLoggingCommandHandler);
 
             // Load more handlers
-            string commandHandlerLocation = "BMonitor.CommandHandler";
+            //string commandHandlerLocation = "BMonitor.Handlers.Custom";
             // todo: load assembly from file
-            var typesInHandlerAssembly = typeof(PrintLineCommandHandler).Assembly.GetTypes();
-            var foundCommandHandlers = typesInHandlerAssembly.GetBindingDefinitionOf(commandHandlerType);
+            Type[] typesInHandlerAssembly = typeof(PrintLineCommandHandler).Assembly.GetTypes();
+            IEnumerable<BindingDefinition> foundCommandHandlers = typesInHandlerAssembly.GetBindingDefinitionOf(commandHandlerType);
 
             foreach (var definedCommandHandler in foundCommandHandlers.GetDefinitionsWhereClosedGeneric())
             {

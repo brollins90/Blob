@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.Utilities;
 using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using Blob.Contracts.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
-namespace Before.App_Start
+namespace Before.Infrastructure.Identity
 {
     public class BeforeSignInManager : IDisposable
     {
-        public BeforeSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
+        public BeforeSignInManager(BeforeUserManager userManager, IAuthenticationManager authenticationManager)
         {
             if (userManager == null)
             {
@@ -31,7 +28,7 @@ namespace Before.App_Start
         }
         public static BeforeSignInManager Create(IdentityFactoryOptions<BeforeSignInManager> options, IOwinContext context)
         {
-            return new BeforeSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+            return new BeforeSignInManager(context.GetUserManager<BeforeUserManager>(), context.Authentication);
         }
 
         /// <summary>
@@ -45,7 +42,7 @@ namespace Before.App_Start
 
         private string _authenticationType;
 
-        public ApplicationUserManager UserManager { get; set; }
+        public BeforeUserManager UserManager { get; set; }
         public IAuthenticationManager AuthenticationManager { get; set; }
 
         public virtual Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto user)
@@ -64,7 +61,7 @@ namespace Before.App_Start
             {
                 return default(Guid);
             }
-            return (Guid) Convert.ChangeType(id, typeof (Guid), CultureInfo.InvariantCulture);
+            return (Guid)Convert.ChangeType(id, typeof(Guid), CultureInfo.InvariantCulture);
         }
 
         public virtual async Task SignInAsync(UserDto user, bool isPersistent, bool rememberBrowser)
@@ -75,11 +72,11 @@ namespace Before.App_Start
             if (rememberBrowser)
             {
                 ClaimsIdentity rememberBrowserIdentity = AuthenticationManager.CreateTwoFactorRememberBrowserIdentity(user.Id);
-                AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, userIdentity, rememberBrowserIdentity);
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
             }
             else
             {
-                AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, userIdentity);
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity);
             }
         }
 
@@ -116,41 +113,41 @@ namespace Before.App_Start
             return await GetVerifiedUserIdAsync().WithCurrentCulture() != null;
         }
 
-        /// <summary>
-        /// Two factor verification step
-        /// </summary>
-        /// <param name="provider"></param>
-        /// <param name="code"></param>
-        /// <param name="isPersistent"></param>
-        /// <param name="rememberBrowser"></param>
-        /// <returns></returns>
-        public virtual async Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
-        {
-            //Guid userId = await GetVerifiedUserIdAsync().WithCurrentCulture();
-            //if (userId == null)
-            //{
-            //    return SignInStatus.Failure;
-            //}
-            //UserDto user = await UserManager.FindByIdAsync(ConvertIdToString(userId)).WithCurrentCulture();
-            //if (user == null)
-            //{
-            //    return SignInStatus.Failure;
-            //}
-            //if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-            //{
-            //    return SignInStatus.LockedOut;
-            //}
-            //if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code).WithCurrentCulture())
-            //{
-            //    // When token is verified correctly, clear the access failed count used for lockout
-            //    await UserManager.ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
-            //    await SignInAsync(user, isPersistent, rememberBrowser).WithCurrentCulture();
-            //    return SignInStatus.Success;
-            //}
-            //// If the token is incorrect, record the failure which also may cause the user to be locked out
-            //await UserManager.AccessFailedAsync(user.Id).WithCurrentCulture();
-            return SignInStatus.Failure;
-        }
+        ///// <summary>
+        ///// Two factor verification step
+        ///// </summary>
+        ///// <param name="provider"></param>
+        ///// <param name="code"></param>
+        ///// <param name="isPersistent"></param>
+        ///// <param name="rememberBrowser"></param>
+        ///// <returns></returns>
+        //public virtual async Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
+        //{
+        //    //Guid userId = await GetVerifiedUserIdAsync().WithCurrentCulture();
+        //    //if (userId == null)
+        //    //{
+        //    //    return SignInStatus.Failure;
+        //    //}
+        //    //UserDto user = await UserManager.FindByIdAsync(ConvertIdToString(userId)).WithCurrentCulture();
+        //    //if (user == null)
+        //    //{
+        //    //    return SignInStatus.Failure;
+        //    //}
+        //    //if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
+        //    //{
+        //    //    return SignInStatus.LockedOut;
+        //    //}
+        //    //if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code).WithCurrentCulture())
+        //    //{
+        //    //    // When token is verified correctly, clear the access failed count used for lockout
+        //    //    await UserManager.ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
+        //    //    await SignInAsync(user, isPersistent, rememberBrowser).WithCurrentCulture();
+        //    //    return SignInStatus.Success;
+        //    //}
+        //    //// If the token is incorrect, record the failure which also may cause the user to be locked out
+        //    //await UserManager.AccessFailedAsync(user.Id).WithCurrentCulture();
+        //    return SignInStatus.Failure;
+        //}
 
         /// <summary>
         /// Sign the user in using an associated external login
@@ -244,6 +241,6 @@ namespace Before.App_Start
         ///     If disposing, calls dispose on the Context.  Always nulls out the Context
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing) {}
+        protected virtual void Dispose(bool disposing) { }
     }
 }

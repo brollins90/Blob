@@ -9,14 +9,14 @@ namespace BMonitor.Monitors
 {
     public class PerfMonMonitor : BaseMonitor
     {
-        private readonly PerformanceCounterManager _manager;
+        private readonly PerfmonCounterManager _manager;
         private PerformanceCounter _counter;
         private string _counterKey;
 
         public PerfMonMonitor(params string[] strings)
         {
             _counterKey = string.Join("_", strings);
-            _manager = PerformanceCounterManager.Instance;
+            _manager = PerfmonCounterManager.Instance;
             _counter = _manager.GetCounter(strings);
         }
 

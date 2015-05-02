@@ -19,7 +19,7 @@ namespace BMonitor.Handlers
 
         public void Handle(TCmd command)
         {
-            _log.Debug("handleing in ExceptionCommandHandlerDecorator");
+            _log.Debug(string.Format("Handle in ExceptionCommandHandlerDecorator{0}", typeof(TCmd).Name));
             try
             {
                 _wrappedHandler.Handle(command);

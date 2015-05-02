@@ -3,36 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Blob.Core.Data;
 using Blob.Core.Domain;
-using Blob.Data;
 using Blob.Managers.Blob;
 using log4net;
 
 namespace Before.Controllers
 {
-    //[Authorize]
+    [Authorize]
+    [RoutePrefix("device")]
+    [Route("{action=index}")]
     public class DeviceController : Controller
     {
         private ILog _log;
-        private IBlobManager _blobManager;
+        private readonly IBlobManager _blobManager;
 
-        public DeviceController()
+        public DeviceController(BlobManager manager, ILog log)
         {
-
-            BlobDbContext _context = new BlobDbContext();
-            IAccountRepository _accountRepository = new Blob.Data.Repositories.AccountRepository(_context);
-            IStatusRepository _statusRepository = new Blob.Data.Repositories.StatusRepository(_context);
-
-            _blobManager = new BlobManager(_accountRepository, _statusRepository, LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType));
+            _blobManager = manager;
+            _log = log;
         }
 
-        // GET: Device
+        [Route("index")]
         public async Task<ActionResult> Index(Guid? selectedCustomer)
         {
-            var customers = await _blobManager.GetAllCustomersAsync(); //.ToList();
+            IList<Customer> customers = await _blobManager.GetAllCustomersAsync();
             ViewBag.SelectedCustomer = new SelectList(customers, "Id", "Name", selectedCustomer);
             Guid customerId = selectedCustomer.GetValueOrDefault();
 
@@ -45,92 +40,125 @@ namespace Before.Controllers
             }
             else
             {
-                devices = await _blobManager.FindDevicesForCustomer(customerId);
+                devices = await _blobManager.FindDevicesForCustomerAsync(customerId);
             }
             return View(devices.ToList());
         }
 
-        // GET: Device/Details/5
+        [Route("details")]
         public async Task<ActionResult> Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var device = await _blobManager.GetDeviceByIdAsync(id.Value);
+
+            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
             if (device == null)
             {
                 return HttpNotFound();
             }
-            //var statuses = await _blobManager.GetStatusForDeviceAsync(device.Id)
-            //var statuses = device.Statuses.ToList();
+
+            await PopulateDeviceTypeDropDownList(device.DeviceType.Value);
             return View(device);
         }
 
-        // GET: Device/Create
-        public async Task<ActionResult> Create()
-        {
-            return View();
-        }
-
-        // POST: Device/Create
-        [HttpPost]
-        public async Task<ActionResult> Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Device/Edit/5
+        [Route("edit")]
         public async Task<ActionResult> Edit(Guid? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            if (device == null)
+            {
+                return HttpNotFound();
+            }
+
+            await PopulateDeviceTypeDropDownList(device.DeviceType.Value);
+            return View(device);
         }
 
-        // POST: Device/Edit/5
         [HttpPost]
+        [Route("edit")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, FormCollection collection)
         {
-            try
+            if (id == null)
             {
-                // TODO: Add update logic here
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-                return RedirectToAction("Index");
-            }
-            catch
+            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            if (device == null)
             {
-                return View();
+                return HttpNotFound();
             }
+
+            if (ModelState.IsValid)
+            {
+                if (TryUpdateModel(device, "", new[] { "DeviceName", "DeviceTypeId" }))
+                {
+                    try
+                    {
+                        device.DeviceName = collection["deviceName"];
+
+                        await _blobManager.UpdateDeviceAsync(device);
+
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception e)
+                    {
+                        ModelState.AddModelError("Error", e);
+                    }
+                }
+            }
+
+            await PopulateDeviceTypeDropDownList(device.DeviceType.Value);
+            return View(device);
         }
 
-        // GET: Device/Delete/5
+        [Route("delete")]
         public async Task<ActionResult> Delete(Guid? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Device device = await _blobManager.GetDeviceByIdAsync(id.Value);
+            if (device == null)
+            {
+                return HttpNotFound();
+            }
+            return View(device);
         }
 
-        // POST: Device/Delete/5
         [HttpPost]
-        public async Task<ActionResult> Delete(Guid? id, FormCollection collection)
+        [Route("delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            await _blobManager.RemoveDeviceByIdAsync(id);
 
-                return RedirectToAction("Index");
-            }
-            catch
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                return View();
+
             }
+            base.Dispose(disposing);
+        }
+
+        private async Task PopulateDeviceTypeDropDownList(object selectedDeviceType = null)
+        {
+            var deviceTypes = await _blobManager.GetAllDeviceTypesAsync();
+            ViewBag.DeviceType = new SelectList(deviceTypes, "DeviceType", "Value", selectedDeviceType);
         }
     }
 }
