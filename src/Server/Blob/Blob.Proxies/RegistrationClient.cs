@@ -21,17 +21,16 @@ namespace Blob.Proxies
         {
         }
 
-        public async Task<RegistrationInformation> Register(RegistrationMessage message)
+        public async Task Register(RegisterDeviceDto message)
         {
             try
             {
-                return await Channel.Register(message).ConfigureAwait(false);
+                await Channel.Register(message).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
-            return null;
         }
 
         private void HandleError(Exception ex)

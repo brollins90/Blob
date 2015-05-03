@@ -10,6 +10,6 @@ namespace Blob.Contracts.Registration
     {
         [OperationContract]
         [PrincipalPermission(SecurityAction.Demand, Role = "Customer")]
-        Task<RegistrationInformation> Register(RegistrationMessage message);
+        Task Register(RegisterDeviceDto registerDeviceDto);
     }
 }

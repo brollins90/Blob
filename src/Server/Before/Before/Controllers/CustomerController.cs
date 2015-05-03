@@ -3,7 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
-using Before.ViewModels;
+using Blob.Contracts.Models;
+using Blob.Contracts.ViewModels;
 using Blob.Core.Domain;
 using Blob.Managers.Blob;
 
@@ -12,7 +13,8 @@ namespace Before.Controllers
     [Authorize]
     public class CustomerController : BaseController
     {
-        public CustomerController(IBlobCommandManager manager) : base(manager) { }
+        public CustomerController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
+            : base(blobCommandManager, blobQueryManager) { }
 
         // GET: customer
         public ActionResult Index()
@@ -29,14 +31,13 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Customer customer = await BlobCommandManager.GetCustomerByIdAsync(id.Value).ConfigureAwait(true);
-            if (customer == null)
+            CustomerDetailsVm cdvm = await BlobQueryManager.GetCustomerDetailsViewModelByIdAsync(id.Value).ConfigureAwait(true);
+            if (cdvm == null)
             {
                 return HttpNotFound();
             }
-            CustomerViewModel cvm = new CustomerViewModel(customer);
 
-            return View(cvm);
+            return View(cdvm);
         }
 
         // GET: customer/edit/{id}
@@ -47,37 +48,25 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Customer customer = await BlobCommandManager.GetCustomerByIdAsync(id.Value).ConfigureAwait(true);
-            if (customer == null)
+            CustomerDetailsVm cdvm = await BlobQueryManager.GetCustomerDetailsViewModelByIdAsync(id.Value).ConfigureAwait(true);
+            if (cdvm == null)
             {
                 return HttpNotFound();
             }
-            CustomerViewModel cvm = new CustomerViewModel(customer);
 
-            return View(cvm);
+            return View(cdvm);
         }
 
         // POST: customer/edit/{customer}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name")] CustomerViewModel customer)
+        public async Task<ActionResult> Edit([Bind(Include = "CustomerId, Name")] UpdateCustomerVm updateCustomerVm)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    Customer customerData = await BlobCommandManager.GetCustomerByIdAsync(customer.Id).ConfigureAwait(true);
-
-                    // update the fields that we will allow to change
-                    customerData.Name = customer.Name;
-                    await BlobCommandManager.UpdateCustomerAsync(customerData);
-
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                }
+                UpdateCustomerDto dto = new UpdateCustomerDto { CustomerId = updateCustomerVm.CustomerId, Name = updateCustomerVm.Name };
+                await BlobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(true);
+                return RedirectToAction("Index");
             }
             return View();
         }

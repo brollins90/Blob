@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Blob.Contracts.Models
 {
     [DataContract]
-    public class StatusPerformanceData
+    public class AddStatusRecordDto
     {
         [DataMember]
         public Guid DeviceId { get; set; }
@@ -17,33 +16,27 @@ namespace Blob.Contracts.Models
         public string MonitorDescription { get; set; }
 
         [DataMember]
+        public int AlertLevel { get; set; }
+
+        [DataMember]
         public DateTime TimeGenerated { get; set; }
 
         [DataMember]
         public DateTime TimeSent { get; set; }
 
         [DataMember]
-        public List<PerformanceDataValue> Data 
-        { 
-            get { return _data ?? (_data = new List<PerformanceDataValue>()); }
-            set { _data = value; }
-        }
-        private List<PerformanceDataValue> _data;
-
-        public void AddPerformanceDataValue(PerformanceDataValue value)
-        {
-            Data.Add(value);
-        }
+        public string CurrentValue { get; set; }
 
         public override string ToString()
         {
-            return string.Format("StatusPerformanceData("
+            return string.Format("AddStatusRecordDto("
                                  + "DeviceId: " + DeviceId
                                  + ", MonitorName: " + MonitorName
                                  + ", MonitorDescription: " + MonitorDescription
+                                 + ", AlertLevel: " + AlertLevel
                                  + ", TimeGenerated: " + TimeGenerated
                                  + ", TimeSent: " + TimeSent
-                                 + ", Count: " + Data.Count
+                                 + ", CurrentValue: " + CurrentValue
                                  + ")");
         }
     }

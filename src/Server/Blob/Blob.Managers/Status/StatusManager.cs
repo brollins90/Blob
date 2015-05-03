@@ -10,8 +10,8 @@ namespace Blob.Managers.Status
 {
     public interface IStatusManager
     {
-        Task StoreStatusData(StatusData statusData);
-        Task StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData);
+        Task StoreStatusData(AddStatusRecordDto statusData);
+        Task StoreStatusPerformanceData(AddPerformanceRecordDto statusPerformanceData);
     }
 
     public class StatusManager : IStatusManager
@@ -28,7 +28,7 @@ namespace Blob.Managers.Status
 
 
         // Customer
-        public async Task StoreStatusData(StatusData statusData)
+        public async Task StoreStatusData(AddStatusRecordDto statusData)
         {
             _log.Debug("Storing status data " + statusData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
@@ -49,14 +49,14 @@ namespace Blob.Managers.Status
             }
         }
 
-        public async Task StoreStatusPerformanceData(StatusPerformanceData statusPerformanceData)
+        public async Task StoreStatusPerformanceData(AddPerformanceRecordDto statusPerformanceData)
         {
             _log.Debug("Storing status perf data " + statusPerformanceData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
 
             if (device != null)
             {
-                foreach (PerformanceDataValue value in statusPerformanceData.Data)
+                foreach (PerformanceRecordValue value in statusPerformanceData.Data)
                 {
                     Context.DevicePerfDatas.Add(new StatusPerf
                                                       {

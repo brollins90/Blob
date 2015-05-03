@@ -42,6 +42,7 @@ namespace Before
             
             container.RegisterPerWebRequest<BlobDbContext>(() => new BlobDbContext(connectionString));
 
+            container.Register<IBlobQueryManager, BlobQueryManager>();
             container.Register<IBlobCommandManager, BlobCommandManager>(); 
 
             // This is kind of bad, all the identity proxying stuff I did was to make OWIN just work, but now I am 

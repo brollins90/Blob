@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
+using Blob.Contracts.ViewModels;
 using Blob.Core.Domain;
 using Blob.Data;
 using log4net;
@@ -12,21 +13,14 @@ namespace Blob.Managers.Blob
 {
     public interface IBlobCommandManager
     {
-        Task<IList<Customer>> GetAllCustomersAsync();
-        Task<Customer> GetCustomerByIdAsync(Guid customerId);
-        Task UpdateCustomerAsync(Customer customer);
+        // Customer
+        Task UpdateCustomerAsync(UpdateCustomerDto dto);
 
-        Task RemoveDeviceByIdAsync(Guid deviceId);
-        Task<IList<Device>> GetAllDevicesAsync();
-        Task<Device> GetDeviceByIdAsync(Guid deviceId);
-        Task UpdateDeviceAsync(Device device);
-        Task<IList<Device>> FindDevicesForCustomerAsync(Guid customerId);
+        // Device
+        Task DisableDeviceAsync(DisableDeviceDto dto);
+        Task RegisterDeviceAsync(RegisterDeviceDto dto);
+        Task UpdateDeviceAsync(UpdateDeviceDto dto);
 
-        Task<IList<DeviceType>> GetAllDeviceTypesAsync();
-
-        Task<RegistrationInformation> RegisterDeviceAsync(RegistrationMessage message);
-
-        Task<IList<User>> FindUsersForCustomerAsync(Guid customerId);
     }
 
     public class BlobCommandManager : IBlobCommandManager
@@ -42,82 +36,69 @@ namespace Blob.Managers.Blob
         public BlobDbContext Context { get; private set; }
 
 
-        // Customer
-        public async Task<IList<Customer>> GetAllCustomersAsync()
+        public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
-            return await Context.Customers
-                .Include(x => x.Devices)
-                .Include(x => x.Users)
-                .ToListAsync().ConfigureAwait(false);
-        }
+            Customer customer = Context.Customers.Find(dto.CustomerId);
+            customer.Name = dto.Name;
 
-        public async Task<Customer> GetCustomerByIdAsync(Guid customerId)
-        {
-            return await Context.Customers
-                .Include(x => x.Devices)
-                .Include(x => x.Users)
-                .SingleAsync(x => x.Id.Equals(customerId)).ConfigureAwait(false);
-        }
-
-        public async Task UpdateCustomerAsync(Customer customer)
-        {
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         // Device
-        public async Task RemoveDeviceByIdAsync(Guid deviceId)
+        public async Task DisableDeviceAsync(DisableDeviceDto dto)
         {
-            Device device = await Context.Devices.FindAsync(deviceId).ConfigureAwait(false);
+            Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             Context.Devices.Remove(device);
             await Context.SaveChangesAsync().ConfigureAwait(false); 
         }
 
-        public async Task<IList<Device>> GetAllDevicesAsync()
-        {
-            return await Context.Devices
-                .Include(x => x.Customer)
-                .Include(x => x.DeviceType)
-                .Include(x => x.Statuses)
-                .Include(x => x.StatusPerfs)
-                .ToListAsync().ConfigureAwait(false);
-        }
+        //public async Task<IList<Device>> GetAllDevicesAsync()
+        //{
+        //    return await Context.Devices
+        //        .Include(x => x.Customer)
+        //        .Include(x => x.DeviceType)
+        //        .Include(x => x.Statuses)
+        //        .Include(x => x.StatusPerfs)
+        //        .ToListAsync().ConfigureAwait(false);
+        //}
 
-        public async Task<Device> GetDeviceByIdAsync(Guid deviceId)
-        {
-            return await Context.Devices
-                .Include(x => x.Customer)
-                .Include(x => x.DeviceType)
-                .Include(x => x.Statuses)
-                .Include(x => x.StatusPerfs)
-                .SingleAsync(x => x.Id.Equals(deviceId)).ConfigureAwait(false);
-        }
+        //public async Task<Device> GetDeviceByIdAsync(Guid deviceId)
+        //{
+        //    return await Context.Devices
+        //        .Include(x => x.Customer)
+        //        .Include(x => x.DeviceType)
+        //        .Include(x => x.Statuses)
+        //        .Include(x => x.StatusPerfs)
+        //        .SingleAsync(x => x.Id.Equals(deviceId)).ConfigureAwait(false);
+        //}
 
-        public async Task UpdateDeviceAsync(Device device)
+        public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
         {
+            Device device = Context.Devices.Find(dto.DeviceId);
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false); 
         }
 
-        public async Task<IList<Device>> FindDevicesForCustomerAsync(Guid customerId)
-        {
-            return await Context.Devices
-                .Include(x => x.Customer)
-                .Include(x => x.DeviceType)
-                .Include(x => x.Statuses)
-                .Include(x => x.StatusPerfs)
-                .Where(x =>x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);
-        }
+        //public async Task<IList<Device>> FindDevicesForCustomerAsync(Guid customerId)
+        //{
+        //    return await Context.Devices
+        //        .Include(x => x.Customer)
+        //        .Include(x => x.DeviceType)
+        //        .Include(x => x.Statuses)
+        //        .Include(x => x.StatusPerfs)
+        //        .Where(x =>x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);
+        //}
 
-        // DeviceType
-        public async Task<IList<DeviceType>> GetAllDeviceTypesAsync()
-        {
-            return await Context.DeviceTypes.ToListAsync().ConfigureAwait(false);
-        }
+        //// DeviceType
+        //public async Task<IList<DeviceType>> GetAllDeviceTypesAsync()
+        //{
+        //    return await Context.DeviceTypes.ToListAsync().ConfigureAwait(false);
+        //}
 
 
 
-        public async Task<RegistrationInformation> RegisterDeviceAsync(RegistrationMessage message)
+        public async Task RegisterDeviceAsync(RegisterDeviceDto message)
         {
             _log.Debug("BlobManager registering device " + message.DeviceId);
             // Authenticate user is done, it is required in the service
@@ -148,19 +129,19 @@ namespace Blob.Managers.Blob
             Context.Devices.Add(device);
             await Context.SaveChangesAsync();
 
-            RegistrationInformation returnInfo = new RegistrationInformation
-                                                 {
-                                                     DeviceId = device.Id.ToString(),
-                                                     TimeSent = DateTime.Now
-                                                 };
-            return returnInfo;
+            //RegistrationInformation returnInfo = new RegistrationInformation
+            //                                     {
+            //                                         DeviceId = device.Id.ToString(),
+            //                                         TimeSent = DateTime.Now
+            //                                     };
+            //return returnInfo;
         }
 
-        public async Task<IList<User>> FindUsersForCustomerAsync(Guid customerId)
-        {
-            return await Context.Users
-                .Include(x => x.Customer)
-                .Where(x => x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);   
-        }
+        //public async Task<IList<User>> FindUsersForCustomerAsync(Guid customerId)
+        //{
+        //    return await Context.Users
+        //        .Include(x => x.Customer)
+        //        .Where(x => x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);   
+        //}
     }
 }

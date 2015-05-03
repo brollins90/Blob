@@ -3,7 +3,7 @@
 namespace Blob.Contracts.Models
 {
     [DataContract]
-    public class PerformanceDataValue
+    public class PerformanceRecordValue
     {
         [DataMember]
         public string Label { get; set; }

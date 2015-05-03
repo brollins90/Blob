@@ -9,6 +9,7 @@ namespace Blob.Core.Domain
         public Guid Id { get; set; }
         public string DeviceName { get; set; }
         public DateTime LastActivityDate { get; set; }
+        public int AlertLevel { get; set; }
 
         public Guid DeviceTypeId { get; set; }
         public virtual DeviceType DeviceType { get; set; }

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.Models
 {
     [DataContract]
-    public class RegistrationMessage
+    public class RegisterDeviceDto
     {
         [DataMember]
         public string DeviceId { get; set; }
@@ -32,7 +32,7 @@ namespace Blob.Contracts.Models
 
         public override string ToString()
         {
-            return string.Format("RegistrationMessage("
+            return string.Format("RegisterDeviceDto("
                                  + "DeviceId: " + DeviceId
                                  + ", DeviceKey1: " + DeviceKey1
                                  + ", DeviceKey1Format: " + DeviceKey1Format

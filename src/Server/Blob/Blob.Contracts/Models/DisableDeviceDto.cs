@@ -3,19 +3,16 @@ using System.Runtime.Serialization;
 
 namespace Blob.Contracts.Models
 {
-    public class RegistrationInformation
+    [DataContract]
+    public class DisableDeviceDto
     {
         [DataMember]
-        public string DeviceId { get; set; }
-
-        [DataMember]
-        public DateTime TimeSent { get; set; }
+        public Guid DeviceId { get; set; }
 
         public override string ToString()
         {
-            return string.Format("RegistrationInformation("
+            return string.Format("DisableDeviceDto("
                                  + "DeviceId: " + DeviceId
-                                 + ", TimeSent: " + TimeSent
                                  + ")");
         }
     }

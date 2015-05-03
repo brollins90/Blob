@@ -5,11 +5,13 @@ namespace Before.Controllers
 {
     public class BaseController : Controller
     {
+        protected IBlobQueryManager BlobQueryManager { get; set; }
         protected IBlobCommandManager BlobCommandManager { get; set; }
 
-        public BaseController(IBlobCommandManager commandManager)
+        public BaseController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
         {
-            BlobCommandManager = commandManager;
+            BlobCommandManager = blobCommandManager;
+            BlobQueryManager = blobQueryManager;
         }
     }
 }

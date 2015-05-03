@@ -23,7 +23,7 @@ namespace Blob.Services.Status
 
         [OperationBehavior]
         [PrincipalPermission(SecurityAction.Assert, Role = "Device")]
-        public async Task SendStatusToServer(StatusData statusData)
+        public async Task SendStatusToServer(AddStatusRecordDto statusData)
         {
             _log.Debug("Server received status: " + statusData);
             await _statusManager.StoreStatusData(statusData).ConfigureAwait(false);
@@ -31,7 +31,7 @@ namespace Blob.Services.Status
 
         [OperationBehavior]
         [PrincipalPermission(SecurityAction.Assert, Role = "Device")]
-        public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
+        public async Task SendStatusPerformanceToServer(AddPerformanceRecordDto statusPerformanceData)
         {
             _log.Debug("Server received perf: " + statusPerformanceData);
             await _statusManager.StoreStatusPerformanceData(statusPerformanceData).ConfigureAwait(false);

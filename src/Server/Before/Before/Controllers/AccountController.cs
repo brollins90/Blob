@@ -3,11 +3,10 @@ using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
+using Before.Models;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Before.ViewModels;
 using Blob.Contracts.Security;
-using log4net;
 
 namespace Before.Controllers
 {

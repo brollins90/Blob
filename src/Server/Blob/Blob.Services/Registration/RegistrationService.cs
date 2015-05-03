@@ -23,10 +23,10 @@ namespace Blob.Services.Registration
 
         [OperationBehavior]
         [PrincipalPermission(SecurityAction.Demand, Role = "Customer")]
-        public async Task<RegistrationInformation> Register(RegistrationMessage message)
+        public async Task Register(RegisterDeviceDto message)
         {
             _log.Debug("RegistrationService received registration message: " + message);
-            return await _blobCommandManager.RegisterDeviceAsync(message).ConfigureAwait(false);
+            await _blobCommandManager.RegisterDeviceAsync(message).ConfigureAwait(false);
         }
     }
 }

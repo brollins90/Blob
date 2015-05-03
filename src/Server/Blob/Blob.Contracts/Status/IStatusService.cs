@@ -8,9 +8,9 @@ namespace Blob.Contracts.Status
     public interface IStatusService
     {
         [OperationContract(IsOneWay = true)]
-        Task SendStatusToServer(StatusData statusData);
+        Task SendStatusToServer(AddStatusRecordDto addStatusRecordDto);
 
         [OperationContract(IsOneWay = true)]
-        Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData);
+        Task SendStatusPerformanceToServer(AddPerformanceRecordDto addPerformanceRecordDto);
     }
 }

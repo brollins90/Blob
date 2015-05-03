@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -48,22 +49,27 @@
     <Compile Include="Command\ICommandHandler.cs" />
     <Compile Include="Command\ICommandService.cs" />
     <Compile Include="Command\ICommandServiceCallback.cs" />
-    <Compile Include="Models\PerformanceDataValue.cs" />
-    <Compile Include="Models\RegistrationInformation.cs" />
-    <Compile Include="Models\RegistrationMessage.cs" />
-    <Compile Include="Models\StatusPerformanceData.cs" />
+    <Compile Include="Models\PerformanceRecordValue.cs" />
+    <Compile Include="Models\RegisterDeviceDto.cs" />
+    <Compile Include="Models\AddPerformanceRecordDto.cs" />
+    <Compile Include="Models\DisableDeviceDto.cs" />
+    <Compile Include="Models\UpdateUserDto.cs" />
     <Compile Include="Registration\IRegistrationService.cs" />
     <Compile Include="Security\DataContracts.cs" />
     <Compile Include="Security\IIdentityService.cs" />
     <Compile Include="Security\IIdentityStore.cs" />
     <Compile Include="Status\IStatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\StatusData.cs" />
-    <Compile Include="ViewModels\CustomerSummaryViewModel.cs" />
-    <Compile Include="ViewModels\DeviceQueryModel.cs" />
-    <Compile Include="ViewModels\PerformanceRecordQueryModel.cs" />
-    <Compile Include="ViewModels\StatusRecordQueryModel.cs" />
-    <Compile Include="ViewModels\UserQueryModel.cs" />
+    <Compile Include="Models\AddStatusRecordDto.cs" />
+    <Compile Include="Models\UpdateDeviceDto.cs" />
+    <Compile Include="Models\UpdateCustomerDto.cs" />
+    <Compile Include="ViewModels\CustomerDetailsVm.cs" />
+    <Compile Include="ViewModels\DeviceListVm.cs" />
+    <Compile Include="ViewModels\PerformanceRecordVm.cs" />
+    <Compile Include="ViewModels\StatusRecordVm.cs" />
+    <Compile Include="ViewModels\UpdateDeviceVm.cs" />
+    <Compile Include="ViewModels\UpdateCustomerVm.cs" />
+    <Compile Include="ViewModels\UserListVm.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

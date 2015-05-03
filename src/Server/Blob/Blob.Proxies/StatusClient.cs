@@ -21,7 +21,7 @@ namespace Blob.Proxies
         {
         }
 
-        public async Task SendStatusToServer(StatusData statusData)
+        public async Task SendStatusToServer(AddStatusRecordDto statusData)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task SendStatusPerformanceToServer(StatusPerformanceData statusPerformanceData)
+        public async Task SendStatusPerformanceToServer(AddPerformanceRecordDto statusPerformanceData)
         {
             try
             {

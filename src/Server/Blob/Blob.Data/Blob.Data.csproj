@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201504251720232_KeyPairs.Designer.cs">
       <DependentUpon>201504251720232_KeyPairs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505030256392_AddAlertLevelToDevice.cs" />
+    <Compile Include="Migrations\201505030256392_AddAlertLevelToDevice.Designer.cs">
+      <DependentUpon>201505030256392_AddAlertLevelToDevice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -102,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504251720232_KeyPairs.resx">
       <DependentUpon>201504251720232_KeyPairs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505030256392_AddAlertLevelToDevice.resx">
+      <DependentUpon>201505030256392_AddAlertLevelToDevice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
