@@ -13,7 +13,7 @@ namespace Blob.Contracts.Models
         public string Name { get; set; }
 
         [DataMember]
-        public string DeviceTypeId { get; set; }
+        public Guid DeviceTypeId { get; set; }
 
         public override string ToString()
         {

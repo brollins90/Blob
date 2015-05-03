@@ -47,20 +47,22 @@ namespace Before.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.DeviceTypeId = new SelectList(updateVm.AvailableTypes, "DeviceTypeId", "Value", updateVm.DeviceTypeId);
+
             return View(updateVm);
         }
 
-        // POST: device/edit/{customer}
+        // POST: device/edit/{dto}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(DeviceUpdateVm updateVm)
         {
             if (ModelState.IsValid)
             {
-
-                UpdateDeviceDto dto = new UpdateDeviceDto {DeviceId = updateVm.DeviceId, Name = updateVm.Name, DeviceTypeId = updateVm.DeviceTypeId};
+                UpdateDeviceDto dto = new UpdateDeviceDto { DeviceId = updateVm.DeviceId, DeviceTypeId = updateVm.DeviceTypeId, Name = updateVm.Name };
+            
                 await BlobCommandManager.UpdateDeviceAsync(dto).ConfigureAwait(true);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }

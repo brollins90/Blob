@@ -58,7 +58,7 @@ namespace Before.Controllers
             if (ModelState.IsValid)
             {
                 await BlobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(true);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }

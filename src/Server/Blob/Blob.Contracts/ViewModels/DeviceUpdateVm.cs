@@ -14,7 +14,7 @@ namespace Blob.Contracts.ViewModels
         public string Name { get; set; }
 
         [DataMember]
-        public string DeviceTypeId { get; set; }
+        public Guid DeviceTypeId { get; set; }
 
         [DataMember]
         public IEnumerable<DeviceTypeSingleVm> AvailableTypes { get; set; }

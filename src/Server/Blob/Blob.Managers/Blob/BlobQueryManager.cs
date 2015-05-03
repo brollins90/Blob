@@ -104,7 +104,7 @@ namespace Blob.Managers.Blob
                                                Value = type.Value
                                            }),
                               DeviceId = device.Id,
-                              DeviceTypeId = device.DeviceTypeId.ToString(),
+                              DeviceTypeId = device.DeviceTypeId,
                               Name = device.DeviceName
                           }).SingleAsync().ConfigureAwait(false);
 

@@ -62,6 +62,9 @@ namespace Blob.Managers.Blob
         public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
         {
             Device device = Context.Devices.Find(dto.DeviceId);
+            device.DeviceName = dto.Name;
+            device.DeviceTypeId = dto.DeviceTypeId;
+
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false); 
         }
