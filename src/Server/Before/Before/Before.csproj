@@ -285,6 +285,8 @@
     <Content Include="Views\Status\Single.cshtml" />
     <Content Include="Views\Performance\Single.cshtml" />
     <Content Include="Views\Device\Edit.cshtml" />
+    <Content Include="Views\Device\Disable.cshtml" />
+    <Content Include="Views\Device\Single.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

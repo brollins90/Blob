@@ -1,0 +1,46 @@
+﻿@model Blob.Contracts.Models.DisableDeviceDto
+@{
+    ViewBag.Title = "Disable";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <h3>Are you sure you want to disable this?</h3>
+
+    <div class="form-horizontal">
+        <h4>Device</h4>
+        <hr/> 
+        @Html.HiddenFor(model => model.DeviceId)
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DeviceId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DeviceId)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+        </dl>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Disable" />
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

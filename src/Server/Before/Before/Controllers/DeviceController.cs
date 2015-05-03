@@ -6,8 +6,6 @@ using Blob.Contracts.Blob;
 using Blob.Contracts.Models;
 using Blob.Contracts.ViewModels;
 
-//using Blob.Core.Domain;
-
 namespace Before.Controllers
 {
     [Authorize]
@@ -81,17 +79,21 @@ namespace Before.Controllers
                 return HttpNotFound();
             }
 
-            DisableDeviceDto dto = new DisableDeviceDto { DeviceId = singleVm.DeviceId };
+            DisableDeviceDto dto = new DisableDeviceDto { DeviceId = singleVm.DeviceId, Name = singleVm.DeviceName};
             return View(dto);
         }
 
         // POST: /device/disableconfirmed/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DisableConfirmed(DisableDeviceDto id)
+        public async Task<ActionResult> Disable(DisableDeviceDto dto)
         {
-            await BlobCommandManager.DisableDeviceAsync(id);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.DisableDeviceAsync(dto).ConfigureAwait(true);
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
         }
     }
 }

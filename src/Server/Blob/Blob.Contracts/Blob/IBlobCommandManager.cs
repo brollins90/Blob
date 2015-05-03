@@ -10,6 +10,7 @@ namespace Blob.Contracts.Blob
 
         // Device
         Task DisableDeviceAsync(DisableDeviceDto dto);
+        Task EnableDeviceAsync(EnableDeviceDto dto);
         Task RegisterDeviceAsync(RegisterDeviceDto dto);
         Task UpdateDeviceAsync(UpdateDeviceDto dto);
 

@@ -33,6 +33,10 @@ namespace Blob.Data.Mapping
             Property(x => x.CreateDate).HasColumnType("datetime2")
                 .IsRequired();
 
+            // Enabled
+            Property(x => x.Enabled).HasColumnType("bit")
+                .IsRequired();
+
             // DeviceType
             Property(x => x.DeviceTypeId).HasColumnType("uniqueidentifier");
             HasRequired(d => d.DeviceType).WithMany().HasForeignKey(d => d.DeviceTypeId);

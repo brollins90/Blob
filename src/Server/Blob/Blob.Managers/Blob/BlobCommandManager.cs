@@ -22,6 +22,7 @@ namespace Blob.Managers.Blob
         public BlobDbContext Context { get; private set; }
 
 
+        // Customer
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             Customer customer = Context.Customers.Find(dto.CustomerId);
@@ -31,33 +32,27 @@ namespace Blob.Managers.Blob
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
+
         // Device
         public async Task DisableDeviceAsync(DisableDeviceDto dto)
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
-            Context.Devices.Remove(device);
-            await Context.SaveChangesAsync().ConfigureAwait(false); 
+            device.Enabled = false;
+
+            Context.Entry(device).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        //public async Task<IList<Device>> GetAllDevicesAsync()
-        //{
-        //    return await Context.Devices
-        //        .Include(x => x.Customer)
-        //        .Include(x => x.DeviceType)
-        //        .Include(x => x.Statuses)
-        //        .Include(x => x.StatusPerfs)
-        //        .ToListAsync().ConfigureAwait(false);
-        //}
 
-        //public async Task<Device> GetDeviceByIdAsync(Guid deviceId)
-        //{
-        //    return await Context.Devices
-        //        .Include(x => x.Customer)
-        //        .Include(x => x.DeviceType)
-        //        .Include(x => x.Statuses)
-        //        .Include(x => x.StatusPerfs)
-        //        .SingleAsync(x => x.Id.Equals(deviceId)).ConfigureAwait(false);
-        //}
+        public async Task EnableDeviceAsync(EnableDeviceDto dto)
+        {
+            Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
+            device.Enabled = true;
+
+            Context.Entry(device).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
 
         public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
         {
@@ -68,23 +63,6 @@ namespace Blob.Managers.Blob
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false); 
         }
-
-        //public async Task<IList<Device>> FindDevicesForCustomerAsync(Guid customerId)
-        //{
-        //    return await Context.Devices
-        //        .Include(x => x.Customer)
-        //        .Include(x => x.DeviceType)
-        //        .Include(x => x.Statuses)
-        //        .Include(x => x.StatusPerfs)
-        //        .Where(x =>x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);
-        //}
-
-        //// DeviceType
-        //public async Task<IList<DeviceType>> GetAllDeviceTypesAsync()
-        //{
-        //    return await Context.DeviceTypes.ToListAsync().ConfigureAwait(false);
-        //}
-
 
 
         public async Task RegisterDeviceAsync(RegisterDeviceDto message)
@@ -125,12 +103,5 @@ namespace Blob.Managers.Blob
             //                                     };
             //return returnInfo;
         }
-
-        //public async Task<IList<User>> FindUsersForCustomerAsync(Guid customerId)
-        //{
-        //    return await Context.Users
-        //        .Include(x => x.Customer)
-        //        .Where(x => x.CustomerId == customerId).ToListAsync().ConfigureAwait(false);   
-        //}
     }
 }

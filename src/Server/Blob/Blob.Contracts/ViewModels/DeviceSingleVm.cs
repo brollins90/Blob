@@ -23,10 +23,14 @@ namespace Blob.Contracts.ViewModels
         [DataMember]
         [Display(Name = "Last activity")]
         public DateTime LastActivityDate { get; set; }
-        
+
         [DataMember]
         [Display(Name = "Create date")]
         public DateTime CreateDate { get; set; }
+
+        [DataMember]
+        [Display(Name = "Enabled")]
+        public bool Enabled { get; set; }
 
         [DataMember]
         [Display(Name = "Status")]

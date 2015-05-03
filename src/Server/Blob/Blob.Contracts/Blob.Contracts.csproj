@@ -51,6 +51,7 @@
     <Compile Include="Command\ICommandHandler.cs" />
     <Compile Include="Command\ICommandService.cs" />
     <Compile Include="Command\ICommandServiceCallback.cs" />
+    <Compile Include="Models\EnableDeviceDto.cs" />
     <Compile Include="Models\PerformanceRecordValue.cs" />
     <Compile Include="Models\RegisterDeviceDto.cs" />
     <Compile Include="Models\AddPerformanceRecordDto.cs" />

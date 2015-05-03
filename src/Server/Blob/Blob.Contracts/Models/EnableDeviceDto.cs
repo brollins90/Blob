@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.Models
 {
     [DataContract]
-    public class DisableDeviceDto
+    public class EnableDeviceDto
     {
         [DataMember]
         public Guid DeviceId { get; set; }
