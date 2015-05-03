@@ -72,6 +72,10 @@ namespace Blob.Data.Mapping
                 .HasColumnType("datetime2")
                 .IsRequired();
 
+            // CreateDate
+            Property(x => x.CreateDate).HasColumnType("datetime2")
+                .IsRequired();
+
             // Roles
             //HasMany(u => u.Roles)
             //    .WithMany(r => r.Users)

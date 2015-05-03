@@ -1,28 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
+using Blob.Contracts.Blob;
 using Blob.Contracts.Models;
-using Blob.Contracts.ViewModels;
 using Blob.Core.Domain;
 using Blob.Data;
 using log4net;
 
 namespace Blob.Managers.Blob
 {
-    public interface IBlobCommandManager
-    {
-        // Customer
-        Task UpdateCustomerAsync(UpdateCustomerDto dto);
-
-        // Device
-        Task DisableDeviceAsync(DisableDeviceDto dto);
-        Task RegisterDeviceAsync(RegisterDeviceDto dto);
-        Task UpdateDeviceAsync(UpdateDeviceDto dto);
-
-    }
-
     public class BlobCommandManager : IBlobCommandManager
     {
         private readonly ILog _log;

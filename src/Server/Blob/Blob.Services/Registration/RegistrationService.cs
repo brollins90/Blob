@@ -1,9 +1,9 @@
 ﻿using System.Security.Permissions;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using Blob.Contracts.Blob;
 using Blob.Contracts.Models;
 using Blob.Contracts.Registration;
-using Blob.Managers.Blob;
 using log4net;
 
 namespace Blob.Services.Registration

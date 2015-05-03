@@ -4,14 +4,8 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.ViewModels
 {
     [DataContract]
-    public class UserListVm
+    public class UserSingleVm
     {
-        [DataMember]
-        public int PageNumber { get; set; }
-
-        [DataMember]
-        public int PageSize { get; set; }
-
         [DataMember]
         public Guid UserId { get; set; }
 
@@ -20,5 +14,7 @@ namespace Blob.Contracts.ViewModels
 
         [DataMember]
         public string Email { get; set; }
+
+        // Login logs?
     }
 }

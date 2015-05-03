@@ -1,0 +1,90 @@
+﻿@using Before.Infrastructure.Extensions
+@model Blob.Contracts.ViewModels.PerformanceRecordSingleVm
+@{
+    ViewBag.Title = "Status";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.RecordId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.RecordId)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MonitorName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.MonitorName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MonitorDescription)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.MonitorDescription)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TimeGenerated)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TimeGenerated)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Unit)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Unit)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Label)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Label)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Value)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Value)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Critical)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Critical)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Max)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Max)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Min)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Min)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Warning)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Warning)
+            </dd>
+        </dl>
+    </div>
+</div>

@@ -12,11 +12,15 @@ namespace Blob.Contracts.Models
         [DataMember]
         public string Name { get; set; }
 
+        [DataMember]
+        public string DeviceTypeId { get; set; }
+
         public override string ToString()
         {
             return string.Format("UpdateDeviceDto("
                                  + "DeviceId: " + DeviceId
                                  + ", Name: " + Name
+                                 + ", DeviceTypeId: " + DeviceTypeId
                                  + ")");
         }
     }

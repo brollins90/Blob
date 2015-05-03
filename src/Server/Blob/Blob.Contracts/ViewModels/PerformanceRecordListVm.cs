@@ -5,8 +5,14 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.ViewModels
 {
     [DataContract]
-    public class PerformanceRecordVm
+    public class PerformanceRecordListVm
     {
+        [DataMember]
+        public int PageNumber { get; set; }
+
+        [DataMember]
+        public int PageSize { get; set; }
+
         [DataMember]
         [Display(Name = "Id")]
         public long RecordId { get; set; }

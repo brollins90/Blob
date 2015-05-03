@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.ViewModels
 {
     [DataContract]
-    public class CustomerDetailsVm
+    public class CustomerSingleVm
     {
         [DataMember]
         public Guid CustomerId { get; set; }

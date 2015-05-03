@@ -24,5 +24,51 @@ namespace Before.Infrastructure.Extensions
 
             return MvcHtmlString.Create(builder.ToString());
         }
+
+
+        public static MvcHtmlString AlertLevelClass(this HtmlHelper htmlHelper, int alertLevel)
+        {
+            string alertLevelClass = "";
+            switch (alertLevel)
+            {
+                case 0:
+                    alertLevelClass = "status-ok";
+                    break;
+                case 1:
+                    alertLevelClass = "status-warning";
+                    break;
+                case 2:
+                    alertLevelClass = "status-critical";
+                    break;
+                default:
+                    alertLevelClass = "status-unknown";
+                    break;
+            }
+
+            return MvcHtmlString.Create(alertLevelClass);
+        }
+
+
+        public static MvcHtmlString AlertLevelValue(this HtmlHelper htmlHelper, int alertLevel)
+        {
+            string alertLevelValue = "";
+            switch (alertLevel)
+            {
+                case 0:
+                    alertLevelValue = "Ok";
+                    break;
+                case 1:
+                    alertLevelValue = "Warning";
+                    break;
+                case 2:
+                    alertLevelValue = "Critical";
+                    break;
+                default:
+                    alertLevelValue = "Unknown";
+                    break;
+            }
+
+            return MvcHtmlString.Create(alertLevelValue);
+        }
     }
 }

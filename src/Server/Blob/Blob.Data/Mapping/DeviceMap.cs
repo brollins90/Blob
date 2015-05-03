@@ -24,6 +24,15 @@ namespace Blob.Data.Mapping
                 .HasColumnType("datetime2")
                 .IsRequired();
 
+            // AlertLevel
+            Property(x => x.AlertLevel)
+                .HasColumnType("int")
+                .IsRequired();
+
+            // CreateDate
+            Property(x => x.CreateDate).HasColumnType("datetime2")
+                .IsRequired();
+
             // DeviceType
             Property(x => x.DeviceTypeId).HasColumnType("uniqueidentifier");
             HasRequired(d => d.DeviceType).WithMany().HasForeignKey(d => d.DeviceTypeId);

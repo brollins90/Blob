@@ -1,18 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace Blob.Contracts.ViewModels
 {
     [DataContract]
-    public class DeviceListVm
+    public class DeviceSingleVm
     {
-        [DataMember]
-        public int PageNumber { get; set; }
-
-        [DataMember]
-        public int PageSize { get; set; }
-
         [DataMember]
         [Display(Name = "Id")]
         public Guid DeviceId { get; set; }
@@ -28,9 +23,19 @@ namespace Blob.Contracts.ViewModels
         [DataMember]
         [Display(Name = "Last activity")]
         public DateTime LastActivityDate { get; set; }
+        
+        [DataMember]
+        [Display(Name = "Create date")]
+        public DateTime CreateDate { get; set; }
 
         [DataMember]
         [Display(Name = "Status")]
         public int Status { get; set; }
+        
+        [DataMember]
+        public IEnumerable<StatusRecordSingleVm> StatusRecords { get; set; }
+
+        [DataMember]
+        public IEnumerable<PerformanceRecordListVm> PerformanceRecords { get; set; }
     }
 }

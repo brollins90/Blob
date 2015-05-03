@@ -37,6 +37,8 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blob\IBlobCommandManager.cs" />
+    <Compile Include="Blob\IBlobQueryManager.cs" />
     <Compile Include="Commands\BlobUpdateConfigCommand.cs" />
     <Compile Include="Commands\PsExecuteCommand.cs" />
     <Compile Include="Commands\WindowsBackupCommand.cs" />
@@ -63,12 +65,16 @@
     <Compile Include="Models\AddStatusRecordDto.cs" />
     <Compile Include="Models\UpdateDeviceDto.cs" />
     <Compile Include="Models\UpdateCustomerDto.cs" />
-    <Compile Include="ViewModels\CustomerDetailsVm.cs" />
+    <Compile Include="ViewModels\DeviceTypeSingleVm.cs" />
+    <Compile Include="ViewModels\DeviceSingleVm.cs" />
+    <Compile Include="ViewModels\CustomerSingleVm.cs" />
     <Compile Include="ViewModels\DeviceListVm.cs" />
-    <Compile Include="ViewModels\PerformanceRecordVm.cs" />
-    <Compile Include="ViewModels\StatusRecordVm.cs" />
-    <Compile Include="ViewModels\UpdateDeviceVm.cs" />
-    <Compile Include="ViewModels\UpdateCustomerVm.cs" />
+    <Compile Include="ViewModels\PerformanceRecordSingleVm.cs" />
+    <Compile Include="ViewModels\PerformanceRecordListVm.cs" />
+    <Compile Include="ViewModels\StatusRecordListVm.cs" />
+    <Compile Include="ViewModels\StatusRecordSingleVm.cs" />
+    <Compile Include="ViewModels\DeviceUpdateVm.cs" />
+    <Compile Include="ViewModels\UserSingleVm.cs" />
     <Compile Include="ViewModels\UserListVm.cs" />
   </ItemGroup>
   <ItemGroup />

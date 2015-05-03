@@ -35,7 +35,7 @@ namespace Blob.WcfHost.Infrastructure
             Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
-            Bind<Managers.Blob.IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
+            Bind<Contracts.Blob.IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
             Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
 
             Bind<Contracts.Command.ICommandService>().To<Services.Command.CommandService>();

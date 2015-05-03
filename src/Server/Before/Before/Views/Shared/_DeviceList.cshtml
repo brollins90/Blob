@@ -28,10 +28,10 @@
 
         @foreach (var item in Model)
         {
-            <tr class="status-@item.Status.ToLowerInvariant()">
+            <tr class="@Html.AlertLevelClass(item.Status)">
                 @*@Html.HiddenFor(modelItem => item.Id)*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @Html.AlertLevelValue(item.Status)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DeviceName)

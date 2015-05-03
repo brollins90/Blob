@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.ViewModels
 {
     [DataContract]
-    public class StatusRecordVm
+    public class StatusRecordSingleVm
     {
         [DataMember]
         [Display(Name = "Id")]
@@ -26,9 +26,5 @@ namespace Blob.Contracts.ViewModels
         [DataMember]
         [Display(Name = "Time generated")]
         public DateTime TimeGenerated { get; set; }
-
-        [DataMember]
-        [Display(Name = "Time sent")]
-        public DateTime TimeSent { get; set; }
     }
 }

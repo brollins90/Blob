@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using Blob.Managers.Blob;
+using Blob.Contracts.Blob;
 
 namespace Before.Controllers
 {

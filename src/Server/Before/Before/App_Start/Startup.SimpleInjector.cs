@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Identity;
+using Blob.Contracts.Blob;
 using Blob.Data;
 using Blob.Managers.Blob;
 using log4net;
