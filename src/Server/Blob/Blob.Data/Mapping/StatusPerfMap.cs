@@ -71,6 +71,12 @@ namespace Blob.Data.Mapping
                 .HasColumnType("uniqueidentifier")
                 .IsRequired();
             HasRequired(s => s.Device).WithMany(d => d.StatusPerfs).HasForeignKey(s => s.DeviceId);
+
+            // Status
+            Property(x => x.StatusId)
+                .HasColumnType("bigint")
+                .IsRequired();
+            HasRequired(s => s.Status).WithMany(d => d.StatusPerfs).HasForeignKey(s => s.StatusId).WillCascadeOnDelete(false);
         }
     }
 }

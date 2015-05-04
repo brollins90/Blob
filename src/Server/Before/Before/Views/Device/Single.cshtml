@@ -1,5 +1,5 @@
 ﻿@using Before.Infrastructure.Extensions
-@model Blob.Contracts.ViewModels.DeviceSingleVm
+@model Blob.Contracts.Dto.ViewModels.DeviceSingleVm
 @{
     ViewBag.Title = "Device";
 }
@@ -22,7 +22,7 @@
                         <a data-toggle="collapse" data-parent="#accordion" href="#device">Device</a>
                     </h4>
                 </div>
-                <div id="device" class="panel-collapse collapse">
+                <div id="device" class="panel-collapse collapse in">
                     <div class="panel-body">
 
                         <dl class="dl-horizontal">
@@ -89,7 +89,7 @@
                     <div class="panel-body">
 
                         <hr />
-                        @*@Html.Partial("_StatusList", Model.StatusRecords)*@
+                        @Html.Partial("_StatusList", Model.StatusRecords)
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                     <div class="panel-body">
 
                         <hr />
-                        @*@Html.Partial("_PerformanceList", Model.PerformanceRecords)*@
+                        @Html.Partial("_PerformanceList", Model.PerformanceRecords)
                     </div>
                 </div>
             </div>

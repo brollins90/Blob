@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 
 namespace Blob.Contracts.Status
 {

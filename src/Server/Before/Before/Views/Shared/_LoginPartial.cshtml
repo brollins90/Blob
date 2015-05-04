@@ -1,16 +1,29 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using Before.Infrastructure.Extensions
+@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
+    var username = User.Identity.GetUserName();
+    var customerId = User.Identity.GetCustomerId();
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Home" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello @username! <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        @Html.ActionLink("Manage User", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    </li>
+                    <li>
+                        @Html.ActionLink("Manage Customer", "Single", "Customer", routeValues: new { id = @customerId }, htmlAttributes: new { title = "Manage" })
+                    </li>
+                    <li class="divider"></li>
+                    @* foreach theme, insert here *@
+                </ul>
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
     }
 }
 else

@@ -1,7 +1,7 @@
 ﻿using System.Security.Permissions;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 
 namespace Blob.Contracts.Registration
 {
@@ -10,6 +10,6 @@ namespace Blob.Contracts.Registration
     {
         [OperationContract]
         [PrincipalPermission(SecurityAction.Demand, Role = "Customer")]
-        Task Register(RegisterDeviceDto registerDeviceDto);
+        Task<RegisterDeviceResponseDto> Register(RegisterDeviceDto registerDeviceDto);
     }
 }

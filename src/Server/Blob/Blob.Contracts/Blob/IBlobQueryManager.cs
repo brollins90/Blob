@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blob.Contracts.ViewModels;
+using Blob.Contracts.Dto.ViewModels;
 
 namespace Blob.Contracts.Blob
 {

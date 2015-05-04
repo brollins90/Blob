@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Contracts.Registration;
 
 namespace Blob.Proxies
@@ -11,26 +11,21 @@ namespace Blob.Proxies
     {
         public Action<Exception> ClientErrorHandler = null;
 
-        public RegistrationClient(string endpointName)
-            : base(endpointName)
-        {
-        }
+        public RegistrationClient(string endpointName) : base(endpointName) { }
 
-        public RegistrationClient(Binding binding, EndpointAddress address)
-            : base(binding, address)
-        {
-        }
+        public RegistrationClient(Binding binding, EndpointAddress address) : base(binding, address) { }
 
-        public async Task Register(RegisterDeviceDto message)
+        public async Task<RegisterDeviceResponseDto> Register(RegisterDeviceDto message)
         {
             try
             {
-                await Channel.Register(message).ConfigureAwait(false);
+                return await Channel.Register(message).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return null;
         }
 
         private void HandleError(Exception ex)

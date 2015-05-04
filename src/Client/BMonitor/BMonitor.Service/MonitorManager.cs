@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel.Security;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Proxies;
 using BMonitor.Common;
 using BMonitor.Common.Interfaces;
@@ -92,7 +92,7 @@ start scheduler
             if (config == null)
                 throw new ArgumentNullException("config");
 
-            if (!Guid.TryParse(GetConfigValue(config["deviceId"], ""), out _deviceId))
+            if (!Guid.TryParse(GetConfigValue(config["deviceId"], "--"), out _deviceId))
             {
                 _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
                 _isRegistered = false;
@@ -103,6 +103,7 @@ start scheduler
             }
             else
             {
+                _log.Info(string.Format("Loaded device id of {0}.",_deviceId));
                 _isRegistered = true;
                 Username = _deviceId.ToString();
                 Password = _deviceId.ToString();
@@ -114,12 +115,12 @@ start scheduler
             _enablePerformanceMonitoring = Convert.ToBoolean(GetConfigValue(config["enablePerformanceMonitoring"], "false"));
             _enableStatusMonitoring = Convert.ToBoolean(GetConfigValue(config["enableStatusMonitoring"], "false"));
 
-            if (_enableCommandConnection)
+            if (_isRegistered && _enableCommandConnection)
             {
                 OpenCommandConnection();
             }
 
-            if (_enableStatusMonitoring || _enablePerformanceMonitoring)
+            if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
             {
                 LoadMonitors();
             }
@@ -134,6 +135,7 @@ start scheduler
 
                 //ICommandService 
                 commandClient = _kernel.Get<CommandClient>();
+                commandClient.ClientErrorHandler += HandleException;
 
 
                 //commandClient = new CommandClient(callbackInstance, "CommandService");
@@ -187,7 +189,7 @@ start scheduler
                 
                 // where am i going to get all the config info?
                 ResultData result = monitor.Execute(true);
-                StatusData statusData = new StatusData()
+                AddStatusRecordDto statusData = new AddStatusRecordDto()
                              {
                                  AlertLevel = (int) result.AlertLevel,
                                  CurrentValue = result.Value,
@@ -198,10 +200,10 @@ start scheduler
                                  TimeSent = DateTime.Now
                              };
 
-                StatusPerformanceData spd = null;
+                AddPerformanceRecordDto spd = null;
                 if (_enablePerformanceMonitoring && result.Perf.Any())
                 {
-                    spd = new StatusPerformanceData
+                    spd = new AddPerformanceRecordDto
                                                 {
                                                     DeviceId = _deviceId,
                                                     MonitorDescription = result.MonitorDescription,
@@ -212,7 +214,7 @@ start scheduler
 
                     foreach (PerformanceData perf in result.Perf)
                     {
-                        spd.AddPerformanceDataValue(new PerformanceDataValue
+                        spd.Data.Add(new PerformanceRecordValue
                                                     {
                                                         Critical = perf.Critical,
                                                         Label = perf.Label,
@@ -230,6 +232,7 @@ start scheduler
 
                 _log.Info("Creating new StatusClient");
                 StatusClient statusClient = new StatusClient("StatusService");
+                statusClient.ClientErrorHandler += HandleException;
                 statusClient.ClientCredentials.UserName.UserName = Username;
                 statusClient.ClientCredentials.UserName.Password = Password;
                 statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
@@ -262,7 +265,7 @@ start scheduler
             {
                 Guid deviceGuid = Guid.NewGuid();
                 _log.Info(string.Format("Registering this agent with the BlobService with id:{0}.", deviceGuid));
-                RegistrationMessage regMessage = new RegistrationMessage
+                RegisterDeviceDto regMessage = new RegisterDeviceDto
                                                  {
                                                      DeviceId = deviceGuid.ToString(),
                                                      DeviceKey1 = "key1",
@@ -276,11 +279,12 @@ start scheduler
                 _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
 
                 RegistrationClient registrationClient = new RegistrationClient("RegistrationService");
+                registrationClient.ClientErrorHandler += HandleException;
                 registrationClient.ClientCredentials.UserName.UserName = username;
                 registrationClient.ClientCredentials.UserName.Password = password;
                 registrationClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
-                RegistrationInformation regInfo = Task.Run(() => registrationClient.Register(regMessage)).Result;
+                RegisterDeviceResponseDto regInfo = Task.Run(() => registrationClient.Register(regMessage)).Result;
                 _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
 
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
@@ -303,6 +307,12 @@ start scheduler
         private static string GetConfigValue(string configValue, string defaultValue)
         {
             return (string.IsNullOrEmpty(configValue)) ? defaultValue : configValue;
+        }
+
+        private void HandleException(Exception ex)
+        {
+            _log.Error(string.Format("Error from client proxy."), ex);
+            ;
         }
 
         public void Dispose()

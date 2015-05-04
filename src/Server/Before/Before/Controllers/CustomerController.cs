@@ -3,8 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blob.Contracts.Blob;
-using Blob.Contracts.Models;
-using Blob.Contracts.ViewModels;
+using Blob.Contracts.Dto.ViewModels;
 
 namespace Before.Controllers
 {
@@ -14,6 +13,7 @@ namespace Before.Controllers
         public CustomerController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
             : base(blobCommandManager, blobQueryManager) { }
 
+
         // GET: customer/single/{id}
         public async Task<ActionResult> Single(Guid? id)
         {
@@ -22,13 +22,13 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CustomerSingleVm cvm = await BlobQueryManager.GetCustomerSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (cvm == null)
+            var singleVm = await BlobQueryManager.GetCustomerSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (singleVm == null)
             {
                 return HttpNotFound();
             }
 
-            return View(cvm);
+            return View(singleVm);
         }
 
         // GET: customer/edit/{id}
@@ -39,25 +39,22 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CustomerSingleVm csvm = await BlobQueryManager.GetCustomerSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (csvm == null)
+            var singleVm = await BlobQueryManager.GetCustomerSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (singleVm == null)
             {
                 return HttpNotFound();
             }
-
-            UpdateCustomerDto dto = new UpdateCustomerDto {CustomerId = csvm.CustomerId, Name = csvm.Name};
-
-            return View(dto);
+            return View(new CustomerUpdateVm { CustomerId = singleVm.CustomerId, CustomerName = singleVm.Name });
         }
 
         // POST: customer/edit/{customer}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(UpdateCustomerDto dto)
+        public async Task<ActionResult> Edit(CustomerUpdateVm vm)
         {
             if (ModelState.IsValid)
             {
-                await BlobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(true);
+                await BlobCommandManager.UpdateCustomerAsync(vm.ToDto()).ConfigureAwait(true);
                 return RedirectToAction("Index", "Home");
             }
             return View();

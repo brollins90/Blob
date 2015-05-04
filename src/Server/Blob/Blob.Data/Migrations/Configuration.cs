@@ -14,7 +14,7 @@ namespace Blob.Data.Migrations
         }
         protected override void Seed(BlobDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            ////  This method will be called after migrating to the latest version.
 
             //// DeviceTypes
             //DeviceType testDeviceTypeWinDesktop = new DeviceType
@@ -40,41 +40,41 @@ namespace Blob.Data.Migrations
             //context.Set<Customer>().AddOrUpdate(x => x.Name, testCustomer1);
             //context.SaveChanges();
 
-            //// Devices
-            //Device testDevice1 = new Device
-            //                     {
-            //                         //Customer,
-            //                         CustomerId = testCustomer1.Id,
-            //                         DeviceName = "Test Windows Desktop 1",
-            //                         //DeviceType
-            //                         DeviceTypeId = testDeviceTypeWinDesktop.Id,
-            //                         Id = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
-            //                         LastActivityDate = DateTime.Parse("2015-04-14"),
-            //                     };
-            ////DeviceSecurity testDevice1Ds = new DeviceSecurity
-            ////                                {
+            ////// Devices
+            ////Device testDevice1 = new Device
+            ////                     {
+            ////                         //Customer,
+            ////                         CustomerId = testCustomer1.Id,
+            ////                         DeviceName = "Test Windows Desktop 1",
+            ////                         //DeviceType
+            ////                         DeviceTypeId = testDeviceTypeWinDesktop.Id,
+            ////                         Id = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
+            ////                         LastActivityDate = DateTime.Parse("2015-04-14"),
+            ////                     };
+            //////DeviceSecurity testDevice1Ds = new DeviceSecurity
+            //////                                {
 
-            ////                                    Comment = null,
-            ////                                    CreateDate = DateTime.Parse("2015-04-14"),
-            ////                                    Device = testDevice1,
-            ////                                    DeviceId = testDevice1.Id,
-            ////                                    //FailedLoginAttemptCount,
-            ////                                    //FailedLoginAttemptWindowStart,
-            ////                                    IsApproved = true,
-            ////                                    IsLockedOut = false,
-            ////                                    Key1 = "key1",
-            ////                                    Key1Format = 0,
-            ////                                    Key1Salt = "",
-            ////                                    Key2 = "key2",
-            ////                                    Key2Format = 0,
-            ////                                    Key2Salt = "",
-            ////                                    //LastKey1ChangedDate,
-            ////                                    //LastKey2ChangedDate,
-            ////                                    //LastLoginDate
-            ////                                };
-            ////context.Set<DeviceSecurity>().AddOrUpdate(x => new { x.DeviceId }, testDevice1Ds);
-            //context.Set<Device>().AddOrUpdate(x => new { x.Id }, testDevice1);
-            //context.SaveChanges();
+            //////                                    Comment = null,
+            //////                                    CreateDate = DateTime.Parse("2015-04-14"),
+            //////                                    Device = testDevice1,
+            //////                                    DeviceId = testDevice1.Id,
+            //////                                    //FailedLoginAttemptCount,
+            //////                                    //FailedLoginAttemptWindowStart,
+            //////                                    IsApproved = true,
+            //////                                    IsLockedOut = false,
+            //////                                    Key1 = "key1",
+            //////                                    Key1Format = 0,
+            //////                                    Key1Salt = "",
+            //////                                    Key2 = "key2",
+            //////                                    Key2Format = 0,
+            //////                                    Key2Salt = "",
+            //////                                    //LastKey1ChangedDate,
+            //////                                    //LastKey2ChangedDate,
+            //////                                    //LastLoginDate
+            //////                                };
+            //////context.Set<DeviceSecurity>().AddOrUpdate(x => new { x.DeviceId }, testDevice1Ds);
+            ////context.Set<Device>().AddOrUpdate(x => new { x.Id }, testDevice1);
+            ////context.SaveChanges();
 
             //// Roles
             //Role deviceRole = new Role
@@ -100,76 +100,15 @@ namespace Blob.Data.Migrations
             //context.Set<Role>().AddOrUpdate(x => x.Name, deviceRole, adminRole, custAdminRole, custRole);
             //context.SaveChanges();
 
-            //// Status
-            //Status status1 = new Status
-            //{
-            //    AlertLevel = 0,
-            //    CurrentValue = "0",
-            //    DeviceId = testDevice1.Id,
-            //    //Id = 5,
-            //    MonitorDescription = "Description",
-            //    MonitorName = "Name",
-            //    TimeGenerated = DateTime.Now,
-            //    TimeSent = DateTime.Now,
-            //};
-            //context.Set<Status>().AddOrUpdate(x => new { x.DeviceId, x.TimeGenerated }, status1);
-            //context.SaveChanges();
-
-            //// StatusPerf
-
-            //// Status
-            //StatusPerf statusPerf1 = new StatusPerf
-            //{
-            //    Critical = null,
-            //    DeviceId = testDevice1.Id,
-            //    Label = "PerfLabelTest",
-            //    MonitorDescription = "Perf Description",
-            //    MonitorName = "Perf Name",
-            //    TimeGenerated = DateTime.Now,
-            //    Max = null,
-            //    Min = null,
-            //    UnitOfMeasure = "GB",
-            //    Value = 7,
-            //    Warning = null,
-            //};
-            //context.Set<StatusPerf>().AddOrUpdate(x => new { x.DeviceId, x.TimeGenerated }, statusPerf1);
-            //context.SaveChanges();
-
             //// User
             //User testUser1 = new User
             //                 {
-            //                     //Customer
             //                     CustomerId = testCustomer1.Id,
             //                     Id = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"),
             //                     LastActivityDate = DateTime.Parse("2015-04-14"),
             //                     PasswordHash = "password",
             //                     UserName = "customerUser1",
             //                 };
-            ////UserSecurity testUser1Us = new UserSecurity
-            ////                           {
-            ////                               Comment = null,
-            ////                               CreateDate = DateTime.Parse("2015-04-14"),
-            ////                               Email = "testUser1@test.com",
-            ////                               //FailedPasswordAnswerAttemptCount,
-            ////                               //FailedPasswordAnswerAttemptWindowStart,
-            ////                               //FailedPasswordAttemptCount,
-            ////                               //FailedPasswordAttemptWindowStart,
-            ////                               HasVerifiedEmail = true,
-            ////                               IsApproved = true,
-            ////                               IsLockedOut = false,
-            ////                               //LastLockoutDate,
-            ////                               //LastLoginDate,
-            ////                               //LastPasswordChangedDate,
-            ////                               //MobilePin,
-            ////                               //PasswordAnswer,
-            ////                               Password = "password",
-            ////                               PasswordFormat = 0,
-            ////                               //PasswordQuestion,
-            ////                               PasswordSalt = "",
-            ////                               UserId = testUser1.Id,
-            ////                               User = testUser1,
-            ////                           };
-            ////context.Set<UserSecurity>().AddOrUpdate(x => new { x.UserId, x.Email }, testUser1Us);
             //context.Set<User>().AddOrUpdate(x => x.Id, testUser1);
             //context.SaveChanges();
         }

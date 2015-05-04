@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Core.Domain;
 using Blob.Data;
 using log4net;
@@ -54,18 +54,7 @@ namespace Blob.Managers.Blob
         }
 
 
-        public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
-        {
-            Device device = Context.Devices.Find(dto.DeviceId);
-            device.DeviceName = dto.Name;
-            device.DeviceTypeId = dto.DeviceTypeId;
-
-            Context.Entry(device).State = EntityState.Modified;
-            await Context.SaveChangesAsync().ConfigureAwait(false); 
-        }
-
-
-        public async Task RegisterDeviceAsync(RegisterDeviceDto message)
+        public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto message)
         {
             _log.Debug("BlobManager registering device " + message.DeviceId);
             // Authenticate user is done, it is required in the service
@@ -96,12 +85,22 @@ namespace Blob.Managers.Blob
             Context.Devices.Add(device);
             await Context.SaveChangesAsync();
 
-            //RegistrationInformation returnInfo = new RegistrationInformation
-            //                                     {
-            //                                         DeviceId = device.Id.ToString(),
-            //                                         TimeSent = DateTime.Now
-            //                                     };
-            //return returnInfo;
+            return new RegisterDeviceResponseDto
+                                                 {
+                                                     DeviceId = device.Id.ToString(),
+                                                     TimeSent = DateTime.Now
+                                                 };
+        }
+
+
+        public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
+        {
+            Device device = Context.Devices.Find(dto.DeviceId);
+            device.DeviceName = dto.Name;
+            device.DeviceTypeId = dto.DeviceTypeId;
+
+            Context.Entry(device).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

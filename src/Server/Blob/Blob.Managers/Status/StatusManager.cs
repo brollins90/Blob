@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Managers.Extensions;

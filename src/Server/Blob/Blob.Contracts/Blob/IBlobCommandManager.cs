@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 
 namespace Blob.Contracts.Blob
 {
@@ -11,7 +11,7 @@ namespace Blob.Contracts.Blob
         // Device
         Task DisableDeviceAsync(DisableDeviceDto dto);
         Task EnableDeviceAsync(EnableDeviceDto dto);
-        Task RegisterDeviceAsync(RegisterDeviceDto dto);
+        Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto);
         Task UpdateDeviceAsync(UpdateDeviceDto dto);
 
     }

@@ -18,5 +18,8 @@ namespace Blob.Core.Domain
 
         public Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
+
+        public long StatusId { get; set; }
+        public virtual Status Status { get; set; }
     }
 }

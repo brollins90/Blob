@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Blob.Core.Domain
 {
@@ -14,5 +16,12 @@ namespace Blob.Core.Domain
 
         public Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
+
+        public virtual ICollection<StatusPerf> StatusPerfs
+        {
+            get { return _statusPerfs ?? (_statusPerfs = new Collection<StatusPerf>()); }
+            protected set { _statusPerfs = value; }
+        }
+        private ICollection<StatusPerf> _statusPerfs;
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blob.Contracts.Blob;
-using Blob.Contracts.ViewModels;
 
 namespace Before.Controllers
 {
@@ -12,6 +11,7 @@ namespace Before.Controllers
         public PerformanceController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
             : base(blobCommandManager, blobQueryManager) { }
 
+
         // GET: performance/single/{id}
         public async Task<ActionResult> Single(long? id)
         {
@@ -20,7 +20,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            PerformanceRecordSingleVm singleVm = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id.Value).ConfigureAwait(true);
+            var singleVm = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id.Value).ConfigureAwait(true);
             if (singleVm == null)
             {
                 return HttpNotFound();

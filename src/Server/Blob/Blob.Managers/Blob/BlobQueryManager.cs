@@ -3,7 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
-using Blob.Contracts.ViewModels;
+using Blob.Contracts.Dto.ViewModels;
 using Blob.Data;
 using log4net;
 
@@ -33,7 +33,7 @@ namespace Blob.Managers.Blob
                               CustomerId = cust.Id,
                               Name = cust.Name,
                               Devices = (from d in cust.Devices
-                                         select new DeviceListVm
+                                         select new DeviceListItemVm
                                          {
                                              DeviceName = d.DeviceName,
                                              DeviceType = d.DeviceType.Value,
@@ -42,7 +42,7 @@ namespace Blob.Managers.Blob
                                              Status = d.AlertLevel
                                          }),
                               Users = (from u in cust.Users
-                                       select new UserListVm
+                                       select new UserListItemVm
                                        {
                                            UserId = u.Id,
                                            UserName = u.UserName
@@ -63,7 +63,7 @@ namespace Blob.Managers.Blob
                               DeviceType = device.DeviceType.Value,
                               LastActivityDate = device.LastActivityDate,
                               PerformanceRecords = (from perf in device.StatusPerfs
-                                                    select new PerformanceRecordListVm
+                                                    select new PerformanceRecordListItemVm
                                                     {
                                                         Critical = perf.Max.ToString(),
                                                         Label = perf.Label,
@@ -79,7 +79,7 @@ namespace Blob.Managers.Blob
                                                     }),
                               Status = device.AlertLevel,
                               StatusRecords = (from status in device.Statuses
-                                               select new StatusRecordSingleVm
+                                               select new StatusRecordListItemVm
                                                {
                                                    MonitorDescription = status.MonitorDescription,
                                                    MonitorName = status.MonitorName,
@@ -105,24 +105,7 @@ namespace Blob.Managers.Blob
                                            }),
                               DeviceId = device.Id,
                               DeviceTypeId = device.DeviceTypeId,
-                              Name = device.DeviceName
-                          }).SingleAsync().ConfigureAwait(false);
-
-        }
-
-        // Status
-        public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
-        {
-            return await (from status in Context.DeviceStatuses
-                          where status.Id == recordId
-                          select new StatusRecordSingleVm
-                          {
-                              MonitorDescription = status.MonitorDescription,
-                              MonitorName = status.MonitorName,
-                              RecordId = status.Id,
-                              Status = status.AlertLevel,
-                              TimeGenerated = status.TimeGenerated
-
+                              DeviceName = device.DeviceName
                           }).SingleAsync().ConfigureAwait(false);
         }
 
@@ -144,6 +127,22 @@ namespace Blob.Managers.Blob
                               Unit = perf.UnitOfMeasure,
                               Value = perf.Value.ToString(),
                               Warning = perf.Warning.ToString()
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        // Status
+        public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
+        {
+            return await (from status in Context.DeviceStatuses
+                          where status.Id == recordId
+                          select new StatusRecordSingleVm
+                          {
+                              MonitorDescription = status.MonitorDescription,
+                              MonitorName = status.MonitorName,
+                              RecordId = status.Id,
+                              Status = status.AlertLevel,
+                              TimeGenerated = status.TimeGenerated
+
                           }).SingleAsync().ConfigureAwait(false);
         }
     }

@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Contracts.Status;
 
 namespace Blob.Proxies

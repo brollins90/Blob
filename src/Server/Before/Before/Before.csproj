@@ -287,6 +287,20 @@
     <Content Include="Views\Device\Edit.cshtml" />
     <Content Include="Views\Device\Disable.cshtml" />
     <Content Include="Views\Device\Single.cshtml" />
+    <Content Include="Views\Shared\_StatusList.cshtml" />
+    <Content Include="Views\Shared\_PerformanceList.cshtml" />
+    <Content Include="Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Views\Device\Enable.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\_EditUserPasswordPartial.cshtml" />
+    <Content Include="Views\Account\_EditUserPartial.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -94,6 +94,10 @@
     <Compile Include="Migrations\201505031909261_EnabledDeviceColumn.Designer.cs">
       <DependentUpon>201505031909261_EnabledDeviceColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505032022595_LinkedPerfDataToStatus.cs" />
+    <Compile Include="Migrations\201505032022595_LinkedPerfDataToStatus.Designer.cs">
+      <DependentUpon>201505032022595_LinkedPerfDataToStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -123,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505031909261_EnabledDeviceColumn.resx">
       <DependentUpon>201505031909261_EnabledDeviceColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505032022595_LinkedPerfDataToStatus.resx">
+      <DependentUpon>201505032022595_LinkedPerfDataToStatus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

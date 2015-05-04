@@ -1,4 +1,4 @@
-﻿@model Blob.Contracts.Models.UpdateCustomerDto
+﻿@model Blob.Contracts.Dto.ViewModels.CustomerUpdateVm
 @{
     ViewBag.Title = "Edit";
 }
@@ -16,10 +16,10 @@
         @Html.HiddenFor(model => model.CustomerId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CustomerName, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
             </div>
         </div>
 

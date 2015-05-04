@@ -1,0 +1,19 @@
+﻿<ul class="nav navbar-nav">
+    <li>@Html.ActionLink("About", "About", "Home")</li>
+    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+    @*@if (ViewBag.Notifications != null)
+        {
+            foreach (NotificationViewModel notification in ViewBag.Notifications)
+            {
+                <li>
+                    <a href="#">
+                        @notification.NotificationType
+                        <span class="badge badge-@notification.BadgeClass">
+                            @notification.Count
+                        </span>
+                    </a>
+                </li>
+            }
+        }*@
+</ul>

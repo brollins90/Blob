@@ -1,7 +1,7 @@
 ﻿using System.Security.Permissions;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Contracts.Status;
 using Blob.Managers.Status;
 using log4net;

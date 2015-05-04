@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
-using Blob.Contracts.Models;
+using Blob.Contracts.Dto;
 using Blob.Contracts.Registration;
 using log4net;
 
@@ -23,10 +23,10 @@ namespace Blob.Services.Registration
 
         [OperationBehavior]
         [PrincipalPermission(SecurityAction.Demand, Role = "Customer")]
-        public async Task Register(RegisterDeviceDto message)
+        public async Task<RegisterDeviceResponseDto> Register(RegisterDeviceDto message)
         {
             _log.Debug("RegistrationService received registration message: " + message);
-            await _blobCommandManager.RegisterDeviceAsync(message).ConfigureAwait(false);
+            return await _blobCommandManager.RegisterDeviceAsync(message).ConfigureAwait(false);
         }
     }
 }
