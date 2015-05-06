@@ -23,6 +23,24 @@ namespace Blob.Managers.Blob
 
 
         // Customer
+        public async Task DisableCustomerAsync(DisableCustomerDto dto)
+        {
+            Customer customer = Context.Customers.Find(dto.CustomerId);
+            customer.Enabled = false;
+
+            Context.Entry(customer).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task EnableCustomerAsync(EnableCustomerDto dto)
+        {
+            Customer customer = Context.Customers.Find(dto.CustomerId);
+            customer.Enabled = true;
+
+            Context.Entry(customer).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             Customer customer = Context.Customers.Find(dto.CustomerId);
@@ -75,10 +93,13 @@ namespace Blob.Managers.Blob
             
             device = new Device
                             {
+                                AlertLevel = 0, // initially set to Ok
+                                CreateDate = createDate,
                                 CustomerId = customerId,
-                                Id = Guid.Parse(message.DeviceId),
                                 DeviceName = message.DeviceName,
                                 DeviceType = deviceType,
+                                Enabled = true,
+                                Id = Guid.Parse(message.DeviceId),
                                 LastActivityDate = createDate
                             };
 
@@ -100,6 +121,40 @@ namespace Blob.Managers.Blob
             device.DeviceTypeId = dto.DeviceTypeId;
 
             Context.Entry(device).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+
+        // User
+        public async Task DisableUserAsync(DisableUserDto dto)
+        {
+            User user = Context.Users.Find(dto.UserId);
+            user.Enabled = false;
+
+            Context.Entry(user).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task EnableUserAsync(EnableUserDto dto)
+        {
+            User user = Context.Users.Find(dto.UserId);
+            user.Enabled = true;
+
+            Context.Entry(user).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task UpdateUserAsync(UpdateUserDto dto)
+        {
+            User user = Context.Users.Find(dto.UserId);
+            //user.UserName = dto.UserName;
+            if (!user.Email.Equals(dto.Email))
+            {
+                user.Email = dto.Email;
+                user.EmailConfirmed = false;
+            }
+
+            Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
     }

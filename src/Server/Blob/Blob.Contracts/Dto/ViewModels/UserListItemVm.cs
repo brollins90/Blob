@@ -19,6 +19,10 @@ namespace Blob.Contracts.Dto.ViewModels
         public string Email { get; set; }
 
         [DataMember]
+        [Required]
+        public bool Enabled { get; set; }
+
+        [DataMember]
         [Display(Name = "Username")]
         [Required]
         public string UserName { get; set; }

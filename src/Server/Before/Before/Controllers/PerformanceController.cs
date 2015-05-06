@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blob.Contracts.Blob;
+using Blob.Contracts.Dto.ViewModels;
 
 namespace Before.Controllers
 {
@@ -12,7 +14,7 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
-        // GET: performance/single/{id}
+        // GET: /performance/single/{id}
         public async Task<ActionResult> Single(long? id)
         {
             if (id == null)
@@ -20,13 +22,19 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var singleVm = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (singleVm == null)
+            var viewModel = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
             {
                 return HttpNotFound();
             }
 
-            return View(singleVm);
+            return View(viewModel);
+        }
+
+        // GET: /performance/list/{models}
+        public ActionResult List(IEnumerable<PerformanceRecordListItemVm> models)
+        {
+            return PartialView("_List", models);
         }
     }
 }

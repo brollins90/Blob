@@ -1,5 +1,7 @@
-﻿using System.Security.Permissions;
+﻿using System.Security.Claims;
+using System.Security.Permissions;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
 using Blob.Contracts.Dto;
@@ -26,6 +28,7 @@ namespace Blob.Services.Registration
         public async Task<RegisterDeviceResponseDto> Register(RegisterDeviceDto message)
         {
             _log.Debug("RegistrationService received registration message: " + message);
+            
             return await _blobCommandManager.RegisterDeviceAsync(message).ConfigureAwait(false);
         }
     }

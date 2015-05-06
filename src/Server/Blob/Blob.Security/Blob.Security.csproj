@@ -80,6 +80,7 @@
     <Compile Include="BlobClaimsIdentityFactory.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />
+    <Compile Include="Sam\BlobClaimsTransformer.cs" />
     <Compile Include="Sam\BlobServiceAuthorizationManager.cs" />
     <Compile Include="BlobUserManagerAdapter.cs" />
     <Compile Include="BlobUserManager.cs" />

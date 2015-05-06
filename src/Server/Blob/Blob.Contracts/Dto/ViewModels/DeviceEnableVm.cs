@@ -15,11 +15,16 @@ namespace Blob.Contracts.Dto.ViewModels
         [DataMember]
         [Display(Name = "Device name")]
         [Required]
-        public string Name { get; set; }
+        public string DeviceName { get; set; }
+
+        [DataMember]
+        [Display(Name = "Enabled")]
+        [Required]
+        public bool Enabled { get; set; }
 
         public EnableDeviceDto ToDto()
         {
-            return new EnableDeviceDto { DeviceId = this.DeviceId, Name = this.Name };
+            return new EnableDeviceDto { DeviceId = DeviceId };
         }
     }
 }

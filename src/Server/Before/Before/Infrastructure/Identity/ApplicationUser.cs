@@ -16,12 +16,13 @@ namespace Before.Infrastructure.Identity
         public BeforeUser(UserDto userDto)
         {
             Id = userDto.Id;
+            Email = userDto.Email;
             UserName = userDto.UserName;
         }
 
         public UserDto ToDto()
         {
-            return new UserDto { Id = Id, UserName = UserName };
+            return new UserDto { Id = Id, Email = Email, UserName = UserName };
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(BeforeUserManager manager)
@@ -29,7 +30,6 @@ namespace Before.Infrastructure.Identity
             return await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie).ConfigureAwait(false);
         }
 
-        public string Email { get; set; }
         public string PasswordHash { get; set; }
     }
 }

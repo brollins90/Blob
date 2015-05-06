@@ -8,8 +8,5 @@ namespace Blob.Contracts.Dto
     {
         [DataMember]
         public Guid DeviceId { get; set; }
-
-        [DataMember]
-        public string Name { get; set; }
     }
 }

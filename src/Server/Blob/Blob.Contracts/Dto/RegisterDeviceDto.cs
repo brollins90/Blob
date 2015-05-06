@@ -7,6 +7,9 @@ namespace Blob.Contracts.Dto
     public class RegisterDeviceDto
     {
         [DataMember]
+        public string CustomerId { get; set; }
+
+        [DataMember]
         public string DeviceId { get; set; }
 
         [DataMember]

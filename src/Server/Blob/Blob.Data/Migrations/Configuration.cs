@@ -111,6 +111,9 @@ namespace Blob.Data.Migrations
             //                 };
             //context.Set<User>().AddOrUpdate(x => x.Id, testUser1);
             //context.SaveChanges();
+
+            //context.Set<BlobUserRole>().AddOrUpdate(new BlobUserRole { UserId = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"), RoleId = Guid.Parse("8EBC5306-37B3-402B-909E-F481845ACD02") });//customer
+            //context.Set<BlobUserRole>().AddOrUpdate(new BlobUserRole { UserId = Guid.Parse("4D5C23CB-E961-4D97-91D8-AAC2E8D0E2C1"), RoleId = Guid.Parse("CA600C24-CB14-480C-B58C-6EEC393B507F") });// customer admin
         }
     }
 }

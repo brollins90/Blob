@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
-using Before.Models;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Blob.Contracts.Dto;
+using Blob.Contracts.Dto.ViewModels;
 using Blob.Contracts.Security;
 
 namespace Before.Controllers
@@ -22,6 +24,13 @@ namespace Before.Controllers
         protected BeforeUserManager UserManager { get; set; }
         protected BeforeSignInManager SignInManager { get; set; }
 
+
+        // GET: /account/list/{models}
+        public ActionResult ListUsers(IEnumerable<UserListItemVm> models)
+        {
+            return PartialView("_UserList", models);
+        }
+
         // GET: /account/login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -34,7 +43,7 @@ namespace Before.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginVm model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +52,7 @@ namespace Before.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            SignInStatusDto resultDto = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatusDto resultDto = await SignInManager.PasswordSignInAsync(model.UserNameEmail, model.Password, model.RememberMe, shouldLockout: false);
             switch (resultDto.ToResult())
             {
                 case SignInStatus.Success:
@@ -75,7 +84,7 @@ namespace Before.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(UserRegisterVm model)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +118,7 @@ namespace Before.Controllers
         // POST: /account/createuser
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateUser(CreateUserViewModel model)
+        public async Task<ActionResult> CreateUser(UserCreateVm model)
         {
             if (ModelState.IsValid)
             {

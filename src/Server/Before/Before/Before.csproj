@@ -213,14 +213,13 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PerformanceController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Infrastructure\Extensions\BlobSecurityUtils.cs" />
     <Compile Include="Infrastructure\Extensions\EnumUtils.cs" />
     <Compile Include="Infrastructure\Extensions\MvcUtils.cs" />
     <Compile Include="Infrastructure\Identity\ApplicationUser.cs" />
     <Compile Include="Infrastructure\Identity\BeforeSignInManager.cs" />
     <Compile Include="Infrastructure\Identity\BeforeUserManager.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AlertLevelViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -256,6 +255,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modalForm.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
@@ -279,18 +279,18 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Customer\Single.cshtml" />
-    <Content Include="Views\Customer\Edit.cshtml" />
-    <Content Include="Views\Shared\_UserList.cshtml" />
-    <Content Include="Views\Shared\_DeviceList.cshtml" />
+    <Content Include="Views\Customer\_Edit.cshtml" />
+    <Content Include="Views\User\_List.cshtml" />
+    <Content Include="Views\Device\_List.cshtml" />
     <Content Include="Views\Status\Single.cshtml" />
     <Content Include="Views\Performance\Single.cshtml" />
-    <Content Include="Views\Device\Edit.cshtml" />
-    <Content Include="Views\Device\Disable.cshtml" />
+    <Content Include="Views\Device\_Edit.cshtml" />
+    <Content Include="Views\Device\_Disable.cshtml" />
     <Content Include="Views\Device\Single.cshtml" />
-    <Content Include="Views\Shared\_StatusList.cshtml" />
-    <Content Include="Views\Shared\_PerformanceList.cshtml" />
+    <Content Include="Views\Status\_List.cshtml" />
+    <Content Include="Views\Performance\_List.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
-    <Content Include="Views\Device\Enable.cshtml" />
+    <Content Include="Views\Device\_Enable.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -301,6 +301,9 @@
     <Content Include="Views\Account\_EditUserPartial.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Shared\_GenericModal.js.cshtml" />
+    <Content Include="Views\Shared\_GenericModal.cshtml" />
+    <Content Include="Views\Customer\_List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -57,6 +57,8 @@ namespace Blob.Contracts.Security
         [DataMember]
         public string Id { get; set; }
         [DataMember]
+        public string Email { get; set; }
+        [DataMember]
         public string UserName { get; set; }
     }
 

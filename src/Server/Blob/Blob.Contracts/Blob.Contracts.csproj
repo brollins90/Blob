@@ -51,9 +51,17 @@
     <Compile Include="Command\ICommandHandler.cs" />
     <Compile Include="Command\ICommandService.cs" />
     <Compile Include="Command\ICommandServiceCallback.cs" />
+    <Compile Include="Dto\EnableUserDto.cs" />
+    <Compile Include="Dto\DisableUserDto.cs" />
+    <Compile Include="Dto\EnableCustomerDto.cs" />
+    <Compile Include="Dto\DisableCustomerDto.cs" />
     <Compile Include="Dto\RegisterDeviceResponseDto.cs" />
+    <Compile Include="Dto\ViewModels\UserEnableVm.cs" />
+    <Compile Include="Dto\ViewModels\UserDisableVm.cs" />
+    <Compile Include="Dto\ViewModels\CustomerEnableVm.cs" />
     <Compile Include="Dto\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Dto\ViewModels\CustomerUpdateVm.cs" />
+    <Compile Include="Dto\ViewModels\CustomerDisableVm.cs" />
     <Compile Include="Dto\ViewModels\DeviceEnableVm.cs" />
     <Compile Include="Dto\ViewModels\DeviceListItemVm.cs" />
     <Compile Include="Dto\ViewModels\DeviceSingleVm.cs" />
@@ -68,6 +76,7 @@
     <Compile Include="Dto\ViewModels\StatusRecordSingleVm.cs" />
     <Compile Include="Dto\ViewModels\UserCreateVm.cs" />
     <Compile Include="Dto\ViewModels\UserForgotPasswordVm.cs" />
+    <Compile Include="Dto\ViewModels\CustomerListItemVm.cs" />
     <Compile Include="Dto\ViewModels\UserListItemVm.cs" />
     <Compile Include="Dto\ViewModels\UserRegisterVm.cs" />
     <Compile Include="Dto\ViewModels\UserResetPasswordVm.cs" />

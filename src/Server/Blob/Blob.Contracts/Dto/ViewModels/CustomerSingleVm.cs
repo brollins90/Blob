@@ -16,6 +16,10 @@ namespace Blob.Contracts.Dto.ViewModels
         [DataMember]
         [Required]
         public DateTime CreateDate { get; set; }
+
+        [DataMember]
+        [Required]
+        public bool Enabled { get; set; }
         
         [DataMember]
         [Display(Name = "Customer name")]

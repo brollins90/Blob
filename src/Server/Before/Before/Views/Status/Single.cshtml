@@ -9,11 +9,8 @@
 <div class="row">
     <div class="col-md-12">
 
-        <p class="text-success">@ViewBag.StatusMessage</p>
         <hr />
-        @*@Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Device", routeValues: new { id = Model.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
-            &nbsp;
-            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Disable", "Disable", "Device", routeValues: new { id = Model.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })*@
+        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Delete", "Delete", "Status", routeValues: new { id = Model.RecordId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
 
         <div id="accordion" class="panel-group">
             <div class="panel panel-default">
@@ -64,6 +61,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -72,9 +70,8 @@
                 </div>
                 <div id="performance" class="panel-collapse collapse in">
                     <div class="panel-body">
-
                         <hr />
-                        @Html.Partial("_PerformanceList", Model.PerformanceRecords)
+                        @{ Html.RenderAction("List", "Performance", routeValues: new { models = Model.PerformanceRecords });}
                     </div>
                 </div>
             </div>

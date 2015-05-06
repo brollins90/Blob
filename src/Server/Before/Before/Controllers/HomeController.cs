@@ -11,7 +11,6 @@ namespace Before.Controllers
         public ActionResult Index()
         {
             var customerId = User.Identity.GetCustomerId();
-
             ViewBag.customerId = customerId;
 
             return View();

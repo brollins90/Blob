@@ -23,6 +23,31 @@ namespace Blob.Managers.Blob
 
 
         // Customer
+
+        public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
+        {
+            return await (from customer in Context.Customers
+                          where customer.Id == customerId
+                          select new CustomerDisableVm
+                          {
+                              CustomerId = customer.Id,
+                              CustomerName = customer.Name,
+                              Enabled = customer.Enabled
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId)
+        {
+            return await (from customer in Context.Customers
+                          where customer.Id == customerId
+                          select new CustomerEnableVm
+                          {
+                              CustomerId = customer.Id,
+                              CustomerName = customer.Name,
+                              Enabled = customer.Enabled
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
         public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
         {
             return await (from cust in Context.Customers.Include("Devices").Include("DeviceTypes").Include("Users")
@@ -38,6 +63,7 @@ namespace Blob.Managers.Blob
                                              DeviceName = d.DeviceName,
                                              DeviceType = d.DeviceType.Value,
                                              DeviceId = d.Id,
+                                             Enabled = d.Enabled,
                                              LastActivityDate = d.LastActivityDate,
                                              Status = d.AlertLevel
                                          }),
@@ -50,7 +76,44 @@ namespace Blob.Managers.Blob
                           }).SingleAsync().ConfigureAwait(false);
         }
 
+        public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
+        {
+            return await (from customer in Context.Customers
+                          where customer.Id == customerId
+                          select new CustomerUpdateVm
+                          {
+                              CustomerId = customer.Id,
+                              CustomerName = customer.Name
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+
         // Device
+
+        public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
+        {
+            return await (from device in Context.Devices
+                          where device.Id == deviceId
+                          select new DeviceDisableVm
+                          {
+                              DeviceId = device.Id,
+                              DeviceName = device.DeviceName,
+                              Enabled = device.Enabled
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId)
+        {
+            return await (from device in Context.Devices
+                          where device.Id == deviceId
+                          select new DeviceEnableVm
+                          {
+                              DeviceId = device.Id,
+                              DeviceName = device.DeviceName,
+                              Enabled = device.Enabled
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
         {
             return await (from device in Context.Devices.Include("DeviceStatuses").Include("DeviceTypes").Include("DevicePerfDatas")
@@ -61,6 +124,7 @@ namespace Blob.Managers.Blob
                               DeviceId = device.Id,
                               DeviceName = device.DeviceName,
                               DeviceType = device.DeviceType.Value,
+                              Enabled = device.Enabled,
                               LastActivityDate = device.LastActivityDate,
                               PerformanceRecords = (from perf in device.StatusPerfs
                                                     select new PerformanceRecordListItemVm
@@ -99,10 +163,10 @@ namespace Blob.Managers.Blob
                           {
                               AvailableTypes = (from type in Context.DeviceTypes
                                                 select new DeviceTypeSingleVm
-                                           {
-                                               DeviceTypeId = type.Id,
-                                               Value = type.Value
-                                           }),
+                                                {
+                                                    DeviceTypeId = type.Id,
+                                                    Value = type.Value
+                                                }),
                               DeviceId = device.Id,
                               DeviceTypeId = device.DeviceTypeId,
                               DeviceName = device.DeviceName
@@ -143,6 +207,66 @@ namespace Blob.Managers.Blob
                               Status = status.AlertLevel,
                               TimeGenerated = status.TimeGenerated
 
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+
+        // User
+
+        public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)
+        {
+            return await (from user in Context.Users
+                          where user.Id == userId
+                          select new UserDisableVm
+                          {
+                              Email = user.Email,
+                              Enabled = user.Enabled,
+                              UserId = user.Id,
+                              UserName = user.UserName
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<UserEnableVm> GetUserEnableVmAsync(Guid userId)
+        {
+            return await (from user in Context.Users
+                          where user.Id == userId
+                          select new UserEnableVm
+                          {
+                              Email = user.Email,
+                              Enabled = user.Enabled,
+                              UserId = user.Id,
+                              UserName = user.UserName
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
+        {
+            return await (from user in Context.Users.Include("Customers")
+                          where user.Id == userId
+                          select new UserSingleVm
+                          {
+                              CreateDate = user.CreateDate,
+                              CustomerName = user.Customer.Name,
+                              Email = user.Email,
+                              EmailConfirmed = user.EmailConfirmed,
+                              Enabled = user.Enabled,
+                              HasPassword = (user.PasswordHash != null),
+                              HasSecurityStamp = (user.SecurityStamp != null),
+                              LastActivityDate = user.LastActivityDate,
+                              UserId = user.Id,
+                              UserName = user.UserName,
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
+        {
+            return await (from user in Context.Users
+                          where user.Id == userId
+                          select new UserUpdateVm
+                          {
+                              UserId = user.Id,
+                              Email = user.Email,
+                              UserName = user.UserName
                           }).SingleAsync().ConfigureAwait(false);
         }
     }

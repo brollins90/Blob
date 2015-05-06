@@ -16,7 +16,7 @@ namespace Blob.Contracts.Dto.ViewModels
 
         public UpdateCustomerDto ToDto()
         {
-            return new UpdateCustomerDto { CustomerId = this.CustomerId, Name = this.CustomerName };
+            return new UpdateCustomerDto { CustomerId = CustomerId, Name = CustomerName };
         }
     }
 }

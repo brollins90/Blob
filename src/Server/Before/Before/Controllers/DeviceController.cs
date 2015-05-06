@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -14,7 +15,7 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
-        // GET: device/single/{id}
+        // GET: /device/single/{id}
         public async Task<ActionResult> Single(Guid? id)
         {
             if (id == null)
@@ -22,13 +23,13 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var singleVm = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (singleVm == null)
+            var viewModel = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
             {
                 return HttpNotFound();
             }
 
-            return View(singleVm);
+            return View(viewModel);
         }
 
         // GET: device/edit/{id}
@@ -39,25 +40,25 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var updateVm = await BlobQueryManager.GetDeviceUpdateVmAsync(id.Value).ConfigureAwait(true);
-            if (updateVm == null)
+            var viewModel = await BlobQueryManager.GetDeviceUpdateVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.DeviceTypeId = new SelectList(updateVm.AvailableTypes, "DeviceTypeId", "Value", updateVm.DeviceTypeId);
-            return View(updateVm);
+            ViewBag.DeviceTypeId = new SelectList(viewModel.AvailableTypes, "DeviceTypeId", "Value", viewModel.DeviceTypeId);
+            return PartialView("_Edit", viewModel);
         }
 
         // POST: device/edit/{dto}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(DeviceUpdateVm vm)
+        public async Task<ActionResult> Edit(DeviceUpdateVm model)
         {
             if (ModelState.IsValid)
             {
-                await BlobCommandManager.UpdateDeviceAsync(vm.ToDto()).ConfigureAwait(true);
-                return RedirectToAction("Index", "Home");
+                await BlobCommandManager.UpdateDeviceAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
             }
             return View();
         }
@@ -70,24 +71,23 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var singleVm = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (singleVm == null)
+            var viewModel = await BlobQueryManager.GetDeviceDisableVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
             {
                 return HttpNotFound();
             }
-
-            return View(new DeviceDisableVm { DeviceId = singleVm.DeviceId, Name = singleVm.DeviceName });
+            return PartialView("_Disable", viewModel);
         }
 
-        // POST: /device/disable/{dto}
+        // POST: /device/disable/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Disable(DeviceDisableVm vm)
+        public async Task<ActionResult> Disable(DeviceDisableVm model)
         {
             if (ModelState.IsValid)
             {
-                await BlobCommandManager.DisableDeviceAsync(vm.ToDto()).ConfigureAwait(true);
-                return RedirectToAction("Index", "Home");
+                await BlobCommandManager.DisableDeviceAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
             }
             return View();
         }
@@ -100,26 +100,31 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var singleVm = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (singleVm == null)
+            var viewModel = await BlobQueryManager.GetDeviceEnableVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
             {
                 return HttpNotFound();
             }
-
-            return View(new DeviceEnableVm { DeviceId = singleVm.DeviceId, Name = singleVm.DeviceName });
+            return PartialView("_Enable", viewModel);
         }
 
         // POST: /device/enable/{dto}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Enable(DeviceEnableVm vm)
+        public async Task<ActionResult> Enable(DeviceEnableVm model)
         {
             if (ModelState.IsValid)
             {
-                await BlobCommandManager.EnableDeviceAsync(vm.ToDto()).ConfigureAwait(true);
-                return RedirectToAction("Index", "Home");
+                await BlobCommandManager.EnableDeviceAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
             }
             return View();
+        }
+
+        // GET: /device/list/{models}
+        public ActionResult List(IEnumerable<DeviceListItemVm> models)
+        {
+            return PartialView("_List", models);
         }
     }
 }

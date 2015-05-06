@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blob.Contracts.Blob;
+using Blob.Contracts.Dto.ViewModels;
 
 namespace Before.Controllers
 {
@@ -12,7 +14,7 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
-        // GET: status/single/{id}
+        // GET: /status/single/{id}
         public async Task<ActionResult> Single(long? id)
         {
             if (id == null)
@@ -20,13 +22,19 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var singleVm = await BlobQueryManager.GetStatusRecordSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (singleVm == null)
+            var viewModel = await BlobQueryManager.GetStatusRecordSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
             {
                 return HttpNotFound();
             }
 
-            return View(singleVm);
+            return View(viewModel);
+        }
+
+        // GET: /status/list/{models}
+        public ActionResult List(IEnumerable<StatusRecordListItemVm> models)
+        {
+            return PartialView("_List", models);
         }
     }
 }

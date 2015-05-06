@@ -9,6 +9,7 @@ namespace Blob.Core.Domain
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime CreateDate { get; set; }
+        public bool Enabled { get; set; }
 
         public virtual ICollection<Device> Devices
         {
