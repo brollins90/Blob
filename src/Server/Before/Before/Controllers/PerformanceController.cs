@@ -14,6 +14,35 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
+        // GET: /performance/delete/{id}
+        public async Task<ActionResult> Delete(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var viewModel = await BlobQueryManager.GetPerformanceRecordDeleteVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("_Delete", viewModel);
+        }
+
+        // POST: /performance/delete/{model}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(PerformanceRecordDeleteVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.DeletePerformanceRecordAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+            return PartialView("_Delete", model);
+        }
+
         // GET: /performance/single/{id}
         public async Task<ActionResult> Single(long? id)
         {

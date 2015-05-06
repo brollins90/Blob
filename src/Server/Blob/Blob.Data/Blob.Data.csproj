@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201505052256561_MoreEnableColumns.Designer.cs">
       <DependentUpon>201505052256561_MoreEnableColumns.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505062051058_PerfDoesntNeedAStatus.cs" />
+    <Compile Include="Migrations\201505062051058_PerfDoesntNeedAStatus.Designer.cs">
+      <DependentUpon>201505062051058_PerfDoesntNeedAStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -137,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505052256561_MoreEnableColumns.resx">
       <DependentUpon>201505052256561_MoreEnableColumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505062051058_PerfDoesntNeedAStatus.resx">
+      <DependentUpon>201505062051058_PerfDoesntNeedAStatus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

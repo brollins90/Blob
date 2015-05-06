@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
+using Blob.Contracts.Command;
 using Blob.Contracts.Dto.ViewModels;
 using Blob.Data;
 using log4net;
@@ -87,6 +90,27 @@ namespace Blob.Managers.Blob
                           }).SingleAsync().ConfigureAwait(false);
         }
 
+
+        // Device Command
+        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId)
+        {
+            IEnumerable<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes(null);
+
+            DeviceCommandIssueVm result = new DeviceCommandIssueVm
+            {
+                DeviceId = deviceId,
+                SelectedCommand = null,
+                AvailableCommands = commandTypes.Select(
+                t => new DeviceCommandVm
+                     {
+                         CommandType = t.FullName,
+                         CommandParamters =
+                            t.GetProperties(BindingFlags.Public & BindingFlags.Instance)
+                            .Select(p => new { p.Name, string.Empty }).ToDictionary(p => p.Name, p => p.Empty)
+                     })
+            };
+            return result;
+        }
 
         // Device
 
@@ -174,6 +198,19 @@ namespace Blob.Managers.Blob
         }
 
         // Performance
+        public async Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId)
+        {
+            return await (from perf in Context.DevicePerfDatas.Include("Devices")
+                          where perf.Id == recordId
+                          select new PerformanceRecordDeleteVm
+                          {
+                              DeviceName = perf.Device.DeviceName,
+                              MonitorName = perf.MonitorName,
+                              RecordId = perf.Id,
+                              TimeGenerated = perf.TimeGenerated
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
         public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             return await (from perf in Context.DevicePerfDatas
@@ -195,6 +232,20 @@ namespace Blob.Managers.Blob
         }
 
         // Status
+        public async Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId)
+        {
+            return await (from status in Context.DeviceStatuses.Include("Devices")
+                          where status.Id == recordId
+                          select new StatusRecordDeleteVm
+                          {
+                              DeviceName = status.Device.DeviceName,
+                              MonitorName = status.MonitorName,
+                              RecordId = status.Id,
+                              TimeGenerated = status.TimeGenerated
+
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
         public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
         {
             return await (from status in Context.DeviceStatuses
@@ -267,6 +318,16 @@ namespace Blob.Managers.Blob
                               UserId = user.Id,
                               Email = user.Email,
                               UserName = user.UserName
+                          }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
+        {
+            return await (from user in Context.Users
+                          where user.Id == userId
+                          select new UserUpdatePasswordVm
+                          {
+                              UserId = user.Id
                           }).SingleAsync().ConfigureAwait(false);
         }
     }

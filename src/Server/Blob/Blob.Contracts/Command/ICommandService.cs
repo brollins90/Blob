@@ -11,15 +11,15 @@ namespace Blob.Contracts.Command
     public interface ICommandService
     {
         [OperationContract(IsOneWay = true)]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "CommandDevice")]
         void Connect(Guid deviceId);
 
         [OperationContract(IsOneWay = true)]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "CommandDevice")]
         void Disconnect(Guid deviceId);
 
         [OperationContract(IsOneWay = true)]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "CommandDevice")]
         void Ping(Guid deviceId);
     }
 }

@@ -22,5 +22,8 @@ namespace Blob.Contracts.Security
 
         [OperationContract(Name = "CreateUserAsyncWithPassword")]
         Task<IdentityResultDto> CreateAsync(UserDto user, string password);
+
+        [OperationContract]
+        Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
     }
 }

@@ -14,24 +14,7 @@ namespace Before.Controllers
         public DeviceController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
             : base(blobCommandManager, blobQueryManager) { }
 
-
-        // GET: /device/single/{id}
-        public async Task<ActionResult> Single(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (viewModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(viewModel);
-        }
-
+        
         // GET: device/edit/{id}
         public async Task<ActionResult> Edit(Guid? id)
         {
@@ -60,7 +43,7 @@ namespace Before.Controllers
                 await BlobCommandManager.UpdateDeviceAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return View();
+            return PartialView("_Edit", model);
         }
 
         // GET: /device/disable/{id}
@@ -89,7 +72,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DisableDeviceAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return View();
+            return PartialView("_Disable", model);
         }
 
         // GET: /device/enable/{id}
@@ -118,7 +101,37 @@ namespace Before.Controllers
                 await BlobCommandManager.EnableDeviceAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return View();
+            return PartialView("_Enable", model);
+        }
+
+        // GET: /device/issuecommand/{id}
+        public ActionResult IssueCommand(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id.Value);//.ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CommandFqn = new SelectList(viewModel.CommandTypes, "FullName", "FullName", viewModel.CommandFqn);
+            return PartialView("_IssueCommand", viewModel);
+        }
+
+        // POST: /device/issuecommand/{dto}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> IssueCommand(DeviceCommandIssueVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.IssueCommandAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+            return PartialView("_IssueCommand", model);
         }
 
         // GET: /device/list/{models}
@@ -126,5 +139,23 @@ namespace Before.Controllers
         {
             return PartialView("_List", models);
         }
+
+        // GET: /device/single/{id}
+        public async Task<ActionResult> Single(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var viewModel = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(viewModel);
+        }
+
     }
 }

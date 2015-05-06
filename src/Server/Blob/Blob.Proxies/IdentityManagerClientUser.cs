@@ -1009,6 +1009,27 @@ namespace Blob.Proxies
             return output;
         }
 
+        public async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
+        {
+            IdentityResultDto output;
+
+            try
+            {
+                IIdentityService remoteProvider = RemoteProvider();
+                output = await remoteProvider.ChangePasswordAsync(userId, currentPassword, newPassword);
+                DisposeRemoteProvider(remoteProvider);
+            }
+            catch (Exception e)
+            {
+                if (LogExceptions)
+                {
+                    _log.Error("Failed to update user password.", e);
+                }
+                throw;
+            }
+            return output;
+        }
+
         //public async Task<UserDto> FindAsync(string userName, string password)
         //{
         //    UserDto output;

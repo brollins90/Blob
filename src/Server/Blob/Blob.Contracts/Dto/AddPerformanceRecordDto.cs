@@ -17,6 +17,9 @@ namespace Blob.Contracts.Dto
         public string MonitorDescription { get; set; }
 
         [DataMember]
+        public long? StatusRecordId { get; set; }
+
+        [DataMember]
         public DateTime TimeGenerated { get; set; }
 
         [DataMember]

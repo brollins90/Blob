@@ -663,6 +663,12 @@ namespace Blob.Security
             return _manager.CreateAsync(user, password);
         }
 
+        public Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
+        {
+            ThrowIfDisposed();
+            return _manager.ChangePasswordAsync(userId, currentPassword, newPassword);
+        }
+
 
 
 

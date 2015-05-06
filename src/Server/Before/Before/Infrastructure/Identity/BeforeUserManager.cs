@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Threading.Tasks;
 using Before.Infrastructure.Extensions;
@@ -27,7 +28,7 @@ namespace Before.Infrastructure.Identity
 
         public async Task<IdentityResult> CreateAsync(BeforeUser user, string password)
         {
-            IdentityResultDto res = await ((IdentityManagerClient) this).CreateAsync(user.ToDto(), password).ConfigureAwait(true);
+            IdentityResultDto res = await ((IdentityManagerClient)this).CreateAsync(user.ToDto(), password).ConfigureAwait(true);
             return res.ToResult();
         }
     }

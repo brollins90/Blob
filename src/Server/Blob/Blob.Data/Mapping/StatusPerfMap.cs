@@ -75,8 +75,8 @@ namespace Blob.Data.Mapping
             // Status
             Property(x => x.StatusId)
                 .HasColumnType("bigint")
-                .IsRequired();
-            HasRequired(s => s.Status).WithMany(d => d.StatusPerfs).HasForeignKey(s => s.StatusId).WillCascadeOnDelete(false);
+                .IsOptional();
+            HasOptional(s => s.Status).WithMany(d => d.StatusPerfs).HasForeignKey(s => s.StatusId).WillCascadeOnDelete(false);
         }
     }
 }

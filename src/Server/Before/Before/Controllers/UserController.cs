@@ -3,34 +3,27 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Infrastructure.Identity;
 using Blob.Contracts.Blob;
 using Blob.Contracts.Dto.ViewModels;
+using Blob.Contracts.Security;
+using Microsoft.AspNet.Identity;
 
 namespace Before.Controllers
 {
     [Authorize]
     public class UserController : BaseController
     {
-        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
-            : base(blobCommandManager, blobQueryManager) { }
-
-
-        // GET: /user/single/{id}
-        public async Task<ActionResult> Single(Guid? id)
+        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManager userManager, BeforeSignInManager signInManager)
+            : base(blobCommandManager, blobQueryManager)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetUserSingleVmAsync(id.Value).ConfigureAwait(true);
-            if (viewModel == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(viewModel);
+            UserManager = userManager;
+            SignInManager = signInManager;
         }
+        
+        protected BeforeUserManager UserManager { get; set; }
+        protected BeforeSignInManager SignInManager { get; set; }
+
 
         // GET: /user/disable/{id}
         public async Task<ActionResult> Disable(Guid? id)
@@ -58,7 +51,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DisableUserAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return View();
+            return PartialView("_Disable", model);
         }
 
         // GET: /user/edit/{id}
@@ -69,7 +62,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var viewModel = await BlobQueryManager.GetUserSingleVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetUserUpdateVmAsync(id.Value).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -87,7 +80,49 @@ namespace Before.Controllers
                 await BlobCommandManager.UpdateUserAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return View();
+            return PartialView("_Edit", model);
+        }
+
+        // GET: /user/editpassword/{id}
+        public async Task<ActionResult> EditPassword(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var viewModel = await BlobQueryManager.GetUserUpdatePasswordVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("_EditPassword", viewModel);
+        }
+
+        //
+        // POST: /user/editpassword/{model}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditPassword(UserUpdatePasswordVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityResultDto result = await UserManager.ChangePasswordAsync(model.UserId, model.OldPassword, model.NewPassword).ConfigureAwait(true);
+                if (result.Succeeded)
+                {
+                    var user = await UserManager.FindByIdAsync(model.UserId.ToString()).ConfigureAwait(true);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).ConfigureAwait(true);
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+            }
+            return PartialView("_EditPassword", model);
         }
 
         // GET: /user/enable/{id}
@@ -116,13 +151,30 @@ namespace Before.Controllers
                 await BlobCommandManager.EnableUserAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return View();
+            return PartialView("_Enable", model);
         }
 
         // GET: /user/list/{models}
         public ActionResult List(IEnumerable<UserListItemVm> models)
         {
             return PartialView("_List", models);
+        }
+
+        // GET: /user/single/{id}
+        public async Task<ActionResult> Single(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var viewModel = await BlobQueryManager.GetUserSingleVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(viewModel);
         }
     }
 }

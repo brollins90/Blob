@@ -10,11 +10,20 @@ namespace Blob.Contracts.Blob
         Task EnableCustomerAsync(EnableCustomerDto dto);
         Task UpdateCustomerAsync(UpdateCustomerDto dto);
 
+        // Commands
+        Task IssueCommandAsync(IssueDeviceCommandDto dto);
+
         // Device
         Task DisableDeviceAsync(DisableDeviceDto dto);
         Task EnableDeviceAsync(EnableDeviceDto dto);
         Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto);
         Task UpdateDeviceAsync(UpdateDeviceDto dto);
+
+        // PerformanceRecord
+        Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
+
+        // StatusRecord
+        Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
 
         // User
         Task DisableUserAsync(DisableUserDto dto);

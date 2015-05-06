@@ -11,18 +11,24 @@ namespace Blob.Contracts.Blob
         Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId);
         Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId);
 
+        DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId);
+
         Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId);
         Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId);
         Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId);
         Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId);
 
-        Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId);
-
+        Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId);
         Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId);
 
-        Task<UserDisableVm> GetUserDisableVmAsync(Guid UserId);
-        Task<UserEnableVm> GetUserEnableVmAsync(Guid UserId);
-        Task<UserSingleVm> GetUserSingleVmAsync(Guid UserId);
-        Task<UserUpdateVm> GetUserUpdateVmAsync(Guid UserId);
+        Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId);
+        Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId);
+
+        Task<UserDisableVm> GetUserDisableVmAsync(Guid userId);
+        Task<UserEnableVm> GetUserEnableVmAsync(Guid userId);
+        Task<UserSingleVm> GetUserSingleVmAsync(Guid userId);
+        Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId);
+        Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId);
+        
     }
 }

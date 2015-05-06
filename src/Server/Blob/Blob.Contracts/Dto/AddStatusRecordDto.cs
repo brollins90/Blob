@@ -26,5 +26,8 @@ namespace Blob.Contracts.Dto
 
         [DataMember]
         public string CurrentValue { get; set; }
+
+        [DataMember]
+        public AddPerformanceRecordDto PerformanceRecordDto { get; set; }
     }
 }

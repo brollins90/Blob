@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Reflection;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
+using Blob.Contracts.Command;
 using Blob.Contracts.Dto;
 using Blob.Core.Domain;
 using Blob.Data;
+using Blob.Managers.Command;
 using log4net;
 
 namespace Blob.Managers.Blob
@@ -20,6 +23,11 @@ namespace Blob.Managers.Blob
             Context = context;
         }
         public BlobDbContext Context { get; private set; }
+
+        protected CommandConnectionManager CommandConnectionManager
+        {
+            get { return CommandConnectionManager.Instance; }
+        }
 
 
         // Customer
@@ -50,6 +58,23 @@ namespace Blob.Managers.Blob
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
+
+        // Device Command
+        public async Task IssueCommandAsync(IssueDeviceCommandDto dto)
+        {
+            Type commandType = Type.GetType(dto.Command,true);
+            var cmdInstance = Activator.CreateInstance(commandType);
+            PropertyInfo[] properties = commandType.GetProperties();
+
+            foreach (var property in properties)
+            {
+                if (dto.CommandParameters.ContainsKey(property.Name))
+                {
+                    property.SetValue(cmdInstance, dto.CommandParameters[property.Name], null);
+                }
+            }
+            await CommandConnectionManager.QueueCommandAsync(dto.DeviceId, (cmdInstance as ICommand));
+        }
 
         // Device
         public async Task DisableDeviceAsync(DisableDeviceDto dto)
@@ -125,6 +150,24 @@ namespace Blob.Managers.Blob
         }
 
 
+        // Performance Record
+        public async Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        {
+            StatusPerf perf = Context.DevicePerfDatas.Find(dto.RecordId);
+            Context.Entry(perf).State = EntityState.Deleted;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+
+        // Status Record
+        public async Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        {
+            Core.Domain.Status status = Context.DeviceStatuses.Find(dto.RecordId);
+            Context.Entry(status).State = EntityState.Deleted;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+
         // User
         public async Task DisableUserAsync(DisableUserDto dto)
         {
@@ -148,7 +191,7 @@ namespace Blob.Managers.Blob
         {
             User user = Context.Users.Find(dto.UserId);
             //user.UserName = dto.UserName;
-            if (!user.Email.Equals(dto.Email))
+            if (!string.IsNullOrEmpty(dto.Email) && !user.Email.Equals(dto.Email))
             {
                 user.Email = dto.Email;
                 user.EmailConfirmed = false;

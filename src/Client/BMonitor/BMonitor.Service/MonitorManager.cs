@@ -241,13 +241,20 @@ start scheduler
                 // send
                 if (_enableStatusMonitoring)
                 {
+                    if (_enablePerformanceMonitoring && spd != null)
+                    {
+                        statusData.PerformanceRecordDto = spd;
+                    }
                     _log.Debug("Sending status message.");
                     Task.Run(() => statusClient.SendStatusToServer(statusData));
                 }
-                if (_enablePerformanceMonitoring && spd != null)
+                else
                 {
-                    _log.Debug("Sending performance message.");
-                    Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
+                    if (_enablePerformanceMonitoring && spd != null)
+                    {
+                        _log.Debug("Sending performance message.");
+                        Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
+                    }
                 }
             }
         }

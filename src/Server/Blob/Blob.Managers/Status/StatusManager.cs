@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using Blob.Contracts.Dto;
 using Blob.Core.Domain;
@@ -26,8 +27,7 @@ namespace Blob.Managers.Status
         }
         public BlobDbContext Context { get; private set; }
 
-
-        // Customer
+        
         public async Task StoreStatusData(AddStatusRecordDto statusData)
         {
             _log.Debug("Storing status data " + statusData);
@@ -35,17 +35,24 @@ namespace Blob.Managers.Status
 
             if (device != null)
             {
-                Context.DeviceStatuses.Add(new Core.Domain.Status
-                                           {
-                                               AlertLevel = statusData.AlertLevel,
-                                               CurrentValue = statusData.CurrentValue,
-                                               DeviceId = device.Id,
-                                               MonitorDescription = statusData.MonitorDescription,
-                                               MonitorName = statusData.MonitorName,
-                                               TimeGenerated = statusData.TimeGenerated,
-                                               TimeSent = statusData.TimeSent
-                                           });
+                Core.Domain.Status newStatus = new Core.Domain.Status
+                           {
+                               AlertLevel = statusData.AlertLevel,
+                               CurrentValue = statusData.CurrentValue,
+                               DeviceId = device.Id,
+                               MonitorDescription = statusData.MonitorDescription,
+                               MonitorName = statusData.MonitorName,
+                               TimeGenerated = statusData.TimeGenerated,
+                               TimeSent = statusData.TimeSent,
+                           };
+                Context.DeviceStatuses.Add(newStatus);
                 await Context.SaveChangesAsync();
+
+                if (statusData.PerformanceRecordDto != null)
+                {
+                    statusData.PerformanceRecordDto.StatusRecordId = newStatus.Id;
+                    await StoreStatusPerformanceData(statusData.PerformanceRecordDto);
+                }
             }
         }
 
@@ -67,6 +74,7 @@ namespace Blob.Managers.Status
                                                           Min = value.Min.ToNullableDecimal(),
                                                           MonitorDescription = statusPerformanceData.MonitorDescription,
                                                           MonitorName = statusPerformanceData.MonitorName,
+                                                          StatusId = (statusPerformanceData.StatusRecordId.HasValue) ? statusPerformanceData.StatusRecordId.Value : 0,
                                                           TimeGenerated = statusPerformanceData.TimeGenerated,
                                                           UnitOfMeasure = value.UnitOfMeasure,
                                                           Value = value.Value.ToDecimal(),

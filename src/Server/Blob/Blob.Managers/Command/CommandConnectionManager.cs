@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Blob.Contracts.Command;
 using Blob.Contracts.Commands;
 using log4net;
 
 namespace Blob.Managers.Command
 {
-    public class CommandManager : IDisposable
+    public class CommandConnectionManager : IDisposable
     {
         private readonly ILog _log;
-        private static volatile CommandManager _connectionManager;
+        private static volatile CommandConnectionManager _connectionManager;
         private static readonly object SyncLock = new object();
         private readonly Dictionary<Guid, ICommandServiceCallback> _callbacks;
         private Queue<Tuple<Guid, ICommand>> _commandQueue;
@@ -21,7 +22,7 @@ namespace Blob.Managers.Command
         private Thread _testThread;
         private Thread _testThread2;
 
-        private CommandManager()
+        private CommandConnectionManager()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _callbacks = new Dictionary<Guid, ICommandServiceCallback>();
@@ -29,7 +30,7 @@ namespace Blob.Managers.Command
         }
         protected internal bool IsDisposed { get; private set; }
 
-        public static CommandManager Instance
+        public static CommandConnectionManager Instance
         {
             get
             {
@@ -37,7 +38,7 @@ namespace Blob.Managers.Command
                 {
                     if (_connectionManager == null)
                     {
-                        _connectionManager = new CommandManager();
+                        _connectionManager = new CommandConnectionManager();
                     }
                 }
                 return _connectionManager;
@@ -97,17 +98,20 @@ namespace Blob.Managers.Command
             }
         }
 
-        public void QueueCommand(Guid deviceId, ICommand command)
+        public async Task QueueCommandAsync(Guid deviceId, ICommand command)
         {
-            // check if there is a valid callback
-            if (_callbacks.ContainsKey(deviceId))
+            await Task.Run(() =>
             {
-                _commandQueue.Enqueue(new Tuple<Guid, ICommand>(deviceId, command));
-            }
-            else
-            {
-                throw new InvalidOperationException("A callback for this device was not found.");
-            }
+                // check if there is a valid callback
+                if (_callbacks.ContainsKey(deviceId))
+                {
+                    _commandQueue.Enqueue(new Tuple<Guid, ICommand>(deviceId, command));
+                }
+                else
+                {
+                    throw new InvalidOperationException("A callback for this device was not found.");
+                }
+            });
         }
 
         private int blakei = 0;
@@ -134,7 +138,8 @@ namespace Blob.Managers.Command
             // hard code test device id
             Guid x = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a");
             _log.Debug("queueing " + cmd + " on " + x);
-            QueueCommand(x, cmd);
+            Task queueTask = QueueCommandAsync(x, cmd);
+            Task.WaitAll(queueTask);
         }
 
         void timer_tick()

@@ -29,7 +29,7 @@ namespace Blob.Services.Command
         public void Connect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Connect: {0}", deviceId));
-            CommandManager.Instance.AddCallback(deviceId, Callback);
+            CommandConnectionManager.Instance.AddCallback(deviceId, Callback);
         }
 
         [OperationBehavior]
@@ -37,7 +37,7 @@ namespace Blob.Services.Command
         public void Disconnect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Disconnect: {0}", deviceId));
-            CommandManager.Instance.RemoveCallback(deviceId, Callback);
+            CommandConnectionManager.Instance.RemoveCallback(deviceId, Callback);
         }
 
         [OperationBehavior]

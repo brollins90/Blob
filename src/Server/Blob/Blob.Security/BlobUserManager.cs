@@ -1701,6 +1701,28 @@ namespace Blob.Security
             return new IdentityResultDto {Succeeded = true};
         }
 
+        public async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
+        {
+            ThrowIfDisposed();
+            var passwordStore = GetPasswordStore();
+            var user = await FindByIdAsync(userId).WithCurrentCulture();
+            if (user == null)
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound, userId));
+            }
+            //if (await VerifyPasswordAsync(passwordStore, user, currentPassword).WithCurrentCulture())
+            //{
+                var result = await UpdatePassword(user, newPassword).WithCurrentCulture();
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
+                await UpdateAsync(user).WithCurrentCulture();
+                return new IdentityResultDto { Succeeded = true };
+            //}
+            //return IdentityResult.Failed(Resources.PasswordMismatch);
+        }
+
 
 
 
