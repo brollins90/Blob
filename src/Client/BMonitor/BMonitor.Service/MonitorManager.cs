@@ -69,7 +69,7 @@ start scheduler
         private bool _isRegistered;
 
         //private ICommandService commandClient;
-        private CommandClient commandClient;
+        private DeviceConnectionClient commandClient;
 
         public MonitorManager(IKernel kernel)
         {
@@ -134,14 +134,16 @@ start scheduler
                 //todo: spin up a new thread
 
                 //ICommandService 
-                commandClient = _kernel.Get<CommandClient>();
+                var u = new Ninject.Parameters.ConstructorArgument("username", Username);
+                var p = new Ninject.Parameters.ConstructorArgument("password", Password);
+                commandClient = _kernel.Get<DeviceConnectionClient>(u,p);
                 commandClient.ClientErrorHandler += HandleException;
 
 
                 //commandClient = new CommandClient(callbackInstance, "CommandService");
-                commandClient.ClientCredentials.UserName.UserName = Username;
-                commandClient.ClientCredentials.UserName.Password = Password;
-                commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+                //commandClient.ClientCredentials.UserName.UserName = Username;
+                //commandClient.ClientCredentials.UserName.Password = Password;
+                //commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
                 commandClient.Connect(_deviceId);
             }
@@ -180,7 +182,7 @@ start scheduler
             
             if (_enableCommandConnection) // && connection is open
             {
-                //commandClient.Ping(_deviceId);
+                commandClient.Ping(_deviceId);
             }
 
             foreach (IMonitor monitor in _monitors)
@@ -231,11 +233,16 @@ start scheduler
                 _log.Debug(statusData);
 
                 _log.Info("Creating new StatusClient");
-                StatusClient statusClient = new StatusClient("StatusService");
+                var u = new Ninject.Parameters.ConstructorArgument("username", Username);
+                var p = new Ninject.Parameters.ConstructorArgument("password", Password);
+                DeviceStatusClient statusClient = _kernel.Get<DeviceStatusClient>(u, p);
                 statusClient.ClientErrorHandler += HandleException;
-                statusClient.ClientCredentials.UserName.UserName = Username;
-                statusClient.ClientCredentials.UserName.Password = Password;
-                statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+
+                //DeviceStatusClient c = new DeviceStatusClient("StatusService");
+                //statusClient.ClientErrorHandler += HandleException;
+                //statusClient.ClientCredentials.UserName.UserName = Username;
+                //statusClient.ClientCredentials.UserName.Password = Password;
+                //statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
 
 
                 // send
@@ -246,14 +253,14 @@ start scheduler
                         statusData.PerformanceRecordDto = spd;
                     }
                     _log.Debug("Sending status message.");
-                    Task.Run(() => statusClient.SendStatusToServer(statusData));
+                    Task.Run(() => statusClient.AddStatusRecordAsync(statusData));
                 }
                 else
                 {
                     if (_enablePerformanceMonitoring && spd != null)
                     {
                         _log.Debug("Sending performance message.");
-                        Task.Run(() => statusClient.SendStatusPerformanceToServer(spd));
+                        Task.Run(() => statusClient.AddPerformanceRecordAsync(spd));
                     }
                 }
             }
@@ -285,13 +292,13 @@ start scheduler
                                                  };
                 _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
 
-                RegistrationClient registrationClient = new RegistrationClient("RegistrationService");
-                registrationClient.ClientErrorHandler += HandleException;
-                registrationClient.ClientCredentials.UserName.UserName = username;
-                registrationClient.ClientCredentials.UserName.Password = password;
-                registrationClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
+                var u = new Ninject.Parameters.ConstructorArgument("username", Username);
+                var p = new Ninject.Parameters.ConstructorArgument("password", Password);
+                DeviceStatusClient statusClient = _kernel.Get<DeviceStatusClient>(u, p);
+                statusClient.ClientErrorHandler += HandleException;
 
-                RegisterDeviceResponseDto regInfo = Task.Run(() => registrationClient.Register(regMessage)).Result;
+
+                RegisterDeviceResponseDto regInfo = Task.Run(() => statusClient.RegisterDeviceAsync(regMessage)).Result;
                 _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
 
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));

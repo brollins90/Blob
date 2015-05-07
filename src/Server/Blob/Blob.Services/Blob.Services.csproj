@@ -39,9 +39,10 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\CommandService.cs" />
-    <Compile Include="Registration\RegistrationService.cs" />
-    <Compile Include="Status\StatusService.cs" />
+    <Compile Include="Before\BeforeCommandService.cs" />
+    <Compile Include="Before\BeforeQueryService.cs" />
+    <Compile Include="Device\DeviceConnectionService.cs" />
+    <Compile Include="Device\DeviceStatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +58,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

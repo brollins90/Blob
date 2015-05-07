@@ -4,7 +4,7 @@ namespace Blob.Contracts.Command
 {
     [ServiceContract]
     [ServiceKnownType("GetKnownCommandTypes", typeof(KnownCommandsMap))]
-    public interface ICommandServiceCallback
+    public interface IDeviceConnectionServiceCallback
     {
         [OperationContract(IsOneWay = true)]
         void OnConnect(string message);

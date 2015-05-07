@@ -11,17 +11,23 @@ namespace Blob.Contracts.Dto.ViewModels
         [Display(Name = "Device Id")]
         [Required]
         public Guid DeviceId { get; set; }
-        
+
+        //[DataMember]
+        //[Required]
+        //public DeviceCommandVm SelectedCommand { get; set; }
+
         [DataMember]
-        [Required]
-        public DeviceCommandVm SelectedCommand { get; set; }
+        public string CommandType { get; set; }
+
+        [DataMember]
+        public string CommandData { get; set; }
 
         [DataMember]
         public IEnumerable<DeviceCommandVm> AvailableCommands { get; set; }
 
         public IssueDeviceCommandDto ToDto()
         {
-            return new IssueDeviceCommandDto { DeviceId = DeviceId, Command = SelectedCommand.CommandType, CommandParameters = SelectedCommand.CommandParamters, TimeSent = DateTime.Now };
+            return new IssueDeviceCommandDto { DeviceId = DeviceId, Command = CommandType, CommandParameters = new Dictionary<string, string> { { "CommandData", CommandData } }, TimeSent = DateTime.Now };
         }
     }
 }

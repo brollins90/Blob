@@ -6,8 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Identity;
 using Blob.Contracts.Blob;
-using Blob.Data;
-using Blob.Managers.Blob;
+using Blob.Proxies;
 using log4net;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -41,10 +40,10 @@ namespace Before
 
             String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
             
-            container.RegisterPerWebRequest<BlobDbContext>(() => new BlobDbContext(connectionString));
+            //container.RegisterPerWebRequest<BlobDbContext>(() => new BlobDbContext(connectionString));
 
-            container.Register<IBlobQueryManager, BlobQueryManager>();
-            container.Register<IBlobCommandManager, BlobCommandManager>(); 
+            container.RegisterPerWebRequest<IBlobCommandManager>(() => new BeforeCommandClient("BeforeCommandService", "customerUser1", "password"));
+            container.RegisterPerWebRequest<IBlobQueryManager>(() => new BeforeQueryClient("BeforeQueryService", "customerUser1", "password"));
 
             // This is kind of bad, all the identity proxying stuff I did was to make OWIN just work, but now I am 
             //    bypassing the OWIN context and injecting into the we context

@@ -7,7 +7,7 @@ using Ninject.Activation.Blocks;
 
 namespace BMonitor.Service
 {
-    public class CommandServiceCallbackHandler : ICommandServiceCallback
+    public class CommandServiceCallbackHandler : IDeviceConnectionServiceCallback
     {
         private readonly IKernel _kernel;
         private readonly ILog _log;

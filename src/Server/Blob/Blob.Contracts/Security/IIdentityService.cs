@@ -20,7 +20,7 @@ namespace Blob.Contracts.Security
         [OperationContract]
         Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType);
 
-        [OperationContract(Name = "CreateUserAsyncWithPassword")]
+        [OperationContract]
         Task<IdentityResultDto> CreateAsync(UserDto user, string password);
 
         [OperationContract]

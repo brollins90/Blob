@@ -14,7 +14,6 @@ namespace Blob.Contracts.Dto.ViewModels
 
         [DataMember]
         [Display(Name = "Command parameters")]
-        [Required]
         public Dictionary<string, string> CommandParamters { get; set; }
     }
 }

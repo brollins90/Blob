@@ -15,7 +15,8 @@ namespace Blob.Contracts.Command
             Assembly coreAssembly = GetCommandHandlerInterfaceAssembly();
 
             // Find the classes in the assembly that end with "Command"
-            var commandTypes = coreAssembly.GetExportedTypes().Where(type => type.Name.EndsWith("Command"));
+            //var commandTypes = coreAssembly.GetExportedTypes().Where(type => type.Name.EndsWith("Command"));
+            var commandTypes = coreAssembly.GetExportedTypes().Where(type => type.Name.EndsWith("CmdExecuteCommand"));
 
             // Return the array of Types
             return commandTypes.ToArray();

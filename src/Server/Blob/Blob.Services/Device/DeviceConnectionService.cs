@@ -5,23 +5,26 @@ using Blob.Contracts.Command;
 using Blob.Managers.Command;
 using log4net;
 
-namespace Blob.Services.Command
+namespace Blob.Services.Device
 {
     [ServiceBehavior]
     //[PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-    public class CommandService : ICommandService
+    public class DeviceConnectionService : IDeviceConnectionService
     {
         private readonly ILog _log;
 
-        public CommandService(ILog log)
+        public DeviceConnectionService(ILog log)
         {
             _log = log;
         }
 
-
-        private ICommandServiceCallback Callback
+        private IDeviceConnectionServiceCallback Callback
         {
-            get { return OperationContext.Current.GetCallbackChannel<ICommandServiceCallback>(); }
+            get { return OperationContext.Current.GetCallbackChannel<IDeviceConnectionServiceCallback>(); }
+        }
+        private CommandConnectionManager ConnectionManager
+        {
+            get { return CommandConnectionManager.Instance; }
         }
 
         [OperationBehavior]
@@ -29,7 +32,7 @@ namespace Blob.Services.Command
         public void Connect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Connect: {0}", deviceId));
-            CommandConnectionManager.Instance.AddCallback(deviceId, Callback);
+            ConnectionManager.AddCallback(deviceId, Callback);
         }
 
         [OperationBehavior]
@@ -37,7 +40,7 @@ namespace Blob.Services.Command
         public void Disconnect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Disconnect: {0}", deviceId));
-            CommandConnectionManager.Instance.RemoveCallback(deviceId, Callback);
+            ConnectionManager.RemoveCallback(deviceId, Callback);
         }
 
         [OperationBehavior]

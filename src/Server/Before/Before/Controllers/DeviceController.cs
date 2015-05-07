@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -15,6 +16,35 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
         
+        // GET: /device/disable/{id}
+        public async Task<ActionResult> Disable(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var viewModel = await BlobQueryManager.GetDeviceDisableVmAsync(id.Value).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("_Disable", viewModel);
+        }
+
+        // POST: /device/disable/{model}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Disable(DeviceDisableVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.DisableDeviceAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+            return PartialView("_Disable", model);
+        }
+
         // GET: device/edit/{id}
         public async Task<ActionResult> Edit(Guid? id)
         {
@@ -44,35 +74,6 @@ namespace Before.Controllers
                 return Json(new { success = true });
             }
             return PartialView("_Edit", model);
-        }
-
-        // GET: /device/disable/{id}
-        public async Task<ActionResult> Disable(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetDeviceDisableVmAsync(id.Value).ConfigureAwait(true);
-            if (viewModel == null)
-            {
-                return HttpNotFound();
-            }
-            return PartialView("_Disable", viewModel);
-        }
-
-        // POST: /device/disable/{model}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Disable(DeviceDisableVm model)
-        {
-            if (ModelState.IsValid)
-            {
-                await BlobCommandManager.DisableDeviceAsync(model.ToDto()).ConfigureAwait(true);
-                return Json(new { success = true });
-            }
-            return PartialView("_Disable", model);
         }
 
         // GET: /device/enable/{id}
@@ -112,12 +113,14 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id.Value);//.ConfigureAwait(true);
+            DeviceCommandIssueVm viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id.Value);//.ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CommandFqn = new SelectList(viewModel.CommandTypes, "FullName", "FullName", viewModel.CommandFqn);
+
+            // temp default 
+            viewModel.CommandData = @"dir >> c:\_\fromACommand.txt";
             return PartialView("_IssueCommand", viewModel);
         }
 
@@ -126,11 +129,14 @@ namespace Before.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> IssueCommand(DeviceCommandIssueVm model)
         {
+            DeviceCommandIssueVm viewModel2 = BlobQueryManager.GetDeviceCommandIssueVm(model.DeviceId);//.ConfigureAwait(true);
             if (ModelState.IsValid)
             {
+                //model.SelectedCommand = viewModel2.AvailableCommands.Select(x=>x.CommandType = )
                 await BlobCommandManager.IssueCommandAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
+            model.AvailableCommands = viewModel2.AvailableCommands;
             return PartialView("_IssueCommand", model);
         }
 

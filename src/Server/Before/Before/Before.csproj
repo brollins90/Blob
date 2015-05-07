@@ -45,15 +45,6 @@
     <Reference Include="Blob.Contracts">
       <HintPath>..\..\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
     </Reference>
-    <Reference Include="Blob.Core">
-      <HintPath>..\..\Blob\Blob.Core\bin\Debug\Blob.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Blob.Data">
-      <HintPath>..\..\Blob\Blob.Data\bin\Debug\Blob.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Blob.Managers">
-      <HintPath>..\..\Blob\Blob.Managers\bin\Debug\Blob.Managers.dll</HintPath>
-    </Reference>
     <Reference Include="Blob.Proxies">
       <HintPath>..\..\Blob\Blob.Proxies\bin\Debug\Blob.Proxies.dll</HintPath>
     </Reference>
@@ -138,6 +129,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -310,6 +302,8 @@
     <Content Include="Views\User\_Enable.cshtml" />
     <Content Include="Views\User\Single.cshtml" />
     <Content Include="Views\Device\_IssueCommand.cshtml" />
+    <Content Include="Views\Shared\_DisplayTemplates\DeviceCommandVm.cshtml" />
+    <Content Include="Views\Shared\_EditorTemplates\DeviceCommandVm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

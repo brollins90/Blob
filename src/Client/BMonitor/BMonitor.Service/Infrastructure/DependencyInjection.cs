@@ -33,10 +33,12 @@ namespace BMonitor.Service.Infrastructure
             Bind<MonitorManager>().ToSelf();
 
             // Callback
-            Bind<ICommandServiceCallback>().To<CommandServiceCallbackHandler>();
-            Bind<CommandClient>().ToSelf()
-                .WithConstructorArgument("callbackInstance", x => new InstanceContext((x.Kernel.Get<ICommandServiceCallback>())))
-                .WithConstructorArgument("endpointName", "CommandService");
+            Bind<IDeviceConnectionServiceCallback>().To<CommandServiceCallbackHandler>();
+            Bind<DeviceConnectionClient>().ToSelf()
+                .WithConstructorArgument("callbackInstance", x => new InstanceContext((x.Kernel.Get<IDeviceConnectionServiceCallback>())))
+                .WithConstructorArgument("endpointName", "DeviceConnectionService");
+            Bind<DeviceStatusClient>().ToSelf()
+                .WithConstructorArgument("endpointName", "DeviceStatusService");
 
             // Command handlers
             Type commandHandlerType = typeof (ICommandHandler<>);

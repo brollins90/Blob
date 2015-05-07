@@ -14,8 +14,8 @@ namespace Blob.Managers.Command
         private readonly ILog _log;
         private static volatile CommandConnectionManager _connectionManager;
         private static readonly object SyncLock = new object();
-        private readonly Dictionary<Guid, ICommandServiceCallback> _callbacks;
-        private Queue<Tuple<Guid, ICommand>> _commandQueue;
+        private static Dictionary<Guid, IDeviceConnectionServiceCallback> _callbacks;
+        private static Queue<Tuple<Guid, ICommand>> _commandQueue;
 
         private bool runTestThread = true;
         private ManualResetEvent _stopEvent;
@@ -25,7 +25,7 @@ namespace Blob.Managers.Command
         private CommandConnectionManager()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _callbacks = new Dictionary<Guid, ICommandServiceCallback>();
+            _callbacks = new Dictionary<Guid, IDeviceConnectionServiceCallback>();
             _commandQueue = new Queue<Tuple<Guid, ICommand>>();
         }
         protected internal bool IsDisposed { get; private set; }
@@ -51,7 +51,7 @@ namespace Blob.Managers.Command
         /// <param name="deviceId">the id of the remote device</param>
         /// <param name="callback">the callback object</param>
         /// <exception cref="InvalidOperationException">A callback for this device was not found.</exception>
-        public void AddCallback(Guid deviceId, ICommandServiceCallback callback)
+        public void AddCallback(Guid deviceId, IDeviceConnectionServiceCallback callback)
         {
             _log.Debug(string.Format("Adding callback to the CommandManager for device {0}.", deviceId));
             ThrowIfDisposed();
@@ -65,14 +65,16 @@ namespace Blob.Managers.Command
                 {
                     _testThread = new Thread(RunTest);
                     _testThread.Start();
-                    _testThread2 = new Thread(RunTest2);
-                    _testThread2.Start();
+                    //_testThread2 = new Thread(RunTest2);
+                    //_testThread2.Start();
                 }
             }
             else
             {
-                _log.Error(string.Format("Failed to store callback for device {0}.  It was already connected.", deviceId));
-                throw new InvalidOperationException("A callback has already been registered for this device.");
+                _callbacks[deviceId] = callback;
+                callback.OnConnect("" + deviceId + " connected successfully.");
+                //_log.Error(string.Format("Failed to store callback for device {0}.  It was already connected.", deviceId));
+                //throw new InvalidOperationException("A callback has already been registered for this device.");
             }
         }
 
@@ -82,7 +84,7 @@ namespace Blob.Managers.Command
         /// <param name="deviceId">the id of the remote device</param>
         /// <param name="callback">the callback object</param>
         /// <exception cref="InvalidOperationException">A callback for this device was not found.</exception>
-        public void RemoveCallback(Guid deviceId, ICommandServiceCallback callback)
+        public void RemoveCallback(Guid deviceId, IDeviceConnectionServiceCallback callback)
         {
             ThrowIfDisposed();
 
@@ -100,16 +102,19 @@ namespace Blob.Managers.Command
 
         public async Task QueueCommandAsync(Guid deviceId, ICommand command)
         {
+            _log.Debug(string.Format("Queueing command for: {0} - {1}", deviceId, command.GetType().ToString()));
             await Task.Run(() =>
             {
                 // check if there is a valid callback
                 if (_callbacks.ContainsKey(deviceId))
                 {
+                    _log.Debug(string.Format("Found a valid callback for : {0} - {1}", deviceId, command.GetType().ToString()));
                     _commandQueue.Enqueue(new Tuple<Guid, ICommand>(deviceId, command));
                 }
                 else
                 {
-                    throw new InvalidOperationException("A callback for this device was not found.");
+                    _log.Error(string.Format("could not find a callback"));
+                    //throw new InvalidOperationException("A callback for this device was not found.");
                 }
             });
         }
@@ -167,7 +172,7 @@ namespace Blob.Managers.Command
             do
             {
                 timer_tick_add();
-            } while (!_stopEvent.WaitOne(1000 * 5));
+            } while (!_stopEvent.WaitOne(1000 * 20));
         }
 
         void RunTest()

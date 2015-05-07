@@ -99,7 +99,7 @@ namespace Blob.Managers.Blob
             DeviceCommandIssueVm result = new DeviceCommandIssueVm
             {
                 DeviceId = deviceId,
-                SelectedCommand = null,
+                //SelectedCommand = null,
                 AvailableCommands = commandTypes.Select(
                 t => new DeviceCommandVm
                      {

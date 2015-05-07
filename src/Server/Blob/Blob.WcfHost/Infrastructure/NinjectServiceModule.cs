@@ -36,12 +36,11 @@ namespace Blob.WcfHost.Infrastructure
                 .WithConstructorArgument("connectionString", connectionString);
 
             Bind<Contracts.Blob.IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
-            Bind<Managers.Status.IStatusManager>().To<Managers.Status.StatusManager>();
+            Bind<Contracts.Blob.IBlobQueryManager>().To<Managers.Blob.BlobQueryManager>();
 
-            Bind<Contracts.Command.ICommandService>().To<Services.Command.CommandService>();
+            Bind<Contracts.Command.IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
+            Bind<Contracts.Device.IDeviceStatusService>().To<Services.Device.DeviceStatusService>();
             Bind<Contracts.Security.IIdentityService>().To<BlobUserManagerAdapter>();
-            Bind<Contracts.Registration.IRegistrationService>().To<Services.Registration.RegistrationService>();
-            Bind<Contracts.Status.IStatusService>().To<Services.Status.StatusService>();
 
             // logging
             Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));

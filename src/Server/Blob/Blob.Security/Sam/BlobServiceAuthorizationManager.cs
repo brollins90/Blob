@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.ServiceModel;
+using System.ServiceModel.Dispatcher;
+using System.Threading;
 using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Data.Identity;
@@ -20,19 +24,96 @@ namespace Blob.Security.Sam
             _log.Debug("Constructing BlobServiceAuthorizationManager");
         }
 
+        //protected override bool CheckAccessCore(OperationContext operationContext)
+        //{
+        //    var action = GetActionMethodInfo(operationContext);
+
+        //    return true;
+        //}
+
+        /////<summary>Returns the Method info for the method (OperationContract) that is called in this WCF request.</summary>
+        //System.Reflection.MethodInfo GetActionMethodInfo(System.ServiceModel.OperationContext operationContext)
+        //{
+        //    string bindingName = operationContext.EndpointDispatcher.ChannelDispatcher.BindingName;
+        //    string methodName;
+        //    if (bindingName.Contains("WebHttpBinding"))
+        //    {
+        //        //REST request
+        //        methodName = (string)operationContext.IncomingMessageProperties["HttpOperationName"];
+        //    }
+        //    else
+        //    {
+        //        //SOAP request
+        //        string action = operationContext.IncomingMessageHeaders.Action;
+        //        methodName = operationContext.EndpointDispatcher.DispatchRuntime.Operations.FirstOrDefault(o => o.Action == action).Name;
+        //    }
+        //    // Insert your own error-handling here if (operation == null)
+        //    Type hostType = operationContext.Host.Description.ServiceType;
+        //    return hostType.GetMethod(methodName);
+        //}
+
+        //public override bool CheckAccess(AuthorizationContext context)
+        //{
+        //    string resourceStr = context.Resource.First().Value;
+        //    string actionStr = context.Action.First().Value;
+
+
+        //    //int resourceId;
+        //    //Operations operationId;
+        //    //try { resourceId = Int32.Parse(resourceStr); }
+        //    //catch { throw new Exception("Invalid resource. Must be a string representation of an integer value."); }
+        //    //try { operationId = (Operations)Enum.Parse(typeof(Operations), actionStr); }
+        //    //catch { throw new Exception("Invalid action/operation. Must be a string representation of an integer value."); }
+
+        //    //Get the current claims principal
+        //    var prinicpal = (ClaimsPrincipal)Thread.CurrentPrincipal;
+        //    //Make sure they are authenticated
+        //    if (!prinicpal.Identity.IsAuthenticated)
+        //        return false;
+        //    //Get the roles from the claims
+        //    var roles = prinicpal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+        //    //Check if they are authorized
+        //    //return ResourceService.Authorize(resourceId, operationId, roles);
+
+        //}
+
+        //private string[] getRoles(Guid id)
+        //{
+        //    string[] roleNames;
+        //    using (BlobDbContext context = new BlobDbContext()) { 
+        //        using (BlobUserStore userStore = new BlobUserStore(context)) {
+        //            using (BlobUserManager userManager = new BlobUserManager(userStore))
+        //            {
+        //                roleNames = userManager.GetRolesAsync(id).Result.ToArray();
+        //            }
+        //        }
+        //    }
+        //    return roleNames;
+        //}
+
+        //protected override bool CheckAccessCore(OperationContext operationContext)
+        //{
+        //    string action = operationContext.IncomingMessageHeaders.Action;
+        //    DispatchOperation operation = operationContext.EndpointDispatcher.DispatchRuntime.Operations.FirstOrDefault(o => o.Action == action);
+        //    // Insert your own error-handling here if (operation == null)
+        //    Type hostType = operationContext.Host.Description.ServiceType;
+        //    MethodInfo method = hostType.GetMethod(operation.Name);
+        //    return base.CheckAccessCore(operationContext);
+        //}
+
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
             _log.Debug("CheckAccessCore");
-            
+
             IIdentity identity = operationContext.ServiceSecurityContext.PrimaryIdentity;
 
             Guid g;
             if (Guid.TryParse(identity.Name, out g))
             {
                 // assume this is a device and not a user
-                _log.Debug("Found a device.  add the device role and return"); 
+                _log.Debug("Found a device.  add the device role and return");
                 operationContext.ServiceSecurityContext.AuthorizationContext
-                             .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, new [] {"Device"});
+                             .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, new[] { "Device" });
 
                 return true;
             }

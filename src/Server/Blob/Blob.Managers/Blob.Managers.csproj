@@ -47,7 +47,6 @@
     <Compile Include="Command\CommandConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Blob\BlobCommandManager.cs" />
-    <Compile Include="Status\StatusManager.cs" />
     <Compile Include="Extensions\Parsing.cs" />
   </ItemGroup>
   <ItemGroup>
