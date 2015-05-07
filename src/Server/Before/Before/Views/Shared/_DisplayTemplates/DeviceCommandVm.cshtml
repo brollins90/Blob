@@ -1,0 +1,16 @@
+﻿@model Blob.Contracts.Dto.ViewModels.DeviceCommandVm
+
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        @Model.CommandType
+    </div>
+    <div class="col-md-8">
+        @foreach (var item in Model.CommandParamters)
+        {
+            <div class="col-md-2">
+                @item.Key - @item.Value
+            </div>
+        }
+    </div>
+</div>
