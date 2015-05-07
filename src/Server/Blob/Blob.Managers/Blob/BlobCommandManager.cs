@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
 using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
 using Blob.Contracts.Dto;
 using Blob.Core.Domain;
 using Blob.Data;
@@ -63,13 +65,15 @@ namespace Blob.Managers.Blob
             var cmdInstance = Activator.CreateInstance(commandType);
             PropertyInfo[] properties = commandType.GetProperties();
 
-            foreach (var property in properties)
-            {
-                if (dto.CommandParameters.ContainsKey(property.Name))
-                {
-                    property.SetValue(cmdInstance, dto.CommandParameters[property.Name], null);
-                }
-            }
+            // temp name is CommandData
+            (cmdInstance as CmdExecuteCommand).CommandString = dto.CommandParameters.First().Value;
+            //foreach (var property in properties)
+            //{
+            //    if (dto.CommandParameters.ContainsKey(property.Name))
+            //    {
+            //        property.SetValue(cmdInstance, dto.CommandParameters[property.Name], null);
+            //    }
+            //}
             await CommandConnectionManager.Instance.QueueCommandAsync(dto.DeviceId, (cmdInstance as ICommand)).ConfigureAwait(false);
         }
 
