@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
+using System.IdentityModel.Claims;
 using System.Linq;
-using System.Reflection;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.ServiceModel;
-using System.ServiceModel.Dispatcher;
-using System.Threading;
-using Blob.Core.Domain;
-using Blob.Data;
-using Blob.Data.Identity;
 using log4net;
 
-namespace Blob.Security.Sam
+namespace Blob.Security.Authorization
 {
+    // https://msdn.microsoft.com/en-us/library/ms751416.aspx
     public class BlobServiceAuthorizationManager : ServiceAuthorizationManager
     {
         private readonly ILog _log;
@@ -24,6 +17,30 @@ namespace Blob.Security.Sam
             _log.Debug("Constructing BlobServiceAuthorizationManager");
         }
 
+        protected override bool CheckAccessCore(OperationContext operationContext)
+        {
+            //string action = operationContext.RequestContext.RequestMessage.Headers.Action;
+            string action = GetActionMethodInfo(operationContext).Name;
+            Console.WriteLine("action: {0}", action);
+
+            foreach (ClaimSet claimSet in operationContext.ServiceSecurityContext.AuthorizationContext.ClaimSets)
+            {
+                // Examine only those claim sets issued by System. 
+                if (claimSet.Issuer == ClaimSet.System)
+                {
+                    foreach (Claim c in claimSet.FindClaims("http://www.contoso.com/claims/allowedoperation", Rights.PossessProperty))
+                    {
+                        Console.WriteLine("resource: {0}", c.Resource.ToString());
+                        if (action == c.Resource.ToString())
+                            return true;
+                    }
+                }
+            }
+
+            // If this point is reached, return false to deny access. 
+            return false;
+        }
+
         //protected override bool CheckAccessCore(OperationContext operationContext)
         //{
         //    var action = GetActionMethodInfo(operationContext);
@@ -31,26 +48,27 @@ namespace Blob.Security.Sam
         //    return true;
         //}
 
-        /////<summary>Returns the Method info for the method (OperationContract) that is called in this WCF request.</summary>
-        //System.Reflection.MethodInfo GetActionMethodInfo(System.ServiceModel.OperationContext operationContext)
-        //{
-        //    string bindingName = operationContext.EndpointDispatcher.ChannelDispatcher.BindingName;
-        //    string methodName;
-        //    if (bindingName.Contains("WebHttpBinding"))
-        //    {
-        //        //REST request
-        //        methodName = (string)operationContext.IncomingMessageProperties["HttpOperationName"];
-        //    }
-        //    else
-        //    {
-        //        //SOAP request
-        //        string action = operationContext.IncomingMessageHeaders.Action;
-        //        methodName = operationContext.EndpointDispatcher.DispatchRuntime.Operations.FirstOrDefault(o => o.Action == action).Name;
-        //    }
-        //    // Insert your own error-handling here if (operation == null)
-        //    Type hostType = operationContext.Host.Description.ServiceType;
-        //    return hostType.GetMethod(methodName);
-        //}
+        //http://stackoverflow.com/a/10025331/148256
+        ///<summary>Returns the Method info for the method (OperationContract) that is called in this WCF request.</summary>
+        System.Reflection.MethodInfo GetActionMethodInfo(System.ServiceModel.OperationContext operationContext)
+        {
+            string bindingName = operationContext.EndpointDispatcher.ChannelDispatcher.BindingName;
+            string methodName;
+            if (bindingName.Contains("WebHttpBinding"))
+            {
+                //REST request
+                methodName = (string)operationContext.IncomingMessageProperties["HttpOperationName"];
+            }
+            else
+            {
+                //SOAP request
+                string action = operationContext.IncomingMessageHeaders.Action;
+                methodName = operationContext.EndpointDispatcher.DispatchRuntime.Operations.FirstOrDefault(o => o.Action == action).Name;
+            }
+            // Insert your own error-handling here if (operation == null)
+            Type hostType = operationContext.Host.Description.ServiceType;
+            return hostType.GetMethod(methodName);
+        }
 
         //public override bool CheckAccess(AuthorizationContext context)
         //{
@@ -101,50 +119,50 @@ namespace Blob.Security.Sam
         //    return base.CheckAccessCore(operationContext);
         //}
 
-        protected override bool CheckAccessCore(OperationContext operationContext)
-        {
-            _log.Debug("CheckAccessCore");
+        //protected override bool CheckAccessCore(OperationContext operationContext)
+        //{
+        //    _log.Debug("CheckAccessCore");
 
-            IIdentity identity = operationContext.ServiceSecurityContext.PrimaryIdentity;
+        //    IIdentity identity = operationContext.ServiceSecurityContext.PrimaryIdentity;
 
-            Guid g;
-            if (Guid.TryParse(identity.Name, out g))
-            {
-                // assume this is a device and not a user
-                _log.Debug("Found a device.  add the device role and return");
-                operationContext.ServiceSecurityContext.AuthorizationContext
-                             .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, new[] { "Device" });
+        //    Guid g;
+        //    if (Guid.TryParse(identity.Name, out g))
+        //    {
+        //        // assume this is a device and not a user
+        //        _log.Debug("Found a device.  add the device role and return");
+        //        operationContext.ServiceSecurityContext.AuthorizationContext
+        //                     .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, new[] { "Device" });
 
-                return true;
-            }
+        //        return true;
+        //    }
 
-            using (BlobDbContext context = new BlobDbContext())
-            {
-                using (BlobUserStore userStore = new BlobUserStore(context))
-                {
-                    using (BlobUserManager userManager = new BlobUserManager(userStore))
-                    {
-                        User user = userManager.FindByNameAsync2(identity.Name).Result;
-                        _log.Debug("Got user: " + user);
+        //    using (BlobDbContext context = new BlobDbContext())
+        //    {
+        //        using (BlobUserStore userStore = new BlobUserStore(context))
+        //        {
+        //            using (BlobUserManager userManager = new BlobUserManager(userStore))
+        //            {
+        //                User user = userManager.FindByNameAsync2(identity.Name).Result;
+        //                _log.Debug("Got user: " + user);
 
-                        if (user == null)
-                        {
-                            string msg = String.Format("Unknown Username {0} .", identity.Name);
-                            Trace.TraceWarning(msg);
-                            _log.Debug(msg);
-                            throw new FaultException(msg);
-                        }
+        //                if (user == null)
+        //                {
+        //                    string msg = String.Format("Unknown Username {0} .", identity.Name);
+        //                    Trace.TraceWarning(msg);
+        //                    _log.Debug(msg);
+        //                    throw new FaultException(msg);
+        //                }
 
-                        //Assign roles to the Principal property for runtime to match with PrincipalPermissionAttributes decorated on the service operation.
-                        string[] roleNames = userManager.GetRolesAsync(user.Id).Result.ToArray(); //users without any role assigned should then call operations not decorated by PrincipalPermissionAttributes
-                        operationContext.ServiceSecurityContext.AuthorizationContext
-                            .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, roleNames);
-                        return true;
-                    }
-                }
+        //                //Assign roles to the Principal property for runtime to match with PrincipalPermissionAttributes decorated on the service operation.
+        //                string[] roleNames = userManager.GetRolesAsync(user.Id).Result.ToArray(); //users without any role assigned should then call operations not decorated by PrincipalPermissionAttributes
+        //                operationContext.ServiceSecurityContext.AuthorizationContext
+        //                    .Properties["Principal"] = new GenericPrincipal(operationContext.ServiceSecurityContext.PrimaryIdentity, roleNames);
+        //                return true;
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         //protected void logRoles(OperationContext operationContext)
         //{

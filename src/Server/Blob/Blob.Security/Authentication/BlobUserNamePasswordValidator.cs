@@ -6,7 +6,7 @@ using Blob.Data;
 using Blob.Data.Identity;
 using log4net;
 
-namespace Blob.Security.Sam
+namespace Blob.Security.Authentication
 {
     public class BlobUserNamePasswordValidator : UserNamePasswordValidator
     {

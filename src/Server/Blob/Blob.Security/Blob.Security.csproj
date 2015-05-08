@@ -77,15 +77,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizationPolicy\UserAuthorizationPolicy.cs" />
+    <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
+    <Compile Include="Authorization\BlobClaimsTransformer.cs" />
+    <Compile Include="Authorization\BlobServiceAuthorizationManager.cs" />
+    <Compile Include="Authorization\BlobUserAuthorizationPolicy.cs" />
     <Compile Include="BlobClaimsIdentityFactory.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />
-    <Compile Include="Sam\BlobClaimsTransformer.cs" />
-    <Compile Include="Sam\BlobServiceAuthorizationManager.cs" />
     <Compile Include="BlobUserManagerAdapter.cs" />
     <Compile Include="BlobUserManager.cs" />
-    <Compile Include="Sam\BlobUserNamePasswordValidator.cs" />
     <Compile Include="Identity\BlobUserValidator.cs" />
     <Compile Include="Sam\BlobAuthorizeAttribute.cs" />
     <Compile Include="WcfMessageLogger.cs" />

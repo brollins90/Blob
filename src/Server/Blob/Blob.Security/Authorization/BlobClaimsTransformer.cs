@@ -111,3 +111,7 @@
 //        }
 //    }
 //}
+
+namespace Blob.Security.Authorization
+{
+}

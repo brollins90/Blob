@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.IdentityModel.Policy;
 using System.ServiceModel;
+using System.ServiceModel.Description;
+using System.ServiceModel.Security;
+using Blob.Security.Authentication;
+using Blob.Security.Authorization;
 using Blob.Security.Sam;
 using log4net;
 using Ninject;
@@ -32,8 +38,23 @@ namespace Blob.WcfHost.Infrastructure
             LogManager.GetLogger(typeof(BlobHostFactory)).Info("CreateServiceHost");
 
             ServiceHost host = base.CreateServiceHost(serviceType, baseAddresses);
+
+            var col = new ReadOnlyCollection<IAuthorizationPolicy>(new IAuthorizationPolicy[] { new BlobUserAuthorizationPolicy() });
+            ServiceAuthorizationBehavior sa = host.Description.Behaviors.Find<ServiceAuthorizationBehavior>();
+            if (sa == null)
+            {
+                sa = new ServiceAuthorizationBehavior();
+                host.Description.Behaviors.Add(sa);
+            }
+            sa.ExternalAuthorizationPolicies = col;
+
+            host.Credentials.UserNameAuthentication.UserNamePasswordValidationMode = UserNamePasswordValidationMode.Custom;
+            host.Credentials.UserNameAuthentication.CustomUserNamePasswordValidator = new BlobUserNamePasswordValidator();
+            
             //host.Authentication.ServiceAuthenticationManager = new BlobServiceAuthenticationManager();
             host.Authorization.ServiceAuthorizationManager = new BlobServiceAuthorizationManager();
+
+
             return host;
         }
     }
