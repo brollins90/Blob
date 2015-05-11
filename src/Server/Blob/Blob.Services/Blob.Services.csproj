@@ -35,6 +35,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.identitymodel.services" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
@@ -53,6 +55,10 @@
     <ProjectReference Include="..\Blob.Managers\Blob.Managers.csproj">
       <Project>{bfb7e4d5-e72e-401d-b576-ae890e35bb52}</Project>
       <Name>Blob.Managers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blob.Security\Blob.Security.csproj">
+      <Project>{0586d78e-fb9d-484e-aab9-00d434e0f3cd}</Project>
+      <Name>Blob.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

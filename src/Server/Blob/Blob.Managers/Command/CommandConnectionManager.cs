@@ -20,7 +20,7 @@ namespace Blob.Managers.Command
         private bool runTestThread = true;
         private ManualResetEvent _stopEvent;
         private Thread _testThread;
-        private Thread _testThread2;
+        //private Thread _testThread2;
 
         private CommandConnectionManager()
         {

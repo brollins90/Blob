@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Security;
 using Blob.Core.Domain;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Security
@@ -12,11 +13,14 @@ namespace Blob.Security
     [ServiceBehavior]
     public class BlobUserManagerAdapter : IIdentityService
     {
+        private ILog _log;
         private readonly BlobUserManager _manager;
         private bool _disposed;
 
         public BlobUserManagerAdapter(BlobUserManager manager)
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobUserManagerAdapter");
             _manager = manager;
         }
 

@@ -72,22 +72,33 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\BlobClaimsAuthenticationManager.cs" />
     <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
-    <Compile Include="Authorization\BlobClaimsTransformer.cs" />
+    <Compile Include="Authorization\AddIdentityAuthorizationPolicy.cs" />
+    <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
     <Compile Include="Authorization\BlobServiceAuthorizationManager.cs" />
     <Compile Include="Authorization\BlobUserAuthorizationPolicy.cs" />
+    <Compile Include="Authorization\ClaimConstants.cs" />
+    <Compile Include="Authorization\CustomerAuthorizationPolicy.cs" />
+    <Compile Include="Authorization\PolicyReader.cs" />
+    <Compile Include="Authorization\ResourceAction.cs" />
     <Compile Include="BlobClaimsIdentityFactory.cs" />
+    <Compile Include="BlobPrincipal.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />
     <Compile Include="BlobUserManagerAdapter.cs" />
     <Compile Include="BlobUserManager.cs" />
     <Compile Include="Identity\BlobUserValidator.cs" />
-    <Compile Include="Sam\BlobAuthorizeAttribute.cs" />
+    <Compile Include="Permissions\BlobPermission.cs" />
+    <Compile Include="Permissions\BlobPermissionAttribute.cs" />
+    <Compile Include="Permissions\IdentityUtil.cs" />
+    <Compile Include="Permissions\ResourceOperations.cs" />
     <Compile Include="WcfMessageLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

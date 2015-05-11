@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Data.Entity.Utilities;
 using System.Security.Claims;
 using Blob.Core.Domain;
+using log4net;
 
 namespace Blob.Security
 {
-    public static class Constants
-    {
-        public const string DefaultSecurityStampClaimType = "AspNet.Identity.SecurityStamp";
-    }
-
     public class BlobClaimsIdentityFactory
     {
-        internal const string IdentityProviderClaimType =
-            "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider";
+        private ILog _log;
+        internal const string IdentityProviderClaimType = "http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider";
 
         internal const string DefaultIdentityProviderClaimValue = "ASP.NET Identity";
+        public const string DefaultSecurityStampClaimType = "AspNet.Identity.SecurityStamp";
 
         /// <summary>
         ///     Constructor
         /// </summary>
         public BlobClaimsIdentityFactory()
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobClaimsIdentityFactory");
+
             RoleClaimType = ClaimsIdentity.DefaultRoleClaimType;
             UserIdClaimType = ClaimTypes.NameIdentifier;
             UserNameClaimType = ClaimsIdentity.DefaultNameClaimType;
-            SecurityStampClaimType = Constants.DefaultSecurityStampClaimType;
+            SecurityStampClaimType = DefaultSecurityStampClaimType;
         }
 
         /// <summary>
@@ -58,6 +58,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async System.Threading.Tasks.Task<ClaimsIdentity> CreateAsync(BlobUserManager manager, User user, string authenticationType)
         {
+            _log.Debug("CreateAsync");
             if (manager == null)
             {
                 throw new ArgumentNullException("manager");

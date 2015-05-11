@@ -25,7 +25,8 @@ namespace Blob.Security
         public BlobUserManager(BlobUserStore store)
             //: base(store)
         {
-            _log = LogManager.GetLogger("MembershipLogger");
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobUserManager");
 
             if (store == null)
             {
@@ -45,78 +46,79 @@ namespace Blob.Security
             ClaimsIdentityFactory = new BlobClaimsIdentityFactory();
         }
 
-        public void Initialize(string name, NameValueCollection config)
-        {
-            try
-            {
-                _log.Debug("Initializing BlobUserManager");
+        //public void Initialize(string name, NameValueCollection config)
+        //{
+        //    try
+        //    {
+        //        _log.Debug("Initializing BlobUserManager");
 
-                if (config == null)
-                    throw new ArgumentNullException("config");
+        //        if (config == null)
+        //            throw new ArgumentNullException("config");
 
-                Config = config;
+        //        Config = config;
 
-                try
-                {
-                    if (MachineKey.ValidationKey.Contains("AutoGenerate"))
-                    {
-                        throw new ProviderException("Hashed or Encrypted passwords are not supported with auto-generated keys.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to load the machine key.", e);
-                    }
-                    throw;
-                }
-            }
-            catch (Exception e)
-            {
-                _log.Error("Failed to load blob user manager.", e);
-                throw;
-            }
-        }
+        //        try
+        //        {
+        //            if (MachineKey.ValidationKey.Contains("AutoGenerate"))
+        //            {
+        //                throw new ProviderException("Hashed or Encrypted passwords are not supported with auto-generated keys.");
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            if (LogExceptions)
+        //            {
+        //                _log.Error("Failed to load the machine key.", e);
+        //            }
+        //            throw;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _log.Error("Failed to load blob user manager.", e);
+        //        throw;
+        //    }
+        //}
+
         protected internal BlobUserStore Store { get; set; }
-        protected internal NameValueCollection Config { get; set; }
+        //protected internal NameValueCollection Config { get; set; }
         protected internal bool IsDisposed { get; private set; }
-        protected internal MachineKeySection MachineKey
-        {
-            get
-            {
-                if (_machineKey == null)
-                {
-                    Configuration cfg = WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-                    _machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
-                }
-                return _machineKey;
-            }
-        }
-        private MachineKeySection _machineKey;
+        //protected internal MachineKeySection MachineKey
+        //{
+        //    get
+        //    {
+        //        if (_machineKey == null)
+        //        {
+        //            Configuration cfg = WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
+        //            _machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
+        //        }
+        //        return _machineKey;
+        //    }
+        //}
+        //private MachineKeySection _machineKey;
 
 
         /// <summary>
         /// Indicates whether to log exceptions
         /// </summary>
         /// <returns>true if the membership provider is configured to log exceptions; otherwise, false. The default is false.</returns>
-        public bool LogExceptions
-        {
-            get
-            {
-                if (_logExceptions.HasValue == false)
-                {
-                    bool bv;
-                    string strv = Config["LogExceptions"];
-                    if (!string.IsNullOrEmpty(strv) && bool.TryParse(strv, out bv))
-                        _logExceptions = bv;
-                    else
-                        _logExceptions = true;
-                }
-                return _logExceptions.Value;
-            }
-        }
-        private bool? _logExceptions;
+        //public bool LogExceptions
+        //{
+        //    get
+        //    {
+        //        if (_logExceptions.HasValue == false)
+        //        {
+        //            bool bv;
+        //            string strv = Config["LogExceptions"];
+        //            if (!string.IsNullOrEmpty(strv) && bool.TryParse(strv, out bv))
+        //                _logExceptions = bv;
+        //            else
+        //                _logExceptions = true;
+        //        }
+        //        return _logExceptions.Value;
+        //    }
+        //}
+        //private bool? _logExceptions;
 
         public IPasswordHasher PasswordHasher
         {
@@ -406,6 +408,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task AddClaimAsync(Guid userId, Claim claim)
         {
+            _log.Debug(string.Format("AddClaimAsync({0}, {1})", userId, claim));
             ThrowIfDisposed();
             var claimStore = GetClaimStore();
             if (claim == null)
@@ -429,6 +432,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<IList<Claim>> GetClaimsAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetClaimsAsync({0})", userId));
             ThrowIfDisposed();
             var claimStore = GetClaimStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -448,6 +452,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task RemoveClaimAsync(Guid userId, Claim claim)
         {
+            _log.Debug(string.Format("RemoveClaimAsync({0}, {1})", userId, claim));
             ThrowIfDisposed();
             var claimStore = GetClaimStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -462,6 +467,7 @@ namespace Blob.Security
 
         protected IUserClaimStore<User, Guid> GetClaimStore()
         {
+            _log.Debug(string.Format("GetClaimStore()"));
             var cast = Store as IUserClaimStore<User, Guid>;
             if (cast == null)
             {
@@ -481,6 +487,7 @@ namespace Blob.Security
         /// <returns></returns>
         public Task<UserDto> FindByEmailAsync(string email)
         {
+            _log.Debug(string.Format("FindByEmailAsync({0})", email));
             ThrowIfDisposed();
             var store = GetEmailStore();
             if (email == null)
@@ -498,6 +505,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<string> GetEmailAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetEmailAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetEmailStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -516,6 +524,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<bool> GetEmailConfirmedAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetEmailConfirmedAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetEmailStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -535,6 +544,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task SetEmailAsync(Guid userId, string email)
         {
+            _log.Debug(string.Format("SetEmailAsync({0}, {1})", userId, email));
             ThrowIfDisposed();
             var store = GetEmailStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -552,6 +562,7 @@ namespace Blob.Security
 
         public async Task SetEmailConfirmedAsync(Guid userId, bool confirmed)
         {
+            _log.Debug(string.Format("SetEmailConfirmedAsync({0}, {1})", userId, confirmed));
             ThrowIfDisposed();
             var store = GetEmailStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -570,6 +581,7 @@ namespace Blob.Security
 
         protected IUserEmailStore<User, Guid> GetEmailStore()
         {
+            _log.Debug(string.Format("GetEmailStore()"));
             var cast = Store as IUserEmailStore<User, Guid>;
             if (cast == null)
             {
@@ -589,6 +601,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<int> GetAccessFailedCountAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetAccessFailedCountAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -607,6 +620,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<bool> GetLockoutEnabledAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetLockoutEnabledAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -625,6 +639,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<DateTimeOffset> GetLockoutEndDateAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetLockoutEndDateAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -638,6 +653,7 @@ namespace Blob.Security
 
         public async Task<int> IncrementAccessFailedCountAsync(Guid userId)
         {
+            _log.Debug(string.Format("IncrementAccessFailedCountAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -657,6 +673,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task SetLockoutEnabledAsync(Guid userId, bool enabled)
         {
+            _log.Debug(string.Format("SetLockoutEnabledAsync({0}, {1})", userId, enabled));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -677,6 +694,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task SetLockoutEndDateAsync(Guid userId, DateTimeOffset lockoutEnd)
         {
+            _log.Debug(string.Format("SetLockoutEndDateAsync({0}, {1})", userId, lockoutEnd));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -700,6 +718,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task ResetAccessFailedCountAsync(Guid userId)
         {
+            _log.Debug(string.Format("ResetAccessFailedCountAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetUserLockoutStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -773,6 +792,7 @@ namespace Blob.Security
         // IUserLockoutStore methods
         protected IUserLockoutStore<User, Guid> GetUserLockoutStore()
         {
+            _log.Debug(string.Format("GetUserLockoutStore()"));
             var cast = Store as IUserLockoutStore<User, Guid>;
             if (cast == null)
             {
@@ -793,6 +813,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task AddLoginAsync(Guid userId, UserLoginInfoDto login)
         {
+            _log.Debug(string.Format("AddLoginAsync({0}, {1})", userId, login));
             ThrowIfDisposed();
             var loginStore = GetLoginStore();
             if (login == null)
@@ -820,6 +841,7 @@ namespace Blob.Security
         /// <returns></returns>
         public Task<UserDto> FindAsync(UserLoginInfoDto login)
         {
+            _log.Debug(string.Format("FindAsync({0})", login));
             ThrowIfDisposed();
             var user = GetLoginStore().FindAsync(login.ToLoginInfo()).Result;
             return Task.FromResult(UserConverter.DtoFromUser(user));
@@ -832,6 +854,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetLoginsAsync({0})", userId));
             ThrowIfDisposed();
             var loginStore = GetLoginStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -851,6 +874,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task RemoveLoginAsync(Guid userId, UserLoginInfoDto login)
         {
+            _log.Debug(string.Format("RemoveLoginAsync({0}, {1})", userId, login));
             ThrowIfDisposed();
             var loginStore = GetLoginStore();
             if (login == null)
@@ -870,6 +894,7 @@ namespace Blob.Security
         
         protected IUserLoginStore<User, Guid> GetLoginStore()
         {
+            _log.Debug(string.Format("GetLoginStore()"));
             var cast = Store as IUserLoginStore<User, Guid>;
             if (cast == null)
             {
@@ -884,6 +909,7 @@ namespace Blob.Security
 
         public async Task<string> GetPasswordHashAsync(Guid userId)
         {
+            _log.Debug(string.Format("GetPasswordHashAsync({0})", userId));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -902,6 +928,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<bool> HasPasswordAsync(Guid userId)
         {
+            _log.Debug(string.Format("HasPasswordAsync({0})", userId));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -915,6 +942,7 @@ namespace Blob.Security
 
         public async Task SetPasswordHashAsync(Guid userId, string passwordHash)
         {
+            _log.Debug(string.Format("SetPasswordHashAsync({0}, {1})", userId, passwordHash));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
             var user = await FindByIdAsync2(userId).WithCurrentCulture();
@@ -928,6 +956,7 @@ namespace Blob.Security
 
         protected IUserPasswordStore<User, Guid> GetPasswordStore()
         {
+            _log.Debug(string.Format("GetPasswordStore()"));
             var cast = Store as IUserPasswordStore<User, Guid>;
             if (cast == null)
             {
@@ -1186,6 +1215,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task CreateAsync(UserDto userDto)
         {
+            _log.Debug(string.Format("CreateAsync({0})", userDto));
             ThrowIfDisposed();
             User user = UserConverter.UserFromUserDto(userDto);
             if (user == null)
@@ -1213,6 +1243,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task DeleteAsync(Guid userId)
         {
+            _log.Debug(string.Format("DeleteAsync({0})", userId));
             ThrowIfDisposed();
             var user = FindByIdAsync2(userId).Result;
             await Store.DeleteAsync(user).WithCurrentCulture();
@@ -1226,6 +1257,7 @@ namespace Blob.Security
         /// <returns></returns>
         public Task<UserDto> FindByIdAsync(Guid userId)
         {
+            _log.Debug(string.Format("FindByIdAsync({0})", userId));
             ThrowIfDisposed();
             var user = Store.FindByIdAsync(userId).Result;
             return Task.FromResult(UserConverter.DtoFromUser(user));
@@ -1238,6 +1270,7 @@ namespace Blob.Security
         /// <returns></returns>
         public Task<UserDto> FindByNameAsync(string userName)
         {
+            _log.Debug(string.Format("FindByNameAsync({0})", userName));
             ThrowIfDisposed();
             if (userName == null)
             {
@@ -1254,6 +1287,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task UpdateAsync(UserDto userDto)
         {
+            _log.Debug(string.Format("UpdateAsync({0})", userDto));
             ThrowIfDisposed();
             User user = UserConverter.UserFromUserDto(userDto);
             if (user == null)
@@ -1272,6 +1306,7 @@ namespace Blob.Security
 
         public async Task<User> FindByNameAsync2(string userName)
         {
+            _log.Debug(string.Format("FindByNameAsync2({0})", userName));
             ThrowIfDisposed();
             var user = await FindByNameAsync(userName).WithCurrentCulture();
             if (user == null)
@@ -1283,6 +1318,7 @@ namespace Blob.Security
 
         public async Task<User> FindByEmailAsync2(string email)
         {
+            _log.Debug(string.Format("FindByEmailAsync2({0})", email));
             ThrowIfDisposed();
             var user = await FindByEmailAsync(email).WithCurrentCulture();
             if (user == null)
@@ -1294,6 +1330,7 @@ namespace Blob.Security
         
         public async Task<User> FindByIdAsync2(Guid userId)
         {
+            _log.Debug(string.Format("FindByIdAsync2({0})", userId));
             ThrowIfDisposed();
             var user = await FindByIdAsync(userId).WithCurrentCulture();
             if (user == null)
@@ -1305,6 +1342,7 @@ namespace Blob.Security
 
         public async Task UpdateAsync2(User user)
         {
+            _log.Debug(string.Format("UpdateAsync2({0})", user));
             ThrowIfDisposed();
             if (user == null)
             {
@@ -1369,6 +1407,7 @@ namespace Blob.Security
 
         public async Task<bool> CheckUserNamePasswordAsync(string userName, string password)
         {
+            _log.Debug(string.Format("CheckUserNamePasswordAsync({0}, {1})", userName, password));
             ThrowIfDisposed();
             User user = await FindByNameAsync2(userName);
             return await CheckPasswordAsync(user, password).WithCurrentCulture();
@@ -1376,6 +1415,7 @@ namespace Blob.Security
         
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
+            _log.Debug(string.Format("CheckPasswordAsync({0}, {1})", user, password));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
             if (user == null)
@@ -1392,9 +1432,9 @@ namespace Blob.Security
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        protected async Task<bool> VerifyPasswordAsync(IUserPasswordStore<User, Guid> store, User user,
-            string password)
+        protected async Task<bool> VerifyPasswordAsync(IUserPasswordStore<User, Guid> store, User user, string password)
         {
+            _log.Debug(string.Format("WTF-ThisIsABadCall.VerifyPasswordAsync({0}, {1})", user, password));
             var hash = await store.GetPasswordHashAsync(user).WithCurrentCulture();
             return PasswordHasher.VerifyHashedPassword(hash, password) != PasswordVerificationResult.Failed;
         }
@@ -1480,6 +1520,7 @@ namespace Blob.Security
 
         protected async Task<IdentityResultDto> UpdatePassword(UserDto user, string newPassword)
         {
+            _log.Debug(string.Format("UpdatePassword({0}, {1})", user, newPassword));
             var result = await PasswordValidator.ValidateAsync(newPassword).WithCurrentCulture();
             if (!result.Succeeded)
             {
@@ -1620,6 +1661,7 @@ namespace Blob.Security
 
         public Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
+            _log.Debug(string.Format("WTF-againPasswordSignInAsync({0}, {1})", userName, password, isPersistent, shouldLockout));
             return Task.FromResult(SignInStatusDto.Success);
             ////if (UserManager == null)
             ////{
@@ -1653,6 +1695,7 @@ namespace Blob.Security
 
         public Task<ClaimsIdentity> CreateIdentityAsync(UserDto userDto, string authenticationType)
         {
+            _log.Debug(string.Format("CreateIdentityAsync({0}, {1})", userDto, authenticationType));
             ThrowIfDisposed(); 
             User user = FindByIdAsync2(userDto.Id.ToGuid()).Result;
             if (user == null)
@@ -1675,6 +1718,7 @@ namespace Blob.Security
         /// <returns></returns>
         public async Task<IdentityResultDto> CreateAsync(UserDto user, string password)
         {
+            _log.Debug(string.Format("CreateAsync({0}, {1})", user, password));
             ThrowIfDisposed();
             //var passwordStore = GetPasswordStore();
             if (user == null)
@@ -1703,6 +1747,7 @@ namespace Blob.Security
 
         public async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
         {
+            _log.Debug(string.Format("ChangePasswordAsync({0}, {1}, {2})", userId, currentPassword, newPassword));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
             var user = await FindByIdAsync(userId).WithCurrentCulture();
@@ -2516,6 +2561,7 @@ namespace Blob.Security
 
     public static class IdentityUtil
     {
+        // todo: move these to util folder
         //public static IdentityResultDto ToDto(this IdentityResult res)
         //{
         //    return new IdentityResultDto(res);

@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Security.Identity
 {
     public class BlobPasswordValidator : IIdentityValidator<string>
     {
+        private readonly ILog _log;
+
+        public BlobPasswordValidator()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobPasswordValidator");
+        }
+
         public int RequiredLength { get; set; }
 
         public bool RequireNonLetterOrDigit { get; set; }
@@ -21,6 +30,7 @@ namespace Blob.Security.Identity
         
         public virtual Task<IdentityResult> ValidateAsync(string item)
         {
+            _log.Debug("ValidateAsync");
             if (item == null)
             {
                 throw new ArgumentNullException("item");

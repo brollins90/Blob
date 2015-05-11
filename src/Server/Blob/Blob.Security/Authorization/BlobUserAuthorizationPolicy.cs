@@ -2,22 +2,32 @@
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Policy;
+using Blob.Data.Migrations;
+using log4net;
+using ClaimTypes = System.Security.Claims.ClaimTypes;
 
 namespace Blob.Security.Authorization
 {
     public class BlobUserAuthorizationPolicy : IAuthorizationPolicy
     {
+        private readonly ILog _log;
+
         public string Id { get; private set; }
         public ClaimSet Issuer { get; private set; }
 
         public BlobUserAuthorizationPolicy()
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobUserAuthorizationPolicy");
+
             Id = Guid.NewGuid().ToString();
             Issuer = ClaimSet.System;
         }
 
         public bool Evaluate(EvaluationContext evaluationContext, ref object state)
         {
+
+            _log.Debug("Evaluate");
             bool bRet = false;
             CustomAuthState customstate = null;
 
@@ -29,9 +39,10 @@ namespace Blob.Security.Authorization
             else
                 customstate = (CustomAuthState)state;
 
-            Console.WriteLine("In Evaluate");
+            _log.Debug("In Evaluate");
             if (!customstate.ClaimsAdded)
             {
+                _log.Debug("adding claims");
                 IList<Claim> claims = new List<Claim>();
 
                 foreach (ClaimSet claimSet in evaluationContext.ClaimSets)
@@ -40,20 +51,26 @@ namespace Blob.Security.Authorization
                     {
                         foreach (string s in GetAllowedOpList(claim.Resource.ToString()))
                         {
-                            claims.Add(new Claim("http://example.com/claims/allowedoperation", s, Rights.PossessProperty));
-                            Console.WriteLine("Claim added {0}", s);
+                            _log.Debug(string.Format("Adding claim {0}", s));
+                            claims.Add(new Claim(ClaimConstants.AllInOne, s, Rights.PossessProperty));
+                            //claims.Add(new Claim("http://example.com/claims/allowedoperation", s, Rights.PossessProperty));
+                            //Console.WriteLine("Claim added {0}", s);
                         }
                     }
                 }
 
+                _log.Debug(string.Format("adding {0} claims to the defaults", claims.Count));
                 evaluationContext.AddClaimSet(this, new DefaultClaimSet(this.Issuer, claims));
                 customstate.ClaimsAdded = true;
                 bRet = true;
             }
             else
             {
+                _log.Debug("Not adding claims");
                 bRet = true;
             }
+            _log.Debug("leaving evaluate");
+            //ClaimsPrincipal newPrincipal = new ClaimsPrincipal((identity, claims);
             return bRet;
         }
 
@@ -63,17 +80,10 @@ namespace Blob.Security.Authorization
         {
             IList<string> ret = new List<string>();
 
-            if (username == "test1")
-            {
-                ret.Add("http://Microsoft.ServiceModel.Samples/ICalculator/Add");
-                ret.Add("http://Microsoft.ServiceModel.Samples/ICalculator/Multiply");
-                ret.Add("http://Microsoft.ServiceModel.Samples/ICalculator/Subtract");
-            }
-            else if (username == "test2")
-            {
-                ret.Add("http://Microsoft.ServiceModel.Samples/ICalculator/Add");
-                ret.Add("http://Microsoft.ServiceModel.Samples/ICalculator/Subtract");
-            }
+            // check....
+            ret.Add("customer/add");
+            ret.Add("customer/edit");
+            ret.Add("customer/view");
             return ret;
         }
 

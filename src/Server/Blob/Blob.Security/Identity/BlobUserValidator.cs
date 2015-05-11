@@ -6,14 +6,19 @@ using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Blob.Core.Domain;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Security.Identity
 {
     public class BlobUserValidator : IIdentityValidator<User>
     {
+        private readonly ILog _log;
+
         public BlobUserValidator(BlobUserManager manager)
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _log.Debug("Constructing BlobUserValidator");
             if (manager == null)
             {
                 throw new ArgumentNullException("manager");
@@ -29,6 +34,7 @@ namespace Blob.Security.Identity
 
         public virtual async Task<IdentityResult> ValidateAsync(User item)
         {
+            _log.Debug("Constructing ValidateAsync");
             if (item == null)
             {
                 throw new ArgumentNullException("item");
