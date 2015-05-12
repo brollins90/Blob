@@ -1,53 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using System.ServiceModel;
 using Blob.Contracts.Command;
-using Blob.Contracts.Commands;
 using log4net;
 
 namespace Blob.Managers.Command
 {
-    public class CommandConnectionManager : IDisposable
+    public class CommandConnectionManager : ICommandConnectionManager
     {
         private readonly ILog _log;
         private static volatile CommandConnectionManager _connectionManager;
         private static readonly object SyncLock = new object();
         private static Dictionary<Guid, IDeviceConnectionServiceCallback> _callbacks;
-        private static Queue<Tuple<Guid, ICommand>> _commandQueue;
-
-        private bool runTestThread = true;
-        private ManualResetEvent _stopEvent;
-        private Thread _testThread;
 
         private CommandConnectionManager()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _callbacks = new Dictionary<Guid, IDeviceConnectionServiceCallback>();
-            _commandQueue = new Queue<Tuple<Guid, ICommand>>();
-
-            if (runTestThread && _testThread == null)
-            {
-                _testThread = new Thread(RunTest);
-                _testThread.Start();
-                //_testThread2 = new Thread(RunTest2);
-                //_testThread2.Start();
-            }
         }
-        
+
         public static CommandConnectionManager Instance
         {
             get
             {
                 lock (SyncLock)
                 {
-                    if (_connectionManager == null)
-                    {
-                        _connectionManager = new CommandConnectionManager();
-                    }
+                    return _connectionManager ?? (_connectionManager = new CommandConnectionManager());
                 }
-                return _connectionManager;
             }
         }
 
@@ -56,138 +35,135 @@ namespace Blob.Managers.Command
         /// </summary>
         /// <param name="deviceId">the id of the remote device</param>
         /// <param name="callback">the callback object</param>
-        /// <exception cref="InvalidOperationException">A callback for this device was not found.</exception>
+        /// <exception cref="InvalidOperationException">A callback has already been registered for this device.</exception>
         public void AddCallback(Guid deviceId, IDeviceConnectionServiceCallback callback)
         {
             _log.Debug(string.Format("Adding callback to the CommandManager for device {0}.", deviceId));
             ThrowIfDisposed();
+            bool added = false;
 
-            if (!_callbacks.ContainsKey(deviceId))
+            //try
+            //{
+                lock (SyncLock)
+                {
+                    if (!_callbacks.ContainsKey(deviceId))
+                    {
+                        _callbacks.Add(deviceId, callback);
+                        callback.OnConnect(string.Format("{0} connected successfully.", deviceId));
+                        added = true;
+                    }
+                }
+            //}
+            //catch (Exception e)
+            //{
+            //    _log.Error("Error getting callback.", e);
+            //    throw;
+            //}
+            if (!added)
             {
-                _callbacks.Add(deviceId, callback);
-                callback.OnConnect("" + deviceId + " connected successfully.");
+                //_callbacks[deviceId] = callback;
+                //callback.OnConnect(string.Format("{0} connected successfully.", deviceId));
+                _log.Error(string.Format("Failed to store callback for device {0}.  It was already connected.", deviceId));
+                throw new InvalidOperationException("A callback has already been registered for this device.");
             }
-            else
-            {
-                _callbacks[deviceId] = callback;
-                callback.OnConnect("" + deviceId + " connected successfully.");
-                //_log.Error(string.Format("Failed to store callback for device {0}.  It was already connected.", deviceId));
-                //throw new InvalidOperationException("A callback has already been registered for this device.");
-            }
+        }
+
+        /// <summary>
+        /// Returns a callback from the CommandManager
+        /// </summary>
+        /// <param name="deviceId">the id of the remote device</param>
+        /// <returns>the callback for the remote device or null if a callback is not found</returns>
+        public IDeviceConnectionServiceCallback GetCallback(Guid deviceId)
+        {
+            _log.Debug(string.Format("returning callback for device {0}.", deviceId));
+            ThrowIfDisposed();
+            //try
+            //{
+            //    lock (SyncLock)
+            //    {
+                    if (_callbacks.ContainsKey(deviceId))
+                    {
+                        return _callbacks[deviceId];
+                    }
+                //}
+            //}
+            //catch (Exception e)
+            //{
+            //    _log.Error("Error getting callback.", e);
+            //    throw;
+            //}
+            return null;
+        }
+
+        /// <summary>
+        /// Check for the existance of a callback
+        /// </summary>
+        /// <param name="deviceId">the id of the remote device</param>
+        /// <returns>true if the callback exists, otherwise returns false.</returns>
+        public bool HasCallback(Guid deviceId)
+        {
+            _log.Debug(string.Format("returning status of callback for device {0}.", deviceId));
+            ThrowIfDisposed();
+            bool contains = false;
+            //try
+            //{
+                lock (SyncLock)
+                {
+                    contains = _callbacks.ContainsKey(deviceId);
+                }
+            //}
+            //catch (Exception e)
+            //{
+            //    _log.Error("Error getting callback.", e);
+            //    throw;
+            //}
+            return contains;
         }
 
         /// <summary>
         /// Removes a callback from the CommandManager
         /// </summary>
         /// <param name="deviceId">the id of the remote device</param>
-        /// <param name="callback">the callback object</param>
         /// <exception cref="InvalidOperationException">A callback for this device was not found.</exception>
-        public void RemoveCallback(Guid deviceId, IDeviceConnectionServiceCallback callback)
+        public void RemoveCallback(Guid deviceId)
         {
+            _log.Debug(string.Format("removing callback from the CommandManager for device {0}.", deviceId));
             ThrowIfDisposed();
 
-            if (_callbacks.ContainsKey(deviceId))
+            bool removed = false;
+            try
             {
-                _callbacks.Remove(deviceId);
-                callback.OnDisconnect("" + deviceId + " disconnected successfully.");
+                lock (SyncLock)
+                {
+                    if (_callbacks.ContainsKey(deviceId))
+                    {
+                        var callback = _callbacks[deviceId];
+                        _callbacks.Remove(deviceId);
+                        if (((ICommunicationObject) callback).State == CommunicationState.Opened)
+                        {
+                            ((ICommunicationObject) callback).Close();
+                        }
+                        removed = true;
+                    }
+                }
             }
-            else
+            catch (TimeoutException e)
+            {
+                _log.Error("The channel timed out on close", e);
+                // todo:  should i find the callback and abort?
+            }
+            catch (CommunicationObjectFaultedException e)
+            {
+                _log.Error("The channel was faulted.", e);
+                // todo:  should i find the callback and abort?
+            }
+            if (!removed)
             {
                 _log.Error(string.Format("Failed to remove callback for device {0}.  It was not connected.", deviceId));
                 throw new InvalidOperationException("A callback for this device was not found.");
             }
         }
 
-        public async Task QueueCommandAsync(Guid deviceId, ICommand command)
-        {
-            _log.Debug(string.Format("Queueing command for: {0} - {1}", deviceId, command.GetType().ToString()));
-            await Task.Run(() =>
-            {
-                // check if there is a valid callback
-                if (_callbacks.ContainsKey(deviceId))
-                {
-                    _log.Debug(string.Format("Found a valid callback for : {0} - {1}", deviceId, command.GetType().ToString()));
-                    _commandQueue.Enqueue(new Tuple<Guid, ICommand>(deviceId, command));
-                }
-                else
-                {
-                    _log.Error(string.Format("could not find a callback"));
-                    //throw new InvalidOperationException("A callback for this device was not found.");
-                }
-            });
-        }
-
-        private int blakei = 0;
-        void timer_tick_add()
-        {
-            _log.Debug("CommandManager tick2 " + blakei++);
-
-            ICommand cmd;
-            if ((blakei % 3) == 0)
-                cmd = new PrintLineCommand { OutputString = "command 1 execution" };
-            else if (((blakei + 1) % 3) == 0)
-                cmd = new CmdExecuteCommand { CommandString = @"dir >> c:\_\fromACommand.txt" };
-            else
-                cmd = new PrintLine2Command { DifferentOutputString = "the other execution (2)" };
-
-            //if (blakei == 0)
-            //    cmd = new PrintLine2Command { DifferentOutputString = "the other execution (2)" };
-            //else if (blakei == 1)
-            //    cmd = new CmdExecuteCommand { CommandString = @"dir >> c:\_\fromACommand.txt" };
-            //else 
-            //    cmd = new PrintLineCommand {OutputString = "command 1 execution"};
-            //blakei++ ;
-            //blakei %= 2;
-            // hard code test device id
-            Guid x = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a");
-            _log.Debug("queueing " + cmd + " on " + x);
-            Task queueTask = QueueCommandAsync(x, cmd);
-            Task.WaitAll(queueTask);
-        }
-
-        void timer_tick()
-        {
-            _log.Debug("CommandManager tick " + blakei++);
-
-            while (_commandQueue.Any())
-            {
-                var c = _commandQueue.Dequeue();
-
-                foreach (var x in _callbacks)
-                {
-                    if (x.Key.Equals(c.Item1))
-                    {
-                        _log.Debug("executing " + c + " on " + x);
-                        x.Value.ExecuteCommand(c.Item2);
-                    }
-                }
-            }
-        }
-
-        void RunTest2()
-        {
-
-            do
-            {
-                timer_tick_add();
-            } while (!_stopEvent.WaitOne(1000 * 20));
-        }
-
-        void RunTest()
-        {
-            _stopEvent = new ManualResetEvent(false);
-
-            do
-            {
-                timer_tick();
-            } while (!_stopEvent.WaitOne(1000 * 4));
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
         protected internal bool IsDisposed { get; private set; }
         private void ThrowIfDisposed()
@@ -197,12 +173,15 @@ namespace Blob.Managers.Command
                 throw new ObjectDisposedException(GetType().Name);
             }
         }
-
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && !IsDisposed)
             {
-                //Store.Dispose();
                 IsDisposed = true;
             }
         }

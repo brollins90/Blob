@@ -41,10 +41,14 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blob\BlobQueryManager.cs" />
     <Compile Include="Command\CommandConnectionManager.cs" />
+    <Compile Include="Command\CommandQueueManager.cs" />
+    <Compile Include="Command\ICommandQueueManager.cs" />
+    <Compile Include="Command\ICommandConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Blob\BlobCommandManager.cs" />
     <Compile Include="Extensions\Parsing.cs" />

@@ -23,7 +23,7 @@ namespace Blob.Services.Device
         {
             get { return OperationContext.Current.GetCallbackChannel<IDeviceConnectionServiceCallback>(); }
         }
-        private CommandConnectionManager ConnectionManager
+        private ICommandConnectionManager ConnectionManager
         {
             get { return CommandConnectionManager.Instance; }
         }
@@ -41,7 +41,7 @@ namespace Blob.Services.Device
         public void Disconnect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Disconnect: {0}", deviceId));
-            ConnectionManager.RemoveCallback(deviceId, Callback);
+            ConnectionManager.RemoveCallback(deviceId);
         }
 
         [OperationBehavior]

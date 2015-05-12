@@ -25,7 +25,17 @@ namespace Blob.Managers.Blob
             _log.Debug("Constructing BlobManager");
             Context = context;
         }
-        public BlobDbContext Context { get; private set; }
+        protected BlobDbContext Context { get; private set; }
+
+        protected ICommandConnectionManager ConnectionManager
+        {
+            get { return CommandConnectionManager.Instance; }
+        }
+
+        protected ICommandQueueManager QueueManager
+        {
+            get { return CommandQueueManager.Instance; }
+        }
 
 
         // Customer
@@ -74,7 +84,7 @@ namespace Blob.Managers.Blob
             //        property.SetValue(cmdInstance, dto.CommandParameters[property.Name], null);
             //    }
             //}
-            await CommandConnectionManager.Instance.QueueCommandAsync(dto.DeviceId, (cmdInstance as ICommand)).ConfigureAwait(false);
+            await QueueManager.QueueCommandAsync(dto.DeviceId, (cmdInstance as ICommand)).ConfigureAwait(false);
         }
 
         // Device
