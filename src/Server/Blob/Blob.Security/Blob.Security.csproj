@@ -78,35 +78,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\BlobClaimsAuthenticationManager.cs" />
     <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
-    <Compile Include="Authorization\AddIdentityAuthorizationPolicy.cs" />
+    <Compile Include="Authentication\ClaimTransformer.cs" />
     <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
-    <Compile Include="Authorization\BlobServiceAuthorizationManager.cs" />
-    <Compile Include="Authorization\BlobUserAuthorizationPolicy.cs" />
-    <Compile Include="Authorization\ClaimConstants.cs" />
-    <Compile Include="Authorization\CustomerAuthorizationPolicy.cs" />
-    <Compile Include="Authorization\PolicyReader.cs" />
-    <Compile Include="Authorization\ResourceAction.cs" />
-    <Compile Include="BlobClaimsIdentityFactory.cs" />
-    <Compile Include="BlobPrincipal.cs" />
+    <Compile Include="Identity\BlobClaimsIdentityFactory.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />
-    <Compile Include="BlobUserManagerAdapter.cs" />
-    <Compile Include="BlobUserManager.cs" />
+    <Compile Include="Identity\BlobUserManager.cs" />
+    <Compile Include="Identity\BlobUserManagerAdapter.cs" />
     <Compile Include="Identity\BlobUserValidator.cs" />
-    <Compile Include="Permissions\BlobPermission.cs" />
-    <Compile Include="Permissions\BlobPermissionAttribute.cs" />
-    <Compile Include="Permissions\IdentityUtil.cs" />
-    <Compile Include="Permissions\ResourceOperations.cs" />
-    <Compile Include="WcfMessageLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="WcfMessageLoggerExtension.cs" />
+    <Compile Include="Tokens\GenericUserNameSecurityTokenHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">

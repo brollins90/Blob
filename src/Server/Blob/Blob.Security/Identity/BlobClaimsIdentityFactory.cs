@@ -5,7 +5,7 @@ using System.Security.Claims;
 using Blob.Core.Domain;
 using log4net;
 
-namespace Blob.Security
+namespace Blob.Security.Identity
 {
     public class BlobClaimsIdentityFactory
     {

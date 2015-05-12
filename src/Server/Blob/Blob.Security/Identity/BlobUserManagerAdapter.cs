@@ -8,7 +8,7 @@ using Blob.Core.Domain;
 using log4net;
 using Microsoft.AspNet.Identity;
 
-namespace Blob.Security
+namespace Blob.Security.Identity
 {
     [ServiceBehavior]
     public class BlobUserManagerAdapter : IIdentityService

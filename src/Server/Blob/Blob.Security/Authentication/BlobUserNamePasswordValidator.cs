@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IdentityModel.Selectors;
 using System.ServiceModel;
+using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Data.Identity;
+using Blob.Security.Identity;
 using log4net;
 
 namespace Blob.Security.Authentication
@@ -28,9 +30,11 @@ namespace Blob.Security.Authentication
                 if (Guid.TryParse(userName, out g))
                 {
                     // assume this is a device and not a user
-                    if (context.Devices.Find(g) != null) return;
+                    Device device = context.Devices.Find(g);
+                    if (device != null && device.Enabled) 
+                        return;
 
-                    msg = String.Format("Username {0} is a guid, but not a valid device", userName);
+                    msg = String.Format("Username {0} is a guid, but not a valid device or the device is not enabled", userName);
                     _log.Debug(msg);
                     throw new FaultException(msg);
                 }

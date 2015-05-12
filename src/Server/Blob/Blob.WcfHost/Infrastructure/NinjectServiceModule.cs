@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.Entity;
-using Blob.Security;
+using Blob.Security.Identity;
 using log4net;
 using Ninject.Modules;
 using Ninject.Web.Common;

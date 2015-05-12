@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Configuration.Provider;
 using System.Data.Entity.Utilities;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using Blob.Contracts.Security;
 using Blob.Core.Domain;
 using Blob.Data.Identity;
-using Blob.Security.Identity;
 using log4net;
 using Microsoft.AspNet.Identity;
 
-namespace Blob.Security
+namespace Blob.Security.Identity
 {
     public class BlobUserManager : IIdentityService<Guid>
     {
@@ -863,7 +858,7 @@ namespace Blob.Security
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
                     userId));
             }
-            return loginStore.GetLoginsAsync(user).Result.Select(login => login.ToDto()).ToList();
+            return loginStore.GetLoginsAsync(user).Result.Select(login => IdentityUtil.ToDto(login)).ToList();
         }
 
         /// <summary>

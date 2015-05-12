@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Services;
 using System.Security.Permissions;
 using System.ServiceModel;
 using Blob.Contracts.Command;
@@ -8,7 +9,7 @@ using log4net;
 namespace Blob.Services.Device
 {
     [ServiceBehavior]
-    //[PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+    //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]
     public class DeviceConnectionService : IDeviceConnectionService
     {
         private readonly ILog _log;
@@ -28,7 +29,7 @@ namespace Blob.Services.Device
         }
 
         [OperationBehavior]
-        [PrincipalPermission(SecurityAction.Assert, Role = "Device")]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "connect")]
         public void Connect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Connect: {0}", deviceId));
@@ -36,7 +37,7 @@ namespace Blob.Services.Device
         }
 
         [OperationBehavior]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "connect")]
         public void Disconnect(Guid deviceId)
         {
             _log.Debug(string.Format("Got Disconnect: {0}", deviceId));
@@ -44,7 +45,7 @@ namespace Blob.Services.Device
         }
 
         [OperationBehavior]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Device")]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "connect")]
         public void Ping(Guid deviceId)
         {
             _log.Debug(string.Format("Got Ping from: {0}", deviceId));

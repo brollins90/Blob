@@ -20,16 +20,22 @@ namespace Blob.Managers.Command
         private bool runTestThread = true;
         private ManualResetEvent _stopEvent;
         private Thread _testThread;
-        //private Thread _testThread2;
 
         private CommandConnectionManager()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _callbacks = new Dictionary<Guid, IDeviceConnectionServiceCallback>();
             _commandQueue = new Queue<Tuple<Guid, ICommand>>();
-        }
-        protected internal bool IsDisposed { get; private set; }
 
+            if (runTestThread && _testThread == null)
+            {
+                _testThread = new Thread(RunTest);
+                _testThread.Start();
+                //_testThread2 = new Thread(RunTest2);
+                //_testThread2.Start();
+            }
+        }
+        
         public static CommandConnectionManager Instance
         {
             get
@@ -60,14 +66,6 @@ namespace Blob.Managers.Command
             {
                 _callbacks.Add(deviceId, callback);
                 callback.OnConnect("" + deviceId + " connected successfully.");
-
-                if (runTestThread && _testThread == null)
-                {
-                    _testThread = new Thread(RunTest);
-                    _testThread.Start();
-                    //_testThread2 = new Thread(RunTest2);
-                    //_testThread2.Start();
-                }
             }
             else
             {
@@ -191,6 +189,7 @@ namespace Blob.Managers.Command
             GC.SuppressFinalize(this);
         }
 
+        protected internal bool IsDisposed { get; private set; }
         private void ThrowIfDisposed()
         {
             if (IsDisposed)
