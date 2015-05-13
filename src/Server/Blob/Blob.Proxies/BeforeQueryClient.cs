@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
 using Blob.Contracts.Dto.ViewModels;
@@ -61,11 +62,24 @@ namespace Blob.Proxies
             return null;
         }
 
-        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId)
+        public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
         {
             try
             {
-                return Channel.GetDeviceCommandIssueVm(deviceId);
+                return Channel.GetDeviceCommandVmList();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        {
+            try
+            {
+                return Channel.GetDeviceCommandIssueVm(deviceId, commandType);
             }
             catch (Exception ex)
             {

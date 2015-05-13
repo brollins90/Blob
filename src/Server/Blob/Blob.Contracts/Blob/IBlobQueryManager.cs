@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Dto.ViewModels;
@@ -18,7 +19,9 @@ namespace Blob.Contracts.Blob
         Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId);
 
         [OperationContract]
-        DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId);
+        IEnumerable<DeviceCommandVm> GetDeviceCommandVmList();
+        [OperationContract]
+        DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType);
 
         [OperationContract]
         Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
@@ -36,5 +37,8 @@ namespace Blob.Contracts.Dto.ViewModels
         [Display(Name = "Status")]
         [Required]
         public int Status { get; set; }
+
+        [DataMember]
+        public IEnumerable<DeviceCommandVm> AvailableCommands { get; set; }
     }
 }

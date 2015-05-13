@@ -14,7 +14,7 @@ namespace Blob.Contracts.Dto
         public string Command { get; set; }
 
         [DataMember]
-        public Dictionary<string, string> CommandParameters { get; set; }
+        public IDictionary<string, string> CommandParameters { get; set; }
 
         [DataMember]
         public DateTime TimeSent { get; set; }

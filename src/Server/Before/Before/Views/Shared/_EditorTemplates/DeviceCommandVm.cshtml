@@ -1,4 +1,4 @@
-﻿@model Blob.Contracts.Dto.ViewModels.DeviceCommandVm
+﻿@*@model Blob.Contracts.Dto.ViewModels.DeviceCommandVm
 
 @{
     // get the name of the ID - this is to support multiple fields
@@ -11,9 +11,9 @@
         foreach (var item in Model.CommandParamters)
          {
              <div class="col-md-2">
-                 <label class="btn btn-info">@item.Key"></label>
-                 <input type="text" class="prop-@htmlField" onchange=" javascript:$('#@htmlField').val(true); " value="@item.Value"/>
+                 <label>@item.Key"></label>
+                 <input type="text" class="prop-@htmlField" onchange="javascript:$('#@htmlField').val(true);" value="@item.Value"/>
              </div>
          }
     }
-</div>
+</div>*@

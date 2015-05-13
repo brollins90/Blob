@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Services;
 using System.Security.Permissions;
 using System.ServiceModel;
@@ -48,9 +49,16 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "issueCommand")]
-        public Contracts.Dto.ViewModels.DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId)
+        public IEnumerable<Contracts.Dto.ViewModels.DeviceCommandVm> GetDeviceCommandVmList()
         {
-            return _blobQueryManager.GetDeviceCommandIssueVm(deviceId);
+            return _blobQueryManager.GetDeviceCommandVmList();
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "issueCommand")]
+        public Contracts.Dto.ViewModels.DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        {
+            return _blobQueryManager.GetDeviceCommandIssueVm(deviceId, commandType);
         }
 
         [OperationBehavior]

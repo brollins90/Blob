@@ -53,30 +53,58 @@ namespace Blob.Managers.Blob
 
         public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
         {
-            return await (from cust in Context.Customers.Include("Devices").Include("DeviceTypes").Include("Users")
-                          where cust.Id == customerId
-                          select new CustomerSingleVm
-                          {
-                              CreateDate = cust.CreateDate,
-                              CustomerId = cust.Id,
-                              Name = cust.Name,
-                              Devices = (from d in cust.Devices
-                                         select new DeviceListItemVm
-                                         {
-                                             DeviceName = d.DeviceName,
-                                             DeviceType = d.DeviceType.Value,
-                                             DeviceId = d.Id,
-                                             Enabled = d.Enabled,
-                                             LastActivityDate = d.LastActivityDate,
-                                             Status = d.AlertLevel
-                                         }),
-                              Users = (from u in cust.Users
-                                       select new UserListItemVm
-                                       {
-                                           UserId = u.Id,
-                                           UserName = u.UserName
-                                       })
-                          }).SingleAsync().ConfigureAwait(false);
+            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
+
+            return await Task.FromResult((from cust in Context.Customers.Include("Devices").Include("DeviceTypes").Include("Users")
+                                          where cust.Id == customerId
+                                          select new
+                                                 {
+                                                     CreateDate = cust.CreateDate,
+                                                     CustomerId = cust.Id,
+                                                     Name = cust.Name,
+                                                     Devices = (from d in cust.Devices
+                                                                select new
+                                                                       {
+                                                                           DeviceName = d.DeviceName,
+                                                                           DeviceType = d.DeviceType.Value,
+                                                                           DeviceId = d.Id,
+                                                                           Enabled = d.Enabled,
+                                                                           LastActivityDate = d.LastActivityDate,
+                                                                           Status = d.AlertLevel
+                                                                       }),
+                                                     Users = (from u in cust.Users
+                                                              select new
+                                                                     {
+                                                                         UserId = u.Id,
+                                                                         UserName = u.UserName
+                                                                     })
+                                                 }).AsEnumerable()
+                              .Select(cust =>
+                                      new CustomerSingleVm
+                                      {
+                                          CreateDate = cust.CreateDate,
+                                          CustomerId = cust.CustomerId,
+                                          Name = cust.Name,
+                                          Devices = (from d in cust.Devices
+                                                     select new DeviceListItemVm
+                                                            {
+                                                                DeviceName = d.DeviceName,
+                                                                DeviceType = d.DeviceType,
+                                                                DeviceId = d.DeviceId,
+                                                                Enabled = d.Enabled,
+                                                                LastActivityDate = d.LastActivityDate,
+                                                                Status = d.Status,
+                                                                AvailableCommands = availableCommands
+                                                            }),
+                                          Users = (from u in cust.Users
+                                                   select new UserListItemVm
+                                                          {
+                                                              UserId = u.UserId,
+                                                              UserName = u.UserName
+                                                          })
+                                      }).Single()).ConfigureAwait(false);
+
+            //.SingleAsync().ConfigureAwait(false);
         }
 
         public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
@@ -92,22 +120,33 @@ namespace Blob.Managers.Blob
 
 
         // Device Command
-        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId)
+        public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
         {
-            IEnumerable<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes(null);
+            IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes(null);
+            return commandTypes.Select(t => new DeviceCommandVm
+                            {
+                                CommandType = t.FullName,
+                                ShortName = t.Name,
+                                CommandParamters = t.GetProperties()//BindingFlags.Public & BindingFlags.Instance)
+                                .Select(p => new DeviceCommandParameterPairVm
+                                {
+                                    Key = p.Name, 
+                                    Value = ""
+                                })
+                            });
+        }
+
+        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        {
+            var commandTypes = GetDeviceCommandVmList();
+            var command = commandTypes.Single(type => type.CommandType.Equals(commandType));
 
             DeviceCommandIssueVm result = new DeviceCommandIssueVm
             {
                 DeviceId = deviceId,
-                //SelectedCommand = null,
-                AvailableCommands = commandTypes.Select(
-                t => new DeviceCommandVm
-                     {
-                         CommandType = t.FullName,
-                         CommandParamters =
-                            t.GetProperties(BindingFlags.Public & BindingFlags.Instance)
-                            .Select(p => new { p.Name, string.Empty }).ToDictionary(p => p.Name, p => p.Empty)
-                     })
+                CommandType = command.CommandType,
+                CommandParamters = command.CommandParamters,
+                ShortName = command.ShortName
             };
             return result;
         }

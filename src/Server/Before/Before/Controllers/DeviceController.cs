@@ -106,21 +106,19 @@ namespace Before.Controllers
         }
 
         // GET: /device/issuecommand/{id}
-        public ActionResult IssueCommand(Guid? id)
+        public ActionResult IssueCommand(Guid? id, string commandType)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            DeviceCommandIssueVm viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id.Value);//.ConfigureAwait(true);
+            DeviceCommandIssueVm viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id.Value, commandType);//.ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
             }
 
-            // temp default 
-            viewModel.CommandData = @"dir >> c:\_\fromACommand.txt";
             return PartialView("_IssueCommand", viewModel);
         }
 
@@ -129,14 +127,11 @@ namespace Before.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> IssueCommand(DeviceCommandIssueVm model)
         {
-            DeviceCommandIssueVm viewModel2 = BlobQueryManager.GetDeviceCommandIssueVm(model.DeviceId);//.ConfigureAwait(true);
             if (ModelState.IsValid)
             {
-                //model.SelectedCommand = viewModel2.AvailableCommands.Select(x=>x.CommandType = )
                 await BlobCommandManager.IssueCommandAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            model.AvailableCommands = viewModel2.AvailableCommands;
             return PartialView("_IssueCommand", model);
         }
 

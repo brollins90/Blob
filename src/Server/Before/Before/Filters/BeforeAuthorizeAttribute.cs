@@ -19,17 +19,18 @@ namespace Before.Filters
         {
             if (httpContext == null)
                 throw new ArgumentNullException("httpContext");
-            if (!string.IsNullOrWhiteSpace(Operation))
-            {
-                return CheckAccess(httpContext, Operation, Resource);
-            }
-            else
-            {
-                var controller = httpContext.Request.RequestContext.RouteData.Values["controller"] as string;
-                var action = httpContext.Request.RequestContext.RouteData.Values["action"] as string;
+            return true;
+            //if (!string.IsNullOrWhiteSpace(Operation))
+            //{
+            //    return CheckAccess(httpContext, Operation, Resource);
+            //}
+            //else
+            //{
+            //    var controller = httpContext.Request.RequestContext.RouteData.Values["controller"] as string;
+            //    var action = httpContext.Request.RequestContext.RouteData.Values["action"] as string;
                 
-                return CheckAccess(httpContext, action, controller);
-            }
+            //    return CheckAccess(httpContext, action, controller);
+            //}
         }
 
         protected virtual bool CheckAccess(HttpContextBase httpContext, string action, string resource)
