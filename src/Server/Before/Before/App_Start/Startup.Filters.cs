@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Before.Filters;
 
 namespace Before
 {
@@ -7,6 +8,7 @@ namespace Before
         public void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new BeforeAuthorizeAttribute());
         }
     }
 }

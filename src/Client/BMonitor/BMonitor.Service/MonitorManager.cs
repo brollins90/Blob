@@ -1,267 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel.Security;
+using System.Threading;
 using System.Threading.Tasks;
 using Blob.Contracts.Dto;
 using Blob.Proxies;
 using BMonitor.Common;
 using BMonitor.Common.Interfaces;
 using BMonitor.Monitors;
+using BMonitor.Service.Configuration;
+using BMonitor.Service.Connection;
+using BMonitor.Service.Quartz;
 using log4net;
 using Ninject;
 
 namespace BMonitor.Service
 {
+    // http://adrianhesketh.com/2015/03/17/wcf-client-proxy-creation-performance-with-ninject/
     public class MonitorManager : IDisposable
     {
-        /*
-         
-        http://adrianhesketh.com/2015/03/17/wcf-client-proxy-creation-performance-with-ninject/
+        public event EventHandler ConfigChanged; 
 
-create
+        private readonly IKernel _kernel;
+        private readonly ILog _log;
+        private IJobHandler _jobHandler;
+        private ConnectionThread _connectionThread;
 
-init
-
-start
-
-if ! init
-throw
-
-if need reg
-start reg
-
-else 
-
-while not done
-
-if command
-start command listener
-
-if mon
-start scheduler
-
-
-
-
-*/
-
-
-
-        private string User_Username = "customerUser1";
-        private string User_password = "password";
         private string Username;
         private string Password;
 
 
-        private readonly IKernel _kernel;
-        private readonly ILog _log;
-        private readonly ICollection<IMonitor> _monitors;
 
         private Guid _deviceId;
-        private string _monitorPath;
 
         private bool _enableCommandConnection;
         private bool _enablePerformanceMonitoring;
         private bool _enableStatusMonitoring;
         private bool _isRegistered;
 
-        //private ICommandService commandClient;
-        private DeviceConnectionClient commandClient;
-
         public MonitorManager(IKernel kernel)
         {
-
             // override the callback to validate the server certificate.  This is a hack for early dev ONLY
             System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
-
-
-
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _kernel = kernel;
-            _monitors = new List<IMonitor>();
-            Username = User_Username;
-            Password = User_password;
         }
 
-        public void Initialize(NameValueCollection config)
+        public void Initialize()
         {
             _log.Debug("Initializing MonitorManager");
+            BMonitorConfigSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigSection;
             if (config == null)
                 throw new ArgumentNullException("config");
 
-            if (!Guid.TryParse(GetConfigValue(config["deviceId"], "--"), out _deviceId))
+            _deviceId = config.Main.DeviceId;
+            if (_deviceId == Guid.Empty)
             {
                 _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
                 _isRegistered = false;
-                Username = User_Username;
-                Password = User_password;
-
-                //_deviceId = Guid.Parse("1C6F0042-750E-4F5A-B1FA-41DD4CA9368A");
+                Username = config.Main.Username;
+                Password = config.Main.Password;
             }
             else
             {
-                _log.Info(string.Format("Loaded device id of {0}.",_deviceId));
+                _log.Info(string.Format("Loaded device id of {0}.", _deviceId));
                 _isRegistered = true;
                 Username = _deviceId.ToString();
                 Password = _deviceId.ToString();
             }
-
-
-            _monitorPath = GetConfigValue(config["monitorPath"], @"/Monitors/");
-            _enableCommandConnection = Convert.ToBoolean(GetConfigValue(config["enableCommandConnection"], "false"));
-            _enablePerformanceMonitoring = Convert.ToBoolean(GetConfigValue(config["enablePerformanceMonitoring"], "false"));
-            _enableStatusMonitoring = Convert.ToBoolean(GetConfigValue(config["enableStatusMonitoring"], "false"));
-
-            if (_isRegistered && _enableCommandConnection)
-            {
-                OpenCommandConnection();
-            }
-
-            if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
-            {
-                LoadMonitors();
-            }
+            _enableCommandConnection = config.Main.EnableCommandConnection;
+            _enablePerformanceMonitoring = config.Main.EnablePerformanceMonitoring;
+            _enableStatusMonitoring = config.Main.EnableStatusMonitoring;
         }
 
-        public void OpenCommandConnection()
+        void UpdateConfigSetting(string key, string val)
         {
-            if (_isRegistered && _enableCommandConnection)
-            {
-                _log.Info("Creating command connection.");
-                //todo: spin up a new thread
-
-                //ICommandService 
-                var u = new Ninject.Parameters.ConstructorArgument("username", Username);
-                var p = new Ninject.Parameters.ConstructorArgument("password", Password);
-                commandClient = _kernel.Get<DeviceConnectionClient>(u,p);
-                commandClient.ClientErrorHandler += HandleException;
-
-
-                //commandClient = new CommandClient(callbackInstance, "CommandService");
-                //commandClient.ClientCredentials.UserName.UserName = Username;
-                //commandClient.ClientCredentials.UserName.Password = Password;
-                //commandClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-
-                commandClient.Connect(_deviceId);
-            }
-
-        }
-
-        public bool LoadMonitors()
-        {
-            _log.Info(string.Format("Loading monitors from {0}", _monitorPath));
-
-            if (_deviceId.Equals(default(Guid)))
-            {
-                _log.Warn("LoadMonitors was requested before registration was completed.");
-                return false;
-            }
-
-            _monitors.Add(new FreeDiskSpace(driveLetter: "C", driveDescription: "OS"));
-                //,
-                //unitOfMeasure: UoM.Percent,
-                //warningLevel: 20,
-                //criticalLevel: 10)
-            //);
-            _log.Info("Loaded FreeDiskSpace monitor");
-
-            _monitors.Add(new PerfMonMonitor("Memory", "Available Bytes"));
-            _log.Info("Loaded Memory monitor");
-
-            _monitors.Add(new PerfMonMonitor("Processor", "% Processor Time", "_Total"));
-            _log.Info("Loaded Processor monitor");
-            return true;
+            //var mySection = (BMonitorConfigurationSection)ConfigurationManager.GetSection("BMonitor");
+            
+            //mySection[key].Value = val;
+            //mySection.SectionInformation.ForceSave = true; //
+            //Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None); 
+            //config.Save(ConfigurationSaveMode.Full);
+            ////ConfigurationManager.RefreshSection("appSettings");
         }
 
         public void MonitorTick()
         {
             _log.Debug("Tick");
             
-            if (_enableCommandConnection) // && connection is open
+            // check if we are in a good, running state.
+            if (!_isRegistered)
             {
-                //commandClient.Ping(_deviceId);
+                //if things are running, stop them
+                _jobHandler.Stop();
+                _connectionThread.Stop();
+
+                RegisterDevice(Username, Password);
             }
-
-            foreach (IMonitor monitor in _monitors)
+            else
             {
-                _log.Debug(string.Format("Executing {0}", monitor.GetType()));
-                
-                // where am i going to get all the config info?
-                ResultData result = monitor.Execute(true);
-                AddStatusRecordDto statusData = new AddStatusRecordDto()
-                             {
-                                 AlertLevel = (int) result.AlertLevel,
-                                 CurrentValue = result.Value,
-                                 DeviceId = _deviceId,
-                                 MonitorDescription = result.MonitorDescription,
-                                 MonitorName = result.MonitorName,
-                                 TimeGenerated = result.TimeGenerated,
-                                 TimeSent = DateTime.Now
-                             };
-
-                AddPerformanceRecordDto spd = null;
-                if (_enablePerformanceMonitoring && result.Perf.Any())
+                if (_enableCommandConnection) // && connection is open
                 {
-                    spd = new AddPerformanceRecordDto
-                                                {
-                                                    DeviceId = _deviceId,
-                                                    MonitorDescription = result.MonitorDescription,
-                                                    MonitorName = result.MonitorName,
-                                                    TimeGenerated = result.TimeGenerated,
-                                                    TimeSent = DateTime.Now
-                                                };
-
-                    foreach (PerformanceData perf in result.Perf)
-                    {
-                        spd.Data.Add(new PerformanceRecordValue
-                                                    {
-                                                        Critical = perf.Critical,
-                                                        Label = perf.Label,
-                                                        Max = perf.Max,
-                                                        Min = perf.Min,
-                                                        UnitOfMeasure = perf.UnitOfMeasure,
-                                                        Value = perf.Value,
-                                                        Warning = perf.Warning
-                                                    });
-                    }
-
-                    _log.Debug(statusData.CurrentValue + "|" + result.Perf.FirstOrDefault().ToString());
+                    //commandClient.Ping(_deviceId);
                 }
-                _log.Debug(statusData);
 
-                _log.Info("Creating new StatusClient");
-                var u = new Ninject.Parameters.ConstructorArgument("username", Username);
-                var p = new Ninject.Parameters.ConstructorArgument("password", Password);
-                DeviceStatusClient statusClient = _kernel.Get<DeviceStatusClient>(u, p);
-                statusClient.ClientErrorHandler += HandleException;
-
-                //DeviceStatusClient c = new DeviceStatusClient("StatusService");
-                //statusClient.ClientErrorHandler += HandleException;
-                //statusClient.ClientCredentials.UserName.UserName = Username;
-                //statusClient.ClientCredentials.UserName.Password = Password;
-                //statusClient.ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-
-
-                // send
-                if (_enableStatusMonitoring)
+                if (_enableStatusMonitoring || _enablePerformanceMonitoring)
                 {
-                    if (_enablePerformanceMonitoring && spd != null)
-                    {
-                        statusData.PerformanceRecordDto = spd;
-                    }
-                    _log.Debug("Sending status message.");
-                    Task.Run(() => statusClient.AddStatusRecordAsync(statusData));
-                }
-                else
-                {
-                    if (_enablePerformanceMonitoring && spd != null)
-                    {
-                        _log.Debug("Sending performance message.");
-                        Task.Run(() => statusClient.AddPerformanceRecordAsync(spd));
-                    }
+                    _jobHandler.Tick();
                 }
             }
         }
@@ -304,7 +153,6 @@ start scheduler
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
                 _deviceId = deviceGuid;
 
-                LoadMonitors();
             }
             catch (Exception e)
             {
@@ -312,16 +160,6 @@ start scheduler
             }
         }
 
-        /// <summary>
-        /// Reads a config value from the config file.
-        /// </summary>
-        /// <param name="configValue">Value name in the config file.</param>
-        /// <param name="defaultValue">Default value to return if the specified value does not exist.</param>
-        /// <returns>the value of the config element or the default specified if the element is null.</returns>
-        private static string GetConfigValue(string configValue, string defaultValue)
-        {
-            return (string.IsNullOrEmpty(configValue)) ? defaultValue : configValue;
-        }
 
         private void HandleException(Exception ex)
         {
@@ -333,6 +171,24 @@ start scheduler
         {
             PerfmonCounterManager manager = PerfmonCounterManager.Instance;
             manager.Dispose();
+        }
+
+        public void Start()
+        {
+            if (_isRegistered && _enableCommandConnection)
+            {
+                _log.Info("Creating command connection.");
+                //todo: spin up a new thread
+                if (_connectionThread == null)
+                    _connectionThread = new ConnectionThread(_kernel, _deviceId);
+            }
+
+            if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
+            {
+                _jobHandler = new BasicJobHandler(_kernel);
+                _jobHandler.LoadConfig();
+                _jobHandler.Start();
+            }
         }
     }
 }

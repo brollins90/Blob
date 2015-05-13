@@ -1,6 +1,7 @@
 ﻿using System;
 using BMonitor.Common;
 using BMonitor.Common.Interfaces;
+using BMonitor.Common.Models;
 
 namespace BMonitor.Monitors
 {
@@ -34,7 +35,7 @@ namespace BMonitor.Monitors
             MonitorThreshold = new Threshold
                 (
                     critical: new Range(10d, double.PositiveInfinity, true),
-                    warning: new Range(20d, double.PositiveInfinity, true)
+                    warning: new Range(80d, double.PositiveInfinity, true)
                 );
         }
 

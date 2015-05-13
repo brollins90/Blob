@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BMonitor.Common
+namespace BMonitor.Common.Models
 {
 
     public class ExecutionResult

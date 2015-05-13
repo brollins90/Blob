@@ -1,33 +1,14 @@
 ﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using Blob.Contracts.Device;
 using Blob.Contracts.Dto;
 
 namespace Blob.Proxies
 {
-    public class DeviceStatusClient : ClientBase<IDeviceStatusService>, IDeviceStatusService
+    public class DeviceStatusClient : BaseClient<IDeviceStatusService>, IDeviceStatusService
     {
-        public Action<Exception> ClientErrorHandler = null;
-
         public DeviceStatusClient(string endpointName, string username, string password)
-            : base(endpointName)
-        {
-            ClientCredentials.UserName.UserName = username;
-            ClientCredentials.UserName.Password = password;
-            ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-        }
-        //public DeviceStatusClient(Binding binding, EndpointAddress address) : base(binding, address) { }
-
-        private void HandleError(Exception ex)
-        {
-            if (ClientErrorHandler != null)
-                ClientErrorHandler(ex);
-            else
-                throw new Exception("Server exception.", ex);
-        }
+            : base(endpointName, username, password) { }
 
         public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
         {

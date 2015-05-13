@@ -21,11 +21,6 @@ namespace BMonitor.WindowsService
             ProgramSettings settings = ParseCommandLine(args);
 
             IKernel kernel = new StandardKernel();
-            //List<string> modules = new List<string>
-            //                       {
-            //                            typeof(Program).AssemblyQualifiedName,
-            //                            typeof(MonitorManager).AssemblyQualifiedName
-            //                        };
             kernel.Load(new DependencyInjection());
 
             MonitorService winServiceWrapper = kernel.Get<MonitorService>();

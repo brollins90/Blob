@@ -1,34 +1,13 @@
 ﻿using System;
-using System.IdentityModel.Selectors;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using Blob.Contracts.Blob;
 using Blob.Contracts.Dto;
 
 namespace Blob.Proxies
 {
-    public class BeforeCommandClient : ClientBase<IBlobCommandManager>, IBlobCommandManager
+    public class BeforeCommandClient : BaseClient<IBlobCommandManager>, IBlobCommandManager
     {
-        public Action<Exception> ClientErrorHandler = null;
-
-        public BeforeCommandClient(string endpointName, string username, string password) : base(endpointName)
-        {
-            ClientCredentials.UserName.UserName = username;
-            ClientCredentials.UserName.Password = password;
-            ClientCredentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-        }
-
-        //public BeforeCommandClient(Binding binding, EndpointAddress address) : base(binding, address) { }
-
-        private void HandleError(Exception ex)
-        {
-            if (ClientErrorHandler != null)
-                ClientErrorHandler(ex);
-            else
-                throw new Exception("Server exception.", ex);
-        }
+        public BeforeCommandClient(string endpointName, string username, string password) : base(endpointName, username, password) { }
 
         public async Task DisableCustomerAsync(DisableCustomerDto dto)
         {

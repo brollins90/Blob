@@ -1,5 +1,6 @@
 ﻿using System;
 using BMonitor.Common;
+using BMonitor.Common.Models;
 using WUApiLib;
 
 namespace BMonitor.Monitors.Custom

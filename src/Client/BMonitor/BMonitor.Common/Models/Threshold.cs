@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace BMonitor.Common
+namespace BMonitor.Common.Models
 {
     public class Threshold
     {

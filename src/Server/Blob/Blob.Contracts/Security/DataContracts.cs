@@ -1,10 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Claims;
+using System.Security.Principal;
+
 // ReSharper disable InconsistentNaming
 
 namespace Blob.Contracts.Security
 {
+    [DataContract]
+    public class AuthorizationContextDto
+    {
+        [DataMember]
+        public IEnumerable<Claim> Action { get; set; }
+        [DataMember]
+        public IEnumerable<Claim> Resource { get; set; }
+        [DataMember]
+        public ClaimsPrincipal Principal { get; set; }
+
+        public AuthorizationContextDto(string action, string resource, ClaimsPrincipal principal)
+        {
+            Action = new List<Claim> { new Claim("action", action) };
+            Principal = principal;
+            Resource = new List<Claim> { new Claim("resource", resource) };
+        }
+    }
+
     [DataContract]
     public class ExternalLoginInfoDto
     {
@@ -70,5 +91,71 @@ namespace Blob.Contracts.Security
         public string LoginProvider { get; set; }
         [DataMember]
         public string ProviderKey { get; set; }
+    }
+
+    [DataContract]
+    public class AuthenticationResponseChallengeDto
+    {
+        public string[] AuthenticationTypes { get; set; }
+        public AuthenticationPropertiesDto Properties { get; set; }
+    }
+
+    [DataContract]
+    public class AuthenticationResponseGrantDto
+    {
+        [DataMember]
+        public ClaimsIdentity Identity { get; set; }
+        [DataMember]
+        public ClaimsPrincipal Principal { get; set; }
+        [DataMember]
+        public AuthenticationPropertiesDto Properties { get; set; }
+    }
+
+    [DataContract]
+    public class AuthenticationResponseRevokeDto
+    {
+        [DataMember]
+        public string[] AuthenticationTypes { get; set; }
+        [DataMember]
+        public AuthenticationPropertiesDto Properties { get; set; }
+    }
+
+    [DataContract]
+    public class AuthenticationPropertiesDto
+    {
+        [DataMember]
+        public bool? AllowRefresh { get; set; }
+        [DataMember]
+        public IDictionary<string, string> Dictionary { get; set; }
+        [DataMember]
+        public DateTimeOffset? ExpiresUtc { get; set; }
+        [DataMember]
+        public bool IsPersistent { get; set; }
+        [DataMember]
+        public DateTimeOffset? IssuedUtc { get; set; }
+        [DataMember]
+        public string RedirectUri { get; set; }
+    }
+
+    [DataContract]
+    public class AuthenticateResultDto
+    {
+        [DataMember]
+        public AuthenticationDescriptionDto Description { get; set; }
+        [DataMember]
+        public ClaimsIdentity Identity { get; set; }
+        [DataMember]
+        public AuthenticationPropertiesDto Properties { get; set; }
+    }
+
+    [DataContract]
+    public class AuthenticationDescriptionDto
+    {
+        [DataMember]
+        public string AuthenticationType { get; set; }
+        [DataMember]
+        public string Caption { get; set; }
+        [DataMember]
+        public IDictionary<string, object> Properties { get; set; }
     }
 }

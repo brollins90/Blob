@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace BMonitor.Common
+namespace BMonitor.Common.Models
 {
     public class Range
     {
@@ -65,10 +65,10 @@ namespace BMonitor.Common
     {
         public static bool Contains(this Range range, double value)
         {
-            if (value < range.Low && range.Low == double.NegativeInfinity)
+            if (value < range.Low && range.Low != double.NegativeInfinity)
                 return (range.MatchInside == false); // MatchInside == false means check that the value is outside
 
-            if (value > range.High && range.High == double.PositiveInfinity)
+            if (value > range.High && range.High != double.PositiveInfinity)
                 return (range.MatchInside == false);
 
             return range.MatchInside == true;

@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity;
 namespace Blob.Security.Identity
 {
     [ServiceBehavior]
-    public class BlobUserManagerAdapter : IIdentityService
+    public class BlobUserManagerAdapter : IUserManagerService
     {
         private ILog _log;
         private readonly BlobUserManager _manager;
@@ -838,125 +838,7 @@ namespace Blob.Security.Identity
         //    }
         //}
 
-        //public AuthenticationResponseChallenge AuthenticationResponseChallenge
-        //{
-        //    get
-        //    {
-        //        ThrowIfDisposed();
-        //        return _manager.AuthenticationResponseChallenge;
-        //    }
-        //    set
-        //    {
-        //        throw new NotImplementedException("Cannot change the AuthenticationResponseChallenge through the service.");
-        //        //ThrowIfDisposed();
-        //        //_manager.AuthenticationResponseChallenge = value;
-        //    }
-        //}
 
-        //public AuthenticationResponseGrant AuthenticationResponseGrant
-        //{
-        //    get
-        //    {
-        //        ThrowIfDisposed();
-        //        return _manager.AuthenticationResponseGrant;
-        //    }
-        //    set
-        //    {
-        //        throw new NotImplementedException("Cannot change the AuthenticationResponseGrant through the service.");
-        //        //ThrowIfDisposed();
-        //        //_manager.AuthenticationResponseGrant = value;
-        //    }
-        //}
-
-        //public AuthenticationResponseRevoke AuthenticationResponseRevoke
-        //{
-        //    get
-        //    {
-        //        ThrowIfDisposed();
-        //        return _manager.AuthenticationResponseRevoke;
-        //    }
-        //    set
-        //    {
-        //        throw new NotImplementedException("Cannot change the AuthenticationResponseRevoke through the service.");
-        //        //ThrowIfDisposed();
-        //        //_manager.AuthenticationResponseRevoke = value;
-        //    }
-        //}
-
-        //public ClaimsPrincipal User
-        //{
-        //    get
-        //    {
-        //        ThrowIfDisposed();
-        //        return _manager.User;
-        //    }
-        //    set
-        //    {
-        //        throw new NotImplementedException("Cannot change the User through the service.");
-        //        //ThrowIfDisposed();
-        //        //_manager.User = value;
-        //    }
-        //}
-
-        //public Task<AuthenticateResult> AuthenticateAsync(string authenticationType)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.AuthenticateAsync(authenticationType);
-        //}
-
-        //public Task<IEnumerable<AuthenticateResult>> AuthenticateAsync(string[] authenticationTypes)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.AuthenticateAsync(authenticationTypes);
-        //}
-
-        //public void Challenge(params string[] authenticationTypes)
-        //{
-        //    ThrowIfDisposed();
-        //    _manager.Challenge(authenticationTypes);
-        //}
-
-        //public void Challenge(AuthenticationProperties properties, params string[] authenticationTypes)
-        //{
-        //    ThrowIfDisposed();
-        //    _manager.Challenge(properties, authenticationTypes);
-        //}
-
-        //public IEnumerable<AuthenticationDescription> GetAuthenticationTypes()
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.GetAuthenticationTypes();
-        //}
-
-        //public IEnumerable<AuthenticationDescription> GetAuthenticationTypes(Func<AuthenticationDescription, bool> predicate)
-        //{
-        //    ThrowIfDisposed();
-        //    return _manager.GetAuthenticationTypes(predicate);
-        //}
-
-        //public void SignIn(params ClaimsIdentity[] identities)
-        //{
-        //    ThrowIfDisposed();
-        //    _manager.SignIn(identities);
-        //}
-
-        //public void SignIn(AuthenticationProperties properties, params ClaimsIdentity[] identities)
-        //{
-        //    ThrowIfDisposed();
-        //    _manager.SignIn(properties, identities);
-        //}
-
-        //public void SignOut(params string[] authenticationTypes)
-        //{
-        //    ThrowIfDisposed();
-        //    _manager.SignOut(authenticationTypes);
-        //}
-
-        //public void SignOut(AuthenticationProperties properties, params string[] authenticationTypes)
-        //{
-        //    ThrowIfDisposed();
-        //    _manager.SignOut(properties, authenticationTypes);
-        //}
 
         //public ClaimsIdentity CreateTwoFactorRememberBrowserIdentity(string userId)
         //{
@@ -1005,6 +887,126 @@ namespace Blob.Security.Identity
         //    ThrowIfDisposed();
         //    return _manager.TwoFactorBrowserRememberedAsync(userId);
         //}
+
+        public AuthenticationResponseChallengeDto AuthenticationResponseChallenge
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _manager.AuthenticationResponseChallenge;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the AuthenticationResponseChallenge through the service.");
+                //ThrowIfDisposed();
+                //_manager.AuthenticationResponseChallenge = value;
+            }
+        }
+
+        public AuthenticationResponseGrantDto AuthenticationResponseGrant
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _manager.AuthenticationResponseGrant;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the AuthenticationResponseGrant through the service.");
+                //ThrowIfDisposed();
+                //_manager.AuthenticationResponseGrant = value;
+            }
+        }
+
+        public AuthenticationResponseRevokeDto AuthenticationResponseRevoke
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _manager.AuthenticationResponseRevoke;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the AuthenticationResponseRevoke through the service.");
+                //ThrowIfDisposed();
+                //_manager.AuthenticationResponseRevoke = value;
+            }
+        }
+
+        public ClaimsPrincipal User
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _manager.User;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the User through the service.");
+                //ThrowIfDisposed();
+                //_manager.User = value;
+            }
+        }
+
+        public Task<AuthenticateResultDto> AuthenticateAsync(string authenticationType)
+        {
+            ThrowIfDisposed();
+            return _manager.AuthenticateAsync(authenticationType);
+        }
+
+        public Task<IEnumerable<AuthenticateResultDto>> AuthenticateAsync(string[] authenticationTypes)
+        {
+            ThrowIfDisposed();
+            return _manager.AuthenticateAsync(authenticationTypes);
+        }
+
+        public Task ChallengeAsync(params string[] authenticationTypes)
+        {
+            ThrowIfDisposed();
+            return _manager.ChallengeAsync(authenticationTypes);
+        }
+
+        public Task ChallengeAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        {
+            ThrowIfDisposed();
+            return _manager.ChallengeAsync(properties, authenticationTypes);
+        }
+
+        public Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync()
+        {
+            ThrowIfDisposed();
+            return _manager.GetAuthenticationTypesAsync();
+        }
+
+        public Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync(Func<AuthenticationDescriptionDto, bool> predicate)
+        {
+            ThrowIfDisposed();
+            return _manager.GetAuthenticationTypesAsync(predicate);
+        }
+
+        public Task SignInAsync(params ClaimsIdentity[] identities)
+        {
+            ThrowIfDisposed();
+            return _manager.SignInAsync(identities);
+        }
+
+        public Task SignInAsync(AuthenticationPropertiesDto properties, params ClaimsIdentity[] identities)
+        {
+            ThrowIfDisposed();
+            return _manager.SignInAsync(properties, identities);
+        }
+
+        public Task SignOutAsync(params string[] authenticationTypes)
+        {
+            ThrowIfDisposed();
+            return _manager.SignOutAsync(authenticationTypes);
+        }
+
+        public Task SignOutAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        {
+            ThrowIfDisposed();
+            return _manager.SignOutAsync(properties, authenticationTypes);
+        }
 
         private void ThrowIfDisposed()
         {

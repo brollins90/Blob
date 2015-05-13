@@ -40,6 +40,7 @@ namespace BMonitor.Service.Infrastructure
             Bind<DeviceStatusClient>().ToSelf()
                 .WithConstructorArgument("endpointName", "DeviceStatusService");
 
+
             // Command handlers
             Type commandHandlerType = typeof (ICommandHandler<>);
             Type openUnknownCommandHandler = typeof (UnknownCommandHandler<>);

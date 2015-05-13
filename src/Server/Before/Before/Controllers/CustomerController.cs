@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Filters;
 using Blob.Contracts.Blob;
 using Blob.Contracts.Dto.ViewModels;
 
@@ -16,6 +17,7 @@ namespace Before.Controllers
 
         
         // GET: /customer/disable/{id}
+        [BeforeAuthorize(Operation = "disable", Resource = "customer")]
         public async Task<ActionResult> Disable(Guid? id)
         {
             if (id == null)
@@ -32,6 +34,7 @@ namespace Before.Controllers
         }
 
         // POST: /customer/disable/{model}
+        [BeforeAuthorize(Operation = "disable", Resource = "customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disable(CustomerDisableVm model)
@@ -45,6 +48,7 @@ namespace Before.Controllers
         }
 
         // GET: /customer/edit/{id}
+        [BeforeAuthorize(Operation = "edit", Resource = "customer")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -61,6 +65,7 @@ namespace Before.Controllers
         }
 
         // POST: /customer/edit/{model}
+        [BeforeAuthorize(Operation = "edit", Resource = "customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(CustomerUpdateVm model)
@@ -74,6 +79,7 @@ namespace Before.Controllers
         }
 
         // GET: /customer/enable/{id}
+        [BeforeAuthorize(Operation = "enable", Resource = "customer")]
         public async Task<ActionResult> Enable(Guid? id)
         {
             if (id == null)
@@ -90,6 +96,7 @@ namespace Before.Controllers
         }
 
         // POST: /customer/enable/{model}
+        [BeforeAuthorize(Operation = "enable", Resource = "customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Enable(CustomerEnableVm model)
@@ -103,12 +110,14 @@ namespace Before.Controllers
         }
 
         // GET: /customer/list/{models}
+        [BeforeAuthorize(Operation = "view", Resource = "customer")]
         public ActionResult List(IEnumerable<CustomerListItemVm> models)
         {
             return PartialView("_List", models);
         }
 
         // GET: /customer/single/{id}
+        [BeforeAuthorize(Operation = "view", Resource = "customer")]
         public async Task<ActionResult> Single(Guid? id)
         {
             if (id == null)

@@ -39,8 +39,10 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseClient.cs" />
+    <Compile Include="BeforeAuthorizationClient.cs" />
     <Compile Include="BeforeQueryClient.cs" />
-    <Compile Include="IdentityManagerClientUser.cs" />
+    <Compile Include="IdentityManagerClient.cs" />
     <Compile Include="DeviceConnectionClient.cs" />
     <Compile Include="BeforeCommandClient.cs" />
     <Compile Include="DeviceStatusClient.cs" />

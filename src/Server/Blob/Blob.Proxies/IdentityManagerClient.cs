@@ -1,131 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Security.Claims;
-using System.ServiceModel;
-using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using Blob.Contracts.Security;
-using log4net;
 
 namespace Blob.Proxies
 {
-    public class IdentityManagerClient : 
-        IIdentityService
+    public class IdentityManagerClient : BaseClient<IUserManagerService>, IUserManagerService
     {
-        private readonly ILog _log;
-        private static ChannelFactory<IIdentityService> _channelFactory;
-        private string Username = "customerUser1";
-        private string Password = "password";
+        public IdentityManagerClient(string endpointName, string username, string password)
+            : base(endpointName, username, password) { }
 
-        public IdentityManagerClient()
-        {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        }
-
-        public void Initialize(string name, NameValueCollection config)
-        {
-            try
-            {
-                _log.Debug("Initializing identity manager proxy");
-                if (config == null)
-                    throw new ArgumentNullException("config");
-
-                Config = config;
-
-                _log.Debug(string.Format("Remote provider type is {0}", ProxyProviderName));
-            }
-            catch (Exception e)
-            {
-                _log.Error("Failed to load identity manager client.", e);
-                throw;
-            }
-        }
-
-        protected IIdentityService RemoteProvider()
-        {
-            if (_channelFactory == null)
-            {
-                _channelFactory = new ChannelFactory<IIdentityService>(ProxyProviderName);
-
-                _channelFactory.Credentials.UserName.UserName = Username;
-                _channelFactory.Credentials.UserName.Password = Password;
-                _channelFactory.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.None;
-            }
-
-            IIdentityService provider = _channelFactory.CreateChannel();
-
-            return provider;
-        }
-
-        private void DisposeRemoteProvider(IIdentityService remoteProvider)
-        {
-            _log.Debug("Disposing of remote provider.");
-
-            // TODO: Add error checking for state of object.
-            ((IClientChannel)remoteProvider).Dispose();
-        }
-
-
-        protected internal NameValueCollection Config { get; private set; }
         protected internal bool IsDisposed { get; private set; }
 
-        public bool LogExceptions
-        {
-            get
-            {
-                if (_logExceptions.HasValue == false)
-                {
-                    bool bv;
-                    string strv = Config["LogExceptions"];
-                    if (!string.IsNullOrEmpty(strv) && bool.TryParse(strv, out bv))
-                        _logExceptions = bv;
-                    else
-                        _logExceptions = true;
-                }
-                return _logExceptions.Value;
-            }
-        }
-        private bool? _logExceptions;
-
-
-        public string ProxyProviderName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_proxyProviderName))
-                {
-                    _proxyProviderName = Config["ProxyProviderName"];
-                    if (string.IsNullOrEmpty(_proxyProviderName))
-                        _proxyProviderName = "IdentityService";
-                }
-                return _proxyProviderName;
-            }
-            set { _proxyProviderName = value; }
-        }
-        private string _proxyProviderName;
-        
         public bool UserLockoutEnabledByDefault
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.UserLockoutEnabledByDefault;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.UserLockoutEnabledByDefault;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -133,23 +33,15 @@ namespace Blob.Proxies
         {
             get
             {
-                int output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.MaxFailedAccessAttemptsBeforeLockout;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.MaxFailedAccessAttemptsBeforeLockout;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(int);
             }
         }
 
@@ -157,23 +49,15 @@ namespace Blob.Proxies
         {
             get
             {
-                TimeSpan output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.DefaultAccountLockoutTimeSpan;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.DefaultAccountLockoutTimeSpan;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(TimeSpan);
             }
         }
 
@@ -181,23 +65,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserTwoFactor;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserTwoFactor;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -205,23 +81,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserPassword;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserPassword;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -229,23 +97,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserSecurityStamp;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserSecurityStamp;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -253,23 +113,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserRole;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserRole;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -277,23 +129,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserLogin;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserLogin;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -301,23 +145,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserEmail;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserEmail;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -325,23 +161,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserPhoneNumber;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserPhoneNumber;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -349,23 +177,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserClaim;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserClaim;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -373,23 +193,15 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsUserLockout;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsUserLockout;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
@@ -397,332 +209,267 @@ namespace Blob.Proxies
         {
             get
             {
-                bool output;
-
                 try
                 {
-                    IIdentityService remoteProvider = RemoteProvider();
-                    output = remoteProvider.SupportsQueryableUsers;
-                    DisposeRemoteProvider(remoteProvider);
+                    return Channel.SupportsQueryableUsers;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    if (LogExceptions)
-                    {
-                        _log.Error("Failed to get property.", e);
-                    }
-                    throw;
+                    HandleError(ex);
                 }
-                return output;
+                return default(bool);
             }
         }
 
         public async Task AddClaimAsync(string userId, Claim claim)
         {
-            //IdentityResultDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.AddClaimAsync(userId, claim);
-                DisposeRemoteProvider(remoteProvider);
+                await Channel.AddClaimAsync(userId, claim).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to add claim.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            //return output;
         }
 
         public async Task<IList<Claim>> GetClaimsAsync(string userId)
         {
-            IList<Claim> output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetClaimsAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.GetClaimsAsync(userId).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get claims.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return null;
         }
 
         public async Task RemoveClaimAsync(string userId, Claim claim)
         {
-            //IdentityResultDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.RemoveClaimAsync(userId, claim);
-                DisposeRemoteProvider(remoteProvider);
+                await Channel.RemoveClaimAsync(userId, claim).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to remove claim.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            //return output;
         }
 
         public async Task<UserDto> FindByEmailAsync(string email)
         {
-            UserDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.FindByEmailAsync(email);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.FindByEmailAsync(email).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to find by email.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return null;
         }
 
         public async Task<string> GetEmailAsync(string userId)
         {
-            string output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetEmailAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.GetEmailAsync(userId).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get if user is in role.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return null;
         }
 
         public async Task<bool> GetEmailConfirmedAsync(string userId)
         {
-            bool output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetEmailConfirmedAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.GetEmailConfirmedAsync(userId).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get if user is in role.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return default(bool);
         }
 
         public async Task SetEmailAsync(string userId, string email)
         {
-            //IdentityResultDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.SetEmailAsync(userId, email);
-                DisposeRemoteProvider(remoteProvider);
+                await Channel.SetEmailAsync(userId, email).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to set email.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            //return output;
         }
 
         public async Task SetEmailConfirmedAsync(string userId, bool confirmed)
         {
-            //IdentityResultDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.SetEmailConfirmedAsync(userId, confirmed);
-                DisposeRemoteProvider(remoteProvider);
+                await Channel.SetEmailConfirmedAsync(userId, confirmed).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to set email.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            //return output;
         }
 
         public async Task<int> GetAccessFailedCountAsync(string userId)
         {
-            int output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetAccessFailedCountAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.GetAccessFailedCountAsync(userId).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to set email.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return default(int);
         }
 
-        public Task<bool> GetLockoutEnabledAsync(string userId)
+        public async Task<bool> GetLockoutEnabledAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.GetLockoutEnabledAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return default(bool);
         }
 
-        public Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
+        public async Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.GetLockoutEndDateAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return default(DateTimeOffset);
         }
 
-        public Task<int> IncrementAccessFailedCountAsync(string userId)
+        public async Task<int> IncrementAccessFailedCountAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.IncrementAccessFailedCountAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return default(int);
         }
 
-        public Task ResetAccessFailedCountAsync(string userId)
+        public async Task ResetAccessFailedCountAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.ResetAccessFailedCountAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
-        public Task SetLockoutEnabledAsync(string userId, bool enabled)
+        public async Task SetLockoutEnabledAsync(string userId, bool enabled)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.SetLockoutEnabledAsync(userId, enabled).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
-        public Task SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
+        public async Task SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.SetLockoutEndDateAsync(userId, lockoutEnd).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task AddLoginAsync(string userId, UserLoginInfoDto login)
         {
-            //IdentityResultDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.AddLoginAsync(userId, login);
-                DisposeRemoteProvider(remoteProvider);
+                await Channel.AddLoginAsync(userId, login).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to add login.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            //return output;
         }
 
         public async Task<UserDto> FindAsync(UserLoginInfoDto login)
         {
-            UserDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.FindAsync(login);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.FindAsync(login).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to find login.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return null;
         }
 
         public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
         {
-            IList<UserLoginInfoDto> output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetLoginsAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
+                return await Channel.GetLoginsAsync(userId).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get logins.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            return output;
+            return null;
         }
 
         public async Task RemoveLoginAsync(string userId, UserLoginInfoDto login)
         {
-            //IdentityResultDto output;
-
             try
             {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.RemoveLoginAsync(userId, login);
-                DisposeRemoteProvider(remoteProvider);
+                await Channel.RemoveLoginAsync(userId, login).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to remove login.", e);
-                }
-                throw;
+                HandleError(ex);
             }
-            //return output;
         }
 
-        public Task<string> GetPasswordHashAsync(string userId)
+        public async Task<string> GetPasswordHashAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.GetPasswordHashAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public Task<bool> HasPasswordAsync(string userId)
@@ -737,297 +484,73 @@ namespace Blob.Proxies
 
         public async Task AddToRoleAsync(string userId, string role)
         {
-            //IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.AddToRoleAsync(userId, role);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to add user to role.", e);
-                }
-                throw;
-            }
-            //return output;
+            throw new NotImplementedException();
         }
 
         public async Task<IList<string>> GetRolesAsync(string userId)
         {
-            IList<string> output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetRolesAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get roles.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
         {
-            bool output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.IsInRoleAsync(userId, role);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get if user is in role.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task RemoveFromRoleAsync(string userId, string role)
         {
-            //IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.RemoveFromRoleAsync(userId, role);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to remove user from role.", e);
-                }
-                throw;
-            }
-            //return output;
+            throw new NotImplementedException();
         }
 
         public async Task<string> GetSecurityStampAsync(string userId)
         {
-            string output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.GetSecurityStampAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get security stamp.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task SetSecurityStampAsync(string userId, string stamp)
         {
-            //string output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.SetSecurityStampAsync(userId, stamp);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to get security stamp.", e);
-                }
-                throw;
-            }
-            //return output;
+            throw new NotImplementedException();
         }
 
         public async Task CreateAsync(UserDto user)
         {
-            //IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.CreateAsync(user);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to create user.", e);
-                }
-                throw;
-            }
-            //return output;
+            throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(string userId)
         {
-            //IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.DeleteAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to delete user.", e);
-                }
-                throw;
-            }
-            //return output;
+            throw new NotImplementedException();
         }
 
         public async Task<UserDto> FindByIdAsync(string userId)
         {
-            UserDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.FindByIdAsync(userId);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to find user.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task<UserDto> FindByNameAsync(string userName)
         {
-            UserDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.FindByNameAsync(userName);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to find user.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task UpdateAsync(UserDto user)
         {
-            //IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                await remoteProvider.UpdateAsync(user);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to update user.", e);
-                }
-                throw;
-            }
-            //return output;
+            throw new NotImplementedException();
         }
 
 
         public async Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType)
         {
-            ClaimsIdentity output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.CreateIdentityAsync(user, authenticationType);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to create identity.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task<IdentityResultDto> CreateAsync(UserDto user, string password)
         {
-            IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.CreateAsync(user, password);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to create user.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         public async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
         {
-            IdentityResultDto output;
-
-            try
-            {
-                IIdentityService remoteProvider = RemoteProvider();
-                output = await remoteProvider.ChangePasswordAsync(userId, currentPassword, newPassword);
-                DisposeRemoteProvider(remoteProvider);
-            }
-            catch (Exception e)
-            {
-                if (LogExceptions)
-                {
-                    _log.Error("Failed to update user password.", e);
-                }
-                throw;
-            }
-            return output;
+            throw new NotImplementedException();
         }
 
         //public async Task<UserDto> FindAsync(string userName, string password)
@@ -1630,6 +1153,142 @@ namespace Blob.Proxies
                 //Store.Dispose();
                 IsDisposed = true;
             }
+        }
+
+        public AuthenticationResponseChallengeDto AuthenticationResponseChallenge
+        {
+            get
+            {
+                try
+                {
+                    return Channel.AuthenticationResponseChallenge;
+                }
+                catch (Exception ex)
+                {
+                    HandleError(ex);
+                }
+                return null;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the AuthenticationResponseChallenge through the service.");
+                //ThrowIfDisposed();
+                //_manager.AuthenticationResponseChallenge = value;
+            }
+        }
+
+        public AuthenticationResponseGrantDto AuthenticationResponseGrant
+        {
+            get
+            {
+                try
+                {
+                    return Channel.AuthenticationResponseGrant;
+                }
+                catch (Exception ex)
+                {
+                    HandleError(ex);
+                }
+                return null;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the AuthenticationResponseGrant through the service.");
+                //ThrowIfDisposed();
+                //_manager.AuthenticationResponseGrant = value;
+            }
+        }
+
+        public AuthenticationResponseRevokeDto AuthenticationResponseRevoke
+        {
+            get
+            {
+                try
+                {
+                    return Channel.AuthenticationResponseRevoke;
+                }
+                catch (Exception ex)
+                {
+                    HandleError(ex);
+                }
+                return null;
+            }
+            set
+            {
+                throw new NotImplementedException("Cannot change the AuthenticationResponseRevoke through the service.");
+                //ThrowIfDisposed();
+                //_manager.AuthenticationResponseRevoke = value;
+            }
+        }
+
+        public ClaimsPrincipal User
+        {
+            get
+            {
+                try
+                {
+                    return Channel.User;
+                }
+                catch (Exception ex)
+                {
+                    HandleError(ex);
+                }
+                return null;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public async Task<AuthenticateResultDto> AuthenticateAsync(string authenticationType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AuthenticateResultDto>> AuthenticateAsync(string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ChallengeAsync(params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ChallengeAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync(Func<AuthenticationDescriptionDto, bool> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignInAsync(params ClaimsIdentity[] identities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignInAsync(AuthenticationPropertiesDto properties, params ClaimsIdentity[] identities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignOutAsync(params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignOutAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
         }
     }
 

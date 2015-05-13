@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Security.Identity
 {
-    public class BlobUserManager : IIdentityService<Guid>
+    public class BlobUserManager : IUserManagerService<Guid>
     {
         private readonly ILog _log;
 
@@ -2552,6 +2552,83 @@ namespace Blob.Security.Identity
         //    #region UserManager
 
 
+
+        public AuthenticationResponseChallengeDto AuthenticationResponseChallenge
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public AuthenticationResponseGrantDto AuthenticationResponseGrant
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public AuthenticationResponseRevokeDto AuthenticationResponseRevoke
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public ClaimsPrincipal User
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public async Task<AuthenticateResultDto> AuthenticateAsync(string authenticationType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AuthenticateResultDto>> AuthenticateAsync(string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ChallengeAsync(params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ChallengeAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync(Func<AuthenticationDescriptionDto, bool> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignInAsync(params ClaimsIdentity[] identities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignInAsync(AuthenticationPropertiesDto properties, params ClaimsIdentity[] identities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignOutAsync(params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SignOutAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public static class IdentityUtil

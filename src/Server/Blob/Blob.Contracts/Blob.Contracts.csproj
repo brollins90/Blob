@@ -98,7 +98,9 @@
     <Compile Include="Dto\UpdateUserDto.cs" />
     <Compile Include="Device\IDeviceStatusService.cs" />
     <Compile Include="Security\DataContracts.cs" />
-    <Compile Include="Security\IIdentityService.cs" />
+    <Compile Include="Security\IAuthenticationManagerService.cs" />
+    <Compile Include="Security\IAuthorizationManagerService.cs" />
+    <Compile Include="Security\IUserManagerService.cs" />
     <Compile Include="Security\IIdentityStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Dto\AddStatusRecordDto.cs" />

@@ -71,11 +71,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\BMonitorMainConfigElement.cs" />
+    <Compile Include="Configuration\BMonitorConfigSection.cs" />
+    <Compile Include="Connection\ConnectionThread.cs" />
     <Compile Include="Infrastructure\DependencyInjection.cs" />
-    <Compile Include="CommandServiceCallbackHandler.cs" />
+    <Compile Include="Connection\CommandServiceCallbackHandler.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="MonitorManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quartz\BasicJobHandler.cs" />
+    <Compile Include="Quartz\IJobHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,6 @@
 ﻿
+using BMonitor.Common.Models;
+
 namespace BMonitor.Common.Interfaces
 {
     public interface IMonitor

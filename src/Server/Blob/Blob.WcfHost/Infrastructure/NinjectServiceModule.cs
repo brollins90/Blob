@@ -40,7 +40,7 @@ namespace Blob.WcfHost.Infrastructure
 
             Bind<Contracts.Command.IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
             Bind<Contracts.Device.IDeviceStatusService>().To<Services.Device.DeviceStatusService>();
-            Bind<Contracts.Security.IIdentityService>().To<BlobUserManagerAdapter>();
+            Bind<Contracts.Security.IUserManagerService>().To<BlobUserManagerAdapter>();
 
             // logging
             Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));

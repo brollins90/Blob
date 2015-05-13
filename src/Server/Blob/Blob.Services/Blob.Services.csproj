@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Before\BeforeCommandService.cs" />
     <Compile Include="Before\BeforeQueryService.cs" />
+    <Compile Include="Before\BeforeAuthorizationService.cs" />
     <Compile Include="Device\DeviceConnectionService.cs" />
     <Compile Include="Device\DeviceStatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
 using System.ServiceProcess;
 using System.Threading;
 using BMonitor.Service;
@@ -21,7 +19,6 @@ namespace BMonitor.WindowsService
         private const int TICK_INTERVAL = 1000 * 5; // 5 seconds
 
         private MonitorManager _manager;
-        private NameValueCollection _managerConfig;
 
         public MonitorService(IKernel kernel, ILog log)
         {
@@ -40,10 +37,11 @@ namespace BMonitor.WindowsService
         protected override void OnStart(string[] args)
         {
             _log.Debug("OnStart called for MonitorService.");
+            _serviceStopEvent = new ManualResetEvent(false);
 
-            _managerConfig = (NameValueCollection)ConfigurationManager.GetSection("BMonitor");
+            //_managerConfig = (NameValueCollection)ConfigurationManager.GetSection("BMonitor");
             _manager = _kernel.Get<MonitorManager>();
-            if (_manager == null || _managerConfig == null)
+            if (_manager == null)// || _managerConfig == null)
                 throw new InvalidOperationException("A required component of the MonitorService failed to load.");
 
             _monitorServiceThread = new Thread(RunBMonitor);
@@ -65,17 +63,18 @@ namespace BMonitor.WindowsService
             }
         }
 
+
+        // This is the manager thread method
         private void RunBMonitor()
         {
             _log.Debug("MonitorService thread start.");
 
-            _serviceStopEvent = new ManualResetEvent(false);
-
-            _manager.Initialize(_managerConfig);
+            _manager.Initialize();
+            _manager.Start();
 
             // add as a task when i have a scheduler
             // register first
-            _manager.RegisterDevice("customerUser1", "password");
+            //_manager.RegisterDevice("customerUser1", "password");
 
             do
             {

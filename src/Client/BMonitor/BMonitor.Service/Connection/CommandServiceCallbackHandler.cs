@@ -35,6 +35,7 @@ namespace BMonitor.Service
             _log.Debug(string.Format("Client received OnReceivedPing callback: {0}", message));
         }
 
+        // https://simpleinjector.codeplex.com/discussions/566865
         // https://www.cuttingedge.it/blogs/steven/pivot/entry.php?id=95
 
         public void ExecuteCommand(dynamic command)

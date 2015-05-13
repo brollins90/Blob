@@ -2,34 +2,32 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Before.Filters;
 using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Blob.Contracts.Dto;
 using Blob.Contracts.Dto.ViewModels;
 using Blob.Contracts.Security;
 
 namespace Before.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+    [BeforeAuthorize]
+    public class AuthController : Controller
     {
-        public AccountController(BeforeUserManager userManager, BeforeSignInManager signInManager)
+        public AuthController(IUserManagerService userManager)
         {
             UserManager = userManager;
-            SignInManager = signInManager;
         }
 
-        protected BeforeUserManager UserManager { get; set; }
-        protected BeforeSignInManager SignInManager { get; set; }
+        protected IUserManagerService UserManager { get; set; }
 
 
-        // GET: /account/list/{models}
-        public ActionResult ListUsers(IEnumerable<UserListItemVm> models)
-        {
-            return PartialView("_UserList", models);
-        }
+        //// GET: /account/list/{models}
+        //public ActionResult ListUsers(IEnumerable<UserListItemVm> models)
+        //{
+        //    return PartialView("_UserList", models);
+        //}
 
         // GET: /account/login
         [AllowAnonymous]
@@ -52,7 +50,7 @@ namespace Before.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            SignInStatusDto resultDto = await SignInManager.PasswordSignInAsync(model.UserNameEmail, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatusDto resultDto = await UserManager.PasswordSignInAsync(model.UserNameEmail, model.Password, model.RememberMe, shouldLockout: false);
             switch (resultDto.ToResult())
             {
                 case SignInStatus.Success:
@@ -92,7 +90,7 @@ namespace Before.Controllers
                 IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user.ToDto(), isPersistent: false, rememberBrowser: false);
+                    await UserManager.SignInAsync(user.ToDto(), isPersistent: false, rememberBrowser: false);
 
                     //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     //Send an email with this link
@@ -109,39 +107,39 @@ namespace Before.Controllers
             return View(model);
         }
 
-        // GET: /account/createuser
-        public ActionResult CreateUser()
-        {
-            return View();
-        }
+        //// GET: /account/createuser
+        //public ActionResult CreateUser()
+        //{
+        //    return View();
+        //}
 
-        // POST: /account/createuser
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateUser(UserCreateVm model)
-        {
-            if (ModelState.IsValid)
-            {
-                BeforeUser user = new BeforeUser { UserName = model.UserName };
-                IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), string.Empty);
-                //if (result.Succeeded)
-                //{
-                //    await SignInManager.SignInAsync(user.ToDto(), isPersistent: false, rememberBrowser: false);
+        //// POST: /account/createuser
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> CreateUser(UserCreateVm model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        BeforeUser user = new BeforeUser { UserName = model.UserName };
+        //        IdentityResultDto result = await UserManager.CreateAsync(user.ToDto(), string.Empty);
+        //        //if (result.Succeeded)
+        //        //{
+        //        //    await SignInManager.SignInAsync(user.ToDto(), isPersistent: false, rememberBrowser: false);
 
-                //    //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                //    //Send an email with this link
-                //    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                //    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                //    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        //        //    //For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+        //        //    //Send an email with this link
+        //        //    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //        //    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+        //        //    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                //    return RedirectToAction("Index", "Home");
-                //}
-                AddErrors(result);
-            }
+        //        //    return RedirectToAction("Index", "Home");
+        //        //}
+        //        AddErrors(result);
+        //    }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         ////
         //// GET: /Account/VerifyCode

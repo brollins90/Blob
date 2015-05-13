@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 namespace Blob.Contracts.Security
 {
     [ServiceContract]
-    public interface IIdentityService : IIdentityService<string> { }
+    public interface IUserManagerService : IUserManagerService<string> { }
 
     [ServiceContract]
-    public interface IIdentityService<in TUserIdType> :
-        IIdentityStore<TUserIdType>
+    public interface IUserManagerService<in TUserIdType> :
+        IIdentityStore<TUserIdType>,
+        IAuthenticationManagerService
         where TUserIdType : IEquatable<TUserIdType>
     {
         bool UserLockoutEnabledByDefault { [OperationContract] get; }
@@ -26,4 +27,5 @@ namespace Blob.Contracts.Security
         [OperationContract]
         Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
     }
+
 }

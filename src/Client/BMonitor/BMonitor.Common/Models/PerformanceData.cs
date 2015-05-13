@@ -1,5 +1,5 @@
 ﻿
-namespace BMonitor.Common
+namespace BMonitor.Common.Models
 {
     public class PerformanceData
     {
