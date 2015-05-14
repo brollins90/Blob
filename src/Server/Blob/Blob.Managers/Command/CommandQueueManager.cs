@@ -30,8 +30,6 @@ namespace Blob.Managers.Command
             {
                 _testThread = new Thread(ProcessQueueThreadStart);
                 _testThread.Start();
-                //_testThread2 = new Thread(RunTest2);
-                //_testThread2.Start();
             }
         }
 
@@ -114,34 +112,6 @@ namespace Blob.Managers.Command
             }
         }
 
-        //private int blakei = 0;
-        //void timer_tick_add()
-        //{
-        //    _log.Debug("CommandManager tick2 " + blakei++);
-
-        //    ICommand cmd;
-        //    if ((blakei % 3) == 0)
-        //        cmd = new PrintLineCommand { OutputString = "command 1 execution" };
-        //    else if (((blakei + 1) % 3) == 0)
-        //        cmd = new CmdExecuteCommand { CommandString = @"dir >> c:\_\fromACommand.txt" };
-        //    else
-        //        cmd = new PrintLine2Command { DifferentOutputString = "the other execution (2)" };
-
-        //    //if (blakei == 0)
-        //    //    cmd = new PrintLine2Command { DifferentOutputString = "the other execution (2)" };
-        //    //else if (blakei == 1)
-        //    //    cmd = new CmdExecuteCommand { CommandString = @"dir >> c:\_\fromACommand.txt" };
-        //    //else 
-        //    //    cmd = new PrintLineCommand {OutputString = "command 1 execution"};
-        //    //blakei++ ;
-        //    //blakei %= 2;
-        //    // hard code test device id
-        //    Guid x = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a");
-        //    _log.Debug("queueing " + cmd + " on " + x);
-        //    Task queueTask = QueueCommandAsync(x, cmd);
-        //    Task.WaitAll(queueTask);
-        //}
-
         private void ProcessQueueThreadStart()
         {
             _stopEvent = new ManualResetEvent(false);
@@ -159,19 +129,11 @@ namespace Blob.Managers.Command
         }
 
         protected internal bool IsDisposed { get; private set; }
-        private void ThrowIfDisposed()
-        {
-            if (IsDisposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && !IsDisposed)
             {
-                //Store.Dispose();
                 IsDisposed = true;
             }
         }

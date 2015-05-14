@@ -7,8 +7,7 @@ namespace Blob.Contracts.ServiceContracts
     [ServiceContract]
     public interface IAuthorizationManagerService
     {
-        //[OperationContract]
-        //bool CheckAccess(AuthorizationContextDto context);
+        //todo: authenticate before user
         [OperationContract]
         Task<bool> CheckAccessAsync(AuthorizationContextDto context);
     }

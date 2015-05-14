@@ -1430,7 +1430,7 @@ namespace Blob.Security.Identity
         /// <returns></returns>
         protected async Task<bool> VerifyPasswordAsync(IUserPasswordStore<User, Guid> store, User user, string password)
         {
-            _log.Debug(string.Format("WTF-ThisIsABadCall.VerifyPasswordAsync({0}, {1})", user, password));
+            _log.Debug(string.Format("VerifyPasswordAsync({0}, {1})", user, password));
             var hash = await store.GetPasswordHashAsync(user).WithCurrentCulture();
             return PasswordHasher.VerifyHashedPassword(hash, password) != PasswordVerificationResult.Failed;
         }
@@ -1657,7 +1657,7 @@ namespace Blob.Security.Identity
 
         public Task<SignInStatusDto> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
-            _log.Debug(string.Format("WTF-againPasswordSignInAsync({0}, {1})", userName, password, isPersistent, shouldLockout));
+            _log.Debug(string.Format("PasswordSignInAsync({0}, {1}, {2}, {3})", userName, password, isPersistent, shouldLockout));
             return Task.FromResult(SignInStatusDto.Success);
             ////if (UserManager == null)
             ////{

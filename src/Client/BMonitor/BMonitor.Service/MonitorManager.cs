@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
-using System.ServiceModel.Security;
-using System.Threading;
 using System.Threading.Tasks;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
 using Blob.Proxies;
-using BMonitor.Common;
-using BMonitor.Common.Interfaces;
 using BMonitor.Monitors;
 using BMonitor.Service.Configuration;
 using BMonitor.Service.Connection;

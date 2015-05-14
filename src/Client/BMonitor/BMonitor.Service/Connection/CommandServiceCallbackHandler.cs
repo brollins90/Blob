@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blob.Contracts.Command;
+using Blob.Contracts.ServiceContracts;
 using log4net;
 using Ninject;
 using Ninject.Activation.Blocks;
 
-namespace BMonitor.Service
+namespace BMonitor.Service.Connection
 {
     public class CommandServiceCallbackHandler : IDeviceConnectionServiceCallback
     {
@@ -49,7 +49,7 @@ namespace BMonitor.Service
                 using (IActivationBlock activation = _kernel.BeginBlock())
                 {
                     Type commandType = command.GetType();
-                    Type commandHandlerType = typeof(Blob.Contracts.Command.ICommandHandler<>).MakeGenericType(commandType);
+                    Type commandHandlerType = typeof(Blob.Contracts.Commands.IDeviceCommandHandler<>).MakeGenericType(commandType);
 
                     // Load the correct handler for the resolved command
                     dynamic commandHandler = _kernel.Get(commandHandlerType);

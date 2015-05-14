@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
+using Blob.Contracts.ServiceContracts;
 using Blob.Proxies;
 using BMonitor.Handlers.Custom;
 using BMonitor.Handlers;
+using BMonitor.Service.Connection;
 using BMonitor.Service.Extensions;
 using log4net;
 using Ninject;
@@ -42,7 +44,7 @@ namespace BMonitor.Service.Infrastructure
 
 
             // Command handlers
-            Type commandHandlerType = typeof (ICommandHandler<>);
+            Type commandHandlerType = typeof (IDeviceCommandHandler<>);
             Type openUnknownCommandHandler = typeof (UnknownCommandHandler<>);
             Type openExceptionCommandHandler = typeof(ExceptionCommandHandlerDecorator<>);
             Type openLoggingCommandHandler = typeof(LoggingCommandHandlerDecorator<>);

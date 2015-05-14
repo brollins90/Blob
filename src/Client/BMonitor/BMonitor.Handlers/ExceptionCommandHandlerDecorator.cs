@@ -1,17 +1,17 @@
 ﻿using System;
 using System.ServiceModel;
-using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
 using log4net;
 
 namespace BMonitor.Handlers
 {
-    public class ExceptionCommandHandlerDecorator<TCmd> : ICommandHandler<TCmd> 
-        where TCmd : ICommand
+    public class ExceptionCommandHandlerDecorator<TCmd> : IDeviceCommandHandler<TCmd>
+        where TCmd : IDeviceCommand
     {
-        private readonly ICommandHandler<TCmd> _wrappedHandler;
+        private readonly IDeviceCommandHandler<TCmd> _wrappedHandler;
         private readonly ILog _log;
 
-        public ExceptionCommandHandlerDecorator(ILog log, ICommandHandler<TCmd> wrappedHandler)
+        public ExceptionCommandHandlerDecorator(ILog log, IDeviceCommandHandler<TCmd> wrappedHandler)
         {
             _log = log;
             _wrappedHandler = wrappedHandler;

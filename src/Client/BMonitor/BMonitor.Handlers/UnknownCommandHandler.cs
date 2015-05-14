@@ -1,11 +1,11 @@
 ﻿using System;
-using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
 using log4net;
 
 namespace BMonitor.Handlers
 {
-    public class UnknownCommandHandler<TCmd> : ICommandHandler<TCmd>
-        where TCmd : ICommand
+    public class UnknownCommandHandler<TCmd> : IDeviceCommandHandler<TCmd>
+        where TCmd : IDeviceCommand
     {
         private readonly ILog _log;
 

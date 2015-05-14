@@ -41,7 +41,6 @@
     <Compile Include="WindowsBackupCommandHandler.cs" />
     <Compile Include="WindowsUpdateCommandHandler.cs" />
     <Compile Include="CmdExecuteCommandHandler.cs" />
-    <Compile Include="PrintLine2CommandHandler.cs" />
     <Compile Include="PrintLineCommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

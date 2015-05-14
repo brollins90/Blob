@@ -1,5 +1,4 @@
 ﻿using System;
-using BMonitor.Common;
 using BMonitor.Common.Interfaces;
 using BMonitor.Common.Models;
 

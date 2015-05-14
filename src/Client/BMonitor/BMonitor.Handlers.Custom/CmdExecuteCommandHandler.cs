@@ -1,11 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using Blob.Contracts.Command;
+﻿using System.Diagnostics;
 using Blob.Contracts.Commands;
 
 namespace BMonitor.Handlers.Custom
 {
-    public class CmdExecuteCommandHandler : ICommandHandler<CmdExecuteCommand>
+    public class CmdExecuteCommandHandler : IDeviceCommandHandler<CmdExecuteCommand>
     {
         public void Handle(CmdExecuteCommand command)
         {

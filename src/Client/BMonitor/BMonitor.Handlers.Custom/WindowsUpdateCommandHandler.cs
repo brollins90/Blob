@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Blob.Contracts.Command;
 using Blob.Contracts.Commands;
 using WUApiLib;
 
 namespace BMonitor.Handlers.Custom
 {
     // http://www.nullskull.com/a/1592/install-windows-updates-using-c--wuapi.aspx
-    public class WindowsUpdateCommandHandler : ICommandHandler<WindowsUpdateCommand>
+    public class WindowsUpdateCommandHandler : IDeviceCommandHandler<WindowsUpdateCommand>
     {
         public void Handle(WindowsUpdateCommand command)
         {

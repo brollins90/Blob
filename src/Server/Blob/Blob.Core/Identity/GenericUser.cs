@@ -24,6 +24,7 @@ namespace Blob.Core.Identity
         where TRole : GenericUserRole<TKey>
         where TClaim : GenericUserClaim<TKey>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GenericUser()
         {
             Claims = new List<TClaim>();

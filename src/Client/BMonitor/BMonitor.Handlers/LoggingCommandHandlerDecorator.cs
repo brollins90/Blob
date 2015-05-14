@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
-using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
 using log4net;
 
 namespace BMonitor.Handlers
 {
-    public class LoggingCommandHandlerDecorator<TCmd> : ICommandHandler<TCmd>
-        where TCmd : ICommand
+    public class LoggingCommandHandlerDecorator<TCmd> : IDeviceCommandHandler<TCmd>
+        where TCmd : IDeviceCommand
     {
-        private readonly ICommandHandler<TCmd> _wrappedHandler;
+        private readonly IDeviceCommandHandler<TCmd> _wrappedHandler;
         private readonly ILog _log;
         private readonly Stopwatch _stopWatch;
 
-        public LoggingCommandHandlerDecorator(ILog log, ICommandHandler<TCmd> wrappedHandler)
+        public LoggingCommandHandlerDecorator(ILog log, IDeviceCommandHandler<TCmd> wrappedHandler)
         {
             _log = log;
             _wrappedHandler = wrappedHandler;

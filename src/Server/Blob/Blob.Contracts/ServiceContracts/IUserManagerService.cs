@@ -12,7 +12,6 @@ namespace Blob.Contracts.ServiceContracts
     [ServiceContract]
     public interface IUserManagerService<in TUserIdType> :
         IIdentityStore<TUserIdType>
-        //IAuthenticationManagerService
         where TUserIdType : IEquatable<TUserIdType>
     {
         bool UserLockoutEnabledByDefault { [OperationContract] get; }

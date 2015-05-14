@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
 using Blob.Proxies;
-using BMonitor.Common;
 using BMonitor.Common.Interfaces;
 using BMonitor.Common.Models;
 using BMonitor.Monitors;
