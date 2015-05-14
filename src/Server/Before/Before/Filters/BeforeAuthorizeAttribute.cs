@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
-using Blob.Contracts.Security;
+using Blob.Contracts.Models;
 
 namespace Before.Filters
 {

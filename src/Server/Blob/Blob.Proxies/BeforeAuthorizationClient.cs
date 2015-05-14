@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blob.Contracts.Security;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Proxies
 {

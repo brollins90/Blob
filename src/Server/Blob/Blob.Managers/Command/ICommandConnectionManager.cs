@@ -1,5 +1,5 @@
 ﻿using System;
-using Blob.Contracts.Command;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Managers.Command
 {

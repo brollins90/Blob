@@ -4,22 +4,25 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Dto.ViewModels;
-using Blob.Contracts.Security;
+using Before.Infrastructure.Identity;
+using Blob.Contracts.Models.ViewModels;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {
     [Authorize]
     public class UserController : BaseController
     {
-        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, IUserManagerService userManager)
+        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManager userManager, BeforeSignInManager signInManager)
             : base(blobCommandManager, blobQueryManager)
         {
             UserManager = userManager;
+            SignInManager = signInManager;
         }
 
-        protected IUserManagerService UserManager { get; set; }
+        protected BeforeUserManager UserManager { get; set; }
+        protected BeforeSignInManager SignInManager { get; set; }
 
 
         // GET: /user/disable/{id}
@@ -108,7 +111,7 @@ namespace Before.Controllers
                 if (result.Succeeded)
                 {
                     var user = await UserManager.FindByIdAsync(model.UserId.ToString()).ConfigureAwait(true);
-                    await UserManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).ConfigureAwait(true);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).ConfigureAwait(true);
                     return Json(new { success = true });
                 }
                 else

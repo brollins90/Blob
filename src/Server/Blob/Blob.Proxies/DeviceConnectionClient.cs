@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
-using Blob.Contracts.Command;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Proxies
 {

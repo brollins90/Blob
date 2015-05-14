@@ -1,8 +1,7 @@
-﻿using Blob.Contracts.Command;
-
+﻿
 namespace Blob.Contracts.Commands
 {
-    public class PrintLineCommand : ICommand
+    public class PrintLineCommand : IDeviceCommand
     {
         public string OutputString { get; set; }
     }

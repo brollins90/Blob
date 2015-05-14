@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Blob.Contracts.Security;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Proxies
 {
@@ -472,85 +473,206 @@ namespace Blob.Proxies
             return null;
         }
 
-        public Task<bool> HasPasswordAsync(string userId)
+        public async Task<bool> HasPasswordAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.HasPasswordAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return false;
         }
 
-        public Task SetPasswordHashAsync(string userId, string passwordHash)
+        public async Task SetPasswordHashAsync(string userId, string passwordHash)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.SetPasswordHashAsync(userId, passwordHash).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task AddToRoleAsync(string userId, string role)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.AddToRoleAsync(userId, role).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task<IList<string>> GetRolesAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.GetRolesAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.IsInRoleAsync(userId, role).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return false;
         }
 
         public async Task RemoveFromRoleAsync(string userId, string role)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.RemoveFromRoleAsync(userId, role).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task<string> GetSecurityStampAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.GetSecurityStampAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public async Task SetSecurityStampAsync(string userId, string stamp)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.SetSecurityStampAsync(userId, stamp).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task CreateAsync(UserDto user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.CreateAsync(user).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task DeleteAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.DeleteAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         public async Task<UserDto> FindByIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.FindByIdAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public async Task<UserDto> FindByNameAsync(string userName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.FindByNameAsync(userName).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public async Task UpdateAsync(UserDto user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await Channel.UpdateAsync(user).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
 
         public async Task<ClaimsIdentity> CreateIdentityAsync(UserDto user, string authenticationType)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.CreateIdentityAsync(user, authenticationType).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public async Task<IdentityResultDto> CreateAsync(UserDto user, string password)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.CreateAsync(user, password).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         public async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await Channel.ChangePasswordAsync(userId, currentPassword, newPassword).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
         }
 
         //public async Task<UserDto> FindAsync(string userName, string password)
@@ -1155,141 +1277,214 @@ namespace Blob.Proxies
             }
         }
 
-        public AuthenticationResponseChallengeDto AuthenticationResponseChallenge
-        {
-            get
-            {
-                try
-                {
-                    return Channel.AuthenticationResponseChallenge;
-                }
-                catch (Exception ex)
-                {
-                    HandleError(ex);
-                }
-                return null;
-            }
-            set
-            {
-                throw new NotImplementedException("Cannot change the AuthenticationResponseChallenge through the service.");
-                //ThrowIfDisposed();
-                //_manager.AuthenticationResponseChallenge = value;
-            }
-        }
+        //public AuthenticationResponseChallengeDto AuthenticationResponseChallenge
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return Channel.AuthenticationResponseChallenge;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            HandleError(ex);
+        //        }
+        //        return null;
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException("Cannot change the AuthenticationResponseChallenge through the service.");
+        //        //ThrowIfDisposed();
+        //        //_manager.AuthenticationResponseChallenge = value;
+        //    }
+        //}
 
-        public AuthenticationResponseGrantDto AuthenticationResponseGrant
-        {
-            get
-            {
-                try
-                {
-                    return Channel.AuthenticationResponseGrant;
-                }
-                catch (Exception ex)
-                {
-                    HandleError(ex);
-                }
-                return null;
-            }
-            set
-            {
-                throw new NotImplementedException("Cannot change the AuthenticationResponseGrant through the service.");
-                //ThrowIfDisposed();
-                //_manager.AuthenticationResponseGrant = value;
-            }
-        }
+        //public AuthenticationResponseGrantDto AuthenticationResponseGrant
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return Channel.AuthenticationResponseGrant;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            HandleError(ex);
+        //        }
+        //        return null;
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException("Cannot change the AuthenticationResponseGrant through the service.");
+        //        //ThrowIfDisposed();
+        //        //_manager.AuthenticationResponseGrant = value;
+        //    }
+        //}
 
-        public AuthenticationResponseRevokeDto AuthenticationResponseRevoke
-        {
-            get
-            {
-                try
-                {
-                    return Channel.AuthenticationResponseRevoke;
-                }
-                catch (Exception ex)
-                {
-                    HandleError(ex);
-                }
-                return null;
-            }
-            set
-            {
-                throw new NotImplementedException("Cannot change the AuthenticationResponseRevoke through the service.");
-                //ThrowIfDisposed();
-                //_manager.AuthenticationResponseRevoke = value;
-            }
-        }
+        //public AuthenticationResponseRevokeDto AuthenticationResponseRevoke
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return Channel.AuthenticationResponseRevoke;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            HandleError(ex);
+        //        }
+        //        return null;
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException("Cannot change the AuthenticationResponseRevoke through the service.");
+        //        //ThrowIfDisposed();
+        //        //_manager.AuthenticationResponseRevoke = value;
+        //    }
+        //}
 
-        public ClaimsPrincipal User
-        {
-            get
-            {
-                try
-                {
-                    return Channel.User;
-                }
-                catch (Exception ex)
-                {
-                    HandleError(ex);
-                }
-                return null;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //public ClaimsPrincipal User
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return Channel.User;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            HandleError(ex);
+        //        }
+        //        return null;
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
-        public async Task<AuthenticateResultDto> AuthenticateAsync(string authenticationType)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<AuthenticateResultDto> AuthenticateAsync(string authenticationType)
+        //{
+        //    try
+        //    {
+        //        return await Channel.AuthenticateAsync(authenticationType).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task<IEnumerable<AuthenticateResultDto>> AuthenticateAsync(string[] authenticationTypes)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<AuthenticateResultDto>> AuthenticateAsync(string[] authenticationTypes)
+        //{
+        //    try
+        //    {
+        //        return await Channel.AuthenticateAsync(authenticationTypes).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task ChallengeAsync(params string[] authenticationTypes)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task ChallengeAsync(params string[] authenticationTypes)
+        //{
+        //    try
+        //    {
+        //        await Channel.ChallengeAsync(authenticationTypes).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task ChallengeAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task ChallengeAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        //{
+        //    try
+        //    {
+        //        await Channel.ChallengeAsync(properties, authenticationTypes).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync()
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync()
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetAuthenticationTypesAsync().ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync(Func<AuthenticationDescriptionDto, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<AuthenticationDescriptionDto>> GetAuthenticationTypesAsync(Func<AuthenticationDescriptionDto, bool> predicate)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetAuthenticationTypesAsync(predicate).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task SignInAsync(params ClaimsIdentity[] identities)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task SignInAsync(params ClaimsIdentity[] identities)
+        //{
+        //    try
+        //    {
+        //        await Channel.SignInAsync(identities).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task SignInAsync(AuthenticationPropertiesDto properties, params ClaimsIdentity[] identities)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task SignInAsync(AuthenticationPropertiesDto properties, params ClaimsIdentity[] identities)
+        //{
+        //    try
+        //    {
+        //        await Channel.SignInAsync(properties, identities).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task SignOutAsync(params string[] authenticationTypes)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task SignOutAsync(params string[] authenticationTypes)
+        //{
+        //    try
+        //    {
+        //        await Channel.SignOutAsync(authenticationTypes).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task SignOutAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task SignOutAsync(AuthenticationPropertiesDto properties, params string[] authenticationTypes)
+        //{
+        //    try
+        //    {
+        //        await Channel.SignOutAsync(properties, authenticationTypes).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
     }
-
 }

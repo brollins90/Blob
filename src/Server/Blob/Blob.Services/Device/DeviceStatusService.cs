@@ -2,9 +2,8 @@
 using System.Security.Permissions;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Device;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 using log4net;
 
 namespace Blob.Services.Device

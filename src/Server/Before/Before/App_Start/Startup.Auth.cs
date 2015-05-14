@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Blob.Contracts.Security;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 using Blob.Proxies;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -15,8 +18,7 @@ namespace Before
     {
         public void ConfigureAuth(IAppBuilder app, Container container)
         {
-            app.Use(typeof(BeforeAuthorizationManagerMiddleware));
-            //app.UseBeforeAuthorization(new BeforeAuthorizationClient("AuthorizationService", "customerUser1", "password"));
+            app.UseBeforeAuthorization();
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
@@ -36,65 +38,48 @@ namespace Before
             //app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
         }
     }
-
-    //public static class AppBuilderExtensions
-    //{
-    //    public static IAppBuilder UseBeforeAuthorization(this IAppBuilder app, IAuthorizationManagerService authorizationManager)
-    //    {
-    //        var options = new BeforeAuthorizationMiddlewareOptions
-    //        {
-    //            Manager = authorizationManager
-    //        };
-
-    //        app.UseBeforeAuthorization(options);
-    //        return app;
-    //    }
-
-    //    public static IAppBuilder UseBeforeAuthorization(this IAppBuilder app, BeforeAuthorizationMiddlewareOptions options)
-    //    {
-    //        app.Use(typeof(BeforeAuthorizationClient), "AuthorizationService", "customerUser1", "password");
-    //        return app;
-    //    }
-    //}
-
-    public class BeforeAuthorizationManagerMiddleware : OwinMiddleware
+    public static class AppBuilderExtensions
     {
-        public BeforeAuthorizationManagerMiddleware(OwinMiddleware next)
-        : base(next) 
+        public static IAppBuilder UseBeforeAuthorization(this IAppBuilder app)
         {
-            
-        }
+            BeforeAuthorizationMiddlewareOptions options;
+            options = new BeforeAuthorizationMiddlewareOptions
+            {
+                Manager = new BeforeAuthorizationClient("AuthorizationService", "customerUser1", "password")
+            };
 
-        public async override Task Invoke(IOwinContext context)
-        {
-            context.Set("BeforeAuthorizationClient",new BeforeAuthorizationClient("AuthorizationService", "customerUser1", "password"));
-            await Next.Invoke(context);
+            app.Use(typeof(BeforeAuthorizationManagerMiddleware), options);
+            return app;
         }
     }
 
-    //    public const string Key = "idm:resourceAuthorizationManager";
+    public class BeforeAuthorizationManagerMiddleware
+    {
+        public const string Key = "idm:authorizationManagerService";
 
-    //    private readonly Func<IDictionary<string, object>, Task> _next;
-    //    private BeforeAuthorizationMiddlewareOptions _options;
+        private readonly Func<IDictionary<string, object>, Task> _next;
+        private BeforeAuthorizationMiddlewareOptions _options;
 
-    //    public BeforeAuthorizationManagerMiddleware(Func<IDictionary<string, object>, Task> next )
-    //    {
-    //        _next = next;
-    //    }
+        public BeforeAuthorizationManagerMiddleware(Func<IDictionary<string, object>, Task> next, BeforeAuthorizationMiddlewareOptions options)
+        {
+            _options = options;
+            _next = next;
+        }
 
-    //    public async Task Invoke(IDictionary<string, object> env)
-    //    {
-    //        env[Key] = new BeforeAuthorizationClient("AuthorizationService", "customerUser1", "password");//_options.Manager ?? _options.ManagerProvider(env);
-    //        await _next(env);
-    //    }
-    //}
-    //public class BeforeAuthorizationMiddlewareOptions
-    //{
-    //    public BeforeAuthorizationMiddlewareOptions()
-    //    {
-    //        ManagerProvider = (env) => null;
-    //    }
-    //    public IAuthorizationManagerService Manager { get; set; }
-    //    public Func<IDictionary<string, object>, IAuthorizationManagerService> ManagerProvider { get; set; }
-    //}
+        public async Task Invoke(IDictionary<string, object> env)
+        {
+            env[Key] = _options.Manager ?? _options.ManagerProvider(env);
+            await _next(env);
+        }
+    }
+
+    public class BeforeAuthorizationMiddlewareOptions
+    {
+        public BeforeAuthorizationMiddlewareOptions()
+        {
+            ManagerProvider = (env) => null;
+        }
+        public IAuthorizationManagerService Manager { get; set; }
+        public Func<IDictionary<string, object>, IAuthorizationManagerService> ManagerProvider { get; set; }
+    }
 }

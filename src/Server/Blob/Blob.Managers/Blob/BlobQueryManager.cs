@@ -4,9 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Command;
-using Blob.Contracts.Dto.ViewModels;
+using Blob.Contracts.Models.ViewModels;
+using Blob.Contracts.ServiceContracts;
 using Blob.Data;
 using log4net;
 
@@ -145,7 +144,7 @@ namespace Blob.Managers.Blob
             {
                 DeviceId = deviceId,
                 CommandType = command.CommandType,
-                CommandParamters = command.CommandParamters,
+                CommandParameters = command.CommandParamters,
                 ShortName = command.ShortName
             };
             return result;

@@ -3,7 +3,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Security;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 using Blob.Security.Authorization;
 
 namespace Blob.Services.Before

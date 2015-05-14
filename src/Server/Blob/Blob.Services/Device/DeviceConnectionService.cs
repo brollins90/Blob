@@ -2,7 +2,7 @@
 using System.IdentityModel.Services;
 using System.Security.Permissions;
 using System.ServiceModel;
-using Blob.Contracts.Command;
+using Blob.Contracts.ServiceContracts;
 using Blob.Managers.Command;
 using log4net;
 

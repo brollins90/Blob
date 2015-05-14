@@ -1,4 +1,4 @@
-﻿@model Blob.Contracts.Dto.ViewModels.DeviceCommandIssueVm
+﻿@model Blob.Contracts.Models.ViewModels.DeviceCommandIssueVm
 
 <div class="modal-content">
     <div class="modal-header">
@@ -19,17 +19,20 @@
                 @Html.HiddenFor(model => model.CommandType)
                 @Html.HiddenFor(model => model.ShortName)
 
-                @{ int i = 0; }
-                @foreach (var item in Model.CommandParamters)
+                @if (Model.CommandParameters != null)
                 {
-                    <div class="form-group">
-                        <label class="control-label col-md-2">@item.Key</label>
-                        <div class="col-md-10">
-                            <input name="CommandParamters[@i].Key" class="hidden" type="hidden" value="@item.Key" />
-                            <input name="CommandParamters[@i].Value" class="form-control text-box single-line" type="text" value="@item.Value" />
+                    int i = 0;
+                    foreach (var item in Model.CommandParameters)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-md-2">@item.Key</label>
+                            <div class="col-md-10">
+                                <input name="CommandParamters[@i].Key" class="hidden" type="hidden" value="@item.Key" />
+                                <input name="CommandParamters[@i].Value" class="form-control text-box single-line" type="text" value="@item.Value" />
+                            </div>
                         </div>
-                    </div>
-                    { i++; }
+                        { i++; }
+                    }
                 }
             </div>
         </div>

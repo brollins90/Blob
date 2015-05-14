@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Blob.Contracts.Command;
+using Blob.Contracts.Commands;
 using log4net;
 
 namespace Blob.Managers.Command
@@ -13,7 +13,7 @@ namespace Blob.Managers.Command
         private readonly ILog _log;
         private static volatile CommandQueueManager _queueManager;
         private static readonly object SyncLock = new object();
-        private static ConcurrentQueue<Tuple<Guid, ICommand>> _commandQueue;
+        private static ConcurrentQueue<Tuple<Guid, IDeviceCommand>> _commandQueue;
 
         private static ManualResetEvent _stopEvent;
         private static int _secondsToWaitBeforeForCommandJobProcessingCheck;
@@ -23,7 +23,7 @@ namespace Blob.Managers.Command
         private CommandQueueManager()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _commandQueue = new ConcurrentQueue<Tuple<Guid, ICommand>>();
+            _commandQueue = new ConcurrentQueue<Tuple<Guid, IDeviceCommand>>();
 
             _secondsToWaitBeforeForCommandJobProcessingCheck = 5;
             if (_testThread == null)
@@ -51,7 +51,7 @@ namespace Blob.Managers.Command
             get { return CommandConnectionManager.Instance; }
         }
 
-        public async Task<bool> QueueCommandAsync(Guid deviceId, ICommand command)
+        public async Task<bool> QueueCommandAsync(Guid deviceId, IDeviceCommand command)
         {
             _log.Debug(string.Format("Queueing command for: {0} - {1}", deviceId, command.GetType().ToString()));
             return await Task.Run(() =>
@@ -62,7 +62,7 @@ namespace Blob.Managers.Command
                     _log.Debug(string.Format("Found a valid callback for : {0} - {1}", deviceId, command.GetType().ToString()));
                     //lock (SyncLock)
                     //{
-                        _commandQueue.Enqueue(new Tuple<Guid, ICommand>(deviceId, command));
+                    _commandQueue.Enqueue(new Tuple<Guid, IDeviceCommand>(deviceId, command));
                     //}
                     return true;
                 }
@@ -82,11 +82,11 @@ namespace Blob.Managers.Command
             try
             {
                 List<Task> tasks = new List<Task>();
-                Tuple<Guid, ICommand> cmd;
+                Tuple<Guid, IDeviceCommand> cmd;
                 while (_commandQueue.TryDequeue(out cmd))
                 {
                     processedCount++;
-                    Tuple<Guid, ICommand> cmdCopy = new Tuple<Guid, ICommand>(cmd.Item1, cmd.Item2);
+                    Tuple<Guid, IDeviceCommand> cmdCopy = new Tuple<Guid, IDeviceCommand>(cmd.Item1, cmd.Item2);
                     Task t = Task.Factory.StartNew(() => ExecuteCommand(cmdCopy));
                     tasks.Add(t);
                 }
@@ -99,7 +99,7 @@ namespace Blob.Managers.Command
             _log.Debug(string.Format("Finished Queue processing.  processed {0} commands", processedCount));
         }
 
-        private void ExecuteCommand(Tuple<Guid, ICommand> cmd)
+        private void ExecuteCommand(Tuple<Guid, IDeviceCommand> cmd)
         {
             try
             {

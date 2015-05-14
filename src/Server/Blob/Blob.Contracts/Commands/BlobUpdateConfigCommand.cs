@@ -1,6 +1,5 @@
-﻿using Blob.Contracts.Command;
-
-namespace Blob.Contracts.Commands
-{
-    public class BlobUpdateConfigCommand : ICommand { }
-}
+﻿
+//namespace Blob.Contracts.Commands
+//{
+//    public class BlobUpdateConfigCommand : IDeviceCommand { }
+//}

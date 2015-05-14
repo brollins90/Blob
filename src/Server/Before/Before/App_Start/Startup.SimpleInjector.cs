@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Identity;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Security;
+using Blob.Contracts.ServiceContracts;
 using Blob.Proxies;
 using log4net;
 using Microsoft.Owin;
@@ -39,14 +36,20 @@ namespace Before
             container.RegisterSingle<IAppBuilder>(app);
 
 
-            String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
+            //String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
             
             //container.RegisterPerWebRequest<BlobDbContext>(() => new BlobDbContext(connectionString));
 
-            container.RegisterPerWebRequest<Blob.Contracts.Security.IUserManagerService>(() => BeforeUserManager.Create("UserManagerService"));
+            container.RegisterPerWebRequest<IUserManagerService>(() => BeforeUserManager.Create("UserManagerService"));
             container.RegisterPerWebRequest<IBlobCommandManager>(() => new BeforeCommandClient("BeforeCommandService", "customerUser1", "password"));
             container.RegisterPerWebRequest<IBlobQueryManager>(() => new BeforeQueryClient("BeforeQueryService", "customerUser1", "password"));
             container.RegisterPerWebRequest<IAuthorizationManagerService>(() => new BeforeAuthorizationClient("AuthorizationService", "customerUser1", "password"));
+
+            container.RegisterPerWebRequest<BeforeUserManager>(() => BeforeUserManager.Create("UserManagerService"));
+            container.RegisterPerWebRequest<BeforeSignInManager>();
+            container.RegisterPerWebRequest<IAuthenticationManager>(() => AdvancedExtensions.IsVerifying(container)
+                ? new OwinContext(new Dictionary<string, object>()).Authentication
+                : HttpContext.Current.GetOwinContext().Authentication);
 
             // This is kind of bad, all the identity proxying stuff I did was to make OWIN just work, but now I am 
             //    bypassing the OWIN context and injecting into the we context

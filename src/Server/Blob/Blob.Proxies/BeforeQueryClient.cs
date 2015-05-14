@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Dto.ViewModels;
+using Blob.Contracts.Models.ViewModels;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Proxies
 {

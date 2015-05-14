@@ -1,6 +1,5 @@
-﻿using Blob.Contracts.Command;
-
+﻿
 namespace Blob.Contracts.Commands
 {
-    public class WindowsUpdateCommand : ICommand { }
+    public class WindowsUpdateCommand : IDeviceCommand { }
 }

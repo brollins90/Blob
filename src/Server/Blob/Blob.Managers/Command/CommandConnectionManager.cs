@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using Blob.Contracts.Command;
+using Blob.Contracts.ServiceContracts;
 using log4net;
 
 namespace Blob.Managers.Command

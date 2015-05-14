@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Blob.Contracts.Security;
+using Blob.Contracts.Models;
 using Microsoft.AspNet.Identity;
 
 namespace Before.Infrastructure.Identity

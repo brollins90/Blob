@@ -2,8 +2,8 @@
 using System.Security.Permissions;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Services.Before
 {

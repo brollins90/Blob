@@ -1,9 +1,8 @@
-﻿using Blob.Contracts.Command;
-
-namespace Blob.Contracts.Commands
-{
-    public class WindowsBackupCommand : ICommand
-    {
-        public string JobName { get; set; }
-    }
-}
+﻿
+//namespace Blob.Contracts.Commands
+//{
+//    public class WindowsBackupCommand : IDeviceCommand
+//    {
+//        public string JobName { get; set; }
+//    }
+//}

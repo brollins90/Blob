@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
 
 namespace Blob.Contracts.ServiceContracts
 {

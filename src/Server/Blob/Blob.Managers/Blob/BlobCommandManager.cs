@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Command;
 using Blob.Contracts.Commands;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Managers.Command;
@@ -76,15 +74,16 @@ namespace Blob.Managers.Blob
             PropertyInfo[] properties = commandType.GetProperties();
 
             // temp name is CommandData
-            (cmdInstance as CmdExecuteCommand).CommandString = dto.CommandParameters.First().Value;
-            //foreach (var property in properties)
-            //{
-            //    if (dto.CommandParameters.ContainsKey(property.Name))
-            //    {
-            //        property.SetValue(cmdInstance, dto.CommandParameters[property.Name], null);
-            //    }
-            //}
-            await QueueManager.QueueCommandAsync(dto.DeviceId, (cmdInstance as ICommand)).ConfigureAwait(false);
+            //(cmdInstance as CmdExecuteCommand).CommandString = dto.CommandParameters.First().Value;
+            foreach (var property in properties)
+            {
+                if (dto.CommandParameters.ContainsKey(property.Name))
+                {
+                    property.SetValue(cmdInstance, dto.CommandParameters[property.Name], null);
+                }
+            }
+
+            await QueueManager.QueueCommandAsync(dto.DeviceId, (cmdInstance as IDeviceCommand)).ConfigureAwait(false);
         }
 
         // Device

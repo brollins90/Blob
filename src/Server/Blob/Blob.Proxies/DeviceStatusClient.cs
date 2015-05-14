@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blob.Contracts.Device;
-using Blob.Contracts.Dto;
+using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Proxies
 {

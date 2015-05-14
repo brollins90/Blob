@@ -2,8 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Blob.Contracts.Blob;
-using Blob.Contracts.Dto.ViewModels;
+using Blob.Contracts.Models.ViewModels;
+using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {

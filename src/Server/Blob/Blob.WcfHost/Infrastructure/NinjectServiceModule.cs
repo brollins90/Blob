@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.Entity;
+using Blob.Contracts.ServiceContracts;
 using Blob.Security.Identity;
 using log4net;
 using Ninject.Modules;
@@ -35,12 +36,12 @@ namespace Blob.WcfHost.Infrastructure
             Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
-            Bind<Contracts.Blob.IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
-            Bind<Contracts.Blob.IBlobQueryManager>().To<Managers.Blob.BlobQueryManager>();
+            Bind<IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
+            Bind<IBlobQueryManager>().To<Managers.Blob.BlobQueryManager>();
 
-            Bind<Contracts.Command.IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
-            Bind<Contracts.Device.IDeviceStatusService>().To<Services.Device.DeviceStatusService>();
-            Bind<Contracts.Security.IUserManagerService>().To<BlobUserManagerAdapter>();
+            Bind<IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
+            Bind<IDeviceStatusService>().To<Services.Device.DeviceStatusService>();
+            Bind<IUserManagerService>().To<BlobUserManagerAdapter>();
 
             // logging
             Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));
