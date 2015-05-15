@@ -21,14 +21,4 @@ namespace Blob.Contracts.Models.ViewModels
         [Display(Name = "Command parameters")]
         public IEnumerable<DeviceCommandParameterPairVm> CommandParamters { get; set; }
     }
-
-    [DataContract]
-    public class DeviceCommandParameterPairVm
-    {
-        [DataMember]
-        public string Key { get; set; }
-
-        [DataMember]
-        public string Value { get; set; }
-    }
 }

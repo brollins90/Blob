@@ -44,6 +44,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blob\BlobAuditor.cs" />
     <Compile Include="Blob\BlobQueryManager.cs" />
     <Compile Include="Command\CommandConnectionManager.cs" />
     <Compile Include="Command\CommandQueueManager.cs" />

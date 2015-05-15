@@ -4,7 +4,7 @@ namespace Blob.Contracts.Commands
 {
     public class PsExecuteCommand : IDeviceCommand
     {
-        public string PsScript { get; set; }
+        public string ScriptPath { get; set; }
         private ICollection<string> Arguments { get; set; }
     }
 }

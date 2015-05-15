@@ -23,7 +23,7 @@ namespace Blob.Contracts.Models.ViewModels
 
         [DataMember]
         [Display(Name = "Command parameters")]
-        public IEnumerable<DeviceCommandParameterPairVm> CommandParameters { get; set; }
+        public IList<DeviceCommandParameterPairVm> CommandParameters { get; set; }
 
         public IssueDeviceCommandDto ToDto()
         {

@@ -28,6 +28,7 @@ namespace Blob.Data
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlobDbContext, Configuration>());
         }
 
+        public DbSet<AuditEntry> AuditLog { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<DeviceType> DeviceTypes { get; set; }
@@ -42,6 +43,7 @@ namespace Blob.Data
             modelBuilder.Configurations.Add(new BlobUserClaimMap());
             modelBuilder.Configurations.Add(new BlobUserLoginMap());
             modelBuilder.Configurations.Add(new BlobUserRoleMap());
+            modelBuilder.Configurations.Add(new AuditEntryMap());
             modelBuilder.Configurations.Add(new CustomerMap());
             modelBuilder.Configurations.Add(new DeviceMap());
             modelBuilder.Configurations.Add(new DeviceTypeMap());

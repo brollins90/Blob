@@ -201,6 +201,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
+    <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PerformanceController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
@@ -302,10 +303,11 @@
     <Content Include="Views\User\Single.cshtml" />
     <Content Include="Views\Device\_IssueCommand.cshtml" />
     <Content Include="Views\Shared\_DisplayTemplates\DeviceCommandVm.cshtml" />
-    <Content Include="Views\Shared\_EditorTemplates\DeviceCommandVm.cshtml" />
+    <Content Include="Views\Shared\_EditorTemplates\DeviceCommandParameterPairVm.cshtml" />
+    <Content Include="Views\FileUpload\_UploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

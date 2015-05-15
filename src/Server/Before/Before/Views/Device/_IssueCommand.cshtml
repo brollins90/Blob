@@ -25,10 +25,11 @@
                     foreach (var item in Model.CommandParameters)
                     {
                         <div class="form-group">
-                            <label class="control-label col-md-2">@item.Key</label>
+                            @Html.LabelFor(model => model.CommandParameters[i].Value, new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                <input name="CommandParamters[@i].Key" class="hidden" type="hidden" value="@item.Key" />
-                                <input name="CommandParamters[@i].Value" class="form-control text-box single-line" type="text" value="@item.Value" />
+                                @Html.HiddenFor(model => model.CommandParameters[i].Key)
+                                @Html.EditorFor(model => model.CommandParameters[i].Value, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CommandParameters[i].Value, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         { i++; }

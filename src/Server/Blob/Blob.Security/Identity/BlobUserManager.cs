@@ -481,7 +481,7 @@ namespace Blob.Security.Identity
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public Task<UserDto> FindByEmailAsync(string email)
+        public async Task<UserDto> FindByEmailAsync(string email)
         {
             _log.Debug(string.Format("FindByEmailAsync({0})", email));
             ThrowIfDisposed();
@@ -490,8 +490,8 @@ namespace Blob.Security.Identity
             {
                 throw new ArgumentNullException("email");
             }
-            var user = store.FindByEmailAsync(email).Result;
-            return Task.FromResult(UserConverter.DtoFromUser(user));
+            var user = await store.FindByEmailAsync(email);
+            return UserConverter.DtoFromUser(user);
         }
 
         /// <summary>
@@ -835,12 +835,12 @@ namespace Blob.Security.Identity
         ///     Returns the user associated with this login
         /// </summary>
         /// <returns></returns>
-        public Task<UserDto> FindAsync(UserLoginInfoDto login)
+        public async Task<UserDto> FindAsync(UserLoginInfoDto login)
         {
             _log.Debug(string.Format("FindAsync({0})", login));
             ThrowIfDisposed();
-            var user = GetLoginStore().FindAsync(login.ToLoginInfo()).Result;
-            return Task.FromResult(UserConverter.DtoFromUser(user));
+            var user = await GetLoginStore().FindAsync(login.ToLoginInfo());
+            return UserConverter.DtoFromUser(user);
         }
 
         /// <summary>
@@ -859,7 +859,7 @@ namespace Blob.Security.Identity
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
                     userId));
             }
-            return loginStore.GetLoginsAsync(user).Result.Select(login => IdentityUtil.ToDto(login)).ToList();
+            return (await loginStore.GetLoginsAsync(user)).Select(login => IdentityUtil.ToDto(login)).ToList();
         }
 
         /// <summary>
@@ -1241,7 +1241,7 @@ namespace Blob.Security.Identity
         {
             _log.Debug(string.Format("DeleteAsync({0})", userId));
             ThrowIfDisposed();
-            var user = FindByIdAsync2(userId).Result;
+            var user = await FindByIdAsync2(userId);
             await Store.DeleteAsync(user).WithCurrentCulture();
             //return IdentityResult.Success.ToDto();
         }
@@ -1251,12 +1251,12 @@ namespace Blob.Security.Identity
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<UserDto> FindByIdAsync(Guid userId)
+        public async Task<UserDto> FindByIdAsync(Guid userId)
         {
             _log.Debug(string.Format("FindByIdAsync({0})", userId));
             ThrowIfDisposed();
-            var user = Store.FindByIdAsync(userId).Result;
-            return Task.FromResult(UserConverter.DtoFromUser(user));
+            var user = await Store.FindByIdAsync(userId);
+            return UserConverter.DtoFromUser(user);
         }
 
         /// <summary>
@@ -1264,7 +1264,7 @@ namespace Blob.Security.Identity
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public Task<UserDto> FindByNameAsync(string userName)
+        public async Task<UserDto> FindByNameAsync(string userName)
         {
             _log.Debug(string.Format("FindByNameAsync({0})", userName));
             ThrowIfDisposed();
@@ -1272,8 +1272,8 @@ namespace Blob.Security.Identity
             {
                 throw new ArgumentNullException("userName");
             }
-            var user = Store.FindByNameAsync(userName).Result;
-            return Task.FromResult(UserConverter.DtoFromUser(user));
+            var user = await FindByNameAsync2(userName);
+            return UserConverter.DtoFromUser(user);
         }
 
         /// <summary>
@@ -1302,14 +1302,13 @@ namespace Blob.Security.Identity
 
         public async Task<User> FindByNameAsync2(string userName)
         {
-            _log.Debug(string.Format("FindByNameAsync2({0})", userName));
+            _log.Debug(string.Format("FindByNameAsync({0})", userName));
             ThrowIfDisposed();
-            var user = await FindByNameAsync(userName).WithCurrentCulture();
-            if (user == null)
+            if (userName == null)
             {
-                return null;
+                throw new ArgumentNullException("userName");
             }
-            return UserConverter.UserFromUserDto(user);
+            return await Store.FindByNameAsync(userName);
         }
 
         public async Task<User> FindByEmailAsync2(string email)
@@ -1547,7 +1546,7 @@ namespace Blob.Security.Identity
 
         //public Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto userDto)
         //{
-        //    User user = FindByIdAsync2(userDto.Id.ToGuid()).Result;
+        //    User user = await FindByIdAsync2(userDto.Id.ToGuid());
         //    return this.CreateIdentityAsync(user, "Blake");
         //    //return this.CreateIdentityAsync(user, AuthenticationType);
         //}
@@ -1689,16 +1688,16 @@ namespace Blob.Security.Identity
             ////return SignInStatus.Failure;
         }
 
-        public Task<ClaimsIdentity> CreateIdentityAsync(UserDto userDto, string authenticationType)
+        public async Task<ClaimsIdentity> CreateIdentityAsync(UserDto userDto, string authenticationType)
         {
             _log.Debug(string.Format("CreateIdentityAsync({0}, {1})", userDto, authenticationType));
             ThrowIfDisposed(); 
-            User user = FindByIdAsync2(userDto.Id.ToGuid()).Result;
+            User user = await FindByIdAsync2(userDto.Id.ToGuid());
             if (user == null)
             {
                 throw new ArgumentNullException("userDto");
             }
-            return ClaimsIdentityFactory.CreateAsync(this, user, authenticationType);
+            return await ClaimsIdentityFactory.CreateAsync(this, user, authenticationType);
         }
 
 

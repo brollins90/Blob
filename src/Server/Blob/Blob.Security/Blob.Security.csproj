@@ -80,8 +80,9 @@
   <ItemGroup>
     <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
     <Compile Include="Authentication\ClaimTransformer.cs" />
-    <Compile Include="Authorization\BlobAuthorizationManagerService.cs" />
     <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
+    <Compile Include="SecurityConstants.cs" />
+    <Compile Include="Extensions\IdentityExtentions.cs" />
     <Compile Include="Identity\BlobClaimsIdentityFactory.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />

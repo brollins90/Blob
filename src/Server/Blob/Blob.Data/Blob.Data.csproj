@@ -60,6 +60,7 @@
     <Compile Include="Identity\GenericRoleStore.cs" />
     <Compile Include="Identity\GenericUserStore.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
+    <Compile Include="Mapping\AuditEntryMap.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
     <Compile Include="Mapping\KeyPairMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
@@ -106,6 +107,14 @@
     <Compile Include="Migrations\201505062051058_PerfDoesntNeedAStatus.Designer.cs">
       <DependentUpon>201505062051058_PerfDoesntNeedAStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505151527347_AuditTable.cs" />
+    <Compile Include="Migrations\201505151527347_AuditTable.Designer.cs">
+      <DependentUpon>201505151527347_AuditTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505151543080_AuditTableTime.cs" />
+    <Compile Include="Migrations\201505151543080_AuditTableTime.Designer.cs">
+      <DependentUpon>201505151543080_AuditTableTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -144,6 +153,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505062051058_PerfDoesntNeedAStatus.resx">
       <DependentUpon>201505062051058_PerfDoesntNeedAStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505151527347_AuditTable.resx">
+      <DependentUpon>201505151527347_AuditTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505151543080_AuditTableTime.resx">
+      <DependentUpon>201505151543080_AuditTableTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

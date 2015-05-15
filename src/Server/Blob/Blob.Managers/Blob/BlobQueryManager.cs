@@ -143,7 +143,7 @@ namespace Blob.Managers.Blob
             {
                 DeviceId = deviceId,
                 CommandType = command.CommandType,
-                CommandParameters = command.CommandParamters,
+                CommandParameters = command.CommandParamters.ToList(),
                 ShortName = command.ShortName
             };
             return result;

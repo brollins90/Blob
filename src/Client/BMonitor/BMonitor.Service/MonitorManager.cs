@@ -173,7 +173,10 @@ namespace BMonitor.Service
                 _log.Info("Creating command connection.");
                 //todo: spin up a new thread
                 if (_connectionThread == null)
+                {
                     _connectionThread = new ConnectionThread(_kernel, _deviceId);
+                    _connectionThread.Start();
+                }
             }
 
             if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)

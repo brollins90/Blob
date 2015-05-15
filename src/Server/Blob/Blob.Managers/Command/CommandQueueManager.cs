@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Blob.Contracts.Commands;
@@ -104,6 +105,16 @@ namespace Blob.Managers.Command
                 var callback = ConnectionManager.GetCallback(cmd.Item1);
                 _log.Debug("executing " + cmd.Item2 + " on " + cmd.Item1);
                 callback.ExecuteCommand(cmd.Item2);
+            }
+            catch (CommunicationObjectAbortedException e)
+            {
+                _log.Error(string.Format("Error executing command {1} on {0}: the callback was aborted.", cmd.Item1, cmd.Item2), e);
+                ConnectionManager.RemoveCallback(cmd.Item1);
+            }
+            catch (CommunicationObjectFaultedException e)
+            {
+                _log.Error(string.Format("Error executing command {1} on {0}: the callback was faulted.", cmd.Item1, cmd.Item2), e);
+                ConnectionManager.RemoveCallback(cmd.Item1);
             }
             catch (Exception e)
             {

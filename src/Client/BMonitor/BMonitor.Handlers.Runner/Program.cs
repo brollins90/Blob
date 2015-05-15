@@ -12,8 +12,13 @@ namespace BMonitor.Handlers.Runner
     {
         static void Main(string[] args)
         {
-            WindowsUpdateCommandHandler handler = new WindowsUpdateCommandHandler();
-            WindowsUpdateCommand cmd = new WindowsUpdateCommand();
+            //WindowsUpdateCommandHandler handler = new WindowsUpdateCommandHandler();
+            //WindowsUpdateCommand cmd = new WindowsUpdateCommand();
+
+            var handler = new PsExecuteCommandHandler();
+            PsExecuteCommand cmd = new PsExecuteCommand {ScriptPath = @"C:\_\psscript.ps1"};
+
+            // C:\_\psscript.ps1
             handler.Handle(cmd);
         }
     }
