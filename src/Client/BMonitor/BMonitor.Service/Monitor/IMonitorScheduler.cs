@@ -1,7 +1,7 @@
 ﻿
-namespace BMonitor.Service.Quartz
+namespace BMonitor.Service.Monitor
 {
-    public interface IJobHandler
+    public interface IMonitorScheduler
     {
         bool LoadConfig();
         void Start();

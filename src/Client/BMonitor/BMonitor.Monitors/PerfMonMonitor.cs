@@ -7,16 +7,38 @@ namespace BMonitor.Monitors
 {
     public class PerfMonMonitor : BaseMonitor
     {
-        private readonly PerfmonCounterManager _manager;
-        private PerformanceCounter _counter;
-        private string _counterKey;
-
-        public PerfMonMonitor(params string[] strings)
+        private PerfmonCounterManager Manager
         {
-            _counterKey = string.Join("_", strings);
-            _manager = PerfmonCounterManager.Instance;
-            _counter = _manager.GetCounter(strings);
+            get { return PerfmonCounterManager.Instance; }
         }
+
+        private PerformanceCounter Counter
+        {
+            get
+            {
+                return Manager.GetCounter(CategoryName, CounterName, InstanceName);
+            }
+        }
+
+        private string _counterKey ;
+
+        public string CategoryName { get; set; }
+        public string CounterName { get; set; }
+        public string InstanceName { get; set; }
+
+        public PerfMonMonitor()
+        {
+            CategoryName = "Memory";
+            CounterName = "Available Bytes";
+            InstanceName = string.Empty;
+            _counterKey = string.Format("{0}_{1}_{2}", CategoryName, CounterName, InstanceName);
+        }
+        //public PerfMonMonitor(params string[] strings)
+        //{
+        //    _counterKey = string.Join("_", strings);
+        //    _manager = PerfmonCounterManager.Instance;
+        //    Counter = _manager.GetCounter(strings);
+        //}
 
         protected override string MonitorName { get { return "PerfMonMonitor"; } }
         protected override string MonitorDescription { get { return "PerfMonMonitor Description"; } }
@@ -25,25 +47,7 @@ namespace BMonitor.Monitors
         public override ResultData Execute(bool collectPerfData = false)
         {
 
-            double executionValue = _counter.NextValue();
-
-            //string driveLetter = string.Format("{0}:", _driveLetter.ToUpper());
-            //string driveName;
-            //string driveLabel;
-            //long totalFreeSpace;
-            //long totalSize;
-            //double freePercent;
-            ////double executionValue;
-
-            //DriveInfo driveInfo = new DriveInfo(driveLetter);
-            //driveName = driveInfo.Name;
-            //driveLabel = driveInfo.VolumeLabel;
-            //totalFreeSpace = driveInfo.TotalFreeSpace;
-            //totalSize = driveInfo.TotalSize;
-            //freePercent = Math.Round(((double)totalFreeSpace / (double)totalSize) * 100);
-
-            ////executionValue = 7.0d;//freePercent;
-
+            double executionValue = Counter.NextValue();
 
             AlertLevel alertLevel = MonitorThreshold.CheckAlertLevel(executionValue);
 

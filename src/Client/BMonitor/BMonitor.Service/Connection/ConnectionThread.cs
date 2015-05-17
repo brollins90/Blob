@@ -14,7 +14,7 @@ namespace BMonitor.Service.Connection
         private readonly DeviceConnectionClient _commandClient;
         private readonly Guid _deviceId;
 
-        public ConnectionThread(IKernel kernel, Guid deviceId)//(DeviceConnectionClient client)
+        public ConnectionThread(IKernel kernel, Guid deviceId)
         {
             _kernel = kernel;
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -26,14 +26,14 @@ namespace BMonitor.Service.Connection
             _commandClient.ClientErrorHandler += HandleException;
         }
 
-        public bool Connected()
+        public bool IsConnected()
         {
             return (_commandClient != null && _commandClient.State == CommunicationState.Opened);
         }
 
         public void Start()
         {
-            if (!Connected())
+            if (!IsConnected())
             {
                 _commandClient.Connect(_deviceId);
             }
@@ -41,7 +41,7 @@ namespace BMonitor.Service.Connection
 
         public void Stop()
         {
-            if (Connected())
+            if (IsConnected())
             {
                 _commandClient.Close();
             }

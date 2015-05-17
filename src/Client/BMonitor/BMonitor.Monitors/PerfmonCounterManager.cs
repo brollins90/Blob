@@ -12,38 +12,36 @@ namespace BMonitor.Monitors
         {
             Counters = new Dictionary<string, PerformanceCounter>();
 
-            GetCounter(new[] { "Memory", "Available Bytes" });
-            GetCounter(new[] { "Processor", "% Processor Time", "_Total" });
+            GetCounter("Memory", "Available Bytes", string.Empty);
+            GetCounter("Processor", "% Processor Time", "_Total");
             //PerformanceCounter _memoryCounter = new PerformanceCounter("Memory", "Available Bytes");
             //PerformanceCounter _processorCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
 
         public static PerfmonCounterManager Instance
         {
-            get { return _instance ?? (_instance = new PerfmonCounterManager()); }   
+            get { return _instance ?? (_instance = new PerfmonCounterManager()); }
         }
         private static PerfmonCounterManager _instance;
 
         public Dictionary<string, PerformanceCounter> Counters { get; private set; }
 
-        internal PerformanceCounter GetCounter(string[] strings)
+        internal PerformanceCounter GetCounter(string categoryName, string counterName, string instanceName)
         {
-            string s = string.Join("_", strings);
-            if (Counters.ContainsKey(s))
+            string key = string.Format("{0}_{1}_{2}", categoryName, counterName, instanceName);
+            if (Counters.ContainsKey(key))
             {
-                return Counters[s];
+                return Counters[key];
             }
 
-            PerformanceCounter counter = (strings.Length == 2)
-                                             ? new PerformanceCounter(strings[0], strings[1])
-                                             : (strings.Length == 3)
-                                                   ? new PerformanceCounter(strings[0], strings[1], strings[2])
-                                                   : null;
-            
+            PerformanceCounter counter = (string.IsNullOrEmpty(instanceName))
+                                             ? new PerformanceCounter(categoryName, counterName)
+                                             : new PerformanceCounter(categoryName, counterName, instanceName);
+
             if (counter == null) throw new ArgumentOutOfRangeException();
 
-            Counters.Add(s, counter);
-            return Counters[s];
+            Counters.Add(key, counter);
+            return Counters[key];
         }
 
         public void Dispose()

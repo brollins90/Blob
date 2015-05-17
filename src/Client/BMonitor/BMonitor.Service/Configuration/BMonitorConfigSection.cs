@@ -6,14 +6,14 @@ namespace BMonitor.Service.Configuration
     {
         public BMonitorConfigSection() { }
 
-        [ConfigurationProperty("main", IsRequired = true)]
-        public BMonitorMainConfigElement Main
+        [ConfigurationProperty("service", IsRequired = true)]
+        public BMonitorServiceConfigElement Service
         {
-            get { return (BMonitorMainConfigElement)base["main"]; }
+            get { return (BMonitorServiceConfigElement)base["service"]; }
         }
 
         //[ConfigurationProperty("Jobs")]
-        //public BMonitorConfigurationElement Jobs
+        //public BMonitorJobsConfigElement Jobs
         //{
         //    get { return (BMonitorConfigurationElement)this["Jobs"]; }
         //}

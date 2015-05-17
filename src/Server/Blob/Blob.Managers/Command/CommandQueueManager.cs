@@ -14,7 +14,7 @@ namespace Blob.Managers.Command
         private readonly ILog _log;
         private static volatile CommandQueueManager _queueManager;
         private static readonly object SyncLock = new object();
-        private static ConcurrentQueue<Tuple<Guid, IDeviceCommand>> _commandQueue;
+        private static ConcurrentQueue<Tuple<Guid, Guid, IDeviceCommand>> _commandQueue;
 
         private static ManualResetEvent _stopEvent;
         private static int _secondsToWaitBeforeForCommandJobProcessingCheck;
@@ -24,7 +24,7 @@ namespace Blob.Managers.Command
         private CommandQueueManager()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _commandQueue = new ConcurrentQueue<Tuple<Guid, IDeviceCommand>>();
+            _commandQueue = new ConcurrentQueue<Tuple<Guid, Guid, IDeviceCommand>>();
 
             _secondsToWaitBeforeForCommandJobProcessingCheck = 5;
             if (_testThread == null)
@@ -50,18 +50,18 @@ namespace Blob.Managers.Command
             get { return CommandConnectionManager.Instance; }
         }
 
-        public async Task<bool> QueueCommandAsync(Guid deviceId, IDeviceCommand command)
+        public async Task<bool> QueueCommandAsync(Guid deviceId, Guid commandId, IDeviceCommand command)
         {
-            _log.Debug(string.Format("Queueing command for: {0} - {1}", deviceId, command.GetType().ToString()));
+            _log.Debug(string.Format("Queueing command for: {0} - {1} {2}", deviceId, commandId, command.GetType().ToString()));
             return await Task.Run(() =>
             {
                 // check if there is a valid callback
                 if (ConnectionManager.HasCallback(deviceId))
                 {
-                    _log.Debug(string.Format("Found a valid callback for : {0} - {1}", deviceId, command.GetType().ToString()));
+                    _log.Debug(string.Format("Found a valid callback for : {0} - {1} {2}", deviceId, commandId, command.GetType().ToString()));
                     //lock (SyncLock)
                     //{
-                    _commandQueue.Enqueue(new Tuple<Guid, IDeviceCommand>(deviceId, command));
+                    _commandQueue.Enqueue(new Tuple<Guid, Guid, IDeviceCommand>(deviceId, commandId, command));
                     //}
                     return true;
                 }
@@ -81,11 +81,11 @@ namespace Blob.Managers.Command
             try
             {
                 List<Task> tasks = new List<Task>();
-                Tuple<Guid, IDeviceCommand> cmd;
+                Tuple<Guid, Guid, IDeviceCommand> cmd;
                 while (_commandQueue.TryDequeue(out cmd))
                 {
                     processedCount++;
-                    Tuple<Guid, IDeviceCommand> cmdCopy = new Tuple<Guid, IDeviceCommand>(cmd.Item1, cmd.Item2);
+                    Tuple<Guid, Guid, IDeviceCommand> cmdCopy = new Tuple<Guid, Guid, IDeviceCommand>(cmd.Item1, cmd.Item2, cmd.Item3);
                     Task t = Task.Factory.StartNew(() => ExecuteCommand(cmdCopy));
                     tasks.Add(t);
                 }
@@ -98,29 +98,31 @@ namespace Blob.Managers.Command
             _log.Debug(string.Format("Finished Queue processing.  processed {0} commands", processedCount));
         }
 
-        private void ExecuteCommand(Tuple<Guid, IDeviceCommand> cmd)
+        private bool ExecuteCommand(Tuple<Guid, Guid, IDeviceCommand> cmd)
         {
             try
             {
                 var callback = ConnectionManager.GetCallback(cmd.Item1);
-                _log.Debug("executing " + cmd.Item2 + " on " + cmd.Item1);
-                callback.ExecuteCommand(cmd.Item2);
+                _log.Debug(string.Format("Executing {2} on {0} with id {1}", cmd.Item1, cmd.Item2, cmd.Item3));
+                callback.ExecuteCommand(cmd.Item2, cmd.Item3);
+                return true;
             }
             catch (CommunicationObjectAbortedException e)
             {
-                _log.Error(string.Format("Error executing command {1} on {0}: the callback was aborted.", cmd.Item1, cmd.Item2), e);
+                _log.Error(string.Format("Error executing command {2} on {0} with id {1}: the callback was aborted.", cmd.Item1, cmd.Item2, cmd.Item3), e);
                 ConnectionManager.RemoveCallback(cmd.Item1);
             }
             catch (CommunicationObjectFaultedException e)
             {
-                _log.Error(string.Format("Error executing command {1} on {0}: the callback was faulted.", cmd.Item1, cmd.Item2), e);
+                _log.Error(string.Format("Error executing command {2} on {0} with id {1}: the callback was faulted.", cmd.Item1, cmd.Item2, cmd.Item3), e);
                 ConnectionManager.RemoveCallback(cmd.Item1);
             }
             catch (Exception e)
             {
-                _log.Error(string.Format("Error executing command on {0}: {1}", cmd.Item1, cmd.Item2), e);
+                _log.Error(string.Format("Error executing command {2} on {0} with id {1}.", cmd.Item1, cmd.Item2, cmd.Item3), e);
                 ConnectionManager.RemoveCallback(cmd.Item1);
             }
+            return false;
         }
 
         private void ProcessQueueThreadStart()

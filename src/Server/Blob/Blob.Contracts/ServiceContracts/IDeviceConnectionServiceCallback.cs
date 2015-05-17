@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 
 namespace Blob.Contracts.ServiceContracts
 {
@@ -16,6 +17,6 @@ namespace Blob.Contracts.ServiceContracts
         void OnReceivedPing(string message);
 
         [OperationContract(IsOneWay = true)]
-        void ExecuteCommand(dynamic command);
+        void ExecuteCommand(Guid commandId, dynamic command);
     }
 }

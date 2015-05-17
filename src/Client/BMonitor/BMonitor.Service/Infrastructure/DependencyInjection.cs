@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using Blob.Contracts.Commands;
 using Blob.Contracts.ServiceContracts;
 using Blob.Proxies;
+using BMonitor.Common.Interfaces;
 using BMonitor.Handlers.Custom;
 using BMonitor.Handlers;
+using BMonitor.Monitors;
 using BMonitor.Service.Connection;
 using BMonitor.Service.Extensions;
 using log4net;
@@ -42,6 +45,13 @@ namespace BMonitor.Service.Infrastructure
             Bind<DeviceStatusClient>().ToSelf()
                 .WithConstructorArgument("endpointName", "DeviceStatusService");
 
+
+            // load monitors
+            var foundMonitors = typeof(BaseMonitor).Assembly.GetExportedTypes().Where(type => type.IsAssignableFrom(typeof(IMonitor)));
+            foreach (var monitor in foundMonitors)
+            {
+                Bind(monitor).ToSelf();
+            }
 
             // Command handlers
             Type commandHandlerType = typeof (IDeviceCommandHandler<>);

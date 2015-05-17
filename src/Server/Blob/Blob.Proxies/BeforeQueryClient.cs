@@ -10,6 +10,19 @@ namespace Blob.Proxies
     {
         public BeforeQueryClient(string endpointName, string username, string password) : base(endpointName, username, password) { }
 
+        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageSize, int pageNum)
+        {
+            try
+            {
+                return await Channel.GetDashDevicesLargeVmAsync(customerId, pageSize, pageNum).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
         public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
         {
             try
@@ -36,7 +49,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
+        public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)//, int devicePageSize, int devicePageNum, int userPageSize, int userPageNum)
         {
             try
             {

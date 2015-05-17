@@ -7,7 +7,9 @@ using Blob.Proxies;
 using BMonitor.Monitors;
 using BMonitor.Service.Configuration;
 using BMonitor.Service.Connection;
-using BMonitor.Service.Quartz;
+using BMonitor.Service.Helpers;
+using BMonitor.Service.Monitor;
+using BMonitor.Service.Monitor.Quartz;
 using log4net;
 using Ninject;
 
@@ -16,11 +18,11 @@ namespace BMonitor.Service
     // http://adrianhesketh.com/2015/03/17/wcf-client-proxy-creation-performance-with-ninject/
     public class MonitorManager : IDisposable
     {
-        public event EventHandler ConfigChanged; 
+        //public event EventHandler ConfigChanged; 
 
         private readonly IKernel _kernel;
         private readonly ILog _log;
-        private IJobHandler _jobHandler;
+        private IMonitorScheduler _jobHandler;
         private ConnectionThread _connectionThread;
 
         private string Username;
@@ -48,15 +50,15 @@ namespace BMonitor.Service
             _log.Debug("Initializing MonitorManager");
             BMonitorConfigSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigSection;
             if (config == null)
-                throw new ArgumentNullException("config");
+                throw new ConfigurationErrorsException();
 
-            _deviceId = config.Main.DeviceId;
+            _deviceId = config.Service.DeviceId;
             if (_deviceId == Guid.Empty)
             {
                 _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
                 _isRegistered = false;
-                Username = config.Main.Username;
-                Password = config.Main.Password;
+                Username = config.Service.Username;
+                Password = config.Service.Password;
             }
             else
             {
@@ -65,21 +67,21 @@ namespace BMonitor.Service
                 Username = _deviceId.ToString();
                 Password = _deviceId.ToString();
             }
-            _enableCommandConnection = config.Main.EnableCommandConnection;
-            _enablePerformanceMonitoring = config.Main.EnablePerformanceMonitoring;
-            _enableStatusMonitoring = config.Main.EnableStatusMonitoring;
+            _enableCommandConnection = config.Service.EnableCommandConnection;
+            _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
+            _enableStatusMonitoring = config.Service.EnableStatusMonitoring;
         }
 
-        void UpdateConfigSetting(string key, string val)
-        {
-            //var mySection = (BMonitorConfigurationSection)ConfigurationManager.GetSection("BMonitor");
+        //void UpdateConfigSetting(string key, string val)
+        //{
+        //    //var mySection = (BMonitorConfigurationSection)ConfigurationManager.GetSection("BMonitor");
             
-            //mySection[key].Value = val;
-            //mySection.SectionInformation.ForceSave = true; //
-            //Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None); 
-            //config.Save(ConfigurationSaveMode.Full);
-            ////ConfigurationManager.RefreshSection("appSettings");
-        }
+        //    //mySection[key].Value = val;
+        //    //mySection.SectionInformation.ForceSave = true; //
+        //    //Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None); 
+        //    //config.Save(ConfigurationSaveMode.Full);
+        //    ////ConfigurationManager.RefreshSection("appSettings");
+        //}
 
         public void MonitorTick()
         {
@@ -181,7 +183,7 @@ namespace BMonitor.Service
 
             if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
             {
-                _jobHandler = new BasicJobHandler(_kernel);
+                _jobHandler = new QuartzMonitorScheduler(_kernel, new BMonitorStatusHelper(_kernel, _deviceId, _enablePerformanceMonitoring, _enableStatusMonitoring));// new BasicJobHandler(_kernel);
                 _jobHandler.LoadConfig();
                 _jobHandler.Start();
             }

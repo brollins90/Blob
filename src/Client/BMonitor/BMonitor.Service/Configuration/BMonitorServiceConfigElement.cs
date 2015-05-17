@@ -3,9 +3,9 @@ using System.Configuration;
 
 namespace BMonitor.Service.Configuration
 {
-    public class BMonitorMainConfigElement : ConfigurationElement
+    public class BMonitorServiceConfigElement : ConfigurationElement
     {
-        private BMonitorMainConfigElement() { }
+        private BMonitorServiceConfigElement() { }
 
         [ConfigurationProperty("deviceId")]
         public Guid DeviceId

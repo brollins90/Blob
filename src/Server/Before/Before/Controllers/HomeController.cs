@@ -1,11 +1,21 @@
-﻿using System.Web.Mvc;
+﻿using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Before.Filters;
 using Before.Infrastructure.Extensions;
+using Blob.Contracts.Models.ViewModels;
+using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        public HomeController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
+            : base(blobCommandManager, blobQueryManager) { }
+
+    
         // GET: /home/index/
         [AllowAnonymous]
         public ActionResult Index()

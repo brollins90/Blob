@@ -56,7 +56,7 @@ namespace Before.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var viewModel = await BlobQueryManager.GetCustomerSingleVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetCustomerUpdateVmAsync(id.Value).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();

@@ -6,6 +6,6 @@ namespace Blob.Managers.Command
 {
     public interface ICommandQueueManager : IDisposable
     {
-        Task<bool> QueueCommandAsync(Guid deviceId, IDeviceCommand command);
+        Task<bool> QueueCommandAsync(Guid deviceId, Guid commandId, IDeviceCommand command);
     }
 }

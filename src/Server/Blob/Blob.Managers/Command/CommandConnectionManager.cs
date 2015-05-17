@@ -42,27 +42,27 @@ namespace Blob.Managers.Command
             ThrowIfDisposed();
             bool added = false;
 
-            //try
-            //{
-                lock (SyncLock)
+            lock (SyncLock)
+            {
+                if (!_callbacks.ContainsKey(deviceId))
                 {
-                    if (!_callbacks.ContainsKey(deviceId))
+                    _callbacks.Add(deviceId, callback);
+                    callback.OnConnect(string.Format("{0} connected successfully.", deviceId));
+                    added = true;
+                }
+                else
+                {
+                    // see if the existing one is active
+                    if (((ICommunicationObject)_callbacks[deviceId]).State != CommunicationState.Opened)
                     {
-                        _callbacks.Add(deviceId, callback);
-                        callback.OnConnect(string.Format("{0} connected successfully.", deviceId));
+                        _callbacks[deviceId] = callback;
+                        callback.OnConnect(string.Format("{0} connected successfully after removing faulted callback", deviceId));
                         added = true;
                     }
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    _log.Error("Error getting callback.", e);
-            //    throw;
-            //}
+            }
             if (!added)
             {
-                //_callbacks[deviceId] = callback;
-                //callback.OnConnect(string.Format("{0} connected successfully.", deviceId));
                 _log.Error(string.Format("Failed to store callback for device {0}.  It was already connected.", deviceId));
                 throw new InvalidOperationException("A callback has already been registered for this device.");
             }
@@ -81,11 +81,11 @@ namespace Blob.Managers.Command
             //{
             //    lock (SyncLock)
             //    {
-                    if (_callbacks.ContainsKey(deviceId))
-                    {
-                        return _callbacks[deviceId];
-                    }
-                //}
+            if (_callbacks.ContainsKey(deviceId))
+            {
+                return _callbacks[deviceId];
+            }
+            //}
             //}
             //catch (Exception e)
             //{
@@ -107,10 +107,10 @@ namespace Blob.Managers.Command
             bool contains = false;
             //try
             //{
-                lock (SyncLock)
-                {
-                    contains = _callbacks.ContainsKey(deviceId);
-                }
+            lock (SyncLock)
+            {
+                contains = _callbacks.ContainsKey(deviceId);
+            }
             //}
             //catch (Exception e)
             //{
@@ -139,9 +139,9 @@ namespace Blob.Managers.Command
                     {
                         var callback = _callbacks[deviceId];
                         _callbacks.Remove(deviceId);
-                        if (((ICommunicationObject) callback).State == CommunicationState.Opened)
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
                         {
-                            ((ICommunicationObject) callback).Close();
+                            ((ICommunicationObject)callback).Close();
                         }
                         removed = true;
                     }

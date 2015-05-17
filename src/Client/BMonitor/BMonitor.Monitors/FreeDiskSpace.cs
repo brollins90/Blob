@@ -8,13 +8,19 @@ namespace BMonitor.Monitors
 {
     public class FreeDiskSpace : BaseMonitor
     {
-        private readonly string _driveLetter;
-        private readonly string _driveDescription;
+        public string DriveLetter { get; set; }
+        public string DriveDescription { get; set; }
+
+        public FreeDiskSpace()
+        {
+            DriveLetter = "C";
+            DriveDescription = "OS-default";
+        }
 
         public FreeDiskSpace(string driveLetter, string driveDescription)
         {
-            _driveLetter = driveLetter;
-            _driveDescription = driveDescription;
+            DriveLetter = driveLetter;
+            DriveDescription = driveDescription;
         }
 
         protected override string MonitorName { get { return "FreeDiskSpace"; } }
@@ -23,7 +29,7 @@ namespace BMonitor.Monitors
 
         public override ResultData Execute(bool collectPerfData = false)
         {
-            string driveLetter = string.Format("{0}:", _driveLetter.ToUpper());
+            string driveLetter = string.Format("{0}:", DriveLetter.ToUpper());
             string driveName;
             string driveLabel;
             long totalFreeSpace;
@@ -50,7 +56,7 @@ namespace BMonitor.Monitors
                     currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) (<{6}%) : CRITICAL", 
                         driveName,
                         driveLabel,
-                        _driveDescription,
+                        DriveDescription,
                         freePercent,
                         totalFreeSpace.BytesToGb(),
                         totalSize.BytesToGb(),
@@ -68,7 +74,7 @@ namespace BMonitor.Monitors
                     currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) (<{6}%) : WARNING", 
                         driveName,
                         driveLabel,
-                        _driveDescription,
+                        DriveDescription,
                         freePercent,
                         totalFreeSpace.BytesToGb(),
                         totalSize.BytesToGb(),
@@ -101,7 +107,7 @@ namespace BMonitor.Monitors
                 PerformanceData perf = new PerformanceData
                                        {
                                            Critical = (totalSize - crit).BytesToGb().ToString(),
-                                           Label = _driveLetter,
+                                           Label = DriveLetter,
                                            Max = totalSize.BytesToGb().ToString(), // the largest a %value can be (not required for %)
                                            Min = "0", // the smallest a %value can be (not required for %)
                                            UnitOfMeasure = "GB",

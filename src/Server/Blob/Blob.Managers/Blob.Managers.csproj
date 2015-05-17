@@ -33,6 +33,10 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -40,6 +44,7 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
@@ -50,6 +55,9 @@
     <Compile Include="Command\CommandQueueManager.cs" />
     <Compile Include="Command\ICommandQueueManager.cs" />
     <Compile Include="Command\ICommandConnectionManager.cs" />
+    <Compile Include="Extensions\SearchExtensions.cs" />
+    <Compile Include="Search\PagedListResult.cs" />
+    <Compile Include="Search\SearchQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Blob\BlobCommandManager.cs" />
     <Compile Include="Extensions\Parsing.cs" />

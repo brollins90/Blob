@@ -37,9 +37,7 @@
     <Compile Include="BaseMonitor.cs" />
     <Compile Include="WindowsUpdateStatus.cs" />
     <Compile Include="PerfMonMonitor.cs" />
-    <Compile Include="FreeDiskSpace - Copy.cs" />
     <Compile Include="PerfmonCounterManager.cs" />
-    <Compile Include="TestMon.cs" />
     <Compile Include="FreeDiskSpace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 using Blob.Data;
+using EntityFramework.Extensions;
 using log4net;
 
 namespace Blob.Managers.Blob
 {
+    // http://www.agile-code.com/blog/entity-framework-code-first-filtering-and-sorting-with-paging-1/
+
+
     public class BlobQueryManager : IBlobQueryManager
     {
         private readonly ILog _log;
@@ -21,6 +25,43 @@ namespace Blob.Managers.Blob
             Context = context;
         }
         public BlobDbContext Context { get; private set; }
+
+
+        // Dash
+
+
+        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageSize = 10, int pageNum = 1)
+        {
+            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            //var cust = Context.Customers.Where(x => x.Id.Equals(customerId));
+            var count = Context.Devices.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
+            var devices = Context.Devices
+                .Where(x => x.CustomerId.Equals(customerId))
+                .OrderBy(x => x.AlertLevel).ThenBy(x => x.DeviceName)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count/pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new DashDevicesLargeVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum,
+                PageSize = pageSize,
+                HasNext = pCount > pNum,
+                HasPrevious = pNum > 1,
+                Items = devices.Select(x => new DashDevicesLargeListItemVm
+                                           {
+                                               AvailableCommands = availableCommands,
+                                               DeviceId = x.Id,
+                                               DeviceName = x.DeviceName,
+                                               Recomendations = new string[]{string.Empty},
+                                               Status = x.AlertLevel
+                                           }),
+            }).ConfigureAwait(false);
+        }
 
 
         // Customer
@@ -83,17 +124,16 @@ namespace Blob.Managers.Blob
                                           CreateDate = cust.CreateDate,
                                           CustomerId = cust.CustomerId,
                                           Name = cust.Name,
-                                          Devices = (from d in cust.Devices
-                                                     select new DeviceListItemVm
-                                                            {
-                                                                DeviceName = d.DeviceName,
-                                                                DeviceType = d.DeviceType,
-                                                                DeviceId = d.DeviceId,
-                                                                Enabled = d.Enabled,
-                                                                LastActivityDate = d.LastActivityDate,
-                                                                Status = d.Status,
-                                                                AvailableCommands = availableCommands
-                                                            }),
+                                          Devices = (cust.Devices.Select(d => new DeviceListItemVm
+                                                                              {
+                                                                                  DeviceName = d.DeviceName,
+                                                                                  DeviceType = d.DeviceType,
+                                                                                  DeviceId = d.DeviceId,
+                                                                                  Enabled = d.Enabled,
+                                                                                  LastActivityDate = d.LastActivityDate,
+                                                                                  Status = d.Status,
+                                                                                  AvailableCommands = availableCommands
+                                                                              })),
                                           Users = (from u in cust.Users
                                                    select new UserListItemVm
                                                           {

@@ -41,6 +41,7 @@ namespace Blob.Managers.Blob
         {
             Customer customer = Context.Customers.Find(dto.CustomerId);
             customer.Enabled = false;
+            // todo: disable all devices and users for customer ?
 
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -73,8 +74,6 @@ namespace Blob.Managers.Blob
             var cmdInstance = Activator.CreateInstance(commandType);
             PropertyInfo[] properties = commandType.GetProperties();
 
-            // temp name is CommandData
-            //(cmdInstance as CmdExecuteCommand).CommandString = dto.CommandParameters.First().Value;
             foreach (var property in properties)
             {
                 if (dto.CommandParameters.ContainsKey(property.Name))
@@ -83,7 +82,15 @@ namespace Blob.Managers.Blob
                 }
             }
 
-            await QueueManager.QueueCommandAsync(dto.DeviceId, (cmdInstance as IDeviceCommand)).ConfigureAwait(false);
+            // todo: add to issue table
+
+            Guid commandId = Guid.NewGuid();
+
+            bool queued = await QueueManager.QueueCommandAsync(dto.DeviceId, commandId, (cmdInstance as IDeviceCommand)).ConfigureAwait(false);
+            if (!queued)
+            {
+                // todo: remove from table, or mark as not queued
+            }
         }
 
         // Device
@@ -91,6 +98,7 @@ namespace Blob.Managers.Blob
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = false;
+            //device.LastActivityDate = DateTime.Now;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -101,6 +109,7 @@ namespace Blob.Managers.Blob
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = true;
+            //device.LastActivityDate = DateTime.Now;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -154,6 +163,7 @@ namespace Blob.Managers.Blob
             Device device = Context.Devices.Find(dto.DeviceId);
             device.DeviceName = dto.Name;
             device.DeviceTypeId = dto.DeviceTypeId;
+            device.LastActivityDate = DateTime.Now;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -166,6 +176,8 @@ namespace Blob.Managers.Blob
         {
             _log.Debug("Storing status perf data " + statusPerformanceData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
+            device.LastActivityDate = DateTime.Now;
+            Context.Entry(device).State = EntityState.Modified;
 
             if (device != null)
             {
@@ -205,6 +217,8 @@ namespace Blob.Managers.Blob
         {
             _log.Debug("Storing status data " + statusData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
+            device.LastActivityDate = DateTime.Now;
+            Context.Entry(device).State = EntityState.Modified;
 
             if (device != null)
             {
@@ -242,6 +256,7 @@ namespace Blob.Managers.Blob
         {
             User user = Context.Users.Find(dto.UserId);
             user.Enabled = false;
+            //user.LastActivityDate = DateTime.Now;
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -259,11 +274,13 @@ namespace Blob.Managers.Blob
         public async Task UpdateUserAsync(UpdateUserDto dto)
         {
             User user = Context.Users.Find(dto.UserId);
+            // todo: can username change?
             //user.UserName = dto.UserName;
             if (!string.IsNullOrEmpty(dto.Email) && !user.Email.Equals(dto.Email))
             {
                 user.Email = dto.Email;
                 user.EmailConfirmed = false;
+                user.LastActivityDate = DateTime.Now;
             }
 
             Context.Entry(user).State = EntityState.Modified;
