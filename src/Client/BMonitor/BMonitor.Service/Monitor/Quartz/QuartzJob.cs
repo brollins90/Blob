@@ -13,9 +13,9 @@ namespace BMonitor.Service.Monitor.Quartz
         private readonly ILog _log;
         private readonly IMonitor _internalMonitor;
 
-        public QuartzJob(IMonitor monitor, ILog log)
+        public QuartzJob(IMonitor monitor)
         {
-            _log = log;
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _internalMonitor = monitor;
         }
         

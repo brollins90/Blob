@@ -41,7 +41,7 @@ namespace BMonitor.Service.Monitor
         public bool LoadConfig()
         {
             _log.Debug("LoadConfig");
-            BMonitorConfigSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigSection;
+            BMonitorSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorSection;
             if (config == null)
                 throw new ConfigurationErrorsException();
 

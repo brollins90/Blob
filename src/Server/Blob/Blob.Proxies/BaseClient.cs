@@ -4,6 +4,9 @@ using System.ServiceModel.Security;
 
 namespace Blob.Proxies
 {
+
+    // https://devzone.channeladam.com/articles/2014/09/how-to-easily-call-wcf-service-properly/
+
     public class BaseClient<TChannel> : ClientBase<TChannel>
         where TChannel : class
     {

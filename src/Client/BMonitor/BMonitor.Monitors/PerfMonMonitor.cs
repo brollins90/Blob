@@ -19,26 +19,24 @@ namespace BMonitor.Monitors
                 return Manager.GetCounter(CategoryName, CounterName, InstanceName);
             }
         }
-
-        private string _counterKey ;
-
+        
         public string CategoryName { get; set; }
         public string CounterName { get; set; }
         public string InstanceName { get; set; }
+        private string CounterKey { get { return string.Format("{0}_{1}_{2}", CategoryName, CounterName, InstanceName); } }
 
         public PerfMonMonitor()
         {
             CategoryName = "Memory";
             CounterName = "Available Bytes";
             InstanceName = string.Empty;
-            _counterKey = string.Format("{0}_{1}_{2}", CategoryName, CounterName, InstanceName);
+
+            MonitorThreshold = new Threshold
+                (
+                    critical: new Range(90, double.PositiveInfinity, false),
+                    warning: new Range(80d, double.PositiveInfinity, false)
+                );
         }
-        //public PerfMonMonitor(params string[] strings)
-        //{
-        //    _counterKey = string.Join("_", strings);
-        //    _manager = PerfmonCounterManager.Instance;
-        //    Counter = _manager.GetCounter(strings);
-        //}
 
         protected override string MonitorName { get { return "PerfMonMonitor"; } }
         protected override string MonitorDescription { get { return "PerfMonMonitor Description"; } }
@@ -56,14 +54,14 @@ namespace BMonitor.Monitors
             {
                 case AlertLevel.CRITICAL:
                     currentValueString = string.Format("{0}: {1} ({2} < {3})",
-                        _counterKey,
+                        CounterKey,
                         "CRITICAL",
                         executionValue,
                         MonitorThreshold.Critical.Limit);
                     break;
                 case AlertLevel.OK:
                     currentValueString = string.Format("{0}: {1} ({2})",
-                        _counterKey,
+                        CounterKey,
                         "OK",
                         executionValue);
                     break;
@@ -72,7 +70,7 @@ namespace BMonitor.Monitors
                     break;
                 case AlertLevel.WARNING:
                     currentValueString = string.Format("{0}: {1} ({2} < {3})",
-                        _counterKey,
+                        CounterKey,
                         "WARNING",
                         executionValue,
                         MonitorThreshold.Warning.Limit);
@@ -104,7 +102,7 @@ namespace BMonitor.Monitors
                 PerformanceData perf = new PerformanceData
                                        {
                                            Critical = MonitorThreshold.Critical.Limit.ToString(),
-                                           Label = _counterKey,
+                                           Label = CounterKey,
                                            Max = "0",//.BytesToGb().ToString(), // the largest a %value can be (not required for %)
                                            Min = "0", // the smallest a %value can be (not required for %)
                                            UnitOfMeasure = "_",

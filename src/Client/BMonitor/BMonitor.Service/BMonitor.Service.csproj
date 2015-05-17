@@ -87,9 +87,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\JobElement.cs" />
+    <Compile Include="Configuration\ServiceElement.cs" />
     <Compile Include="Helpers\BMonitorStatusHelper.cs" />
-    <Compile Include="Configuration\BMonitorServiceConfigElement.cs" />
-    <Compile Include="Configuration\BMonitorConfigSection.cs" />
+    <Compile Include="Configuration\JobsCollection.cs" />
+    <Compile Include="Configuration\BMonitorSection.cs" />
     <Compile Include="Connection\ConnectionThread.cs" />
     <Compile Include="Infrastructure\DependencyInjection.cs" />
     <Compile Include="Connection\CommandServiceCallbackHandler.cs" />

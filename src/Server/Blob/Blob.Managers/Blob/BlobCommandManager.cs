@@ -176,6 +176,7 @@ namespace Blob.Managers.Blob
         {
             _log.Debug("Storing status perf data " + statusPerformanceData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
+            
             device.LastActivityDate = DateTime.Now;
             Context.Entry(device).State = EntityState.Modified;
 
@@ -217,6 +218,8 @@ namespace Blob.Managers.Blob
         {
             _log.Debug("Storing status data " + statusData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
+
+            device.AlertLevel = statusData.AlertLevel;
             device.LastActivityDate = DateTime.Now;
             Context.Entry(device).State = EntityState.Modified;
 

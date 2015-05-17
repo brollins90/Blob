@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using BMonitor.Common.Interfaces;
 using log4net;
 using Ninject;
 using Ninject.Parameters;
@@ -27,6 +28,7 @@ namespace BMonitor.Service.Monitor.Quartz
             {
                 string monitorTypeString = bundle.JobDetail.JobDataMap.GetString("MonitorType");
                 _log.Debug(string.Format("MonitorType {0}", monitorTypeString));
+
                 Type monitorType = Type.GetType(monitorTypeString, throwOnError: true);
                 var monitorInstance = Activator.CreateInstance(monitorType);
                 PropertyInfo[] properties = monitorType.GetProperties();
@@ -39,7 +41,7 @@ namespace BMonitor.Service.Monitor.Quartz
                     }
                 }
 
-                QuartzJob wrapperJob = this._kernel.Get<QuartzJob>(new ConstructorArgument("monitor", monitorInstance));
+                QuartzJob wrapperJob = new QuartzJob(monitorInstance as IMonitor);
 
                 _log.Debug("Returning");
                 return wrapperJob;

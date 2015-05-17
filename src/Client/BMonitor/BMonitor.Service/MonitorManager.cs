@@ -48,7 +48,7 @@ namespace BMonitor.Service
         public void Initialize()
         {
             _log.Debug("Initializing MonitorManager");
-            BMonitorConfigSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigSection;
+            BMonitorSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorSection;
             if (config == null)
                 throw new ConfigurationErrorsException();
 
