@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Blob.Core.Identity;
+using Blob.Identity;
 
 namespace Blob.Core.Domain
 {

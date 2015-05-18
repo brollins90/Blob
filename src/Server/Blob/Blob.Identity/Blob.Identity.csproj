@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,6 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericGroup.cs" />
+    <Compile Include="GenericGroupRole.cs" />
+    <Compile Include="GenericRole.cs" />
+    <Compile Include="GenericUser.cs" />
+    <Compile Include="GenericUserClaim.cs" />
+    <Compile Include="GenericUserGroup.cs" />
+    <Compile Include="GenericUserLogin.cs" />
+    <Compile Include="GenericUserRole.cs" />
     <Compile Include="IGroup.cs" />
     <Compile Include="IGroupStore.cs" />
     <Compile Include="IQueryableGroupStore.cs" />

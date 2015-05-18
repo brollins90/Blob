@@ -1,5 +1,5 @@
 ﻿
-namespace Blob.Core.Identity
+namespace Blob.Identity
 {
     public class GenericUserGroup : GenericUserGroup<string> { }
 

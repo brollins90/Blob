@@ -22,3 +22,37 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*.table > tbody > tr > .status-ok,
+.table > tbody > tr > .status-ok > td
+.table > tbody > tr > .status-ok > th*/
+/*tr.status-ok {
+  background-color: green !important;
+}*/
+
+/*.table > tbody > tr > .status-warning,
+.table > tbody > tr > .status-warning > td
+.table > tbody > tr > .status-warning > th*/
+/*tr.status-warning {
+  background-color: yellow !important;
+}*/
+
+/*.table > tbody > tr > .status-critical,
+.table > tbody > tr > .status-critical > td
+.table > tbody > tr > .status-critical > th*/
+/*tr.status-critical {
+  background-color: red !important;
+}*/
+
+/*.table > tbody > tr > .status-unknown,
+.table > tbody > tr > .status-unknown > td
+.table > tbody > tr > .status-unknown > th*/
+/*tr.status-unknown {
+  background-color: orange !important;
+}*/
+
+/*.table-striped > tbody > tr > .danger,
+.table-striped > tbody > .danger > td,
+.table-striped > tbody > .danger > th {
+  background-color: #f2dede !important;
+}*/

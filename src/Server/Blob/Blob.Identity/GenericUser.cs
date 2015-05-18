@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
+
 // ReSharper disable DoNotCallOverridableMethodsInConstructor
 
-namespace Blob.Core.Identity
+namespace Blob.Identity
 {
     public class GenericUser : GenericUser<string, GenericUserLogin, GenericUserRole, GenericUserClaim>, IUser
     {

@@ -32,16 +32,16 @@ namespace Before.Infrastructure.Extensions
             switch (alertLevel)
             {
                 case 0:
-                    alertLevelClass = "status-ok";
+                    alertLevelClass = "success";//"status-ok";
                     break;
                 case 1:
-                    alertLevelClass = "status-warning";
+                    alertLevelClass = "warning";//"status-warning";
                     break;
                 case 2:
-                    alertLevelClass = "status-critical";
+                    alertLevelClass = "danger";//"status-critical";
                     break;
                 default:
-                    alertLevelClass = "status-unknown";
+                    alertLevelClass = "info";//"status-unknown";
                     break;
             }
 

@@ -3,7 +3,6 @@ using System.Data.Entity;
 using System.Data.Entity.SqlServer.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
-using Blob.Core.Identity;
 using Blob.Identity;
 
 namespace Blob.Data.Identity

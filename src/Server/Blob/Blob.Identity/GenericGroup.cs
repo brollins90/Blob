@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Blob.Identity;
+
 // ReSharper disable DoNotCallOverridableMethodsInConstructor
 
-namespace Blob.Core.Identity
+namespace Blob.Identity
 {
     public class GenericGroup : GenericGroup<string, GenericUserGroup, GenericGroupRole>
     {

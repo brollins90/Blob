@@ -49,14 +49,6 @@
     <Compile Include="Domain\Status.cs" />
     <Compile Include="Domain\StatusPerf.cs" />
     <Compile Include="Domain\User.cs" />
-    <Compile Include="Identity\GenericGroup.cs" />
-    <Compile Include="Identity\GenericRole.cs" />
-    <Compile Include="Identity\GenericUser.cs" />
-    <Compile Include="Identity\GenericUserClaim.cs" />
-    <Compile Include="Identity\GenericGroupRole.cs" />
-    <Compile Include="Identity\GenericUserLogin.cs" />
-    <Compile Include="Identity\GenericUserGroup.cs" />
-    <Compile Include="Identity\GenericUserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

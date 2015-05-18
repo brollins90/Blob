@@ -1,5 +1,5 @@
-﻿using Blob.Core.Identity;
-using System;
+﻿using System;
+using Blob.Identity;
 
 namespace Blob.Core.Domain
 {

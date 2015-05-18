@@ -4,7 +4,7 @@ using System.Data.Entity.SqlServer.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
 using Blob.Core.Domain;
-using Blob.Core.Identity;
+using Blob.Identity;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity

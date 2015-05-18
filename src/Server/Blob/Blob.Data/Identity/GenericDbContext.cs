@@ -8,7 +8,7 @@ using System.Data.Entity.Infrastructure.Annotations;
 using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
-using Blob.Core.Identity;
+using Blob.Identity;
 
 namespace Blob.Data.Identity
 {
