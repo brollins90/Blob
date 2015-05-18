@@ -222,42 +222,42 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task AddClaimAsync(string userId, Claim claim)
-        {
-            try
-            {
-                await Channel.AddClaimAsync(userId, claim).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task AddClaimAsync(string userId, Claim claim)
+        //{
+        //    try
+        //    {
+        //        await Channel.AddClaimAsync(userId, claim).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task<IList<Claim>> GetClaimsAsync(string userId)
-        {
-            try
-            {
-                return await Channel.GetClaimsAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return null;
-        }
+        //public async Task<IList<Claim>> GetClaimsAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetClaimsAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task RemoveClaimAsync(string userId, Claim claim)
-        {
-            try
-            {
-                await Channel.RemoveClaimAsync(userId, claim).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task RemoveClaimAsync(string userId, Claim claim)
+        //{
+        //    try
+        //    {
+        //        await Channel.RemoveClaimAsync(userId, claim).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
         public async Task<UserDto> FindByEmailAsync(string email)
         {
@@ -322,143 +322,143 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task<int> GetAccessFailedCountAsync(string userId)
-        {
-            try
-            {
-                return await Channel.GetAccessFailedCountAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return default(int);
-        }
+        //public async Task<int> GetAccessFailedCountAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetAccessFailedCountAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return default(int);
+        //}
 
-        public async Task<bool> GetLockoutEnabledAsync(string userId)
-        {
-            try
-            {
-                return await Channel.GetLockoutEnabledAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return default(bool);
-        }
+        //public async Task<bool> GetLockoutEnabledAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetLockoutEnabledAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return default(bool);
+        //}
 
-        public async Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
-        {
-            try
-            {
-                return await Channel.GetLockoutEndDateAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return default(DateTimeOffset);
-        }
+        //public async Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetLockoutEndDateAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return default(DateTimeOffset);
+        //}
 
-        public async Task<int> IncrementAccessFailedCountAsync(string userId)
-        {
-            try
-            {
-                return await Channel.IncrementAccessFailedCountAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return default(int);
-        }
+        //public async Task<int> IncrementAccessFailedCountAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.IncrementAccessFailedCountAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return default(int);
+        //}
 
-        public async Task ResetAccessFailedCountAsync(string userId)
-        {
-            try
-            {
-                await Channel.ResetAccessFailedCountAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task ResetAccessFailedCountAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        await Channel.ResetAccessFailedCountAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task SetLockoutEnabledAsync(string userId, bool enabled)
-        {
-            try
-            {
-                await Channel.SetLockoutEnabledAsync(userId, enabled).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task SetLockoutEnabledAsync(string userId, bool enabled)
+        //{
+        //    try
+        //    {
+        //        await Channel.SetLockoutEnabledAsync(userId, enabled).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
-        {
-            try
-            {
-                await Channel.SetLockoutEndDateAsync(userId, lockoutEnd).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
+        //{
+        //    try
+        //    {
+        //        await Channel.SetLockoutEndDateAsync(userId, lockoutEnd).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task AddLoginAsync(string userId, UserLoginInfoDto login)
-        {
-            try
-            {
-                await Channel.AddLoginAsync(userId, login).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task AddLoginAsync(string userId, UserLoginInfoDto login)
+        //{
+        //    try
+        //    {
+        //        await Channel.AddLoginAsync(userId, login).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
-        public async Task<UserDto> FindAsync(UserLoginInfoDto login)
-        {
-            try
-            {
-                return await Channel.FindAsync(login).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return null;
-        }
+        //public async Task<UserDto> FindAsync(UserLoginInfoDto login)
+        //{
+        //    try
+        //    {
+        //        return await Channel.FindAsync(login).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
-        {
-            try
-            {
-                return await Channel.GetLoginsAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return null;
-        }
+        //public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetLoginsAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task RemoveLoginAsync(string userId, UserLoginInfoDto login)
-        {
-            try
-            {
-                await Channel.RemoveLoginAsync(userId, login).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task RemoveLoginAsync(string userId, UserLoginInfoDto login)
+        //{
+        //    try
+        //    {
+        //        await Channel.RemoveLoginAsync(userId, login).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
         public async Task<string> GetPasswordHashAsync(string userId)
         {
@@ -510,6 +510,18 @@ namespace Blob.Proxies
             }
         }
 
+        public async Task AddToRolesAsync(string userId, string[] roles)
+        {
+            try
+            {
+                await Channel.AddToRolesAsync(userId, roles).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
         public async Task<IList<string>> GetRolesAsync(string userId)
         {
             try
@@ -548,30 +560,30 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task<string> GetSecurityStampAsync(string userId)
-        {
-            try
-            {
-                return await Channel.GetSecurityStampAsync(userId).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-            return null;
-        }
+        //public async Task<string> GetSecurityStampAsync(string userId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetSecurityStampAsync(userId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
 
-        public async Task SetSecurityStampAsync(string userId, string stamp)
-        {
-            try
-            {
-                await Channel.SetSecurityStampAsync(userId, stamp).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                HandleError(ex);
-            }
-        }
+        //public async Task SetSecurityStampAsync(string userId, string stamp)
+        //{
+        //    try
+        //    {
+        //        await Channel.SetSecurityStampAsync(userId, stamp).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
 
         public async Task CreateAsync(UserDto user)
         {

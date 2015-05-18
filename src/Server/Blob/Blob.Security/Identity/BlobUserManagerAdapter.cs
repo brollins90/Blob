@@ -225,23 +225,23 @@ namespace Blob.Security.Identity
 
         #region IUserClaimStoreService
 
-        public Task AddClaimAsync(string userId, Claim claim)
-        {
-            ThrowIfDisposed();
-            return _manager.AddClaimAsync(userId.ToGuid(), claim);
-        }
+        //public Task AddClaimAsync(string userId, Claim claim)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.AddClaimAsync(userId.ToGuid(), claim);
+        //}
 
-        public Task<IList<Claim>> GetClaimsAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetClaimsAsync(userId.ToGuid());
-        }
+        //public Task<IList<Claim>> GetClaimsAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.GetClaimsAsync(userId.ToGuid());
+        //}
 
-        public Task RemoveClaimAsync(string userId, Claim claim)
-        {
-            ThrowIfDisposed();
-            return _manager.RemoveClaimAsync(userId.ToGuid(), claim);
-        }
+        //public Task RemoveClaimAsync(string userId, Claim claim)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.RemoveClaimAsync(userId.ToGuid(), claim);
+        //}
 
         #endregion
 
@@ -281,87 +281,87 @@ namespace Blob.Security.Identity
 
         #region IUserLockoutStoreService
 
-        public Task<int> IncrementAccessFailedCountAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetAccessFailedCountAsync(userId.ToGuid());
-        }
-
-        public Task<int> GetAccessFailedCountAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetAccessFailedCountAsync(userId.ToGuid());
-        }
-
-        public Task<bool> GetLockoutEnabledAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetLockoutEnabledAsync(userId.ToGuid());
-        }
-
-        public Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetLockoutEndDateAsync(userId.ToGuid());
-        }
-
-        public Task ResetAccessFailedCountAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.ResetAccessFailedCountAsync(userId.ToGuid());
-        }
-
-        public Task SetLockoutEnabledAsync(string userId, bool enabled)
-        {
-            ThrowIfDisposed();
-            return _manager.SetLockoutEnabledAsync(userId.ToGuid(), enabled);
-        }
-
-        public Task SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
-        {
-            ThrowIfDisposed();
-            return _manager.SetLockoutEndDateAsync(userId.ToGuid(), lockoutEnd);
-        }
-
-        //public Task<bool> IsLockedOutAsync(string userId)
+        //public Task<int> IncrementAccessFailedCountAsync(string userId)
         //{
         //    ThrowIfDisposed();
-        //    return _manager.IsLockedOutAsync(userId.ToGuid());
+        //    return _manager.GetAccessFailedCountAsync(userId.ToGuid());
         //}
 
-        //public Task AccessFailedAsync(string userId)
+        //public Task<int> GetAccessFailedCountAsync(string userId)
         //{
         //    ThrowIfDisposed();
-        //    return _manager.AccessFailedAsync(userId.ToGuid());
+        //    return _manager.GetAccessFailedCountAsync(userId.ToGuid());
         //}
+
+        //public Task<bool> GetLockoutEnabledAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.GetLockoutEnabledAsync(userId.ToGuid());
+        //}
+
+        //public Task<DateTimeOffset> GetLockoutEndDateAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.GetLockoutEndDateAsync(userId.ToGuid());
+        //}
+
+        //public Task ResetAccessFailedCountAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.ResetAccessFailedCountAsync(userId.ToGuid());
+        //}
+
+        //public Task SetLockoutEnabledAsync(string userId, bool enabled)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.SetLockoutEnabledAsync(userId.ToGuid(), enabled);
+        //}
+
+        //public Task SetLockoutEndDateAsync(string userId, DateTimeOffset lockoutEnd)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.SetLockoutEndDateAsync(userId.ToGuid(), lockoutEnd);
+        //}
+
+        ////public Task<bool> IsLockedOutAsync(string userId)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    return _manager.IsLockedOutAsync(userId.ToGuid());
+        ////}
+
+        ////public Task AccessFailedAsync(string userId)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    return _manager.AccessFailedAsync(userId.ToGuid());
+        ////}
 
         #endregion
 
         #region IUserLoginStoreService
 
-        public Task AddLoginAsync(string userId, UserLoginInfoDto login)
-        {
-            ThrowIfDisposed();
-            return _manager.AddLoginAsync(userId.ToGuid(), login);
-        }
+        //public Task AddLoginAsync(string userId, UserLoginInfoDto login)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.AddLoginAsync(userId.ToGuid(), login);
+        //}
 
-        public Task<UserDto> FindAsync(UserLoginInfoDto login)
-        {
-            ThrowIfDisposed();
-            return _manager.FindAsync(login);
-        }
+        //public Task<UserDto> FindAsync(UserLoginInfoDto login)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.FindAsync(login);
+        //}
 
-        public Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetLoginsAsync(userId.ToGuid());
-        }
+        //public Task<IList<UserLoginInfoDto>> GetLoginsAsync(string userId)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.GetLoginsAsync(userId.ToGuid());
+        //}
 
-        public Task RemoveLoginAsync(string userId, UserLoginInfoDto login)
-        {
-            ThrowIfDisposed();
-            return _manager.RemoveLoginAsync(userId.ToGuid(), login);
-        }
+        //public Task RemoveLoginAsync(string userId, UserLoginInfoDto login)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.RemoveLoginAsync(userId.ToGuid(), login);
+        //}
 
         #endregion
 
@@ -459,6 +459,12 @@ namespace Blob.Security.Identity
             return _manager.AddToRoleAsync(userId.ToGuid(), role);
         }
 
+        public Task AddToRolesAsync(string userId, string[] roles)
+        {
+            ThrowIfDisposed();
+            return _manager.AddToRolesAsync(userId.ToGuid(), roles);
+        }
+
         public Task<IList<string>> GetRolesAsync(string userId)
         {
             ThrowIfDisposed();
@@ -493,23 +499,23 @@ namespace Blob.Security.Identity
 
         #region IUserSecurityStampStoreService
 
-        public Task<string> GetSecurityStampAsync(string userId)
-        {
-            ThrowIfDisposed();
-            return _manager.GetSecurityStampAsync(userId.ToGuid());
-        }
-
-        public Task SetSecurityStampAsync(string userId, string stamp)
-        {
-            ThrowIfDisposed();
-            return _manager.SetSecurityStampAsync(userId.ToGuid(), stamp);
-        }
-
-        //public Task<IdentityResultDto> UpdateSecurityStampAsync(string userId)
+        //public Task<string> GetSecurityStampAsync(string userId)
         //{
         //    ThrowIfDisposed();
-        //    return _manager.UpdateSecurityStampAsync(userId.ToGuid());
+        //    return _manager.GetSecurityStampAsync(userId.ToGuid());
         //}
+
+        //public Task SetSecurityStampAsync(string userId, string stamp)
+        //{
+        //    ThrowIfDisposed();
+        //    return _manager.SetSecurityStampAsync(userId.ToGuid(), stamp);
+        //}
+
+        ////public Task<IdentityResultDto> UpdateSecurityStampAsync(string userId)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    return _manager.UpdateSecurityStampAsync(userId.ToGuid());
+        ////}
 
         #endregion
 

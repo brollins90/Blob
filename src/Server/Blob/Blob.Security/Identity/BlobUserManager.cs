@@ -19,7 +19,6 @@ namespace Blob.Security.Identity
         private readonly ILog _log;
 
         public BlobUserManager(BlobUserStore store)
-            //: base(store)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _log.Debug("Constructing BlobUserManager");
@@ -42,79 +41,8 @@ namespace Blob.Security.Identity
             ClaimsIdentityFactory = new BlobClaimsIdentityFactory();
         }
 
-        //public void Initialize(string name, NameValueCollection config)
-        //{
-        //    try
-        //    {
-        //        _log.Debug("Initializing BlobUserManager");
-
-        //        if (config == null)
-        //            throw new ArgumentNullException("config");
-
-        //        Config = config;
-
-        //        try
-        //        {
-        //            if (MachineKey.ValidationKey.Contains("AutoGenerate"))
-        //            {
-        //                throw new ProviderException("Hashed or Encrypted passwords are not supported with auto-generated keys.");
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (LogExceptions)
-        //            {
-        //                _log.Error("Failed to load the machine key.", e);
-        //            }
-        //            throw;
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _log.Error("Failed to load blob user manager.", e);
-        //        throw;
-        //    }
-        //}
-
         protected internal BlobUserStore Store { get; set; }
-        //protected internal NameValueCollection Config { get; set; }
         protected internal bool IsDisposed { get; private set; }
-        //protected internal MachineKeySection MachineKey
-        //{
-        //    get
-        //    {
-        //        if (_machineKey == null)
-        //        {
-        //            Configuration cfg = WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
-        //            _machineKey = (MachineKeySection)cfg.GetSection("system.web/machineKey");
-        //        }
-        //        return _machineKey;
-        //    }
-        //}
-        //private MachineKeySection _machineKey;
-
-
-        /// <summary>
-        /// Indicates whether to log exceptions
-        /// </summary>
-        /// <returns>true if the membership provider is configured to log exceptions; otherwise, false. The default is false.</returns>
-        //public bool LogExceptions
-        //{
-        //    get
-        //    {
-        //        if (_logExceptions.HasValue == false)
-        //        {
-        //            bool bv;
-        //            string strv = Config["LogExceptions"];
-        //            if (!string.IsNullOrEmpty(strv) && bool.TryParse(strv, out bv))
-        //                _logExceptions = bv;
-        //            else
-        //                _logExceptions = true;
-        //        }
-        //        return _logExceptions.Value;
-        //    }
-        //}
-        //private bool? _logExceptions;
 
         public IPasswordHasher PasswordHasher
         {
@@ -396,81 +324,81 @@ namespace Blob.Security.Identity
 
         #region IUserClaimStoreService
 
-        /// <summary>
-        ///     Add a user claim
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="claim"></param>
-        /// <returns></returns>
-        public async Task AddClaimAsync(Guid userId, Claim claim)
-        {
-            _log.Debug(string.Format("AddClaimAsync({0}, {1})", userId, claim));
-            ThrowIfDisposed();
-            var claimStore = GetClaimStore();
-            if (claim == null)
-            {
-                throw new ArgumentNullException("claim");
-            }
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            await claimStore.AddClaimAsync(user, claim).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
+        ///// <summary>
+        /////     Add a user claim
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="claim"></param>
+        ///// <returns></returns>
+        //public async Task AddClaimAsync(Guid userId, Claim claim)
+        //{
+        //    _log.Debug(string.Format("AddClaimAsync({0}, {1})", userId, claim));
+        //    ThrowIfDisposed();
+        //    var claimStore = GetClaimStore();
+        //    if (claim == null)
+        //    {
+        //        throw new ArgumentNullException("claim");
+        //    }
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    await claimStore.AddClaimAsync(user, claim).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
 
-        /// <summary>
-        ///     Get a users's claims
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<IList<Claim>> GetClaimsAsync(Guid userId)
-        {
-            _log.Debug(string.Format("GetClaimsAsync({0})", userId));
-            ThrowIfDisposed();
-            var claimStore = GetClaimStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return await claimStore.GetClaimsAsync(user).WithCurrentCulture();
-        }
+        ///// <summary>
+        /////     Get a users's claims
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public async Task<IList<Claim>> GetClaimsAsync(Guid userId)
+        //{
+        //    _log.Debug(string.Format("GetClaimsAsync({0})", userId));
+        //    ThrowIfDisposed();
+        //    var claimStore = GetClaimStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    return await claimStore.GetClaimsAsync(user).WithCurrentCulture();
+        //}
 
-        /// <summary>
-        ///     Remove a user claim
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="claim"></param>
-        /// <returns></returns>
-        public async Task RemoveClaimAsync(Guid userId, Claim claim)
-        {
-            _log.Debug(string.Format("RemoveClaimAsync({0}, {1})", userId, claim));
-            ThrowIfDisposed();
-            var claimStore = GetClaimStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            await claimStore.RemoveClaimAsync(user, claim).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
+        ///// <summary>
+        /////     Remove a user claim
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="claim"></param>
+        ///// <returns></returns>
+        //public async Task RemoveClaimAsync(Guid userId, Claim claim)
+        //{
+        //    _log.Debug(string.Format("RemoveClaimAsync({0}, {1})", userId, claim));
+        //    ThrowIfDisposed();
+        //    var claimStore = GetClaimStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    await claimStore.RemoveClaimAsync(user, claim).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
 
-        protected IUserClaimStore<User, Guid> GetClaimStore()
-        {
-            _log.Debug(string.Format("GetClaimStore()"));
-            var cast = Store as IUserClaimStore<User, Guid>;
-            if (cast == null)
-            {
-                throw new NotSupportedException(Resources.StoreNotIUserClaimStore);
-            }
-            return cast;
-        }
+        //protected IUserClaimStore<User, Guid> GetClaimStore()
+        //{
+        //    _log.Debug(string.Format("GetClaimStore()"));
+        //    var cast = Store as IUserClaimStore<User, Guid>;
+        //    if (cast == null)
+        //    {
+        //        throw new NotSupportedException(Resources.StoreNotIUserClaimStore);
+        //    }
+        //    return cast;
+        //}
 
         #endregion
 
@@ -590,314 +518,314 @@ namespace Blob.Security.Identity
 
         #region IUserLockoutStoreService
 
-        /// <summary>
-        ///     Returns the number of failed access attempts for the user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<int> GetAccessFailedCountAsync(Guid userId)
-        {
-            _log.Debug(string.Format("GetAccessFailedCountAsync({0})", userId));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return await store.GetAccessFailedCountAsync(user).WithCurrentCulture();
-        }
-
-        /// <summary>
-        ///     Returns whether lockout is enabled for the user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<bool> GetLockoutEnabledAsync(Guid userId)
-        {
-            _log.Debug(string.Format("GetLockoutEnabledAsync({0})", userId));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return await store.GetLockoutEnabledAsync(user).WithCurrentCulture();
-        }
-
-        /// <summary>
-        ///     Returns when the user is no longer locked out, dates in the past are considered as not being locked out
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<DateTimeOffset> GetLockoutEndDateAsync(Guid userId)
-        {
-            _log.Debug(string.Format("GetLockoutEndDateAsync({0})", userId));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return await store.GetLockoutEndDateAsync(user).WithCurrentCulture();
-        }
-
-        public async Task<int> IncrementAccessFailedCountAsync(Guid userId)
-        {
-            _log.Debug(string.Format("IncrementAccessFailedCountAsync({0})", userId));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return await store.IncrementAccessFailedCountAsync(user).WithCurrentCulture();
-        }
-
-        /// <summary>
-        ///     Sets whether lockout is enabled for this user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="enabled"></param>
-        /// <returns></returns>
-        public async Task SetLockoutEnabledAsync(Guid userId, bool enabled)
-        {
-            _log.Debug(string.Format("SetLockoutEnabledAsync({0}, {1})", userId, enabled));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            await store.SetLockoutEnabledAsync(user, enabled).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
-
-        /// <summary>
-        ///     Sets the when a user lockout ends
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="lockoutEnd"></param>
-        /// <returns></returns>
-        public async Task SetLockoutEndDateAsync(Guid userId, DateTimeOffset lockoutEnd)
-        {
-            _log.Debug(string.Format("SetLockoutEndDateAsync({0}, {1})", userId, lockoutEnd));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            //if (!await store.GetLockoutEnabledAsync(user).WithCurrentCulture())
-            //{
-            //    return IdentityResult.Failed(Resources.LockoutNotEnabled).ToDto();
-            //}
-            await store.SetLockoutEndDateAsync(user, lockoutEnd).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
-
-        /// <summary>
-        ///     Resets the access failed count for the user to 0
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task ResetAccessFailedCountAsync(Guid userId)
-        {
-            _log.Debug(string.Format("ResetAccessFailedCountAsync({0})", userId));
-            ThrowIfDisposed();
-            var store = GetUserLockoutStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-
-            //if (await GetAccessFailedCountAsync(user.Id).WithCurrentCulture() == 0)
-            //{
-            //    return IdentityResult.Success.ToDto();
-            //}
-
-            await store.ResetAccessFailedCountAsync(user).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
-
         ///// <summary>
-        /////     Returns true if the user is locked out
+        /////     Returns the number of failed access attempts for the user
         ///// </summary>
         ///// <param name="userId"></param>
         ///// <returns></returns>
-        //public new virtual async Task<bool> IsLockedOutAsync(Guid userId)
+        //public async Task<int> GetAccessFailedCountAsync(Guid userId)
         //{
+        //    _log.Debug(string.Format("GetAccessFailedCountAsync({0})", userId));
         //    ThrowIfDisposed();
         //    var store = GetUserLockoutStore();
-        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
         //    if (user == null)
         //    {
         //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
         //            userId));
         //    }
-        //    if (!await store.GetLockoutEnabledAsync(user).WithCurrentCulture())
-        //    {
-        //        return false;
-        //    }
-        //    var lockoutTime = await store.GetLockoutEndDateAsync(user).WithCurrentCulture();
-        //    return lockoutTime >= DateTimeOffset.UtcNow;
+        //    return await store.GetAccessFailedCountAsync(user).WithCurrentCulture();
         //}
 
         ///// <summary>
-        ///// Increments the access failed count for the user and if the failed access account is greater than or equal
-        ///// to the MaxFailedAccessAttempsBeforeLockout, the user will be locked out for the next DefaultAccountLockoutTimeSpan
-        ///// and the AccessFailedCount will be reset to 0. This is used for locking out the user account.
+        /////     Returns whether lockout is enabled for the user
         ///// </summary>
         ///// <param name="userId"></param>
         ///// <returns></returns>
-        //public new virtual async Task<IdentityResultDto> AccessFailedAsync(Guid userId)
+        //public async Task<bool> GetLockoutEnabledAsync(Guid userId)
         //{
+        //    _log.Debug(string.Format("GetLockoutEnabledAsync({0})", userId));
         //    ThrowIfDisposed();
         //    var store = GetUserLockoutStore();
-        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
         //    if (user == null)
         //    {
         //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
         //            userId));
         //    }
-        //    // If this puts the user over the threshold for lockout, lock them out and reset the access failed count
-        //    var count = await store.IncrementAccessFailedCountAsync(user).WithCurrentCulture();
-        //    if (count >= MaxFailedAccessAttemptsBeforeLockout)
-        //    {
-        //        await
-        //            store.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.Add(DefaultAccountLockoutTimeSpan))
-        //                .WithCurrentCulture();
-        //        await store.ResetAccessFailedCountAsync(user).WithCurrentCulture();
-        //    }
-        //    return await UpdateAsync(user).WithCurrentCulture();
+        //    return await store.GetLockoutEnabledAsync(user).WithCurrentCulture();
         //}
 
-        // IUserLockoutStore methods
-        protected IUserLockoutStore<User, Guid> GetUserLockoutStore()
-        {
-            _log.Debug(string.Format("GetUserLockoutStore()"));
-            var cast = Store as IUserLockoutStore<User, Guid>;
-            if (cast == null)
-            {
-                throw new NotSupportedException(Resources.StoreNotIUserLockoutStore);
-            }
-            return cast;
-        }
+        ///// <summary>
+        /////     Returns when the user is no longer locked out, dates in the past are considered as not being locked out
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public async Task<DateTimeOffset> GetLockoutEndDateAsync(Guid userId)
+        //{
+        //    _log.Debug(string.Format("GetLockoutEndDateAsync({0})", userId));
+        //    ThrowIfDisposed();
+        //    var store = GetUserLockoutStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    return await store.GetLockoutEndDateAsync(user).WithCurrentCulture();
+        //}
+
+        //public async Task<int> IncrementAccessFailedCountAsync(Guid userId)
+        //{
+        //    _log.Debug(string.Format("IncrementAccessFailedCountAsync({0})", userId));
+        //    ThrowIfDisposed();
+        //    var store = GetUserLockoutStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    return await store.IncrementAccessFailedCountAsync(user).WithCurrentCulture();
+        //}
+
+        ///// <summary>
+        /////     Sets whether lockout is enabled for this user
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="enabled"></param>
+        ///// <returns></returns>
+        //public async Task SetLockoutEnabledAsync(Guid userId, bool enabled)
+        //{
+        //    _log.Debug(string.Format("SetLockoutEnabledAsync({0}, {1})", userId, enabled));
+        //    ThrowIfDisposed();
+        //    var store = GetUserLockoutStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    await store.SetLockoutEnabledAsync(user, enabled).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
+
+        ///// <summary>
+        /////     Sets the when a user lockout ends
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="lockoutEnd"></param>
+        ///// <returns></returns>
+        //public async Task SetLockoutEndDateAsync(Guid userId, DateTimeOffset lockoutEnd)
+        //{
+        //    _log.Debug(string.Format("SetLockoutEndDateAsync({0}, {1})", userId, lockoutEnd));
+        //    ThrowIfDisposed();
+        //    var store = GetUserLockoutStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    //if (!await store.GetLockoutEnabledAsync(user).WithCurrentCulture())
+        //    //{
+        //    //    return IdentityResult.Failed(Resources.LockoutNotEnabled).ToDto();
+        //    //}
+        //    await store.SetLockoutEndDateAsync(user, lockoutEnd).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
+
+        ///// <summary>
+        /////     Resets the access failed count for the user to 0
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public async Task ResetAccessFailedCountAsync(Guid userId)
+        //{
+        //    _log.Debug(string.Format("ResetAccessFailedCountAsync({0})", userId));
+        //    ThrowIfDisposed();
+        //    var store = GetUserLockoutStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+
+        //    //if (await GetAccessFailedCountAsync(user.Id).WithCurrentCulture() == 0)
+        //    //{
+        //    //    return IdentityResult.Success.ToDto();
+        //    //}
+
+        //    await store.ResetAccessFailedCountAsync(user).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
+
+        /////// <summary>
+        ///////     Returns true if the user is locked out
+        /////// </summary>
+        /////// <param name="userId"></param>
+        /////// <returns></returns>
+        ////public new virtual async Task<bool> IsLockedOutAsync(Guid userId)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    var store = GetUserLockoutStore();
+        ////    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        ////    if (user == null)
+        ////    {
+        ////        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        ////            userId));
+        ////    }
+        ////    if (!await store.GetLockoutEnabledAsync(user).WithCurrentCulture())
+        ////    {
+        ////        return false;
+        ////    }
+        ////    var lockoutTime = await store.GetLockoutEndDateAsync(user).WithCurrentCulture();
+        ////    return lockoutTime >= DateTimeOffset.UtcNow;
+        ////}
+
+        /////// <summary>
+        /////// Increments the access failed count for the user and if the failed access account is greater than or equal
+        /////// to the MaxFailedAccessAttempsBeforeLockout, the user will be locked out for the next DefaultAccountLockoutTimeSpan
+        /////// and the AccessFailedCount will be reset to 0. This is used for locking out the user account.
+        /////// </summary>
+        /////// <param name="userId"></param>
+        /////// <returns></returns>
+        ////public new virtual async Task<IdentityResultDto> AccessFailedAsync(Guid userId)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    var store = GetUserLockoutStore();
+        ////    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        ////    if (user == null)
+        ////    {
+        ////        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        ////            userId));
+        ////    }
+        ////    // If this puts the user over the threshold for lockout, lock them out and reset the access failed count
+        ////    var count = await store.IncrementAccessFailedCountAsync(user).WithCurrentCulture();
+        ////    if (count >= MaxFailedAccessAttemptsBeforeLockout)
+        ////    {
+        ////        await
+        ////            store.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.Add(DefaultAccountLockoutTimeSpan))
+        ////                .WithCurrentCulture();
+        ////        await store.ResetAccessFailedCountAsync(user).WithCurrentCulture();
+        ////    }
+        ////    return await UpdateAsync(user).WithCurrentCulture();
+        ////}
+
+        //// IUserLockoutStore methods
+        //protected IUserLockoutStore<User, Guid> GetUserLockoutStore()
+        //{
+        //    _log.Debug(string.Format("GetUserLockoutStore()"));
+        //    var cast = Store as IUserLockoutStore<User, Guid>;
+        //    if (cast == null)
+        //    {
+        //        throw new NotSupportedException(Resources.StoreNotIUserLockoutStore);
+        //    }
+        //    return cast;
+        //}
 
         #endregion
 
         #region IUserLoginStoreService
         
-        /// <summary>
-        ///     Associate a login with a user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="login"></param>
-        /// <returns></returns>
-        public async Task AddLoginAsync(Guid userId, UserLoginInfoDto login)
-        {
-            _log.Debug(string.Format("AddLoginAsync({0}, {1})", userId, login));
-            ThrowIfDisposed();
-            var loginStore = GetLoginStore();
-            if (login == null)
-            {
-                throw new ArgumentNullException("login");
-            }
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            var existingUser = await FindAsync(login).WithCurrentCulture();
-            if (existingUser != null)
-            {
-                return;//IdentityResult.Failed(Resources.ExternalLoginExists).ToDto();
-            }
-            await loginStore.AddLoginAsync(user, login.ToLoginInfo()).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
+        ///// <summary>
+        /////     Associate a login with a user
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="login"></param>
+        ///// <returns></returns>
+        //public async Task AddLoginAsync(Guid userId, UserLoginInfoDto login)
+        //{
+        //    _log.Debug(string.Format("AddLoginAsync({0}, {1})", userId, login));
+        //    ThrowIfDisposed();
+        //    var loginStore = GetLoginStore();
+        //    if (login == null)
+        //    {
+        //        throw new ArgumentNullException("login");
+        //    }
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    var existingUser = await FindAsync(login).WithCurrentCulture();
+        //    if (existingUser != null)
+        //    {
+        //        return;//IdentityResult.Failed(Resources.ExternalLoginExists).ToDto();
+        //    }
+        //    await loginStore.AddLoginAsync(user, login.ToLoginInfo()).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
 
-        /// <summary>
-        ///     Returns the user associated with this login
-        /// </summary>
-        /// <returns></returns>
-        public async Task<UserDto> FindAsync(UserLoginInfoDto login)
-        {
-            _log.Debug(string.Format("FindAsync({0})", login));
-            ThrowIfDisposed();
-            var user = await GetLoginStore().FindAsync(login.ToLoginInfo());
-            return UserConverter.DtoFromUser(user);
-        }
+        ///// <summary>
+        /////     Returns the user associated with this login
+        ///// </summary>
+        ///// <returns></returns>
+        //public async Task<UserDto> FindAsync(UserLoginInfoDto login)
+        //{
+        //    _log.Debug(string.Format("FindAsync({0})", login));
+        //    ThrowIfDisposed();
+        //    var user = await GetLoginStore().FindAsync(login.ToLoginInfo());
+        //    return UserConverter.DtoFromUser(user);
+        //}
 
-        /// <summary>
-        ///     Gets the logins for a user.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(Guid userId)
-        {
-            _log.Debug(string.Format("GetLoginsAsync({0})", userId));
-            ThrowIfDisposed();
-            var loginStore = GetLoginStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return (await loginStore.GetLoginsAsync(user)).Select(login => IdentityUtil.ToDto(login)).ToList();
-        }
+        ///// <summary>
+        /////     Gets the logins for a user.
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public async Task<IList<UserLoginInfoDto>> GetLoginsAsync(Guid userId)
+        //{
+        //    _log.Debug(string.Format("GetLoginsAsync({0})", userId));
+        //    ThrowIfDisposed();
+        //    var loginStore = GetLoginStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    return (await loginStore.GetLoginsAsync(user)).Select(login => IdentityUtil.ToDto(login)).ToList();
+        //}
 
-        /// <summary>
-        ///     Remove a user login
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="login"></param>
-        /// <returns></returns>
-        public async Task RemoveLoginAsync(Guid userId, UserLoginInfoDto login)
-        {
-            _log.Debug(string.Format("RemoveLoginAsync({0}, {1})", userId, login));
-            ThrowIfDisposed();
-            var loginStore = GetLoginStore();
-            if (login == null)
-            {
-                throw new ArgumentNullException("login");
-            }
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            await loginStore.RemoveLoginAsync(user, login.ToLoginInfo()).WithCurrentCulture();
-            //await UpdateSecurityStampInternal(user).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
+        ///// <summary>
+        /////     Remove a user login
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="login"></param>
+        ///// <returns></returns>
+        //public async Task RemoveLoginAsync(Guid userId, UserLoginInfoDto login)
+        //{
+        //    _log.Debug(string.Format("RemoveLoginAsync({0}, {1})", userId, login));
+        //    ThrowIfDisposed();
+        //    var loginStore = GetLoginStore();
+        //    if (login == null)
+        //    {
+        //        throw new ArgumentNullException("login");
+        //    }
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    await loginStore.RemoveLoginAsync(user, login.ToLoginInfo()).WithCurrentCulture();
+        //    //await UpdateSecurityStampInternal(user).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
         
-        protected IUserLoginStore<User, Guid> GetLoginStore()
-        {
-            _log.Debug(string.Format("GetLoginStore()"));
-            var cast = Store as IUserLoginStore<User, Guid>;
-            if (cast == null)
-            {
-                throw new NotSupportedException(Resources.StoreNotIUserLoginStore);
-            }
-            return cast;
-        }
+        //protected IUserLoginStore<User, Guid> GetLoginStore()
+        //{
+        //    _log.Debug(string.Format("GetLoginStore()"));
+        //    var cast = Store as IUserLoginStore<User, Guid>;
+        //    if (cast == null)
+        //    {
+        //        throw new NotSupportedException(Resources.StoreNotIUserLoginStore);
+        //    }
+        //    return cast;
+        //}
 
         #endregion
 
@@ -994,6 +922,17 @@ namespace Blob.Security.Identity
             await UpdateAsync2(user).WithCurrentCulture();
         }
 
+
+        public async Task AddToRolesAsync(Guid userId, string[] roles)
+        {
+            foreach (var role in roles)
+            {
+                await AddToRoleAsync(userId, role).ConfigureAwait(true);
+            }
+        }
+
+
+
         /// <summary>
         ///     Remove a user from a role.
         /// </summary>
@@ -1016,6 +955,15 @@ namespace Blob.Security.Identity
             }
             await userRoleStore.RemoveFromRoleAsync(user, role).WithCurrentCulture();
             await UpdateAsync2(user).WithCurrentCulture();
+        }
+
+
+        public async Task RemoveFromRolesAsync(Guid userId, string[] roles)
+        {
+            foreach (var role in roles)
+            {
+                await RemoveFromRoleAsync(userId, role).ConfigureAwait(true);
+            }
         }
 
         /// <summary>
@@ -1137,68 +1085,68 @@ namespace Blob.Security.Identity
 
         #region IUserSecurityStampStoreService
         
-        /// <summary>
-        ///     Returns the current security stamp for a user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<string> GetSecurityStampAsync(Guid userId)
-        {
-            ThrowIfDisposed();
-            var securityStore = GetSecurityStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            return await securityStore.GetSecurityStampAsync(user).WithCurrentCulture();
-        }
-
-
-        public async Task SetSecurityStampAsync(Guid userId, string stamp)
-        {
-            ThrowIfDisposed();
-            var securityStore = GetSecurityStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
-            }
-            await securityStore.SetSecurityStampAsync(user, stamp).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
-        }
-
-        protected IUserSecurityStampStore<User, Guid> GetSecurityStore()
-        {
-            //todo:
-            var cast = Store as IUserSecurityStampStore<User, Guid>;
-            if (cast == null)
-            {
-                throw new NotSupportedException(Resources.StoreNotIUserSecurityStampStore);
-            }
-            return cast;
-        }
-
         ///// <summary>
-        /////     Generate a new security stamp for a user, used for SignOutEverywhere functionality
+        /////     Returns the current security stamp for a user
         ///// </summary>
         ///// <param name="userId"></param>
         ///// <returns></returns>
-        //public new virtual async Task<IdentityResultDto> UpdateSecurityStampAsync(Guid userId)
+        //public async Task<string> GetSecurityStampAsync(Guid userId)
         //{
         //    ThrowIfDisposed();
         //    var securityStore = GetSecurityStore();
-        //    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
         //    if (user == null)
         //    {
         //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
         //            userId));
         //    }
-        //    await securityStore.SetSecurityStampAsync(user, NewSecurityStamp()).WithCurrentCulture();
-        //    return await UpdateAsync(user).WithCurrentCulture();
+        //    return await securityStore.GetSecurityStampAsync(user).WithCurrentCulture();
         //}
+
+
+        //public async Task SetSecurityStampAsync(Guid userId, string stamp)
+        //{
+        //    ThrowIfDisposed();
+        //    var securityStore = GetSecurityStore();
+        //    var user = await FindByIdAsync2(userId).WithCurrentCulture();
+        //    if (user == null)
+        //    {
+        //        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        //            userId));
+        //    }
+        //    await securityStore.SetSecurityStampAsync(user, stamp).WithCurrentCulture();
+        //    await UpdateAsync2(user).WithCurrentCulture();
+        //}
+
+        //protected IUserSecurityStampStore<User, Guid> GetSecurityStore()
+        //{
+        //    //todo:
+        //    var cast = Store as IUserSecurityStampStore<User, Guid>;
+        //    if (cast == null)
+        //    {
+        //        throw new NotSupportedException(Resources.StoreNotIUserSecurityStampStore);
+        //    }
+        //    return cast;
+        //}
+
+        /////// <summary>
+        ///////     Generate a new security stamp for a user, used for SignOutEverywhere functionality
+        /////// </summary>
+        /////// <param name="userId"></param>
+        /////// <returns></returns>
+        ////public new virtual async Task<IdentityResultDto> UpdateSecurityStampAsync(Guid userId)
+        ////{
+        ////    ThrowIfDisposed();
+        ////    var securityStore = GetSecurityStore();
+        ////    var user = await FindByIdAsync(userId).WithCurrentCulture();
+        ////    if (user == null)
+        ////    {
+        ////        throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
+        ////            userId));
+        ////    }
+        ////    await securityStore.SetSecurityStampAsync(user, NewSecurityStamp()).WithCurrentCulture();
+        ////    return await UpdateAsync(user).WithCurrentCulture();
+        ////}
 
         #endregion
 

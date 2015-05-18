@@ -71,11 +71,11 @@ namespace Blob.Security.Identity
             id.AddClaim(new Claim(UserIdClaimType, user.Id.ToString(), ClaimValueTypes.String));
             id.AddClaim(new Claim(UserNameClaimType, user.UserName, ClaimValueTypes.String));
             id.AddClaim(new Claim(IdentityProviderClaimType, DefaultIdentityProviderClaimValue, ClaimValueTypes.String));
-            if (manager.SupportsUserSecurityStamp)
-            {
-                id.AddClaim(new Claim(SecurityStampClaimType,
-                    await manager.GetSecurityStampAsync(user.Id).WithCurrentCulture()));
-            }
+            //if (manager.SupportsUserSecurityStamp)
+            //{
+            //    id.AddClaim(new Claim(SecurityStampClaimType,
+            //        await manager.GetSecurityStampAsync(user.Id).WithCurrentCulture()));
+            //}
             if (manager.SupportsUserRole)
             {
                 IList<string> roles = await manager.GetRolesAsync(user.Id).WithCurrentCulture();
@@ -84,10 +84,10 @@ namespace Blob.Security.Identity
                     id.AddClaim(new Claim(RoleClaimType, roleName, ClaimValueTypes.String));
                 }
             }
-            if (manager.SupportsUserClaim)
-            {
-                id.AddClaims(await manager.GetClaimsAsync(user.Id).WithCurrentCulture());
-            }
+            //if (manager.SupportsUserClaim)
+            //{
+            //    id.AddClaims(await manager.GetClaimsAsync(user.Id).WithCurrentCulture());
+            //}
             return id;
         }
     }

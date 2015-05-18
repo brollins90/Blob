@@ -149,41 +149,41 @@ namespace Before.Infrastructure.Identity
         //    return SignInStatus.Failure;
         //}
 
-        /// <summary>
-        /// Sign the user in using an associated external login
-        /// </summary>
-        /// <param name="loginInfo"></param>
-        /// <param name="isPersistent"></param>
-        /// <returns></returns>
-        public async Task<SignInStatusDto> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent)
-        {
-            var user = await UserManager.FindAsync(loginInfo.Login).WithCurrentCulture();
-            //if (user == null)
-            //{
-            //    return SignInStatus.Failure;
-            //}
-            //if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-            //{
-            //    return SignInStatus.LockedOut;
-            //}
-            return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
-        }
+        ///// <summary>
+        ///// Sign the user in using an associated external login
+        ///// </summary>
+        ///// <param name="loginInfo"></param>
+        ///// <param name="isPersistent"></param>
+        ///// <returns></returns>
+        //public async Task<SignInStatusDto> ExternalSignInAsync(ExternalLoginInfoDto loginInfo, bool isPersistent)
+        //{
+        //    var user = await UserManager.FindAsync(loginInfo.Login).WithCurrentCulture();
+        //    //if (user == null)
+        //    //{
+        //    //    return SignInStatus.Failure;
+        //    //}
+        //    //if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
+        //    //{
+        //    //    return SignInStatus.LockedOut;
+        //    //}
+        //    return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
+        //}
 
-        private async Task<SignInStatusDto> SignInOrTwoFactor(UserDto user, bool isPersistent)
-        {
-            string id = Convert.ToString(user.Id);
-            //if (await UserManager.GetTwoFactorEnabledAsync(user.Id).WithCurrentCulture()
-            //    && (await UserManager.GetValidTwoFactorProvidersAsync(user.Id).WithCurrentCulture()).Count > 0
-            //    && !await AuthenticationManager.TwoFactorBrowserRememberedAsync(id).WithCurrentCulture())
-            //{
-            //    var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
-            //    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
-            //    AuthenticationManager.SignIn(identity);
-            //    return SignInStatus.RequiresVerification;
-            //}
-            await SignInAsync(user, isPersistent, false).WithCurrentCulture();
-            return SignInStatusDto.Success;
-        }
+        //private async Task<SignInStatusDto> SignInOrTwoFactor(UserDto user, bool isPersistent)
+        //{
+        //    string id = Convert.ToString(user.Id);
+        //    //if (await UserManager.GetTwoFactorEnabledAsync(user.Id).WithCurrentCulture()
+        //    //    && (await UserManager.GetValidTwoFactorProvidersAsync(user.Id).WithCurrentCulture()).Count > 0
+        //    //    && !await AuthenticationManager.TwoFactorBrowserRememberedAsync(id).WithCurrentCulture())
+        //    //{
+        //    //    var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
+        //    //    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
+        //    //    AuthenticationManager.SignIn(identity);
+        //    //    return SignInStatus.RequiresVerification;
+        //    //}
+        //    await SignInAsync(user, isPersistent, false).WithCurrentCulture();
+        //    return SignInStatusDto.Success;
+        //}
 
         /// <summary>
         /// Sign in the user in using the user name and password

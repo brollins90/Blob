@@ -104,6 +104,18 @@
     <Compile Include="ServiceContracts\IBlobAuditor.cs" />
     <Compile Include="ServiceContracts\IBlobCommandManager.cs" />
     <Compile Include="ServiceContracts\IBlobQueryManager.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserEmailStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserClaimStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserLockoutStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserLoginStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserPasswordStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserPhoneNumberStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserGroupStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserRoleStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserSecurityStampStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserTokenProviderService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserTwoFactorStoreService.cs" />
     <Compile Include="ServiceContracts\IDeviceConnectionService.cs" />
     <Compile Include="ServiceContracts\IDeviceConnectionServiceCallback.cs" />
     <Compile Include="ServiceContracts\IDeviceStatusService.cs" />
@@ -111,7 +123,9 @@
     <Compile Include="ServiceContracts\IUserManagerService.cs" />
     <Compile Include="ServiceContracts\KnownCommandsMap.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ServiceContracts\IdentityManager\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

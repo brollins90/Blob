@@ -26,6 +26,7 @@ namespace Blob.Contracts.ServiceContracts
 
         [OperationContract]
         Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
+
     }
 
 }

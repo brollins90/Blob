@@ -57,11 +57,13 @@
       <DependentUpon>IdentityResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Identity\GenericDbContext.cs" />
+    <Compile Include="Identity\BlobGroupStore.cs" />
     <Compile Include="Identity\GenericRoleStore.cs" />
     <Compile Include="Identity\GenericUserStore.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\AuditEntryMap.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
+    <Compile Include="Mapping\GroupMap.cs" />
     <Compile Include="Mapping\KeyPairMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
@@ -115,6 +117,10 @@
     <Compile Include="Migrations\201505151543080_AuditTableTime.Designer.cs">
       <DependentUpon>201505151543080_AuditTableTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505180103292_AddGroups.cs" />
+    <Compile Include="Migrations\201505180103292_AddGroups.Designer.cs">
+      <DependentUpon>201505180103292_AddGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -159,6 +165,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505151543080_AuditTableTime.resx">
       <DependentUpon>201505151543080_AuditTableTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505180103292_AddGroups.resx">
+      <DependentUpon>201505180103292_AddGroups.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

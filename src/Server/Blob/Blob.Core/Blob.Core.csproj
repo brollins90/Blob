@@ -40,6 +40,7 @@
     <Compile Include="Data\DataOpResult.cs" />
     <Compile Include="Data\IIdentityStore.cs" />
     <Compile Include="Domain\AuditEntry.cs" />
+    <Compile Include="Domain\BlobGroup.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Device.cs" />
     <Compile Include="Domain\DeviceType.cs" />

@@ -34,6 +34,7 @@ namespace Blob.Data
         public DbSet<DeviceType> DeviceTypes { get; set; }
         public DbSet<Status> DeviceStatuses { get; set; }
         public DbSet<StatusPerf> DevicePerfDatas { get; set; }
+        public DbSet<BlobGroup> Groups { get; set; }
         public DbSet<KeyPair> Keys { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -43,6 +44,9 @@ namespace Blob.Data
             modelBuilder.Configurations.Add(new BlobUserClaimMap());
             modelBuilder.Configurations.Add(new BlobUserLoginMap());
             modelBuilder.Configurations.Add(new BlobUserRoleMap());
+            modelBuilder.Configurations.Add(new BlobGroupMap());
+            modelBuilder.Configurations.Add(new BlobGroupRoleMap());
+            modelBuilder.Configurations.Add(new BlobUserGroupMap());
             modelBuilder.Configurations.Add(new AuditEntryMap());
             modelBuilder.Configurations.Add(new CustomerMap());
             modelBuilder.Configurations.Add(new DeviceMap());

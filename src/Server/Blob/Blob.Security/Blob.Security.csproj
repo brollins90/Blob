@@ -81,6 +81,8 @@
     <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
     <Compile Include="Authentication\ClaimTransformer.cs" />
     <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
+    <Compile Include="Identity\BlobRoleManager.cs" />
+    <Compile Include="Identity\BlobGroupManager.cs" />
     <Compile Include="SecurityConstants.cs" />
     <Compile Include="Extensions\IdentityExtentions.cs" />
     <Compile Include="Identity\BlobClaimsIdentityFactory.cs" />
