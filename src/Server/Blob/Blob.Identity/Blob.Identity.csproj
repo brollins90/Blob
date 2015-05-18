@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A8395CBD-FDD2-4A90-8A9E-719B8266773F}</ProjectGuid>
+    <ProjectGuid>{659BD006-9EDC-465A-8F8D-1B1693C956C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Blob.Core</RootNamespace>
-    <AssemblyName>Blob.Core</AssemblyName>
+    <RootNamespace>Blob.Identity</RootNamespace>
+    <AssemblyName>Blob.Identity</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,43 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.Identity.Core">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\DataOpResult.cs" />
-    <Compile Include="Data\IIdentityStore.cs" />
-    <Compile Include="Domain\AuditEntry.cs" />
-    <Compile Include="Domain\BlobGroup.cs" />
-    <Compile Include="Domain\Customer.cs" />
-    <Compile Include="Domain\Device.cs" />
-    <Compile Include="Domain\DeviceType.cs" />
-    <Compile Include="Domain\KeyPair.cs" />
-    <Compile Include="Domain\Role.cs" />
-    <Compile Include="Domain\Status.cs" />
-    <Compile Include="Domain\StatusPerf.cs" />
-    <Compile Include="Domain\User.cs" />
-    <Compile Include="Identity\GenericGroup.cs" />
-    <Compile Include="Identity\GenericRole.cs" />
-    <Compile Include="Identity\GenericUser.cs" />
-    <Compile Include="Identity\GenericUserClaim.cs" />
-    <Compile Include="Identity\GenericGroupRole.cs" />
-    <Compile Include="Identity\GenericUserLogin.cs" />
-    <Compile Include="Identity\GenericUserGroup.cs" />
-    <Compile Include="Identity\GenericUserRole.cs" />
+    <Compile Include="IGroup.cs" />
+    <Compile Include="IGroupStore.cs" />
+    <Compile Include="IQueryableGroupStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Blob.Identity\Blob.Identity.csproj">
-      <Project>{659bd006-9edc-465a-8f8d-1b1693c956c0}</Project>
-      <Name>Blob.Identity</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

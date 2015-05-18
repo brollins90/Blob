@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Identity\GenericDbContext.cs" />
     <Compile Include="Identity\BlobGroupStore.cs" />
+    <Compile Include="Identity\GenericGroupStore.cs" />
     <Compile Include="Identity\GenericRoleStore.cs" />
     <Compile Include="Identity\GenericUserStore.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
@@ -174,6 +175,10 @@
     <ProjectReference Include="..\Blob.Core\Blob.Core.csproj">
       <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
       <Name>Blob.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blob.Identity\Blob.Identity.csproj">
+      <Project>{659bd006-9edc-465a-8f8d-1b1693c956c0}</Project>
+      <Name>Blob.Identity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

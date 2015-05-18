@@ -112,6 +112,10 @@
       <Project>{e12f5b0f-43bd-479e-b36f-553c965a8e33}</Project>
       <Name>Blob.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blob.Identity\Blob.Identity.csproj">
+      <Project>{659bd006-9edc-465a-8f8d-1b1693c956c0}</Project>
+      <Name>Blob.Identity</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

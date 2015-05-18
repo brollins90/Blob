@@ -27,12 +27,12 @@ namespace Blob.Data.Mapping
                     new IndexAttribute("IX_GroupName", 1) { IsUnique = true }));
 
             // Users
-            HasMany<BlobUserGroup>((BlobGroup g) => g.GroupUsers)
+            HasMany<BlobUserGroup>((BlobGroup g) => g.Users)
                 .WithRequired()
                 .HasForeignKey<Guid>((BlobUserGroup ug) => ug.GroupId);
 
             // Users
-            HasMany<BlobGroupRole>((BlobGroup g) => g.GroupRoles)
+            HasMany<BlobGroupRole>((BlobGroup g) => g.Roles)
                 .WithRequired()
                 .HasForeignKey<Guid>((BlobGroupRole gr) => gr.GroupId);
         }

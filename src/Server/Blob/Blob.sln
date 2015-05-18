@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Crypto", "Blob.Crypto\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Tests", "Blob.Tests\Blob.Tests.csproj", "{40C9CABB-2D6D-4C1C-BDE4-42CC7CA94043}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Identity", "Blob.Identity\Blob.Identity.csproj", "{659BD006-9EDC-465A-8F8D-1B1693C956C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{40C9CABB-2D6D-4C1C-BDE4-42CC7CA94043}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C9CABB-2D6D-4C1C-BDE4-42CC7CA94043}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C9CABB-2D6D-4C1C-BDE4-42CC7CA94043}.Release|Any CPU.Build.0 = Release|Any CPU
+		{659BD006-9EDC-465A-8F8D-1B1693C956C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{659BD006-9EDC-465A-8F8D-1B1693C956C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{659BD006-9EDC-465A-8F8D-1B1693C956C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{659BD006-9EDC-465A-8F8D-1B1693C956C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

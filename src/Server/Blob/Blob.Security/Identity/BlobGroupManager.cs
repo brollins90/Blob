@@ -74,10 +74,10 @@ namespace Blob.Security.Identity
 
             var currentGroupMembers = (await this.GetGroupUsersAsync(groupId)).ToList();
             // remove the roles from the group:
-            group.GroupRoles.Clear();
+            group.Roles.Clear();
 
             // Remove all the users:
-            group.GroupUsers.Clear();
+            group.Users.Clear();
 
             // Remove the group itself:
             _context.Groups.Remove(group);
@@ -103,7 +103,7 @@ namespace Blob.Security.Identity
             BlobGroup theGroup = await _context.Groups.FirstOrDefaultAsync(g => g.Id == groupId).ConfigureAwait(true);
             List<Role> allRoles = await _roleManager.Roles.ToListAsync().ConfigureAwait(true);
             List<Role> groupRoles = (from r in allRoles
-                                     where theGroup.GroupRoles
+                                     where theGroup.Roles
                                        .Any(ap => ap.RoleId == r.Id)
                                      select r).ToList();
             return groupRoles;
@@ -113,7 +113,7 @@ namespace Blob.Security.Identity
         {
             BlobGroup group = await FindByIdAsync(groupId).ConfigureAwait(true);
             List<User> users = new List<User>();
-            foreach (BlobUserGroup groupUser in group.GroupUsers)
+            foreach (BlobUserGroup groupUser in group.Users)
             {
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == groupUser.UserId);
                 users.Add(user);
@@ -124,7 +124,7 @@ namespace Blob.Security.Identity
         public async Task<IEnumerable<BlobGroup>> GetUserGroupsAsync(Guid userId)
         {
             return await (from g in Groups
-                          where g.GroupUsers
+                          where g.Users
                             .Any(u => u.UserId == userId)
                           select g).ToListAsync().ConfigureAwait(false);
         }
@@ -135,7 +135,7 @@ namespace Blob.Security.Identity
             List<BlobGroupRole> userGroupRoles = new List<BlobGroupRole>();
             foreach (BlobGroup group in userGroups)
             {
-                userGroupRoles.AddRange(group.GroupRoles.ToArray());
+                userGroupRoles.AddRange(group.Roles.ToArray());
             }
             return userGroupRoles;
         }
@@ -173,14 +173,14 @@ namespace Blob.Security.Identity
         {
             // Clear all the roles associated with this group:
             BlobGroup thisGroup = await FindByIdAsync(groupId);
-            thisGroup.GroupRoles.Clear();
+            thisGroup.Roles.Clear();
             await _context.SaveChangesAsync();
 
             // Add the new roles passed in:
             var newRoles = _roleManager.Roles.Where(r => roleNames.Any(n => n == r.Name));
             foreach (var role in newRoles)
             {
-                thisGroup.GroupRoles.Add(new BlobGroupRole
+                thisGroup.Roles.Add(new BlobGroupRole
                                         {
                                             GroupId = groupId,
                                             RoleId = role.Id
@@ -189,7 +189,7 @@ namespace Blob.Security.Identity
             await _context.SaveChangesAsync();
 
             // Reset the roles for all affected users:
-            foreach (var groupUser in thisGroup.GroupUsers)
+            foreach (var groupUser in thisGroup.Users)
             {
                 await this.RefreshUserGroupRolesAsync(groupUser.UserId);
             }
@@ -202,7 +202,7 @@ namespace Blob.Security.Identity
             var currentGroups = await GetUserGroupsAsync(userId);
             foreach (var group in currentGroups)
             {
-                group.GroupUsers.Remove(group.GroupUsers.FirstOrDefault(gr => gr.UserId == userId));
+                group.Users.Remove(group.Users.FirstOrDefault(gr => gr.UserId == userId));
             }
             await _context.SaveChangesAsync();
 
@@ -210,7 +210,7 @@ namespace Blob.Security.Identity
             foreach (Guid groupId in groupIds)
             {
                 BlobGroup newGroup = await this.FindByIdAsync(groupId);
-                newGroup.GroupUsers.Add(new BlobUserGroup
+                newGroup.Users.Add(new BlobUserGroup
                 {
                     UserId = userId,
                     GroupId = groupId
@@ -225,7 +225,7 @@ namespace Blob.Security.Identity
         public async Task<IdentityResult> UpdateGroupAsync(BlobGroup group)
         {
             await _groupStore.UpdateAsync(group).ConfigureAwait(true);
-            foreach (var groupUser in group.GroupUsers)
+            foreach (var groupUser in group.Users)
             {
                 await this.RefreshUserGroupRolesAsync(groupUser.UserId).ConfigureAwait(true);
             }
