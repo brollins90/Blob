@@ -1,7 +1,5 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Filters;
 using Before.Infrastructure.Extensions;

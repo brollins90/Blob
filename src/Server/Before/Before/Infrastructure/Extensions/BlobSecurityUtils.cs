@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
@@ -73,69 +72,5 @@ namespace Before.Infrastructure.Extensions
             //}
             //return null;
         }
-
-
-
-        //#region Signin stuff
-        //public static string GetAuthenticationType(this IUserManagerService ums)
-        //{
-        //    return DefaultAuthenticationTypes.ApplicationCookie; 
-        //}
-        
-        //public static async Task SignInAsync(this IUserManagerService ums, UserDto user, bool isPersistent, bool rememberBrowser)
-        //{
-        //    ClaimsIdentity userIdentity = await ums.CreateIdentityAsync(user, ums.GetAuthenticationType());
-        //    // Clear any partial cookies from external or two factor partial sign ins
-        //    //await SignOutAsync(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
-        //    //if (rememberBrowser)
-        //    //{
-        //    //    ClaimsIdentity rememberBrowserIdentity = AuthenticationManager.CreateTwoFactorRememberBrowserIdentity(user.Id);
-        //    //    await SignInAsync(new AuthenticationPropertiesDto { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
-        //    //}
-        //    //else
-        //    //{
-        //    await ums.SignInAsync(new AuthenticationPropertiesDto { IsPersistent = isPersistent }, userIdentity);
-        //    //}
-        //}
-
-        ///// <summary>
-        ///// Sign in the user in using the user name and password
-        ///// </summary>
-        ///// <param name="userName"></param>
-        ///// <param name="password"></param>
-        ///// <param name="isPersistent"></param>
-        ///// <param name="shouldLockout"></param>
-        ///// <returns></returns>
-        //public static async Task<SignInStatusDto> PasswordSignInAsync(this IUserManagerService ums, string userName, string password, bool isPersistent, bool shouldLockout)
-        //{
-        //    var user = await ums.FindByNameAsync(userName);
-        //    if (user == null)
-        //    {
-        //        return SignInStatusDto.Failure;
-        //    }
-        //    await ums.SignInAsync(user, isPersistent, false);
-        //    return SignInStatusDto.Success;
-        //    //if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-        //    //{
-        //    //    return SignInStatusDto.LockedOut;
-        //    //}
-        //    //if (await UserManager.CheckPasswordAsync(user, password).WithCurrentCulture())
-        //    //{
-        //    //    await UserManager.ResetAccessFailedCountAsync(user.Id).WithCurrentCulture();
-        //    //    return await SignInOrTwoFactor(user, isPersistent).WithCurrentCulture();
-        //    //}
-        //    //if (shouldLockout)
-        //    //{
-        //    //    // If lockout is requested, increment access failed count which might lock out the user
-        //    //    await UserManager.AccessFailedAsync(user.Id).WithCurrentCulture();
-        //    //    if (await UserManager.IsLockedOutAsync(user.Id).WithCurrentCulture())
-        //    //    {
-        //    //        return SignInStatus.LockedOut;
-        //    //    }
-        //    //}
-        //    //return SignInStatus.Failure;
-        //}
-
-        //#endregion
     }
 }

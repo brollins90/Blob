@@ -71,6 +71,8 @@
     <Compile Include="Models\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
+    <Compile Include="Models\ViewModels\PerformanceRecordPageVm.cs" />
+    <Compile Include="Models\ViewModels\StatusRecordPageVm.cs" />
     <Compile Include="Models\ViewModels\DevicePageVm.cs" />
     <Compile Include="Models\ViewModels\UserListVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeVm.cs" />

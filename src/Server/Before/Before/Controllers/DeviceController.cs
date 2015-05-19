@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
-using PagedList;
 
 namespace Before.Controllers
 {
@@ -142,20 +141,20 @@ namespace Before.Controllers
             return PartialView("_List", models);
         }
 
-        // GET: /device/ListFromCustomer/{id}
-        public ActionResult PageForCustomer(Guid customerId, int? page, int? pageSize)
+        // GET: /device/PageForCustomer/{customerId}
+        public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
             if (!pageSize.HasValue) pageSize = 10;
 
-            DevicePageVm pageVm = AsyncHelpers.RunSync<DevicePageVm>(() => BlobQueryManager.GetDevicePageVmAsync(customerId, page.Value, pageSize.Value));
+            var pageVm = AsyncHelpers.RunSync<DevicePageVm>(() => BlobQueryManager.GetDevicePageVmAsync(id, page.Value, pageSize.Value));
 
-            ViewBag.CustomerId = customerId;
-            // Func<int, string>
+            ViewBag.CustomerId = id;
+
             var c = Lambda<Func<int, string>>.Cast;
-            var pageUrl = c(p => Url.Action("PageFromCustomer", "Device", routeValues: new {id = customerId, p, pageSize = pageVm.PageSize}));
+            var pageUrl = c(p => Url.Action("PageForCustomer", "Device", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
             ViewBag.PageUrl = pageUrl;
-            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();// new StaticPagedList<DeviceListItemVm>(models.Items, models.PageNum, models.PageSize, models.TotalCount).GetMetaData();
+            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
             return PartialView("_Page", pageVm);
         }
 

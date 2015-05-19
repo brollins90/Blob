@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 
@@ -43,6 +45,29 @@ namespace Before.Controllers
             return PartialView("_Delete", model);
         }
 
+        // GET: /status/list/{models}
+        public ActionResult List(IEnumerable<StatusRecordListItemVm> models)
+        {
+            return PartialView("_List", models);
+        }
+
+        // GET: /status/PageForCustomer/{deviceId}
+        public ActionResult PageForDevice(Guid id, int? page, int? pageSize)
+        {
+            if (!page.HasValue) page = 1;
+            if (!pageSize.HasValue) pageSize = 10;
+
+            var pageVm = AsyncHelpers.RunSync<StatusRecordPageVm>(() => BlobQueryManager.GetStatusRecordPageVmAsync(id, page.Value, pageSize.Value));
+
+            ViewBag.DeviceId = id;
+
+            var c = Lambda<Func<int, string>>.Cast;
+            var pageUrl = c(p => Url.Action("PageForDevice", "Status", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
+            ViewBag.PageUrl = pageUrl;
+            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
+            return PartialView("_Page", pageVm);
+        }
+
         // GET: /status/single/{id}
         public async Task<ActionResult> Single(long? id)
         {
@@ -58,12 +83,6 @@ namespace Before.Controllers
             }
 
             return View(viewModel);
-        }
-
-        // GET: /status/list/{models}
-        public ActionResult List(IEnumerable<StatusRecordListItemVm> models)
-        {
-            return PartialView("_List", models);
         }
     }
 }

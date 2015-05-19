@@ -143,6 +143,15 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
+        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "performance", deviceId.ToString());
+            return await _blobQueryManager.GetPerformanceRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
         public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
@@ -157,6 +166,15 @@ namespace Blob.Services.Before
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "deleteview", "status", recordId.ToString());
             return await _blobQueryManager.GetStatusRecordDeleteVmAsync(recordId).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "status", Operation = "view")]
+        public async Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "status", deviceId.ToString());
+            return await _blobQueryManager.GetStatusRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]

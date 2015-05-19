@@ -43,10 +43,10 @@ namespace Blob.Contracts.Models.ViewModels
         [Required]
         public int Status { get; set; }
         
-        [DataMember]
-        public IEnumerable<StatusRecordListItemVm> StatusRecords { get; set; }
+        //[DataMember]
+        //public StatusRecordPageVm StatusRecords { get; set; }
 
-        [DataMember]
-        public IEnumerable<PerformanceRecordListItemVm> PerformanceRecords { get; set; }
+        //[DataMember]
+        //public PerformanceRecordPageVm PerformanceRecords { get; set; }
     }
 }

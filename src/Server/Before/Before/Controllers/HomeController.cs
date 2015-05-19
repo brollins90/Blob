@@ -1,10 +1,5 @@
-﻿using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Before.Filters;
+﻿using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
-using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers

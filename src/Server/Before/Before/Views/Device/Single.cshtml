@@ -87,8 +87,8 @@
                 </div>
                 <div id="status" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <hr />
-                        @{ Html.RenderAction("List", "Status", routeValues: new { models = Model.StatusRecords });}
+                        <hr/> 
+                        @{ Html.RenderAction("PageForDevice", "Status", routeValues: new { deviceId = Model.DeviceId });}
                     </div>
                 </div>
             </div>
@@ -100,8 +100,8 @@
                 </div>
                 <div id="performance" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <hr />
-                        @{ Html.RenderAction("List", "Performance", routeValues: new { models = Model.PerformanceRecords });}
+                        <hr/> 
+                        @{ Html.RenderAction("PageForDevice", "Performance", routeValues: new { deviceId = Model.DeviceId });}
                     </div>
                 </div>
             </div>

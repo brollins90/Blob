@@ -1,0 +1,88 @@
+﻿@using Before.Infrastructure.Extensions
+@using Blob.Contracts.Models.ViewModels
+@using PagedList
+@using PagedList.Mvc
+@model StatusRecordPageVm
+
+<div id="statusRecordPageContent">
+
+    @if (Model != null && Model.Items != null && Model.Items.Any())
+    {
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().RecordId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().MonitorName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().MonitorDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().TimeGenerated)
+                    </th>
+                    <th> </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            @Html.AlertLevelValue(item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RecordId)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Single", "Status", new { id=item.RecordId})">@Html.DisplayFor(modelItem => item.MonitorName)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MonitorDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeGenerated)
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Delete", "Delete", "Status", routeValues: new { id = item.RecordId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {@:
+        <div class="text-muted">&nbsp;No devices found.</div>
+    }
+
+    <div id="statusRecordPageContentPager">
+        @Html.PagedListPager(new StaticPagedList<StatusRecordListItemVm>(Model.Items, (IPagedList)ViewBag.PagingMetaData),
+                             (Func<int, string>)ViewBag.PageUrl,
+                             PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+                                                                                   new PagedListRenderOptions
+                                                                                   {
+                                                                                       LinkToFirstPageFormat = String.Format("<<"),
+                                                                                       LinkToPreviousPageFormat = String.Format("<"),
+                                                                                       LinkToNextPageFormat = String.Format(">"),
+                                                                                       LinkToLastPageFormat = String.Format(">>"),
+                                                                                       MaximumPageNumbersToDisplay = 5,
+                                                                                       DisplayEllipsesWhenNotShowingAllPageNumbers = false
+                                                                                   },
+                                                                                   new AjaxOptions
+                                                                                   {
+                                                                                       UpdateTargetId = "statusRecordPageContent",
+                                                                                       HttpMethod = "GET",
+                                                                                       InsertionMode = InsertionMode.Replace,
+                                                                                       LoadingElementId = "progressPnl"
+                                                                                   }))
+    </div>
+</div>

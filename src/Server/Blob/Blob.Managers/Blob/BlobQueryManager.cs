@@ -221,31 +221,31 @@ namespace Blob.Managers.Blob
                               DeviceType = device.DeviceType.Value,
                               Enabled = device.Enabled,
                               LastActivityDate = device.LastActivityDate,
-                              PerformanceRecords = (from perf in device.StatusPerfs
-                                                    select new PerformanceRecordListItemVm
-                                                    {
-                                                        Critical = perf.Max.ToString(),
-                                                        Label = perf.Label,
-                                                        Max = perf.Max.ToString(),
-                                                        Min = perf.Min.ToString(),
-                                                        MonitorDescription = perf.MonitorDescription,
-                                                        MonitorName = perf.MonitorName,
-                                                        RecordId = perf.Id,
-                                                        TimeGenerated = perf.TimeGenerated,
-                                                        Unit = perf.UnitOfMeasure,
-                                                        Value = perf.Value.ToString(),
-                                                        Warning = perf.Warning.ToString(),
-                                                    }),
+                              //PerformanceRecords = (from perf in device.StatusPerfs
+                              //                      select new PerformanceRecordListItemVm
+                              //                      {
+                              //                          Critical = perf.Max.ToString(),
+                              //                          Label = perf.Label,
+                              //                          Max = perf.Max.ToString(),
+                              //                          Min = perf.Min.ToString(),
+                              //                          MonitorDescription = perf.MonitorDescription,
+                              //                          MonitorName = perf.MonitorName,
+                              //                          RecordId = perf.Id,
+                              //                          TimeGenerated = perf.TimeGenerated,
+                              //                          Unit = perf.UnitOfMeasure,
+                              //                          Value = perf.Value.ToString(),
+                              //                          Warning = perf.Warning.ToString(),
+                              //                      }),
                               Status = device.AlertLevel,
-                              StatusRecords = (from status in device.Statuses
-                                               select new StatusRecordListItemVm
-                                               {
-                                                   MonitorDescription = status.MonitorDescription,
-                                                   MonitorName = status.MonitorName,
-                                                   RecordId = status.Id,
-                                                   Status = status.AlertLevel,
-                                                   TimeGenerated = status.TimeGenerated
-                                               }),
+                              //StatusRecords = (from status in device.Statuses
+                              //                 select new StatusRecordListItemVm
+                              //                 {
+                              //                     MonitorDescription = status.MonitorDescription,
+                              //                     MonitorName = status.MonitorName,
+                              //                     RecordId = status.Id,
+                              //                     Status = status.AlertLevel,
+                              //                     TimeGenerated = status.TimeGenerated
+                              //                 }),
                           }).SingleAsync().ConfigureAwait(false);
         }
 
@@ -282,6 +282,41 @@ namespace Blob.Managers.Blob
                           }).SingleAsync().ConfigureAwait(false);
         }
 
+        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
+        {
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            var count = Context.DevicePerfDatas.Where(x => x.DeviceId.Equals(deviceId)).FutureCount();
+            var devices = Context.DevicePerfDatas
+                .Where(x => x.DeviceId.Equals(deviceId))
+                .OrderByDescending(x => x.TimeGenerated)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new PerformanceRecordPageVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = devices.Select(x => new PerformanceRecordListItemVm
+                {
+                    Critical = x.Critical.Value.ToString(),
+                    Label = x.Label,
+                    Max = x.Max.Value.ToString(),
+                    Min = x.Min.Value.ToString(),
+                    MonitorDescription = x.MonitorDescription,
+                    MonitorName = x.MonitorName,
+                    RecordId = x.Id,
+                    TimeGenerated = x.TimeGenerated,
+                    Unit = x.UnitOfMeasure,
+                    Value = x.Value.ToString(),
+                    Warning = x.Warning.Value.ToString()
+                }),
+            }).ConfigureAwait(false);
+        }
+
         public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             return await (from perf in Context.DevicePerfDatas
@@ -315,6 +350,35 @@ namespace Blob.Managers.Blob
                               TimeGenerated = status.TimeGenerated
 
                           }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
+        {
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            var count = Context.DeviceStatuses.Where(x => x.DeviceId.Equals(deviceId)).FutureCount();
+            var devices = Context.DeviceStatuses
+                .Where(x => x.DeviceId.Equals(deviceId))
+                .OrderByDescending(x => x.TimeGenerated)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new StatusRecordPageVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = devices.Select(x => new StatusRecordListItemVm
+                {
+                    MonitorDescription = x.MonitorDescription,
+                    MonitorName = x.MonitorName,
+                    RecordId = x.Id,
+                    Status = x.AlertLevel,
+                    TimeGenerated = x.TimeGenerated
+                }),
+            }).ConfigureAwait(false);
         }
 
         public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)

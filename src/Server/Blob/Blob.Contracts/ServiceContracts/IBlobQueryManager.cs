@@ -40,10 +40,14 @@ namespace Blob.Contracts.ServiceContracts
         [OperationContract]
         Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId);
         [OperationContract]
+        Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
         Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId);
 
         [OperationContract]
         Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId);
+        [OperationContract]
+        Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
         [OperationContract]
         Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId);
 
