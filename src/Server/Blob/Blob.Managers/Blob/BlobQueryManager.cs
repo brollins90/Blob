@@ -39,25 +39,26 @@ namespace Blob.Managers.Blob
             var count = Context.Devices.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
             var devices = Context.Devices
                 .Where(x => x.CustomerId.Equals(customerId))
-                .OrderBy(x => x.AlertLevel).ThenBy(x => x.DeviceName)
+                .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
                 .Skip(pNum * pageSize).Take(pageSize).Future();
 
             // define future queries before any of them execute
-            var pCount = ((count/pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
             return await Task.FromResult(new DashDevicesLargeVm
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum,
                 PageSize = pageSize,
-                HasNext = pCount > pNum,
-                HasPrevious = pNum > 1,
                 Items = devices.Select(x => new DashDevicesLargeListItemVm
                                            {
                                                AvailableCommands = availableCommands,
                                                DeviceId = x.Id,
                                                DeviceName = x.DeviceName,
-                                               Recomendations = new string[]{string.Empty},
+                                               Reason = string.Empty,
+                                               Recomendations = (x.AlertLevel == 0)
+                                               ? new string[] { "Everything is Ok" }
+                                               : new string[] { string.Empty },
                                                Status = x.AlertLevel
                                            }),
             }).ConfigureAwait(false);
@@ -92,57 +93,17 @@ namespace Blob.Managers.Blob
 
         public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
         {
-            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
-
-            return await Task.FromResult((from cust in Context.Customers.Include("Devices").Include("DeviceTypes").Include("Users")
-                                          where cust.Id == customerId
-                                          select new
-                                                 {
-                                                     CreateDate = cust.CreateDate,
-                                                     CustomerId = cust.Id,
-                                                     Name = cust.Name,
-                                                     Devices = (from d in cust.Devices
-                                                                select new
-                                                                       {
-                                                                           DeviceName = d.DeviceName,
-                                                                           DeviceType = d.DeviceType.Value,
-                                                                           DeviceId = d.Id,
-                                                                           Enabled = d.Enabled,
-                                                                           LastActivityDate = d.LastActivityDate,
-                                                                           Status = d.AlertLevel
-                                                                       }),
-                                                     Users = (from u in cust.Users
-                                                              select new
-                                                                     {
-                                                                         UserId = u.Id,
-                                                                         UserName = u.UserName
-                                                                     })
-                                                 }).AsEnumerable()
-                              .Select(cust =>
-                                      new CustomerSingleVm
-                                      {
-                                          CreateDate = cust.CreateDate,
-                                          CustomerId = cust.CustomerId,
-                                          Name = cust.Name,
-                                          Devices = (cust.Devices.Select(d => new DeviceListItemVm
-                                                                              {
-                                                                                  DeviceName = d.DeviceName,
-                                                                                  DeviceType = d.DeviceType,
-                                                                                  DeviceId = d.DeviceId,
-                                                                                  Enabled = d.Enabled,
-                                                                                  LastActivityDate = d.LastActivityDate,
-                                                                                  Status = d.Status,
-                                                                                  AvailableCommands = availableCommands
-                                                                              })),
-                                          Users = (from u in cust.Users
-                                                   select new UserListItemVm
-                                                          {
-                                                              UserId = u.UserId,
-                                                              UserName = u.UserName
-                                                          })
-                                      }).Single()).ConfigureAwait(false);
-
-            //.SingleAsync().ConfigureAwait(false);
+            return await Context.Customers
+                .Include("Devices").Include("Users")
+                                .Where(x => x.Id == customerId)
+                                .Select(cust => new CustomerSingleVm
+                                                {
+                                                    CreateDate = cust.CreateDate,
+                                                    CustomerId = cust.Id,
+                                                    Name = cust.Name,
+                                                    DeviceCount = cust.Devices.Count,
+                                                    UserCount = cust.Users.Count
+                                                }).SingleAsync();
         }
 
         public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
@@ -168,7 +129,7 @@ namespace Blob.Managers.Blob
                                 CommandParamters = t.GetProperties()//BindingFlags.Public & BindingFlags.Instance)
                                 .Select(p => new DeviceCommandParameterPairVm
                                 {
-                                    Key = p.Name, 
+                                    Key = p.Name,
                                     Value = ""
                                 })
                             });
@@ -213,6 +174,39 @@ namespace Blob.Managers.Blob
                               DeviceName = device.DeviceName,
                               Enabled = device.Enabled
                           }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        {
+            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            var count = Context.Devices.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
+            var devices = Context.Devices
+                .Include("DeviceType")
+                .Where(x => x.CustomerId.Equals(customerId))
+                .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new DevicePageVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = devices.Select(x => new DeviceListItemVm
+                {
+                    AvailableCommands = availableCommands,
+                    DeviceId = x.Id,
+                    DeviceName = x.DeviceName,
+                    DeviceType = x.DeviceType.Value,
+                    Enabled = x.Enabled,
+                    LastActivityDate = x.LastActivityDate,
+                    Status = x.AlertLevel
+                }),
+            }).ConfigureAwait(false);
         }
 
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)

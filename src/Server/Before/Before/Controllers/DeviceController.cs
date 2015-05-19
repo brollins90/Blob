@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
+using PagedList;
 
 namespace Before.Controllers
 {
@@ -138,6 +140,23 @@ namespace Before.Controllers
         public ActionResult List(IEnumerable<DeviceListItemVm> models)
         {
             return PartialView("_List", models);
+        }
+
+        // GET: /device/ListFromCustomer/{id}
+        public ActionResult PageForCustomer(Guid customerId, int? page, int? pageSize)
+        {
+            if (!page.HasValue) page = 1;
+            if (!pageSize.HasValue) pageSize = 10;
+
+            DevicePageVm pageVm = AsyncHelpers.RunSync<DevicePageVm>(() => BlobQueryManager.GetDevicePageVmAsync(customerId, page.Value, pageSize.Value));
+
+            ViewBag.CustomerId = customerId;
+            // Func<int, string>
+            var c = Lambda<Func<int, string>>.Cast;
+            var pageUrl = c(p => Url.Action("PageFromCustomer", "Device", routeValues: new {id = customerId, p, pageSize = pageVm.PageSize}));
+            ViewBag.PageUrl = pageUrl;
+            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();// new StaticPagedList<DeviceListItemVm>(models.Items, models.PageNum, models.PageSize, models.TotalCount).GetMetaData();
+            return PartialView("_Page", pageVm);
         }
 
         // GET: /device/single/{id}

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace Blob.Contracts.Models
 {
-    public interface IPagedList<T>
+    public interface IPageInfoVm<T>
     {
-        bool HasNext { get; set; }
-        bool HasPrevious { get; set; }
         int PageNum { get; set; }
         int PageCount { get; set; }
         int PageSize { get; set; }

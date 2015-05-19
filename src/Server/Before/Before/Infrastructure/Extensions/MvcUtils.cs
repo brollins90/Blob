@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Blob.Contracts.Models;
+using PagedList;
 
 namespace Before.Infrastructure.Extensions
 {
@@ -70,5 +74,29 @@ namespace Before.Infrastructure.Extensions
 
             return MvcHtmlString.Create(alertLevelValue);
         }
+
+        public static IPagedList GetPagedListMetaData<T>(this IPageInfoVm<T> inList)
+        {
+
+            return new StaticPagedList<T>(inList.Items, inList.PageNum, inList.PageSize, inList.TotalCount).GetMetaData();
+        } 
+
+
+    }
+
+    // http://blog.instance-factory.com/?p=1147
+    public static class DefaultValues
+    {
+        public static SelectList ItemsPerPageList
+        {
+            get
+            {
+                return (new SelectList(new List<int> { 5, 10, 25, 50, 100 }, selectedValue: 10));
+            }
+        }
+    }
+    public sealed class Lambda<T>
+    {
+        public static Func<T, T> Cast = x => x;
     }
 }

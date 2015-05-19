@@ -31,6 +31,8 @@ namespace Blob.Contracts.ServiceContracts
         [OperationContract]
         Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId);
         [OperationContract]
+        Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
         Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId);
         [OperationContract]
         Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId);

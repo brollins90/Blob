@@ -54,7 +54,7 @@
     <Compile Include="Models\EnableCustomerDto.cs" />
     <Compile Include="Models\EnableDeviceDto.cs" />
     <Compile Include="Models\EnableUserDto.cs" />
-    <Compile Include="Models\IPagedList.cs" />
+    <Compile Include="Models\IPageInfoVm.cs" />
     <Compile Include="Models\IssueDeviceCommandDto.cs" />
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\PagedListExtensions.cs" />
@@ -71,6 +71,8 @@
     <Compile Include="Models\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
+    <Compile Include="Models\ViewModels\DevicePageVm.cs" />
+    <Compile Include="Models\ViewModels\UserListVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeVm.cs" />
     <Compile Include="Models\ViewModels\DeviceCommandIssueVm.cs" />
     <Compile Include="Models\ViewModels\DeviceCommandParameterPairVm.cs" />

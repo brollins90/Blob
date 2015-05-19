@@ -127,6 +127,19 @@ namespace Blob.Proxies
             return null;
         }
 
+        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
+        {
+            try
+            {
+                return await Channel.GetDevicePageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
         {
             try

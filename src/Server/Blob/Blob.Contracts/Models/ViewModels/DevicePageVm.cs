@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Blob.Contracts.Models.ViewModels
 {
     [DataContract]
-    public class DashDevicesLargeVm : IPageInfoVm<DashDevicesLargeListItemVm>
+    public class DevicePageVm : IPageInfoVm<DeviceListItemVm>
     {
         [DataMember]
         public int PageNum { get; set; }
@@ -19,6 +19,6 @@ namespace Blob.Contracts.Models.ViewModels
         public int TotalCount { get; set; }
 
         [DataMember]
-        public IEnumerable<DashDevicesLargeListItemVm> Items {get; set; } 
+        public IEnumerable<DeviceListItemVm> Items { get; set; } 
     }
 }

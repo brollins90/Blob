@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
@@ -25,11 +24,15 @@ namespace Blob.Contracts.Models.ViewModels
         [Display(Name = "Customer name")]
         [Required]
         public string Name { get; set; }
-        
-        [DataMember]
-        public IEnumerable<UserListItemVm> Users { get; set; }
 
         [DataMember]
-        public IEnumerable<DeviceListItemVm> Devices { get; set; }
+        [Display(Name = "Device count")]
+        [Required]
+        public int DeviceCount { get; set; }
+
+        [DataMember]
+        [Display(Name = "User count")]
+        [Required]
+        public int UserCount { get; set; }
     }
 }

@@ -24,6 +24,11 @@ namespace Blob.Contracts.Models.ViewModels
         public int Status { get; set; }
 
         [DataMember]
+        [Display(Name = "Reason")]
+        [Required]
+        public string Reason { get; set; }
+
+        [DataMember]
         [Display(Name = "Available commands")]
         public IEnumerable<DeviceCommandVm> AvailableCommands { get; set; }
 
