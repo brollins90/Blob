@@ -7,7 +7,7 @@ namespace BMonitor.Service.Configuration
     {
         private ServiceElement() { }
 
-        [ConfigurationProperty("deviceId")]
+        [ConfigurationProperty("deviceId", IsRequired = false)]
         public Guid DeviceId
         {
             get { return (Guid)base["deviceId"]; }

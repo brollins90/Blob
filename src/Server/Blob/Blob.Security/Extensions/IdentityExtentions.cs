@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using Blob.Contracts;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Security.Extensions
@@ -20,7 +21,7 @@ namespace Blob.Security.Extensions
             var ci = identity as ClaimsIdentity;
             if (ci != null)
             {
-                return ci.FindFirstValue(SecurityConstants.BlobId);
+                return ci.FindFirstValue(SecurityConstants.BlobIdClaimType);
             }
             return null;
         }
@@ -48,7 +49,7 @@ namespace Blob.Security.Extensions
             var ci = identity as ClaimsIdentity;
             if (ci != null)
             {
-                return ci.FindFirstValue(SecurityConstants.CustomerId);
+                return ci.FindFirstValue(SecurityConstants.CustomerIdClaimType);
             }
             return null;
         }

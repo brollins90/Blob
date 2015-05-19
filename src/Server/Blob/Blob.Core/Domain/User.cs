@@ -7,7 +7,7 @@ namespace Blob.Core.Domain
     public class BlobUserLogin : GenericUserLogin<Guid> { }
     public class BlobUserRole : GenericUserRole<Guid> { }
 
-    public class User : GenericUser<Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
+    public class User : GenericUser<Guid, BlobUserLogin, BlobUserRole, BlobUserClaim, BlobUserGroup>
     {
         public DateTime CreateDate { get; set; }
         public bool Enabled { get; set; }

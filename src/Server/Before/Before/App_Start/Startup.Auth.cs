@@ -18,6 +18,10 @@ namespace Before
     {
         public void ConfigureAuth(IAppBuilder app, Container container)
         {
+            app.Use(async (context, next) =>
+            {
+                await next.Invoke();
+            });
             app.UseBeforeAuthorization();
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

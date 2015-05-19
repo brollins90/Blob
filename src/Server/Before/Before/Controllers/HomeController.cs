@@ -15,9 +15,6 @@ namespace Before.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var customerId = User.Identity.GetCustomerId();
-            ViewBag.customerId = customerId;
-
             return View();
         }
 

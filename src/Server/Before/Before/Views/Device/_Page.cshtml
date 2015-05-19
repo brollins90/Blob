@@ -112,3 +112,21 @@
     </div>
 
 </div>
+@section scripts
+{
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", "#devicePageContentPager a[href]", function () {
+                $.ajax({
+                    url: $(this).attr("href"),
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#content').html(result);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}

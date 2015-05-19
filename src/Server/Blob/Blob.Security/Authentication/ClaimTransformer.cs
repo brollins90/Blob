@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.ServiceModel;
+using Blob.Contracts;
 using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Data.Identity;
@@ -42,10 +43,10 @@ namespace Blob.Security.Authentication
                     Device device = context.Devices.Find(g);
                     if (device != null && device.Enabled)
                     {
-                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobId, device.Id.ToString()));
-                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobName, device.DeviceName.ToString()));
-                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobPrincipalType, SecurityConstants.DeviceType));
-                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.CustomerId, device.CustomerId.ToString()));
+                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobIdClaimType, device.Id.ToString()));
+                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobNameClaimType, device.DeviceName.ToString()));
+                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobPrincipalTypeClaimType, SecurityConstants.DeviceTypeClaimType));
+                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.CustomerIdClaimType, device.CustomerId.ToString()));
                     }
                 }
                 else
@@ -56,10 +57,10 @@ namespace Blob.Security.Authentication
                         //todo implement the enabled checks
                         if (user != null)// && user.Enabled)
                         {
-                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobId, user.Id.ToString()));
-                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobName, user.UserName.ToString()));
-                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobPrincipalType, SecurityConstants.UserType));
-                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.CustomerId, user.CustomerId.ToString()));
+                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobIdClaimType, user.Id.ToString()));
+                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobNameClaimType, user.UserName.ToString()));
+                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobPrincipalTypeClaimType, SecurityConstants.UserTypeClaimType));
+                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.CustomerIdClaimType, user.CustomerId.ToString()));
                         }
                     }
                 }

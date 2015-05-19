@@ -31,7 +31,7 @@ namespace Blob.Data.Mapping
                 .WithRequired()
                 .HasForeignKey<Guid>((BlobUserGroup ug) => ug.GroupId);
 
-            // Users
+            // Roles
             HasMany<BlobGroupRole>((BlobGroup g) => g.Roles)
                 .WithRequired()
                 .HasForeignKey<Guid>((BlobGroupRole gr) => gr.GroupId);

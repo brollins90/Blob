@@ -91,8 +91,8 @@ namespace BMonitor.Service
             if (!_isRegistered)
             {
                 //if things are running, stop them
-                _jobHandler.Stop();
-                _connectionThread.Stop();
+                if (_jobHandler != null) _jobHandler.Stop();
+                if (_connectionThread != null) _connectionThread.Stop();
 
                 RegisterDevice(Username, Password);
             }
@@ -147,6 +147,11 @@ namespace BMonitor.Service
 
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
                 _deviceId = deviceGuid;
+                _isRegistered = true;
+
+                // move this to an event...
+                // todo:
+                Start();
 
             }
             catch (Exception e)

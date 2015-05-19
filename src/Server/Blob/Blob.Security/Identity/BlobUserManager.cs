@@ -9,6 +9,7 @@ using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core.Domain;
 using Blob.Data.Identity;
+using Blob.Security.Authentication;
 using log4net;
 using Microsoft.AspNet.Identity;
 
@@ -432,7 +433,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("GetEmailAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetEmailStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -451,7 +452,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("GetEmailConfirmedAsync({0})", userId));
             ThrowIfDisposed();
             var store = GetEmailStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -471,7 +472,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("SetEmailAsync({0}, {1})", userId, email));
             ThrowIfDisposed();
             var store = GetEmailStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -480,7 +481,7 @@ namespace Blob.Security.Identity
             await store.SetEmailAsync(user, email).WithCurrentCulture();
             await store.SetEmailConfirmedAsync(user, false).WithCurrentCulture();
             //await UpdateSecurityStampInternal(user).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
+            await UpdateDomainUserAsync(user).WithCurrentCulture();
         }
 
 
@@ -489,7 +490,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("SetEmailConfirmedAsync({0}, {1})", userId, confirmed));
             ThrowIfDisposed();
             var store = GetEmailStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -500,7 +501,7 @@ namespace Blob.Security.Identity
             //    return IdentityResult.Failed(Resources.InvalidToken).ToDto();
             //}
             await store.SetEmailConfirmedAsync(user, confirmed).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
+            await UpdateDomainUserAsync(user).WithCurrentCulture();
         }
 
         protected IUserEmailStore<User, Guid> GetEmailStore()
@@ -836,7 +837,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("GetPasswordHashAsync({0})", userId));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -855,7 +856,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("HasPasswordAsync({0})", userId));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -869,7 +870,7 @@ namespace Blob.Security.Identity
             _log.Debug(string.Format("SetPasswordHashAsync({0}, {1})", userId, passwordHash));
             ThrowIfDisposed();
             var passwordStore = GetPasswordStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -907,7 +908,7 @@ namespace Blob.Security.Identity
         {
             ThrowIfDisposed();
             var userRoleStore = GetUserRoleStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -919,7 +920,7 @@ namespace Blob.Security.Identity
                 return;// new IdentityResult(Resources.UserAlreadyInRole).ToDto();
             }
             await userRoleStore.AddToRoleAsync(user, role).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
+            await UpdateDomainUserAsync(user).WithCurrentCulture();
         }
 
 
@@ -943,7 +944,7 @@ namespace Blob.Security.Identity
         {
             ThrowIfDisposed();
             var userRoleStore = GetUserRoleStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -954,7 +955,7 @@ namespace Blob.Security.Identity
                 return;// new IdentityResult(Resources.UserNotInRole).ToDto();
             }
             await userRoleStore.RemoveFromRoleAsync(user, role).WithCurrentCulture();
-            await UpdateAsync2(user).WithCurrentCulture();
+            await UpdateDomainUserAsync(user).WithCurrentCulture();
         }
 
 
@@ -975,7 +976,7 @@ namespace Blob.Security.Identity
         {
             ThrowIfDisposed();
             var userRoleStore = GetUserRoleStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -994,7 +995,7 @@ namespace Blob.Security.Identity
         {
             ThrowIfDisposed();
             var userRoleStore = GetUserRoleStore();
-            var user = await FindByIdAsync2(userId).WithCurrentCulture();
+            var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
@@ -1189,7 +1190,7 @@ namespace Blob.Security.Identity
         {
             _log.Debug(string.Format("DeleteAsync({0})", userId));
             ThrowIfDisposed();
-            var user = await FindByIdAsync2(userId);
+            var user = await FindDomainUserByIdAsync(userId);
             await Store.DeleteAsync(user).WithCurrentCulture();
             //return IdentityResult.Success.ToDto();
         }
@@ -1271,21 +1272,16 @@ namespace Blob.Security.Identity
             return UserConverter.UserFromUserDto(user);
         }
         
-        public async Task<User> FindByIdAsync2(Guid userId)
+        public async Task<User> FindDomainUserByIdAsync(Guid userId)
         {
-            _log.Debug(string.Format("FindByIdAsync2({0})", userId));
+            _log.Debug(string.Format("FindDomainUserByIdAsync({0})", userId));
             ThrowIfDisposed();
-            var user = await FindByIdAsync(userId).WithCurrentCulture();
-            if (user == null)
-            {
-                return null;
-            }
-            return UserConverter.UserFromUserDto(user);
+            return await Store.FindByIdAsync(userId);
         }
 
-        public async Task UpdateAsync2(User user)
+        public async Task UpdateDomainUserAsync(User user)
         {
-            _log.Debug(string.Format("UpdateAsync2({0})", user));
+            _log.Debug(string.Format("UpdateDomainUserAsync({0})", user));
             ThrowIfDisposed();
             if (user == null)
             {
@@ -1640,7 +1636,7 @@ namespace Blob.Security.Identity
         {
             _log.Debug(string.Format("CreateIdentityAsync({0}, {1})", userDto, authenticationType));
             ThrowIfDisposed(); 
-            User user = await FindByIdAsync2(userDto.Id.ToGuid());
+            User user = await FindDomainUserByIdAsync(userDto.Id.ToGuid());
             if (user == null)
             {
                 throw new ArgumentNullException("userDto");

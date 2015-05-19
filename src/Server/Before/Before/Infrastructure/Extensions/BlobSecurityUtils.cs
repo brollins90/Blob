@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
+using Blob.Contracts;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
 using Microsoft.AspNet.Identity;
@@ -59,18 +61,17 @@ namespace Before.Infrastructure.Extensions
 
         public static Guid GetCustomerId(this IIdentity identity)
         {
-            return Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
-            //if (identity == null)
+            //return Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            var ci = (ClaimsIdentity)identity;
+            //if (ci.HasClaim(x=>x.Type.Equals(SecurityConstants.CustomerIdClaimType)))
             //{
-            //    throw new ArgumentNullException("identity");
+                return Guid.Parse(ci.FindFirstValue(SecurityConstants.CustomerIdClaimType));
             //}
-            //var ci = identity as ClaimsIdentity;
-            //if (ci != null)
-            //{
-            //    return ci.FindFirstValue("customerid");
-            //    //return ci.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
-            //}
-            //return null;
+            //return Guid.Empty;
         }
     }
 }

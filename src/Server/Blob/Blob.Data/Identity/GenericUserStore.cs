@@ -14,12 +14,12 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {
-    public class BlobUserStore : GenericUserStore<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
+    public class BlobUserStore : GenericUserStore<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim, BlobUserGroup>
     {
         public BlobUserStore(DbContext context) : base(context) { }
     }
 
-    public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
+    public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim, TUserGroup> :
         IUserLoginStore<TUser, TKey>,
         IUserClaimStore<TUser, TKey>,
         IUserRoleStore<TUser, TKey>,
@@ -31,11 +31,12 @@ namespace Blob.Data.Identity
         IUserTwoFactorStore<TUser, TKey>,
         IUserLockoutStore<TUser, TKey>
         where TKey : IEquatable<TKey>
-        where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim>
+        where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim, TUserGroup>
         where TRole : GenericRole<TKey, TUserRole>
         where TUserLogin : GenericUserLogin<TKey>, new()
         where TUserRole : GenericUserRole<TKey>, new()
         where TUserClaim : GenericUserClaim<TKey>, new()
+        where TUserGroup : GenericUserGroup<TKey>, new()
     {
         private readonly IDbSet<TUserLogin> _logins;
         private readonly IDbSet<TUserClaim> _userClaims;

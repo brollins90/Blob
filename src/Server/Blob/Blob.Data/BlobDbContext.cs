@@ -8,7 +8,7 @@ using log4net;
 
 namespace Blob.Data
 {
-    public class BlobDbContext : GenericDbContext<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
+    public class BlobDbContext : GenericDbContext<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim, BlobUserGroup, BlobGroup, BlobGroupRole>
     {
         private readonly ILog _log;
 
