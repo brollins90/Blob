@@ -152,6 +152,15 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
+        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "performance", recordId.ToString());
+            return await _blobQueryManager.GetPerformanceRecordPageVmForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
         public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
@@ -203,7 +212,15 @@ namespace Blob.Services.Before
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "enableview", "user", userId.ToString());
             return await _blobQueryManager.GetUserEnableVmAsync(userId).ConfigureAwait(false);
         }
-
+        
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "view")]
+        public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "user", customerId.ToString());
+            return await _blobQueryManager.GetUserPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+        }
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "view")]
         public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)

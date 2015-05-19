@@ -192,6 +192,19 @@ namespace Blob.Proxies
             return null;
         }
 
+        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
+        {
+            try
+            {
+                return await Channel.GetPerformanceRecordPageVmForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
         public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             try
@@ -262,6 +275,19 @@ namespace Blob.Proxies
             try
             {
                 return await Channel.GetUserEnableVmAsync(userId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum, int pageSize)
+        {
+            try
+            {
+                return await Channel.GetUserPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

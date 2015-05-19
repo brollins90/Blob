@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -29,7 +28,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Disable", viewModel);
+            return PartialView("_DisableModal", viewModel);
         }
 
         // POST: /device/disable/{model}
@@ -42,7 +41,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DisableDeviceAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Disable", model);
+            return PartialView("_DisableModal", model);
         }
 
         // GET: device/edit/{id}
@@ -60,7 +59,7 @@ namespace Before.Controllers
             }
 
             ViewBag.DeviceTypeId = new SelectList(viewModel.AvailableTypes, "DeviceTypeId", "Value", viewModel.DeviceTypeId);
-            return PartialView("_Edit", viewModel);
+            return PartialView("_EditModal", viewModel);
         }
 
         // POST: device/edit/{dto}
@@ -73,7 +72,7 @@ namespace Before.Controllers
                 await BlobCommandManager.UpdateDeviceAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Edit", model);
+            return PartialView("_EditModal", model);
         }
 
         // GET: /device/enable/{id}
@@ -89,7 +88,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Enable", viewModel);
+            return PartialView("_EnableModal", viewModel);
         }
 
         // POST: /device/enable/{dto}
@@ -102,7 +101,7 @@ namespace Before.Controllers
                 await BlobCommandManager.EnableDeviceAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Enable", model);
+            return PartialView("_EnableModal", model);
         }
 
         // GET: /device/issuecommand/{id}
@@ -119,7 +118,7 @@ namespace Before.Controllers
                 return HttpNotFound();
             }
 
-            return PartialView("_IssueCommand", viewModel);
+            return PartialView("_IssueCommandModal", viewModel);
         }
 
         // POST: /device/issuecommand/{dto}
@@ -132,13 +131,7 @@ namespace Before.Controllers
                 await BlobCommandManager.IssueCommandAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_IssueCommand", model);
-        }
-
-        // GET: /device/list/{models}
-        public ActionResult List(IEnumerable<DeviceListItemVm> models)
-        {
-            return PartialView("_List", models);
+            return PartialView("_IssueCommandModal", model);
         }
 
         // GET: /device/PageForCustomer/{customerId}
@@ -174,6 +167,5 @@ namespace Before.Controllers
 
             return View(viewModel);
         }
-
     }
 }

@@ -70,8 +70,8 @@
                 </div>
                 <div id="performance" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <hr />
-                        @{ Html.RenderAction("List", "Performance", routeValues: new { models = Model.PerformanceRecords });}
+                        <hr/> 
+                        @{ Html.RenderAction("PageForStatus", "Performance", routeValues: new { recordId = Model.RecordId });}
                     </div>
                 </div>
             </div>

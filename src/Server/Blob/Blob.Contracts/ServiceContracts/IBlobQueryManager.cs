@@ -41,6 +41,9 @@ namespace Blob.Contracts.ServiceContracts
         Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId);
         [OperationContract]
         Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
+
+        [OperationContract]
+        Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10);
         [OperationContract]
         Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId);
 
@@ -55,6 +58,8 @@ namespace Blob.Contracts.ServiceContracts
         Task<UserDisableVm> GetUserDisableVmAsync(Guid userId);
         [OperationContract]
         Task<UserEnableVm> GetUserEnableVmAsync(Guid userId);
+        [OperationContract]
+        Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
         [OperationContract]
         Task<UserSingleVm> GetUserSingleVmAsync(Guid userId);
         [OperationContract]

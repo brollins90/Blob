@@ -6,13 +6,14 @@
 
 <h2>@ViewBag.Title.</h2>
 
+<div class="pull-right">
+    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Device", routeValues: new { id = Model.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
+    &nbsp;
+    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Disable", "Disable", "Device", routeValues: new { id = Model.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
+</div>
+
 <div class="row">
     <div class="col-md-12">
-
-        <hr />
-        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Device", routeValues: new { id = Model.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
-        &nbsp;
-        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Disable", "Disable", "Device", routeValues: new { id = Model.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
 
         <div id="accordion" class="panel-group">
             <div class="panel panel-default">
@@ -21,9 +22,8 @@
                         <a data-toggle="collapse" data-parent="#accordion" href="#device">Device</a>
                     </h4>
                 </div>
-                <div id="device" class="panel-collapse collapse in">
+                <div id="manage" class="panel-collapse collapse in">
                     <div class="panel-body">
-
                         <dl class="dl-horizontal">
                             <dt>
                                 @Html.DisplayNameFor(model => model.DeviceId)
@@ -73,7 +73,6 @@
                             <dd>
                                 @Html.DisplayFor(model => model.Status)
                             </dd>
-
                         </dl>
                     </div>
                 </div>
@@ -87,7 +86,7 @@
                 </div>
                 <div id="status" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <hr/> 
+                        <hr />
                         @{ Html.RenderAction("PageForDevice", "Status", routeValues: new { deviceId = Model.DeviceId });}
                     </div>
                 </div>
@@ -100,7 +99,7 @@
                 </div>
                 <div id="performance" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <hr/> 
+                        <hr />
                         @{ Html.RenderAction("PageForDevice", "Performance", routeValues: new { deviceId = Model.DeviceId });}
                     </div>
                 </div>
@@ -108,3 +107,38 @@
         </div>
     </div>
 </div>
+
+@section scripts
+{
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", "#statusRecordPageContentPager a[href]", function () {
+                $.ajax({
+                    url: $(this).attr("href"),
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#statusRecordPageContent').html(result);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", "#performanceRecordPageContentPager a[href]", function () {
+                $.ajax({
+                    url: $(this).attr("href"),
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#performanceRecordPageContent').html(result);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}

@@ -30,7 +30,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Disable", viewModel);
+            return PartialView("_DisableModal", viewModel);
         }
 
         // POST: /customer/disable/{model}
@@ -44,7 +44,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DisableCustomerAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Disable", model);
+            return PartialView("_DisableModal", model);
         }
 
         // GET: /customer/edit/{id}
@@ -61,7 +61,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Edit", viewModel);
+            return PartialView("_EditModal", viewModel);
         }
 
         // POST: /customer/edit/{model}
@@ -75,7 +75,7 @@ namespace Before.Controllers
                 await BlobCommandManager.UpdateCustomerAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Edit", model);
+            return PartialView("_EditModal", model);
         }
 
         // GET: /customer/enable/{id}
@@ -92,7 +92,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Enable", viewModel);
+            return PartialView("_EnableModal", viewModel);
         }
 
         // POST: /customer/enable/{model}
@@ -106,16 +106,9 @@ namespace Before.Controllers
                 await BlobCommandManager.EnableCustomerAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Enable", model);
+            return PartialView("_EnableModal", model);
         }
-
-        // GET: /customer/list/{models}
-        [BeforeAuthorize(Operation = "view", Resource = "customer")]
-        public ActionResult List(IEnumerable<CustomerListItemVm> models)
-        {
-            return PartialView("_List", models);
-        }
-
+        
         // GET: /customer/single/{id}
         [BeforeAuthorize(Operation = "view", Resource = "customer")]
         public async Task<ActionResult> Single(Guid? id)

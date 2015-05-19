@@ -3,17 +3,17 @@
 @{
     ViewBag.Title = "Customer";
 }
-<h2>@ViewBag.Title.</h2>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="pull-right">
+    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Customer", routeValues: new { id = Model.CustomerId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
+</div>
 
 <div class="row">
     <div class="col-md-12">
-        <hr />
-        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Customer", routeValues: new { id = Model.CustomerId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
-        @*&nbsp;
-        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Disable", "Disable", "Customer", routeValues: new { id = Model.CustomerId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })*@
 
         <div id="accordion" class="panel-group">
-
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -22,10 +22,6 @@
                 </div>
                 <div id="manage" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <div class="panel-heading">
-                            <strong>@Model.Name</strong>
-                        </div>
-                        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Customer", routeValues: new {id = Model.CustomerId}, htmlAttributes: new {data_modal = "", @class = "btn btn-default"})
                         <dl class="dl-horizontal">
                             <dt>
                                 @Html.DisplayNameFor(model => model.Name)
@@ -62,14 +58,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#users">Users</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#devices">Devices</a>
                     </h4>
                 </div>
-                <div id="users" class="panel-collapse collapse in">
+                <div id="devices" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <hr />
-
-                        @*@{ Html.Action("PageForCustomer", "User", routeValues: new { id = Model.CustomerId });}*@
+                        @{ Html.RenderAction("PageForCustomer", "Device", routeValues: new { customerId = Model.CustomerId });}
                     </div>
                 </div>
             </div>
@@ -77,14 +72,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#devices">Devices</a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#users">Users</a>
                     </h4>
                 </div>
-                <div id="devices" class="panel-collapse collapse in">
+                <div id="users" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <hr />
-
-                        @{ Html.RenderAction("PageForCustomer", "Device", routeValues: new { customerId = Model.CustomerId });}
+                        @{ Html.RenderAction("PageForCustomer", "User", routeValues: new { customerId = Model.CustomerId });}
                     </div>
                 </div>
             </div>
@@ -103,6 +97,22 @@
                     cache: false,
                     success: function (result) {
                         $('#devicePageContent').html(result);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", "#userPageContentPager a[href]", function () {
+                $.ajax({
+                    url: $(this).attr("href"),
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $('#userPageContent').html(result);
                     }
                 });
                 return false;

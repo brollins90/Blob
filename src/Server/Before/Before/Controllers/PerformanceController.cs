@@ -29,7 +29,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Delete", viewModel);
+            return PartialView("_DeleteModal", viewModel);
         }
 
         // POST: /performance/delete/{model}
@@ -42,13 +42,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DeletePerformanceRecordAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Delete", model);
-        }
-
-        // GET: /performance/list/{models}
-        public ActionResult List(IEnumerable<PerformanceRecordListItemVm> models)
-        {
-            return PartialView("_List", models);
+            return PartialView("_DeleteModal", model);
         }
 
         // GET: /performance/PageForCustomer/{deviceId}
@@ -58,6 +52,23 @@ namespace Before.Controllers
             if (!pageSize.HasValue) pageSize = 10;
 
             var pageVm = AsyncHelpers.RunSync<PerformanceRecordPageVm>(() => BlobQueryManager.GetPerformanceRecordPageVmAsync(id, page.Value, pageSize.Value));
+
+            ViewBag.DeviceId = id;
+
+            var c = Lambda<Func<int, string>>.Cast;
+            var pageUrl = c(p => Url.Action("PageForDevice", "Performance", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
+            ViewBag.PageUrl = pageUrl;
+            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
+            return PartialView("_Page", pageVm);
+        }
+
+        // GET: /performance/PageForCustomer/{deviceId}
+        public ActionResult PageForStatus(long id, int? page, int? pageSize)
+        {
+            if (!page.HasValue) page = 1;
+            if (!pageSize.HasValue) pageSize = 10;
+
+            var pageVm = AsyncHelpers.RunSync<PerformanceRecordPageVm>(() => BlobQueryManager.GetPerformanceRecordPageVmForStatusAsync(id, page.Value, pageSize.Value));
 
             ViewBag.DeviceId = id;
 

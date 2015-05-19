@@ -8,7 +8,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {

@@ -317,6 +317,41 @@ namespace Blob.Managers.Blob
             }).ConfigureAwait(false);
         }
 
+        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10)
+        {
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            var count = Context.DevicePerfDatas.Where(x => x.StatusId == recordId).FutureCount();
+            var data = Context.DevicePerfDatas
+                .Where(x => x.StatusId == recordId)
+                .OrderByDescending(x => x.TimeGenerated)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new PerformanceRecordPageVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = data.Select(x => new PerformanceRecordListItemVm
+                {
+                    Critical = x.Critical.Value.ToString(),
+                    Label = x.Label,
+                    Max = x.Max.Value.ToString(),
+                    Min = x.Min.Value.ToString(),
+                    MonitorDescription = x.MonitorDescription,
+                    MonitorName = x.MonitorName,
+                    RecordId = x.Id,
+                    TimeGenerated = x.TimeGenerated,
+                    Unit = x.UnitOfMeasure,
+                    Value = x.Value.ToString(),
+                    Warning = x.Warning.Value.ToString()
+                }),
+            }).ConfigureAwait(false);
+        }
+
         public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             return await (from perf in Context.DevicePerfDatas
@@ -423,6 +458,34 @@ namespace Blob.Managers.Blob
                               UserId = user.Id,
                               UserName = user.UserName
                           }).SingleAsync().ConfigureAwait(false);
+        }
+
+        public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        {
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            var count = Context.Users.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
+            var devices = Context.Users
+                .Where(x => x.CustomerId.Equals(customerId))
+                .OrderBy(x => x.UserName).ThenBy(x => x.Email)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new UserPageVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = devices.Select(x => new UserListItemVm
+                {
+                    Email = x.Email,
+                    Enabled = x.Enabled,
+                    UserId = x.Id,
+                    UserName = x.UserName
+                }),
+            }).ConfigureAwait(false);
         }
 
         public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)

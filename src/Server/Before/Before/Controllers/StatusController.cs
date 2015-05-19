@@ -29,7 +29,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Delete", viewModel);
+            return PartialView("_DeleteModal", viewModel);
         }
 
         // POST: /status/delete/{model}
@@ -42,13 +42,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DeleteStatusRecordAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Delete", model);
-        }
-
-        // GET: /status/list/{models}
-        public ActionResult List(IEnumerable<StatusRecordListItemVm> models)
-        {
-            return PartialView("_List", models);
+            return PartialView("_DeleteModal", model);
         }
 
         // GET: /status/PageForCustomer/{deviceId}

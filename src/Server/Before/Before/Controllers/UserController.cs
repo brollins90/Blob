@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Models;
@@ -36,7 +37,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Disable", viewModel);
+            return PartialView("_DisableModal", viewModel);
         }
 
         // POST: /user/disable/{model}
@@ -49,7 +50,7 @@ namespace Before.Controllers
                 await BlobCommandManager.DisableUserAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Disable", model);
+            return PartialView("_DisableModal", model);
         }
 
         // GET: /user/edit/{id}
@@ -65,7 +66,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Edit", viewModel);
+            return PartialView("_EditModal", viewModel);
         }
 
         // POST: /user/edit/{model}
@@ -78,7 +79,7 @@ namespace Before.Controllers
                 await BlobCommandManager.UpdateUserAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Edit", model);
+            return PartialView("_EditModal", model);
         }
 
         // GET: /user/editpassword/{id}
@@ -94,7 +95,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_EditPassword", viewModel);
+            return PartialView("_EditPasswordModal", viewModel);
         }
 
         //
@@ -120,7 +121,7 @@ namespace Before.Controllers
                     }
                 }
             }
-            return PartialView("_EditPassword", model);
+            return PartialView("_EditPasswordModal", model);
         }
 
         // GET: /user/enable/{id}
@@ -136,7 +137,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("_Enable", viewModel);
+            return PartialView("_EnableModal", viewModel);
         }
 
         // POST: /user/enable/{model}
@@ -149,13 +150,24 @@ namespace Before.Controllers
                 await BlobCommandManager.EnableUserAsync(model.ToDto()).ConfigureAwait(true);
                 return Json(new { success = true });
             }
-            return PartialView("_Enable", model);
+            return PartialView("_EnableModal", model);
         }
 
-        // GET: /user/list/{models}
-        public ActionResult List(IEnumerable<UserListItemVm> models)
+        // GET: /user/PageForCustomer/{customerId}
+        public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
         {
-            return PartialView("_List", models);
+            if (!page.HasValue) page = 1;
+            if (!pageSize.HasValue) pageSize = 10;
+
+            var pageVm = AsyncHelpers.RunSync<UserPageVm>(() => BlobQueryManager.GetUserPageVmAsync(id, page.Value, pageSize.Value));
+
+            ViewBag.CustomerId = id;
+
+            var c = Lambda<Func<int, string>>.Cast;
+            var pageUrl = c(p => Url.Action("PageForCustomer", "User", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
+            ViewBag.PageUrl = pageUrl;
+            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
+            return PartialView("_Page", pageVm);
         }
 
         // GET: /user/single/{id}
