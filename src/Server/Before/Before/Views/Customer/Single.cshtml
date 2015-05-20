@@ -85,38 +85,3 @@
         </div>
     </div>
 </div>
-
-@section scripts
-{
-    <script language="javascript" type="text/javascript">
-        $(document).ready(function () {
-            $(document).on("click", "#devicePageContentPager a[href]", function () {
-                $.ajax({
-                    url: $(this).attr("href"),
-                    type: 'GET',
-                    cache: false,
-                    success: function (result) {
-                        $('#devicePageContent').html(result);
-                    }
-                });
-                return false;
-            });
-        });
-    </script>
-
-    <script language="javascript" type="text/javascript">
-        $(document).ready(function () {
-            $(document).on("click", "#userPageContentPager a[href]", function () {
-                $.ajax({
-                    url: $(this).attr("href"),
-                    type: 'GET',
-                    cache: false,
-                    success: function (result) {
-                        $('#userPageContent').html(result);
-                    }
-                });
-                return false;
-            });
-        });
-    </script>
-}

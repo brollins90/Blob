@@ -49,6 +49,7 @@
     <Compile Include="Domain\Status.cs" />
     <Compile Include="Domain\StatusPerf.cs" />
     <Compile Include="Domain\User.cs" />
+    <Compile Include="Domain\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

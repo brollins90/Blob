@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFB7E4D5-E72E-401D-B576-AE890E35BB52}</ProjectGuid>
+    <ProjectGuid>{E770BFBC-6D41-47AF-B76D-CF47370E5A73}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Blob.Managers</RootNamespace>
-    <AssemblyName>Blob.Managers</AssemblyName>
+    <RootNamespace>Behind.Core</RootNamespace>
+    <AssemblyName>Behind.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,62 +30,56 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=3.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.1.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.1.0\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="Ninject.Extensions.Quartz, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.Quartz.0.2.0.0\lib\net45\Ninject.Extensions.Quartz.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    <Reference Include="Quartz, Version=2.3.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.3.2\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blob\BlobAuditor.cs" />
-    <Compile Include="Blob\BlobQueryManager.cs" />
-    <Compile Include="Command\CommandConnectionManager.cs" />
-    <Compile Include="Command\CommandQueueManager.cs" />
-    <Compile Include="Command\ICommandQueueManager.cs" />
-    <Compile Include="Command\ICommandConnectionManager.cs" />
-    <Compile Include="Extensions\SearchExtensions.cs" />
-    <Compile Include="Notification\NotificationManager.cs" />
-    <Compile Include="Search\PagedListResult.cs" />
-    <Compile Include="Search\SearchQuery.cs" />
+    <Compile Include="BehindManager.cs" />
+    <Compile Include="IBehind.cs" />
+    <Compile Include="Notification\EmailNotificationJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Blob\BlobCommandManager.cs" />
-    <Compile Include="Extensions\Parsing.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">
-      <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
-      <Name>Blob.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Blob.Core\Blob.Core.csproj">
-      <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
-      <Name>Blob.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Blob.Data\Blob.Data.csproj">
       <Project>{E12F5B0F-43BD-479E-B36F-553C965A8E33}</Project>
       <Name>Blob.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Blob.Identity\Blob.Identity.csproj">
-      <Project>{659bd006-9edc-465a-8f8d-1b1693c956c0}</Project>
-      <Name>Blob.Identity</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Audit\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

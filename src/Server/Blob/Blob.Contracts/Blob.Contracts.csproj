@@ -71,6 +71,7 @@
     <Compile Include="Models\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
+    <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
     <Compile Include="Models\ViewModels\UserPageVm.cs" />
     <Compile Include="Models\ViewModels\PerformanceRecordPageVm.cs" />
     <Compile Include="Models\ViewModels\StatusRecordPageVm.cs" />
