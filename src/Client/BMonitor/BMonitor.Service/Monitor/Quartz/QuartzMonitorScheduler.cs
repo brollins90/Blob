@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using BMonitor.Service.Configuration;
 using BMonitor.Service.Helpers;
 using log4net;
 using Ninject;
@@ -15,6 +17,9 @@ namespace BMonitor.Service.Monitor.Quartz
         private IScheduler _scheduler;
         private BMonitorStatusHelper _statusHelper;
 
+        private Guid _deviceId;
+        private bool _enablePerformanceMonitoring;
+
         public QuartzMonitorScheduler(IKernel kernel, BMonitorStatusHelper statusHelper)
         {
             _kernel = kernel;
@@ -25,10 +30,17 @@ namespace BMonitor.Service.Monitor.Quartz
         public bool LoadConfig()
         {
             _log.Debug("LoadConfig");
+            BMonitorSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorSection;
+            if (config == null)
+                throw new ConfigurationErrorsException();
+
             try
             {
+                _deviceId = config.Service.DeviceId;
+                _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
+
                 _scheduler = StdSchedulerFactory.GetDefaultScheduler();
-                _scheduler.JobFactory = new NinjectJobFactory(_kernel);
+                _scheduler.JobFactory = new NinjectJobFactory(_kernel, _enablePerformanceMonitoring);
                 _scheduler.ListenerManager.AddJobListener(new SendStatusJobListener(_statusHelper), GroupMatcher<JobKey>.AnyGroup());
 
                 return true;

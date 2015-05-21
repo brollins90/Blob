@@ -145,7 +145,7 @@ namespace Before.Controllers
             ViewBag.CustomerId = id;
 
             var c = Lambda<Func<int, string>>.Cast;
-            var pageUrl = c(p => Url.Action("PageForCustomer", "Device", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
+            Func<int, string> pageUrl = c(p => Url.Action("PageForCustomer", "Device", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
             ViewBag.PageUrl = pageUrl;
             ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
             return PartialView("_Page", pageVm);

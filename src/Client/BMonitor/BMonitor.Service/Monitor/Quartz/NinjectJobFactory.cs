@@ -13,11 +13,13 @@ namespace BMonitor.Service.Monitor.Quartz
     {
         private readonly IKernel _kernel;
         private readonly ILog _log;
+        private readonly bool _enablePerformanceMonitoring;
 
-        public NinjectJobFactory(IKernel kernel)
+        public NinjectJobFactory(IKernel kernel, bool enablePerformanceMonitoring)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _kernel = kernel;
+            _enablePerformanceMonitoring = enablePerformanceMonitoring;
             _log.Debug("Constructing NinjectJobFactory");
         }
 
@@ -42,8 +44,8 @@ namespace BMonitor.Service.Monitor.Quartz
                 }
 
                 QuartzJob wrapperJob = new QuartzJob(monitorInstance as IMonitor);
-
                 _log.Debug("Returning");
+                bundle.JobDetail.JobDataMap.Put("collectPerfdata", _enablePerformanceMonitoring); 
                 return wrapperJob;
             }
             catch (Exception ex)

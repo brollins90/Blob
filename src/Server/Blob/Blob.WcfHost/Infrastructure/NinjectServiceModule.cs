@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.Entity;
 using Blob.Contracts.ServiceContracts;
+using Blob.Managers.Audit;
 using Blob.Security.Identity;
 using log4net;
 using Ninject.Modules;
@@ -36,7 +37,7 @@ namespace Blob.WcfHost.Infrastructure
             Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
-            Bind<IBlobAuditor>().To<Managers.Blob.BlobAuditor>();
+            Bind<IBlobAuditor>().To<BlobAuditor>();
             Bind<IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
             Bind<IBlobQueryManager>().To<Managers.Blob.BlobQueryManager>();
 

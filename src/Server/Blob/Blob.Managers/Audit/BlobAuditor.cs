@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Reflection;
 using System.Threading.Tasks;
-using Blob.Contracts.Commands;
-using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core.Domain;
 using Blob.Data;
-using Blob.Managers.Command;
-using Blob.Managers.Extensions;
 using log4net;
 
-namespace Blob.Managers.Blob
+namespace Blob.Managers.Audit
 {
     public class BlobAuditor : IBlobAuditor
     {

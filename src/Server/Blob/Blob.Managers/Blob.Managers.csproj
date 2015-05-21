@@ -49,7 +49,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blob\BlobAuditor.cs" />
+    <Compile Include="Audit\BlobAuditor.cs" />
     <Compile Include="Blob\BlobQueryManager.cs" />
     <Compile Include="Command\CommandConnectionManager.cs" />
     <Compile Include="Command\CommandQueueManager.cs" />
@@ -83,10 +83,12 @@
       <Project>{659bd006-9edc-465a-8f8d-1b1693c956c0}</Project>
       <Name>Blob.Identity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blob.Security\Blob.Security.csproj">
+      <Project>{0586D78E-FB9D-484E-AAB9-00D434E0F3CD}</Project>
+      <Name>Blob.Security</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Audit\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

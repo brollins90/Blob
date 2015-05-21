@@ -30,7 +30,7 @@ namespace Blob.Managers.Blob
         // Dash
 
 
-        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageSize = 10, int pageNum = 1)
+        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
@@ -48,7 +48,7 @@ namespace Blob.Managers.Blob
             {
                 TotalCount = count,
                 PageCount = pCount,
-                PageNum = pNum,
+                PageNum = pNum + 1,
                 PageSize = pageSize,
                 Items = devices.Select(x => new DashDevicesLargeListItemVm
                                            {

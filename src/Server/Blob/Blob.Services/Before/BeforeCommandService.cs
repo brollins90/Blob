@@ -11,6 +11,7 @@ using AuditLevel = Blob.Contracts.ServiceContracts.AuditLevel;
 namespace Blob.Services.Before
 {
     [ServiceBehavior]
+    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
     //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]
     public class BeforeCommandService : IBlobCommandManager
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Blob.Contracts.Commands;
 using Blob.Contracts.Models;
@@ -9,6 +10,7 @@ using Blob.Core.Domain;
 using Blob.Data;
 using Blob.Managers.Command;
 using Blob.Managers.Extensions;
+using Blob.Security.Extensions;
 using log4net;
 
 namespace Blob.Managers.Blob
@@ -119,40 +121,51 @@ namespace Blob.Managers.Blob
         public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto message)
         {
             _log.Debug("BlobManager registering device " + message.DeviceId);
-            // Authenticate user is done, it is required in the service
 
+            bool succeeded = false;
             Guid deviceId = Guid.Parse(message.DeviceId);
-            // check if device is already defined
-            Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(deviceId));
-            if (device != null)
+            try
             {
-                throw new InvalidOperationException("This device has already been registered.");
+                // check if device is already defined
+                Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(deviceId));
+                if (device != null)
+                {
+                    throw new InvalidOperationException("This device has already been registered.");
+                }
+
+                DateTime createDate = DateTime.Now;
+                DeviceType deviceType = await Context.Set<DeviceType>().FirstOrDefaultAsync(x => x.Value.Equals(message.DeviceType));
+
+                // todo, get the customerid from the principal
+                ClaimsPrincipal id = ClaimsPrincipal.Current;
+                Guid customerId = Guid.Parse(id.Identity.GetCustomerId());
+                //Guid customerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
+
+                device = new Device
+                         {
+                             AlertLevel = 0, // initially set to Ok
+                             CreateDate = createDate,
+                             CustomerId = customerId,
+                             DeviceName = message.DeviceName,
+                             DeviceType = deviceType,
+                             Enabled = true,
+                             Id = deviceId,
+                             LastActivityDate = createDate
+                         };
+
+                Context.Devices.Add(device);
+                await Context.SaveChangesAsync();
+                succeeded = true;
             }
-
-            DateTime createDate = DateTime.Now;
-            DeviceType deviceType = await Context.Set<DeviceType>().FirstOrDefaultAsync(x => x.Value.Equals(message.DeviceType));
-
-            // todo, get the customerid from the principal
-            Guid customerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
-            
-            device = new Device
-                            {
-                                AlertLevel = 0, // initially set to Ok
-                                CreateDate = createDate,
-                                CustomerId = customerId,
-                                DeviceName = message.DeviceName,
-                                DeviceType = deviceType,
-                                Enabled = true,
-                                Id = Guid.Parse(message.DeviceId),
-                                LastActivityDate = createDate
-                            };
-
-            Context.Devices.Add(device);
-            await Context.SaveChangesAsync();
-
+            catch (Exception e)
+            {
+                _log.Error("Failed to register device", e);
+                succeeded = false;
+            }
             return new RegisterDeviceResponseDto
                                                  {
-                                                     DeviceId = device.Id.ToString(),
+                                                     DeviceId = deviceId.ToString(),
+                                                     Succeeded = succeeded,
                                                      TimeSent = DateTime.Now
                                                  };
         }

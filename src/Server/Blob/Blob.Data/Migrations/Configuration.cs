@@ -16,29 +16,49 @@ namespace Blob.Data.Migrations
         {
             ////  This method will be called after migrating to the latest version.
 
-            //// DeviceTypes
-            //DeviceType testDeviceTypeWinDesktop = new DeviceType
-            //                                      {
-            //                                          Id = Guid.Parse("ca20309d-de49-460d-98f7-835ff2ea463d"),
-            //                                          Value = "WindowsDesktop",
-            //                                      };
-            //DeviceType testDeviceTypeWinServer = new DeviceType
-            //                                     {
-            //                                         Id = Guid.Parse("99f1d6a5-74e1-4e1c-ba19-06be0a8345cf"),
-            //                                         Value = "WindowsServer",
-            //                                     };
-            //context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinDesktop, testDeviceTypeWinServer);
-            //context.SaveChanges();
+            // DeviceTypes
+            DeviceType testDeviceTypeWinDesktop = new DeviceType
+                                                  {
+                                                      Id = Guid.Parse("ca20309d-de49-460d-98f7-835ff2ea463d"),
+                                                      Value = "WindowsDesktop",
+                                                  };
+            DeviceType testDeviceTypeWinServer = new DeviceType
+                                                 {
+                                                     Id = Guid.Parse("99f1d6a5-74e1-4e1c-ba19-06be0a8345cf"),
+                                                     Value = "WindowsServer",
+                                                 };
+            context.Set<DeviceType>().AddOrUpdate(x => x.Value, testDeviceTypeWinDesktop, testDeviceTypeWinServer);
+            context.SaveChanges();
 
-            //// Customers
-            //Customer testCustomer1 = new Customer
-            //                         {
-            //                             Id = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f"),
-            //                             Name = "TestCustomer1",
-            //                             CreateDate = DateTime.Parse("2015-04-14"),
-            //                         };
-            //context.Set<Customer>().AddOrUpdate(x => x.Name, testCustomer1);
-            //context.SaveChanges();
+            // Customers
+            Customer rritc = new Customer
+            {
+                CreateDate = DateTime.Parse("2015-04-01"),
+                Id = Guid.Parse("1568BBD4-251D-4C09-A09B-ECC421E44FB3"),
+                Name = "RRITC",
+                Enabled = true
+            };
+            context.Set<Customer>().AddOrUpdate(x => x.Name, rritc);
+            context.SaveChanges();
+
+            // User
+            User rritc1 = new User
+                             {
+                                 AccessFailedCount = 0,
+                                 CreateDate = DateTime.Parse("2015-04-01"),
+                                 CustomerId = rritc.Id,
+                                 Email = "rritc1@rritc.com",
+                                 EmailConfirmed = true,
+                                 Enabled = true,
+                                 Id = Guid.Parse("22B9C84E-C3DF-42C5-BE9E-0F297B02EB5F"),
+                                 LastActivityDate = DateTime.Parse("2015-04-01"),
+                                 LockoutEnabled = false,
+                                 LockoutEndDateUtc = DateTime.Parse("2015-04-01").AddDays(-1),
+                                 PasswordHash = "password",
+                                 UserName = "rritc1"
+                             };
+            context.Set<User>().AddOrUpdate(x => x.UserName, rritc1);
+            context.SaveChanges();
 
             ////// Devices
             ////Device testDevice1 = new Device

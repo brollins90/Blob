@@ -143,6 +143,10 @@ namespace BMonitor.Service
 
 
                 RegisterDeviceResponseDto regInfo = Task.Run(() => statusClient.RegisterDeviceAsync(regMessage)).Result;
+                if (regInfo.Succeeded != true)
+                {
+                    _log.Error("Registration failed");
+                }
                 _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
 
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));

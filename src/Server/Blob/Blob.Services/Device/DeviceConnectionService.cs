@@ -9,6 +9,7 @@ using log4net;
 namespace Blob.Services.Device
 {
     [ServiceBehavior]
+    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
     //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]
     public class DeviceConnectionService : IDeviceConnectionService
     {

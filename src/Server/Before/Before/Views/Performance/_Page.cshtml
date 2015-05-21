@@ -8,90 +8,90 @@
 
     @if (Model != null && Model.Items != null && Model.Items.Any())
     {
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped table-responsive">
             <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().RecordId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().MonitorName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().MonitorDescription)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().TimeGenerated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Label)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Value)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Unit)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Warning)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Critical)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Min)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().Max)
-                    </th>
-                    <th> </th>
-                </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().RecordId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().MonitorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().MonitorDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().TimeGenerated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Label)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Unit)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Warning)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Critical)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Min)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items.First().Max)
+                </th>
+                <th> </th>
+            </tr>
             </thead>
 
             <tbody>
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RecordId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonitorName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonitorDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TimeGenerated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Label)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Value)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Unit)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Warning)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Critical)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Min)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Max)
-                        </td>
-                        <td>
-                            <div class="pull-right">
-                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Delete", "Delete", "Performance", routeValues: new { id = item.RecordId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
-                            </div>
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RecordId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonitorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonitorDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeGenerated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Label)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Warning)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Critical)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Min)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Max)
+                    </td>
+                    <td>
+                        <div class="pull-right">
+                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Delete", "Delete", "Performance", routeValues: new {id = item.RecordId}, htmlAttributes: new {data_modal = "", @class = "btn btn-danger"})
+                        </div>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     }
@@ -99,26 +99,5 @@
     {@:
         <div class="text-muted">&nbsp;No performance records found.</div>
     }
-
-    <div id="performanceRecordPageContentPager">
-        @Html.PagedListPager(new StaticPagedList<PerformanceRecordListItemVm>(Model.Items, (IPagedList)ViewBag.PagingMetaData),
-                             (Func<int, string>)ViewBag.PageUrl,
-                             PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
-                                                                                   new PagedListRenderOptions
-                                                                                   {
-                                                                                       LinkToFirstPageFormat = String.Format("<<"),
-                                                                                       LinkToPreviousPageFormat = String.Format("<"),
-                                                                                       LinkToNextPageFormat = String.Format(">"),
-                                                                                       LinkToLastPageFormat = String.Format(">>"),
-                                                                                       MaximumPageNumbersToDisplay = 5,
-                                                                                       DisplayEllipsesWhenNotShowingAllPageNumbers = false
-                                                                                   },
-                                                                                   new AjaxOptions
-                                                                                   {
-                                                                                       UpdateTargetId = "performanceRecordPageContent",
-                                                                                       HttpMethod = "GET",
-                                                                                       InsertionMode = InsertionMode.Replace,
-                                                                                       LoadingElementId = "progressPnl"
-                                                                                   }))
-    </div>
+    @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "performanceRecordPageContent")
 </div>

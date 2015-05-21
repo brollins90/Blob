@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Utilities;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Blob.Contracts;
 using Blob.Core.Domain;
 using Blob.Security.Identity;
@@ -19,7 +20,7 @@ namespace Blob.Security.Authentication
             _log.Debug("Constructing BlobClaimsIdentityFactory");
         }
 
-        public async System.Threading.Tasks.Task<ClaimsIdentity> CreateAsync(BlobUserManager manager, User user, string authenticationType)
+        public Task<ClaimsIdentity> CreateAsync(BlobUserManager manager, User user, string authenticationType)
         {
             _log.Debug("CreateAsync");
             if (manager == null)
@@ -68,7 +69,8 @@ namespace Blob.Security.Authentication
             ////{
             ////    id.AddClaims(await manager.GetClaimsAsync(user.Id).WithCurrentCulture());
             ////}
-            return id;
+            /// 
+            return Task.FromResult(id);
         }
     }
 }

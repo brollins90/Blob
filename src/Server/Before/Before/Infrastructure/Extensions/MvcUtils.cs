@@ -29,14 +29,13 @@ namespace Before.Infrastructure.Extensions
             return MvcHtmlString.Create(builder.ToString());
         }
 
-
         public static MvcHtmlString AlertLevelClass(this HtmlHelper htmlHelper, int alertLevel)
         {
             string alertLevelClass = "";
             switch (alertLevel)
             {
                 case 0:
-                    alertLevelClass = "success";//"status-ok";
+                    //alertLevelClass = "success";//"status-ok";
                     break;
                 case 1:
                     alertLevelClass = "warning";//"status-warning";
@@ -73,12 +72,6 @@ namespace Before.Infrastructure.Extensions
             }
 
             return MvcHtmlString.Create(alertLevelValue);
-        }
-
-        public static IPagedList GetPagedListMetaData<T>(this IPageInfoVm<T> inList)
-        {
-
-            return new StaticPagedList<T>(inList.Items, inList.PageNum, inList.PageSize, inList.TotalCount).GetMetaData();
         } 
 
 

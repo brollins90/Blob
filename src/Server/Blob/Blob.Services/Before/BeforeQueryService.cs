@@ -12,6 +12,7 @@ using Blob.Security.Extensions;
 namespace Blob.Services.Before
 {
     [ServiceBehavior]
+    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
     //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]
     public class BeforeQueryService : IBlobQueryManager
     {
@@ -26,11 +27,11 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
-        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageSize, int pageNum)
+        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "customer", customerId.ToString());
-            return await _blobQueryManager.GetDashDevicesLargeVmAsync(customerId, pageSize, pageNum).ConfigureAwait(false);
+            return await _blobQueryManager.GetDashDevicesLargeVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]

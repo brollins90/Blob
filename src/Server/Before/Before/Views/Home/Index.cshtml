@@ -1,16 +1,18 @@
-﻿@*@using Before.Infrastructure.Extensions
-@using Microsoft.Web.Mvc.Html*@
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
 @if (Request.IsAuthenticated)
 {
-    //var customerId = User.Identity.GetCustomerId();
-    <div class="jumbotron">
-        @*@Html.ActionLink("Customer", "Single", "Customer", routeValues: new {id = customerId}, htmlAttributes: new {@class = "btn btn-default"})*@
-    </div>
-    <div class="partialContents" data-url="/dashboard/deviceslarge">
+    <div class="jumbotron"></div>
+    @*<div class="partialContents" data-url="/dashboard/deviceslarge">
         <img src="~/Images/indicator.white.gif" /> Loading ...
+    </div>*@
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Devices</strong>
+        </div>
+
+        @{ Html.RenderAction("DevicesLarge", "Dashboard", routeValues: null);}
     </div>
 }
 else

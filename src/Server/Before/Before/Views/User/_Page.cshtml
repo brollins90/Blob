@@ -1,14 +1,13 @@
 ﻿@using Before.Infrastructure.Extensions
 @using Blob.Contracts.Models.ViewModels
 @using PagedList
-@using PagedList.Mvc
 @model UserPageVm
 
 <div id="userPageContent">
 
     @if (Model != null && Model.Items != null && Model.Items.Any())
     {
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped table-responsive">
             <thead>
                 <tr>
                     <th>
@@ -47,11 +46,11 @@
                                 &nbsp;
                                 @if (item.Enabled)
                                 {
-                                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Disable", "Disable", "User", routeValues: new { id = item.UserId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
+                                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-remove-sign'></span>", "Disable", "Disable", "User", routeValues: new { id = item.UserId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
                                 }
                                 else
                                 {
-                                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-arrow-up'></span>", "Enable", "Enable", "User", routeValues: new { id = item.UserId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
+                                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-ok-sign'></span>", "Enable", "Enable", "User", routeValues: new { id = item.UserId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
                                 }
                             </div>
                         </td>
@@ -64,26 +63,5 @@
     {@:
         <div class="text-muted">&nbsp;No devices found.</div>
     }
-
-    <div id="userPageContentPager">
-        @Html.PagedListPager(new StaticPagedList<UserListItemVm>(Model.Items, (IPagedList)ViewBag.PagingMetaData),
-                             (Func<int, string>)ViewBag.PageUrl,
-                             PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
-                                                                                   new PagedListRenderOptions
-                                                                                   {
-                                                                                       LinkToFirstPageFormat = String.Format("<<"),
-                                                                                       LinkToPreviousPageFormat = String.Format("<"),
-                                                                                       LinkToNextPageFormat = String.Format(">"),
-                                                                                       LinkToLastPageFormat = String.Format(">>"),
-                                                                                       MaximumPageNumbersToDisplay = 5,
-                                                                                       DisplayEllipsesWhenNotShowingAllPageNumbers = false
-                                                                                   },
-                                                                                   new AjaxOptions
-                                                                                   {
-                                                                                       UpdateTargetId = "userPageContent",
-                                                                                       HttpMethod = "GET",
-                                                                                       InsertionMode = InsertionMode.Replace,
-                                                                                       LoadingElementId = "progressPnl"
-                                                                                   }))
-    </div>
+    @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "userPageContent")
 </div>

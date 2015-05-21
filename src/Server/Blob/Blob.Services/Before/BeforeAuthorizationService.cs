@@ -10,6 +10,7 @@ using Blob.Security.Authorization;
 namespace Blob.Services.Before
 {
     [ServiceBehavior]
+    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
     public class BeforeAuthorizationService : IAuthorizationManagerService
     {
         [OperationBehavior]

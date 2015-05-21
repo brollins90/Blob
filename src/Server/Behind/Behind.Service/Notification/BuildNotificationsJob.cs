@@ -56,10 +56,10 @@ namespace Behind.Service.Notification
                     var users = status.Device.Customer.Users;
                     foreach (var user in users)
                     {
-                        //if (!string.IsNullOrEmpty(user.Email) && user.EmailConfirmed && user.Enabled)
-                        //{
+                        if (!string.IsNullOrEmpty(user.Email) && user.EmailConfirmed && user.Enabled)
+                        {
                             _notificationManager.AddNotificationToBatch(new EmailNotification { Recipient = user.Email, Message = statusMessage });
-                        //}
+                        }
                     }
 
                     _log.Debug(status);

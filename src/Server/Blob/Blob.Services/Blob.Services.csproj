@@ -39,6 +39,7 @@
     <Reference Include="System.identitymodel.services" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Before\BeforeCommandService.cs" />
@@ -46,6 +47,8 @@
     <Compile Include="Before\BeforeAuthorizationService.cs" />
     <Compile Include="Device\DeviceConnectionService.cs" />
     <Compile Include="Device\DeviceStatusService.cs" />
+    <Compile Include="GlobalErrorBehaviorAttribute.cs" />
+    <Compile Include="GlobalErrorHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ namespace Blob.Contracts.ServiceContracts
     public interface IBlobQueryManager
     {
         [OperationContract]
-        Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageSize = 10, int pageNum = 1);
+        Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
 
         [OperationContract]
         Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId);
