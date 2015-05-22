@@ -27,10 +27,10 @@ namespace Before.Infrastructure.Identity
             UserManager = userManager;
             AuthenticationManager = authenticationManager;
         }
-        public static BeforeSignInManager Create(IdentityFactoryOptions<BeforeSignInManager> options, IOwinContext context)
-        {
-            return new BeforeSignInManager(context.GetUserManager<BeforeUserManager>(), context.Authentication);
-        }
+        //public static BeforeSignInManager Create(IdentityFactoryOptions<BeforeSignInManager> options, IOwinContext context)
+        //{
+        //    return new BeforeSignInManager(context.GetUserManager<BeforeUserManagerLocal>(), context.Authentication);
+        //}
 
         /// <summary>
         /// AuthenticationType that will be used by sign in, defaults to DefaultAuthenticationTypes.ApplicationCookie

@@ -101,7 +101,11 @@ namespace Blob.Security.Tokens
             {
                 new Claim(ClaimTypes.Name, unToken.UserName),
                 new Claim(ClaimTypes.AuthenticationMethod, AuthenticationMethods.Password),
-                new Claim(ClaimTypes.AuthenticationInstant, XmlConvert.ToString(DateTime.UtcNow, "yyyy-MM-ddTHH:mm:ss.fffZ"), ClaimValueTypes.DateTime)
+                new Claim(ClaimTypes.AuthenticationInstant, XmlConvert.ToString(DateTime.UtcNow, "yyyy-MM-ddTHH:mm:ss.fffZ"), ClaimValueTypes.DateTime),
+                //// todo:  come on blake...
+                //new Claim("username", unToken.UserName),
+                //new Claim("password", unToken.Password)
+
             };
 
             var identity = new ClaimsIdentity(claims);

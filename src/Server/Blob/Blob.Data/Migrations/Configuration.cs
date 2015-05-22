@@ -31,6 +31,16 @@ namespace Blob.Data.Migrations
             context.SaveChanges();
 
             // Customers
+            Customer beforeService = new Customer
+            {
+                CreateDate = DateTime.Parse("2015-04-01"),
+                Id = Guid.Parse("94779853-6C22-4FAD-89E2-65A9BBF8C288"),
+                Name = "Before Service",
+                Enabled = true
+            };
+            context.Set<Customer>().AddOrUpdate(x => x.Name, beforeService);
+            context.SaveChanges();
+
             Customer rritc = new Customer
             {
                 CreateDate = DateTime.Parse("2015-04-01"),
@@ -42,21 +52,39 @@ namespace Blob.Data.Migrations
             context.SaveChanges();
 
             // User
+            User beforeService1 = new User
+            {
+                AccessFailedCount = 0,
+                CreateDate = DateTime.Parse("2015-04-01"),
+                CustomerId = beforeService.Id,
+                Email = "beforeService1@rritc.com",
+                EmailConfirmed = true,
+                Enabled = true,
+                Id = Guid.Parse("5FE53DA7-938F-4CDC-9889-2A45B0A0541D"),
+                LastActivityDate = DateTime.Parse("2015-04-01"),
+                LockoutEnabled = false,
+                LockoutEndDateUtc = DateTime.Parse("2015-04-01").AddDays(-1),
+                PasswordHash = "BeforePassword",
+                UserName = "BeforeUser"
+            };
+            context.Set<User>().AddOrUpdate(x => x.UserName, beforeService1);
+            context.SaveChanges();
+
             User rritc1 = new User
-                             {
-                                 AccessFailedCount = 0,
-                                 CreateDate = DateTime.Parse("2015-04-01"),
-                                 CustomerId = rritc.Id,
-                                 Email = "rritc1@rritc.com",
-                                 EmailConfirmed = true,
-                                 Enabled = true,
-                                 Id = Guid.Parse("22B9C84E-C3DF-42C5-BE9E-0F297B02EB5F"),
-                                 LastActivityDate = DateTime.Parse("2015-04-01"),
-                                 LockoutEnabled = false,
-                                 LockoutEndDateUtc = DateTime.Parse("2015-04-01").AddDays(-1),
-                                 PasswordHash = "password",
-                                 UserName = "rritc1"
-                             };
+            {
+                AccessFailedCount = 0,
+                CreateDate = DateTime.Parse("2015-04-01"),
+                CustomerId = rritc.Id,
+                Email = "rritc1@rritc.com",
+                EmailConfirmed = true,
+                Enabled = true,
+                Id = Guid.Parse("22B9C84E-C3DF-42C5-BE9E-0F297B02EB5F"),
+                LastActivityDate = DateTime.Parse("2015-04-01"),
+                LockoutEnabled = false,
+                LockoutEndDateUtc = DateTime.Parse("2015-04-01").AddDays(-1),
+                PasswordHash = "password",
+                UserName = "rritc1"
+            };
             context.Set<User>().AddOrUpdate(x => x.UserName, rritc1);
             context.SaveChanges();
 

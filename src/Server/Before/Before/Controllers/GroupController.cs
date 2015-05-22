@@ -10,7 +10,7 @@ namespace Before.Controllers
 {
     public class GroupController : BaseController
     {
-        public GroupController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManager userManager)
+        public GroupController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManagerLocal userManager)
             : base(blobCommandManager, blobQueryManager)
         {
             UserManager = userManager;

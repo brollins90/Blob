@@ -8,16 +8,31 @@ using Microsoft.Owin.Security;
 
 namespace Before.Infrastructure.Identity
 {
+    public class BeforeUserManagerLocal : BeforeUserManager
+    {
+        public BeforeUserManagerLocal(string endpointName, string username, string password)
+            : base(endpointName, username, password) { }
+
+        public static BeforeUserManagerLocal Create(string endpointName)
+        {
+            return new BeforeUserManagerLocal(endpointName, SiteGlobalConfig.AuthorizationServiceUsername, SiteGlobalConfig.AuthorizationServicePassword);
+        }
+
+    }
     public class BeforeUserManager : IdentityManagerClient
     {
-        private BeforeUserManager(string endpointName, string username, string password)
+        public BeforeUserManager(string endpointName, string username, string password)
             : base(endpointName, username, password) { }
 
         public static BeforeUserManager Create(string endpointName)
         {
-            ClaimsPrincipal principal = ClaimsPrincipal.Current;
-            string username = "customerUser1";
-            string password = "password";
+            //ClaimsPrincipal principal = ClaimsPrincipal.Current;
+            //string username = (principal.Identity.IsAuthenticated) ? principal.FindFirst(x => x.Type.Equals("username")).ToString() : "";
+            //string password = (principal.Identity.IsAuthenticated) ? principal.FindFirst(x => x.Type.Equals("password")).ToString() : "";
+            //// "customerUser1";
+            ////"password";
+            string username = SiteGlobalConfig.AuthorizationServiceUsername;
+            string password = SiteGlobalConfig.AuthorizationServicePassword;
             return new BeforeUserManager(endpointName, username, password);
         }
 

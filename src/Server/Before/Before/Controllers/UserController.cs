@@ -14,14 +14,14 @@ namespace Before.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManager userManager, BeforeSignInManager signInManager)
+        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, IUserManagerService userManager, BeforeSignInManager signInManager)
             : base(blobCommandManager, blobQueryManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
 
-        protected BeforeUserManager UserManager { get; set; }
+        protected IUserManagerService UserManager { get; set; }
         protected BeforeSignInManager SignInManager { get; set; }
 
         // GET: /user/disable/{id}

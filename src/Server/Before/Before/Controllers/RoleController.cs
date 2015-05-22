@@ -10,7 +10,7 @@ namespace Before.Controllers
 {
     public class RoleController : BaseController
     {
-        public RoleController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManager userManager)
+        public RoleController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, BeforeUserManagerLocal userManager)
             : base(blobCommandManager, blobQueryManager)
         {
             UserManager = userManager;

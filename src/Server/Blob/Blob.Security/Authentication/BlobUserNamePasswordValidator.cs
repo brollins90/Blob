@@ -23,6 +23,9 @@ namespace Blob.Security.Authentication
         {
             _log.Debug("Validate");
 
+            //if (userName.ToLowerInvariant().Equals("beforeuser") && password.ToLowerInvariant().Equals("beforepassword"))
+            //    return;
+
             using (BlobDbContext context = new BlobDbContext())
             {
                 Guid g;

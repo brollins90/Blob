@@ -8,19 +8,20 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {
     [BeforeAuthorize]
     public class AccountController : Controller
     {
-        public AccountController(BeforeUserManager userManager, BeforeSignInManager signInManager)
+        public AccountController(BeforeUserManagerLocal userManager, BeforeSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
 
-        protected BeforeUserManager UserManager { get; set; }
+        protected IUserManagerService UserManager { get; set; }
         protected BeforeSignInManager SignInManager { get; set; }
 
         // GET: /account/login

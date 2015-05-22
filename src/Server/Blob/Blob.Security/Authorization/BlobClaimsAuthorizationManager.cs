@@ -31,6 +31,14 @@ namespace Blob.Security.Authorization
 
             // we are going to bypass real checks here and only check the userid
             //todo:
+
+
+            //if (claimsIdentity.GetUserName().ToLowerInvariant().Equals("beforeuser"))
+            //{
+            //    return true;
+            //}
+
+
             var customerId = claimsIdentity.GetCustomerId(); //"79720728-171c-48a4-a866-5f905c8fdb9f";
             var identityId = claimsIdentity.GetBlobId();
             if (identityId.Equals("4d5c23cb-e961-4d97-91d8-aac2e8d0e2c1"))
