@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
+using Blob.Contracts.ServiceContracts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -13,7 +14,7 @@ namespace Before.Infrastructure.Identity
 {
     public class BeforeSignInManager : IDisposable
     {
-        public BeforeSignInManager(BeforeUserManager userManager, IAuthenticationManager authenticationManager)
+        public BeforeSignInManager(IUserManagerService userManager, IAuthenticationManager authenticationManager)
         {
             if (userManager == null)
             {
@@ -42,7 +43,7 @@ namespace Before.Infrastructure.Identity
 
         private string _authenticationType;
 
-        public BeforeUserManager UserManager { get; set; }
+        public IUserManagerService UserManager { get; set; }
         public IAuthenticationManager AuthenticationManager { get; set; }
 
         public virtual Task<ClaimsIdentity> CreateUserIdentityAsync(UserDto user)
