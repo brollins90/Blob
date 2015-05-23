@@ -1,7 +1,5 @@
-﻿using System.Security.Claims;
-using System.Web.Helpers;
+﻿using Before.Owin.Authorization;
 using Blob.Proxies;
-using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
@@ -13,11 +11,10 @@ namespace Before
     {
         public void ConfigureAuth(IAppBuilder app, Container container)
         {
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             app.UseBeforeAuthorization(new BeforeAuthorizationClient(SiteGlobalConfig.AuthorizationService, SiteGlobalConfig.AuthorizationServiceUsername, SiteGlobalConfig.AuthorizationServicePassword));
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                AuthenticationType = BeforeAuthorizationConstants.CookieType,
                 LoginPath = new PathString("/account/login"),
             });
         }

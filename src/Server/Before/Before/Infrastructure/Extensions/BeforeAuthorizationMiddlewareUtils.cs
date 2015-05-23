@@ -22,7 +22,7 @@ namespace Before.Infrastructure.Extensions
 
         private static IAuthorizationManagerService GetAuthorizationManager(this IOwinContext context)
         {
-            var am = context.Get<IAuthorizationManagerService>(BeforeAuthorizationMiddleware.KEY);
+            var am = context.Get<IAuthorizationManagerService>(BeforeAuthorizationConstants.Key);
 
             if (am == null)
             {

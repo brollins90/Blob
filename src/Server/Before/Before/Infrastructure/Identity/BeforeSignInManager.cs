@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Before.Owin.Authorization;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
 namespace Before.Infrastructure.Identity
@@ -21,7 +21,7 @@ namespace Before.Infrastructure.Identity
 
         public string AuthenticationType
         {
-            get { return _authenticationType ?? DefaultAuthenticationTypes.ApplicationCookie; }
+            get { return _authenticationType ?? BeforeAuthorizationConstants.CookieType; }
             set { _authenticationType = value; }
         }
         private string _authenticationType;
@@ -90,7 +90,7 @@ namespace Before.Infrastructure.Identity
 
         public void SignOut()
         {
-            SignOut(AuthenticationType, DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
+            SignOut(AuthenticationType);
         }
 
         public void SignOut(params string[] authenticationTypes)

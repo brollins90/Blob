@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBuilderExtensions.cs" />
+    <Compile Include="BeforeAuthorizationConstants.cs" />
     <Compile Include="BeforeAuthorizationMiddleware.cs" />
     <Compile Include="BeforeAuthorizationMiddlewareOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

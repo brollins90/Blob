@@ -31,7 +31,15 @@ namespace Before
         {
             var container = new Container();
             // Logging
-            container.RegisterSingle(LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType));
+            container.RegisterWithContext<ILog>(dc =>
+            {
+                if (dc.ImplementationType == null)
+                {
+                    return LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+                }
+                return LogManager.GetLogger(dc.ImplementationType);
+            });
+            //container.RegisterSingle(LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType));
 
             // OWIN stuff ?
             container.RegisterSingle<IAppBuilder>(app);

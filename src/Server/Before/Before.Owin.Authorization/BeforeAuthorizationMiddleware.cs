@@ -6,8 +6,6 @@ namespace Before.Owin.Authorization
 {
     public class BeforeAuthorizationMiddleware
     {
-        public const string KEY = "idm:BeforeAuthorizationMiddleware";
-
         private readonly Func<IDictionary<string, object>, Task> _next;
         private readonly BeforeAuthorizationMiddlewareOptions _options;
 
@@ -19,7 +17,7 @@ namespace Before.Owin.Authorization
 
         public async Task Invoke(IDictionary<string, object> env)
         {
-            env[KEY] = _options.Manager ?? _options.ManagerProvider(env);
+            env[BeforeAuthorizationConstants.Key] = _options.Manager ?? _options.ManagerProvider(env);
             await _next(env).ConfigureAwait(false);
         }
     }
