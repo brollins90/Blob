@@ -64,6 +64,7 @@
     <Compile Include="Models\SecurityDtos.cs" />
     <Compile Include="Models\UpdateCustomerDto.cs" />
     <Compile Include="Models\UpdateDeviceDto.cs" />
+    <Compile Include="Models\CreateUserDto.cs" />
     <Compile Include="Models\UpdateUserDto.cs" />
     <Compile Include="Models\ViewModels\CustomerDisableVm.cs" />
     <Compile Include="Models\ViewModels\CustomerEnableVm.cs" />

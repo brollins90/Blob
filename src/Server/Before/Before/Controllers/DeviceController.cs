@@ -15,15 +15,9 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
         
-        // GET: /device/disable/{id}
-        public async Task<ActionResult> Disable(Guid? id)
+        public async Task<ActionResult> Disable(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetDeviceDisableVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetDeviceDisableVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -31,7 +25,6 @@ namespace Before.Controllers
             return PartialView("_DisableModal", viewModel);
         }
 
-        // POST: /device/disable/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disable(DeviceDisableVm model)
@@ -44,15 +37,9 @@ namespace Before.Controllers
             return PartialView("_DisableModal", model);
         }
 
-        // GET: device/edit/{id}
-        public async Task<ActionResult> Edit(Guid? id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetDeviceUpdateVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetDeviceUpdateVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -62,7 +49,6 @@ namespace Before.Controllers
             return PartialView("_EditModal", viewModel);
         }
 
-        // POST: device/edit/{dto}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(DeviceUpdateVm model)
@@ -75,15 +61,9 @@ namespace Before.Controllers
             return PartialView("_EditModal", model);
         }
 
-        // GET: /device/enable/{id}
-        public async Task<ActionResult> Enable(Guid? id)
+        public async Task<ActionResult> Enable(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetDeviceEnableVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetDeviceEnableVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -91,7 +71,6 @@ namespace Before.Controllers
             return PartialView("_EnableModal", viewModel);
         }
 
-        // POST: /device/enable/{dto}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Enable(DeviceEnableVm model)
@@ -104,15 +83,9 @@ namespace Before.Controllers
             return PartialView("_EnableModal", model);
         }
 
-        // GET: /device/issuecommand/{id}
-        public ActionResult IssueCommand(Guid? id, string commandType)
+        public ActionResult IssueCommand(Guid id, string commandType)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            DeviceCommandIssueVm viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id.Value, commandType);//.ConfigureAwait(true);
+            DeviceCommandIssueVm viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id, commandType);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -121,7 +94,6 @@ namespace Before.Controllers
             return PartialView("_IssueCommandModal", viewModel);
         }
 
-        // POST: /device/issuecommand/{dto}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> IssueCommand(DeviceCommandIssueVm model)
@@ -134,7 +106,6 @@ namespace Before.Controllers
             return PartialView("_IssueCommandModal", model);
         }
 
-        // GET: /device/PageForCustomer/{customerId}
         public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -151,15 +122,9 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
-        // GET: /device/single/{id}
-        public async Task<ActionResult> Single(Guid? id)
+        public async Task<ActionResult> Single(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetDeviceSingleVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetDeviceSingleVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();

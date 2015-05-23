@@ -16,15 +16,9 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
-        // GET: /performance/delete/{id}
-        public async Task<ActionResult> Delete(long? id)
+        public async Task<ActionResult> Delete(long id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetPerformanceRecordDeleteVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetPerformanceRecordDeleteVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -32,7 +26,6 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", viewModel);
         }
 
-        // POST: /performance/delete/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(PerformanceRecordDeleteVm model)
@@ -45,7 +38,6 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", model);
         }
 
-        // GET: /performance/PageForCustomer/{deviceId}
         public ActionResult PageForDevice(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -62,7 +54,6 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
-        // GET: /performance/PageForCustomer/{deviceId}
         public ActionResult PageForStatus(long id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -79,15 +70,9 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
-        // GET: /performance/single/{id}
-        public async Task<ActionResult> Single(long? id)
+        public async Task<ActionResult> Single(long id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();

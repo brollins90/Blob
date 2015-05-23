@@ -154,6 +154,18 @@ namespace Blob.Proxies
             }
         }
 
+        public async Task CreateUserAsync(CreateUserDto dto)
+        {
+            try
+            {
+                await Channel.CreateUserAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
         public async Task DisableUserAsync(DisableUserDto dto)
         {
             try

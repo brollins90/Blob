@@ -16,7 +16,6 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
-        // GET: 
         [BeforeAuthorize(Operation = "view", Resource = "customer")]
         public ActionResult DevicesLarge(Guid? id, int? page, int? pageSize)
         {
@@ -29,14 +28,6 @@ namespace Before.Controllers
             if (!pageSize.HasValue) pageSize = 10;
 
             var pageVm = AsyncHelpers.RunSync<DashDevicesLargeVm>(() => BlobQueryManager.GetDashDevicesLargeVmAsync(searchUsingId, page.Value, pageSize.Value));
-            //DashDevicesLargeVm viewModel = BlobQueryManager.GetDashDevicesLargeVmAsync(searchUsingId, page.Value, pageSize.Value).Result;
-            //if (viewModel == null)
-            //{
-            //    return HttpNotFound();
-            //}
-
-
-            //var pageVm = AsyncHelpers.RunSync<DevicePageVm>(() => BlobQueryManager.GetDevicePageVmAsync(searchUsingId, page.Value, pageSize.Value));
 
             ViewBag.CustomerId = searchUsingId;
 

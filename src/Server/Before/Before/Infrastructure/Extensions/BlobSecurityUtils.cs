@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
+using Before.Owin.Authorization;
 using Blob.Contracts;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
@@ -27,7 +28,7 @@ namespace Before.Infrastructure.Extensions
 
         private static IAuthorizationManagerService GetAuthorizationManager(this IOwinContext context)
         {
-            var am = context.Get<IAuthorizationManagerService>("BeforeAuthorizationClient");
+            var am = context.Get<IAuthorizationManagerService>(BeforeAuthorizationMiddleware.KEY);
 
             if (am == null)
             {

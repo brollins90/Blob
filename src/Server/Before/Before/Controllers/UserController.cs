@@ -14,25 +14,19 @@ namespace Before.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, IUserManagerService userManager, BeforeSignInManager signInManager)
+        protected IUserManagerService UserManager { get; set; }
+        //protected ISignInManager SignInManager { get; set; }
+
+        public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, IUserManagerService userManager, ISignInManager signInManager)
             : base(blobCommandManager, blobQueryManager)
         {
             UserManager = userManager;
-            SignInManager = signInManager;
+            //SignInManager = signInManager;
         }
 
-        protected IUserManagerService UserManager { get; set; }
-        protected BeforeSignInManager SignInManager { get; set; }
-
-        // GET: /user/disable/{id}
-        public async Task<ActionResult> Disable(Guid? id)
+        public async Task<ActionResult> Disable(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetUserDisableVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetUserDisableVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -40,7 +34,6 @@ namespace Before.Controllers
             return PartialView("_DisableModal", viewModel);
         }
 
-        // POST: /user/disable/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disable(UserDisableVm model)
@@ -53,15 +46,9 @@ namespace Before.Controllers
             return PartialView("_DisableModal", model);
         }
 
-        // GET: /user/edit/{id}
-        public async Task<ActionResult> Edit(Guid? id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetUserUpdateVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetUserUpdateVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -69,7 +56,6 @@ namespace Before.Controllers
             return PartialView("_EditModal", viewModel);
         }
 
-        // POST: /user/edit/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserUpdateVm model)
@@ -82,15 +68,9 @@ namespace Before.Controllers
             return PartialView("_EditModal", model);
         }
 
-        // GET: /user/editpassword/{id}
-        public async Task<ActionResult> EditPassword(Guid? id)
+        public async Task<ActionResult> EditPassword(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetUserUpdatePasswordVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetUserUpdatePasswordVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -98,8 +78,6 @@ namespace Before.Controllers
             return PartialView("_EditPasswordModal", viewModel);
         }
 
-        //
-        // POST: /user/editpassword/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditPassword(UserUpdatePasswordVm model)
@@ -110,7 +88,8 @@ namespace Before.Controllers
                 if (result.Succeeded)
                 {
                     var user = await UserManager.FindByIdAsync(model.UserId.ToString()).ConfigureAwait(true);
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).ConfigureAwait(true);
+                    // todo: add signout and sign back in
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).ConfigureAwait(true);
                     return Json(new { success = true });
                 }
                 else
@@ -124,15 +103,9 @@ namespace Before.Controllers
             return PartialView("_EditPasswordModal", model);
         }
 
-        // GET: /user/enable/{id}
-        public async Task<ActionResult> Enable(Guid? id)
+        public async Task<ActionResult> Enable(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetUserEnableVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetUserEnableVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -140,7 +113,6 @@ namespace Before.Controllers
             return PartialView("_EnableModal", viewModel);
         }
 
-        // POST: /user/enable/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Enable(UserEnableVm model)
@@ -153,7 +125,23 @@ namespace Before.Controllers
             return PartialView("_EnableModal", model);
         }
 
-        // GET: /user/PageForCustomer/{customerId}
+        public ActionResult Create()
+        {
+            return PartialView("_CreateModal");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(UserCreateVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.CreateUserAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+            return PartialView("_EnableModal", model);
+        }
+
         public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -170,15 +158,9 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
-        // GET: /user/single/{id}
-        public async Task<ActionResult> Single(Guid? id)
+        public async Task<ActionResult> Single(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetUserSingleVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetUserSingleVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();

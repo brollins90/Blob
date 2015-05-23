@@ -43,6 +43,8 @@ namespace Blob.Contracts.ServiceContracts
 
         // User
         [OperationContract]
+        Task CreateUserAsync(CreateUserDto dto);
+        [OperationContract]
         Task DisableUserAsync(DisableUserDto dto);
         [OperationContract]
         Task EnableUserAsync(EnableUserDto dto);

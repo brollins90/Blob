@@ -268,6 +268,27 @@ namespace Blob.Managers.Blob
 
 
         // User
+        public async Task CreateUserAsync(CreateUserDto dto)
+        {
+            Core.Domain.User newUser = new Core.Domain.User
+            {
+                AccessFailedCount = 0,
+                CreateDate = DateTime.Now,
+                CustomerId = dto.CustomerId,
+                Email = dto.Email,
+                EmailConfirmed = false,
+                Enabled = false,
+                Id = dto.UserId,
+                LastActivityDate = DateTime.Parse("2015-04-01").AddDays(-1),
+                LockoutEnabled = false,
+                LockoutEndDateUtc = DateTime.Parse("2015-04-01").AddDays(-1),
+                PasswordHash = null,
+                UserName = dto.UserName
+            };
+            Context.Users.Add(newUser);
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
         public async Task DisableUserAsync(DisableUserDto dto)
         {
             User user = Context.Users.Find(dto.UserId);

@@ -16,15 +16,9 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
         
-        // GET: /status/delete/{id}
-        public async Task<ActionResult> Delete(long? id)
+        public async Task<ActionResult> Delete(long id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetStatusRecordDeleteVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetStatusRecordDeleteVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -32,7 +26,6 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", viewModel);
         }
 
-        // POST: /status/delete/{model}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(StatusRecordDeleteVm model)
@@ -45,7 +38,6 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", model);
         }
 
-        // GET: /status/PageForCustomer/{deviceId}
         public ActionResult PageForDevice(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -62,15 +54,9 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
-        // GET: /status/single/{id}
-        public async Task<ActionResult> Single(long? id)
+        public async Task<ActionResult> Single(long id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var viewModel = await BlobQueryManager.GetStatusRecordSingleVmAsync(id.Value).ConfigureAwait(true);
+            var viewModel = await BlobQueryManager.GetStatusRecordSingleVmAsync(id).ConfigureAwait(true);
             if (viewModel == null)
             {
                 return HttpNotFound();

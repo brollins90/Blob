@@ -17,8 +17,6 @@ namespace Before.Filters
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            if (httpContext == null)
-                throw new ArgumentNullException("httpContext");
             return true;
             //if (!string.IsNullOrWhiteSpace(Operation))
             //{
@@ -28,7 +26,7 @@ namespace Before.Filters
             //{
             //    var controller = httpContext.Request.RequestContext.RouteData.Values["controller"] as string;
             //    var action = httpContext.Request.RequestContext.RouteData.Values["action"] as string;
-                
+
             //    return CheckAccess(httpContext, action, controller);
             //}
         }
@@ -38,7 +36,7 @@ namespace Before.Filters
             AuthorizationContextDto context = new AuthorizationContextDto(action, resource, ClaimsPrincipal.Current);
             Task<bool> task = httpContext.CheckAccessAsync(context);
 
-            if (task.Wait(5000))
+            if (task.Wait(50000))
                 return task.Result;
             throw new TimeoutException();
         }

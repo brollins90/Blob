@@ -133,6 +133,15 @@ namespace Blob.Services.Before
         }
 
         [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "create")]
+        public async Task CreateUserAsync(CreateUserDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "user", dto.UserId.ToString());
+            await _blobCommandManager.CreateUserAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "disable")]
         public async Task DisableUserAsync(DisableUserDto dto)
         {

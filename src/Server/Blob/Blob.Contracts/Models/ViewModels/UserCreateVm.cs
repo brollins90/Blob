@@ -8,6 +8,9 @@ namespace Blob.Contracts.Models.ViewModels
     public class UserCreateVm
     {
         [DataMember]
+        public Guid CustomerId { get; set; }
+
+        [DataMember]
         [Display(Name = "Id")]
         [Required]
         public Guid UserId { get; set; }
@@ -22,5 +25,10 @@ namespace Blob.Contracts.Models.ViewModels
         [Display(Name = "Username")]
         [Required]
         public string UserName { get; set; }
+
+        public CreateUserDto ToDto()
+        {
+            return new CreateUserDto { UserId = UserId, Email = Email, UserName = UserName, CustomerId = CustomerId };
+        }
     }
 }
