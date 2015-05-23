@@ -43,26 +43,14 @@ namespace Before.Filters
 
         public new string Roles
         {
-            get
-            {
-                throw new NotSupportedException();
-            }
-            set
-            {
-                throw new NotSupportedException();
-            }
+            get { throw new NotSupportedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         public new string Users
         {
-            get
-            {
-                throw new NotSupportedException();
-            }
-            set
-            {
-                throw new NotSupportedException();
-            }
+            get { throw new NotSupportedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

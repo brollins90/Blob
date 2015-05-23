@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Filters;
 using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
@@ -15,7 +14,8 @@ namespace Before.Controllers
         public StatusController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
             : base(blobCommandManager, blobQueryManager) { }
 
-        
+
+        [BeforeAuthorize(Operation = "delete", Resource = "status")]
         public async Task<ActionResult> Delete(long id)
         {
             var viewModel = await BlobQueryManager.GetStatusRecordDeleteVmAsync(id).ConfigureAwait(true);
@@ -26,6 +26,7 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "delete", Resource = "status")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(StatusRecordDeleteVm model)
@@ -38,6 +39,7 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", model);
         }
 
+        [BeforeAuthorize(Operation = "page", Resource = "status")]
         public ActionResult PageForDevice(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -54,6 +56,7 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
+        [BeforeAuthorize(Operation = "single", Resource = "status")]
         public async Task<ActionResult> Single(long id)
         {
             var viewModel = await BlobQueryManager.GetStatusRecordSingleVmAsync(id).ConfigureAwait(true);

@@ -35,7 +35,6 @@ namespace Before.Controllers
             Func<int, string> pageUrl = c(p => Url.Action("DevicesLarge", "Dashboard", routeValues: new { id = searchUsingId, page = p, pageSize = pageVm.PageSize }));
             ViewBag.PageUrl = pageUrl;
             ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
-            //return PartialView("_Page", pageVm);
 
             return PartialView("_DashDevicesLarge", pageVm);
         }

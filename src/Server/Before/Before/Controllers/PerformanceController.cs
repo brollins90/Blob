@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Filters;
 using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
@@ -16,6 +15,7 @@ namespace Before.Controllers
             : base(blobCommandManager, blobQueryManager) { }
 
 
+        [BeforeAuthorize(Operation = "delete", Resource = "performance")]
         public async Task<ActionResult> Delete(long id)
         {
             var viewModel = await BlobQueryManager.GetPerformanceRecordDeleteVmAsync(id).ConfigureAwait(true);
@@ -26,6 +26,7 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "delete", Resource = "performance")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(PerformanceRecordDeleteVm model)
@@ -38,6 +39,7 @@ namespace Before.Controllers
             return PartialView("_DeleteModal", model);
         }
 
+        [BeforeAuthorize(Operation = "page", Resource = "performance")]
         public ActionResult PageForDevice(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -54,6 +56,7 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
+        [BeforeAuthorize(Operation = "page", Resource = "performance")]
         public ActionResult PageForStatus(long id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -70,6 +73,7 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
+        [BeforeAuthorize(Operation = "single", Resource = "performance")]
         public async Task<ActionResult> Single(long id)
         {
             var viewModel = await BlobQueryManager.GetPerformanceRecordSingleVmAsync(id).ConfigureAwait(true);

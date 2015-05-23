@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Filters;
 using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
 using Blob.Contracts.Models.ViewModels;
@@ -15,15 +14,36 @@ namespace Before.Controllers
     public class UserController : BaseController
     {
         protected IUserManagerService UserManager { get; set; }
-        //protected ISignInManager SignInManager { get; set; }
+        protected ISignInManager SignInManager { get; set; }
 
         public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, IUserManagerService userManager, ISignInManager signInManager)
             : base(blobCommandManager, blobQueryManager)
         {
             UserManager = userManager;
-            //SignInManager = signInManager;
+            SignInManager = signInManager;
         }
 
+
+        [BeforeAuthorize(Operation = "create", Resource = "user")]
+        public ActionResult Create()
+        {
+            return PartialView("_CreateModal");
+        }
+
+        [BeforeAuthorize(Operation = "create", Resource = "user")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(UserCreateVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.CreateUserAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+            return PartialView("_EnableModal", model);
+        }
+
+        [BeforeAuthorize(Operation = "disable", Resource = "user")]
         public async Task<ActionResult> Disable(Guid id)
         {
             var viewModel = await BlobQueryManager.GetUserDisableVmAsync(id).ConfigureAwait(true);
@@ -34,6 +54,7 @@ namespace Before.Controllers
             return PartialView("_DisableModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "disable", Resource = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disable(UserDisableVm model)
@@ -46,6 +67,7 @@ namespace Before.Controllers
             return PartialView("_DisableModal", model);
         }
 
+        [BeforeAuthorize(Operation = "edit", Resource = "user")]
         public async Task<ActionResult> Edit(Guid id)
         {
             var viewModel = await BlobQueryManager.GetUserUpdateVmAsync(id).ConfigureAwait(true);
@@ -56,6 +78,7 @@ namespace Before.Controllers
             return PartialView("_EditModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "edit", Resource = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserUpdateVm model)
@@ -68,6 +91,7 @@ namespace Before.Controllers
             return PartialView("_EditModal", model);
         }
 
+        [BeforeAuthorize(Operation = "editpassword", Resource = "user")]
         public async Task<ActionResult> EditPassword(Guid id)
         {
             var viewModel = await BlobQueryManager.GetUserUpdatePasswordVmAsync(id).ConfigureAwait(true);
@@ -78,6 +102,7 @@ namespace Before.Controllers
             return PartialView("_EditPasswordModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "editpassword", Resource = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditPassword(UserUpdatePasswordVm model)
@@ -89,7 +114,8 @@ namespace Before.Controllers
                 {
                     var user = await UserManager.FindByIdAsync(model.UserId.ToString()).ConfigureAwait(true);
                     // todo: add signout and sign back in
-                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).ConfigureAwait(true);
+                    SignInManager.SignOut();
+                    await SignInManager.PasswordSignInAsync(user.UserName, model.NewPassword, isPersistent: false, shouldLockout: false).ConfigureAwait(true);
                     return Json(new { success = true });
                 }
                 else
@@ -103,6 +129,7 @@ namespace Before.Controllers
             return PartialView("_EditPasswordModal", model);
         }
 
+        [BeforeAuthorize(Operation = "enable", Resource = "user")]
         public async Task<ActionResult> Enable(Guid id)
         {
             var viewModel = await BlobQueryManager.GetUserEnableVmAsync(id).ConfigureAwait(true);
@@ -113,6 +140,7 @@ namespace Before.Controllers
             return PartialView("_EnableModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "enable", Resource = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Enable(UserEnableVm model)
@@ -125,23 +153,7 @@ namespace Before.Controllers
             return PartialView("_EnableModal", model);
         }
 
-        public ActionResult Create()
-        {
-            return PartialView("_CreateModal");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserCreateVm model)
-        {
-            if (ModelState.IsValid)
-            {
-                await BlobCommandManager.CreateUserAsync(model.ToDto()).ConfigureAwait(true);
-                return Json(new { success = true });
-            }
-            return PartialView("_EnableModal", model);
-        }
-
+        [BeforeAuthorize(Operation = "page", Resource = "user")]
         public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -158,6 +170,7 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
+        [BeforeAuthorize(Operation = "single", Resource = "user")]
         public async Task<ActionResult> Single(Guid id)
         {
             var viewModel = await BlobQueryManager.GetUserSingleVmAsync(id).ConfigureAwait(true);

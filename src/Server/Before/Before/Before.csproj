@@ -197,12 +197,12 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\BeforeAuthorizeAttribute.cs" />
     <Compile Include="Infrastructure\Extensions\AsyncHelpers.cs" />
+    <Compile Include="Infrastructure\Extensions\BeforeAuthorizationMiddlewareUtils.cs" />
     <Compile Include="Infrastructure\Extensions\BlobSecurityUtils.cs" />
     <Compile Include="Infrastructure\Extensions\EnumUtils.cs" />
     <Compile Include="Infrastructure\Extensions\MvcUtils.cs" />
     <Compile Include="Infrastructure\Extensions\PagedListUtil.cs" />
     <Compile Include="Infrastructure\Identity\BeforeSignInManager.cs" />
-    <Compile Include="Infrastructure\Identity\BeforeUserManager.cs" />
     <Compile Include="Infrastructure\Identity\ISignInManager.cs" />
     <Compile Include="Infrastructure\Identity\RoleVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

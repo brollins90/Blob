@@ -7,7 +7,6 @@ using Before.Infrastructure.Identity;
 using Blob.Contracts.ServiceContracts;
 using Blob.Proxies;
 using log4net;
-using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Owin;
@@ -31,21 +30,22 @@ namespace Before
         public static Container GetInitializeContainer(IAppBuilder app)
         {
             var container = new Container();
+            // Logging
             container.RegisterSingle(LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType));
 
             // OWIN stuff ?
             container.RegisterSingle<IAppBuilder>(app);
 
             // Auth
-            container.RegisterPerWebRequest<IUserManagerService>(() => SIFact.CreateUserManagerClient());
+            container.RegisterPerWebRequest<IUserManagerService>(() => SimpleInjectorFactory.CreateUserManagerClient());
             container.RegisterPerWebRequest<ISignInManager, BeforeSignInManager>();
             container.RegisterPerWebRequest<IAuthenticationManager>(() => AdvancedExtensions.IsVerifying(container)
                 ? new OwinContext(new Dictionary<string, object>()).Authentication
                 : HttpContext.Current.GetOwinContext().Authentication);
 
             // Blob
-            container.RegisterPerWebRequest<IBlobCommandManager>(() => SIFact.CreateBeforeCommandClient());
-            container.RegisterPerWebRequest<IBlobQueryManager>(() => SIFact.CreateBeforeQueryClient());
+            container.RegisterPerWebRequest<IBlobCommandManager>(() => SimpleInjectorFactory.CreateBeforeCommandClient());
+            container.RegisterPerWebRequest<IBlobQueryManager>(() => SimpleInjectorFactory.CreateBeforeQueryClient());
 
             // MVC
             container.RegisterMvcControllers(Assembly.GetExecutingAssembly());
@@ -54,7 +54,7 @@ namespace Before
         }
     }
 
-    public static class SIFact
+    public static class SimpleInjectorFactory
     {
         public static IdentityManagerClient CreateUserManagerClient()
         {

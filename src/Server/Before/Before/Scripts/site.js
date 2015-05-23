@@ -29,7 +29,7 @@ function beforeAjaxOnComplete() {
 
 function bindPaginator(pager, content) {
     $(document).on("click", pager, function () {
-        history.pushState(null, null, $(this).attr("href"));
+        //history.pushState(null, null, $(this).attr("href"));
         $.ajax({
             url: this.href,
             type: "GET",
@@ -67,7 +67,7 @@ function bindPaginator(pager, content) {
 function bindAllModals() {
     $.ajaxSetup({ cache: false });
     $(document).on("click", "a[data-modal]", function (e) {
-        history.pushState(null, null, $(this).attr("href"));
+        //history.pushState(null, null, $(this).attr("href"));
         $("#myModalContent").load(this.href, function () {
             $("#myModal").modal({ keyboard: true}, "show");
             bindForm(this);
@@ -87,7 +87,7 @@ function bindForm(dialog) {
                     $("#myModal").modal("hide");
                     $('#replacetarget').load(result.url);
                     //Refresh
-                    //location.reload();
+                    location.reload();
                 } else {
                     $("#myModalContent").html(result);
                     bindForm(dialog);

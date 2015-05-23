@@ -1,10 +1,9 @@
-﻿using System.Security.Claims;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : BaseController
     {
         public HomeController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
@@ -14,7 +13,6 @@ namespace Before.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var c = ClaimsPrincipal.Current;
             return View();
         }
 

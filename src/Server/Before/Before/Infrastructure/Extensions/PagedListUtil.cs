@@ -17,8 +17,8 @@ namespace Before.Infrastructure.Extensions
         }
 
         public static MvcHtmlString BeforePagedListPager<T>(
-            this System.Web.Mvc.HtmlHelper html, 
-            IEnumerable<T> subset, 
+            this System.Web.Mvc.HtmlHelper html,
+            IEnumerable<T> subset,
             IPagedList metaData,
             Func<int, string> generatePageUrl,
             string updateTargetId)
@@ -46,7 +46,7 @@ namespace Before.Infrastructure.Extensions
             tagBuilder.MergeAttribute("id", updateTargetId + "Pager");
             tagBuilder.InnerHtml = html.PagedListPager(new StaticPagedList<T>(subset, metaData), generatePageUrl, options).ToHtmlString();
             return new MvcHtmlString(tagBuilder.ToString());
-                //return html.PagedListPager(new StaticPagedList<T>(subset, metaData), generatePageUrl, options).ToHtmlString();
+            //return html.PagedListPager(new StaticPagedList<T>(subset, metaData), generatePageUrl, options).ToHtmlString();
         }
     }
 }

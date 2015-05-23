@@ -1,13 +1,11 @@
 ﻿using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Before.Infrastructure.Extensions;
 using Before.Infrastructure.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Before.Controllers
 {
@@ -22,6 +20,7 @@ namespace Before.Controllers
             SignInManager = signInManager;
         }
 
+        // Login
         [AllowAnonymous]
         [HttpGet]
         public ActionResult Login(string returnUrl)
@@ -30,6 +29,7 @@ namespace Before.Controllers
             return View();
         }
 
+        // Login
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -37,7 +37,6 @@ namespace Before.Controllers
         {
             if (ModelState.IsValid)
             {
-                //SiteGlobalConfig.UpDictionary[model.UserNameEmail] = model.Password;
                 SignInStatusDto resultDto = await SignInManager.PasswordSignInAsync(model.UserNameEmail, model.Password, model.RememberMe, shouldLockout: false);
                 switch (resultDto.ToResult())
                 {
@@ -52,6 +51,7 @@ namespace Before.Controllers
             return View(model);
         }
 
+        // Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOut()
@@ -61,17 +61,6 @@ namespace Before.Controllers
         }
 
         #region Helpers
-        private const string XSRF_KEY = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
-
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -79,35 +68,6 @@ namespace Before.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
-        }
-
-        internal class ChallengeResult : HttpUnauthorizedResult
-        {
-            public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
-            {
-            }
-
-            public ChallengeResult(string provider, string redirectUri, string userId)
-            {
-                LoginProvider = provider;
-                RedirectUri = redirectUri;
-                UserId = userId;
-            }
-
-            public string LoginProvider { get; set; }
-            public string RedirectUri { get; set; }
-            public string UserId { get; set; }
-
-            public override void ExecuteResult(ControllerContext context)
-            {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
-                {
-                    properties.Dictionary[XSRF_KEY] = UserId;
-                }
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
-            }
         }
         #endregion
     }

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Before.Filters;
 using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
@@ -14,7 +14,9 @@ namespace Before.Controllers
         public DeviceController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
             : base(blobCommandManager, blobQueryManager) { }
 
-        
+
+        // Disable
+        [BeforeAuthorize(Operation = "disable", Resource = "device")]
         public async Task<ActionResult> Disable(Guid id)
         {
             var viewModel = await BlobQueryManager.GetDeviceDisableVmAsync(id).ConfigureAwait(true);
@@ -25,6 +27,7 @@ namespace Before.Controllers
             return PartialView("_DisableModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "disable", Resource = "device")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disable(DeviceDisableVm model)
@@ -37,6 +40,8 @@ namespace Before.Controllers
             return PartialView("_DisableModal", model);
         }
 
+        // Edit
+        [BeforeAuthorize(Operation = "edit", Resource = "device")]
         public async Task<ActionResult> Edit(Guid id)
         {
             var viewModel = await BlobQueryManager.GetDeviceUpdateVmAsync(id).ConfigureAwait(true);
@@ -49,6 +54,7 @@ namespace Before.Controllers
             return PartialView("_EditModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "edit", Resource = "device")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(DeviceUpdateVm model)
@@ -61,6 +67,8 @@ namespace Before.Controllers
             return PartialView("_EditModal", model);
         }
 
+        // Enable
+        [BeforeAuthorize(Operation = "enable", Resource = "device")]
         public async Task<ActionResult> Enable(Guid id)
         {
             var viewModel = await BlobQueryManager.GetDeviceEnableVmAsync(id).ConfigureAwait(true);
@@ -71,6 +79,7 @@ namespace Before.Controllers
             return PartialView("_EnableModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "enable", Resource = "device")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Enable(DeviceEnableVm model)
@@ -83,6 +92,8 @@ namespace Before.Controllers
             return PartialView("_EnableModal", model);
         }
 
+        // IssueCommand
+        [BeforeAuthorize(Operation = "issuecommand", Resource = "device")]
         public ActionResult IssueCommand(Guid id, string commandType)
         {
             DeviceCommandIssueVm viewModel = BlobQueryManager.GetDeviceCommandIssueVm(id, commandType);
@@ -94,6 +105,7 @@ namespace Before.Controllers
             return PartialView("_IssueCommandModal", viewModel);
         }
 
+        [BeforeAuthorize(Operation = "issuecommand", Resource = "device")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> IssueCommand(DeviceCommandIssueVm model)
@@ -106,6 +118,8 @@ namespace Before.Controllers
             return PartialView("_IssueCommandModal", model);
         }
 
+        // Page
+        [BeforeAuthorize(Operation = "view", Resource = "device")]
         public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
@@ -122,6 +136,8 @@ namespace Before.Controllers
             return PartialView("_Page", pageVm);
         }
 
+        // Single
+        [BeforeAuthorize(Operation = "view", Resource = "device")]
         public async Task<ActionResult> Single(Guid id)
         {
             var viewModel = await BlobQueryManager.GetDeviceSingleVmAsync(id).ConfigureAwait(true);

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Blob.Contracts.Models;
-using PagedList;
 
 namespace Before.Infrastructure.Extensions
 {

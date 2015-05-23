@@ -8,7 +8,7 @@ using Microsoft.Owin.Security;
 
 namespace Before.Infrastructure.Identity
 {
-    public class BeforeSignInManager : IDisposable, ISignInManager
+    public class BeforeSignInManager : ISignInManager
     {
         public IUserManagerService UserManager { get; set; }
         public IAuthenticationManager AuthenticationManager { get; set; }

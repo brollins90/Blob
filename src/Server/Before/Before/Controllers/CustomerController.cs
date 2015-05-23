@@ -13,6 +13,8 @@ namespace Before.Controllers
         public CustomerController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
             : base(blobCommandManager, blobQueryManager) { }
         
+
+        // Disable
         [BeforeAuthorize(Operation = "disable", Resource = "customer")]
         public async Task<ActionResult> Disable(Guid id)
         {
@@ -37,6 +39,7 @@ namespace Before.Controllers
             return PartialView("_DisableModal", model);
         }
 
+        // Edit
         [BeforeAuthorize(Operation = "edit", Resource = "customer")]
         public async Task<ActionResult> Edit(Guid id)
         {
@@ -61,7 +64,7 @@ namespace Before.Controllers
             return PartialView("_EditModal", model);
         }
 
-        // GET: /customer/enable/{id}
+        // Enable
         [BeforeAuthorize(Operation = "enable", Resource = "customer")]
         public async Task<ActionResult> Enable(Guid id)
         {
@@ -73,7 +76,6 @@ namespace Before.Controllers
             return PartialView("_EnableModal", viewModel);
         }
 
-        // POST: /customer/enable/{model}
         [BeforeAuthorize(Operation = "enable", Resource = "customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -87,7 +89,7 @@ namespace Before.Controllers
             return PartialView("_EnableModal", model);
         }
         
-        // GET: /customer/single/{id}
+        // Single
         [BeforeAuthorize(Operation = "view", Resource = "customer")]
         public async Task<ActionResult> Single(Guid id)
         {

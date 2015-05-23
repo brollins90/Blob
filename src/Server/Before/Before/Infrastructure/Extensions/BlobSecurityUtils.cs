@@ -2,42 +2,15 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading.Tasks;
-using System.Web;
-using Before.Owin.Authorization;
 using Blob.Contracts;
 using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 
 namespace Before.Infrastructure.Extensions
 {
     public static class BlobSecurityUtils
     {
-        public static Task<bool> CheckAccessAsync(this HttpContextBase httpContext, AuthorizationContextDto authorizationContext)
-        {
-            return httpContext.GetOwinContext().CheckAccessAsync(authorizationContext);
-        }
-
-        private static async Task<bool> CheckAccessAsync(this IOwinContext context, AuthorizationContextDto authorizationContext)
-        {
-            return await context.GetAuthorizationManager().CheckAccessAsync(authorizationContext).ConfigureAwait(false);
-        }
-
-        private static IAuthorizationManagerService GetAuthorizationManager(this IOwinContext context)
-        {
-            var am = context.Get<IAuthorizationManagerService>(BeforeAuthorizationMiddleware.KEY);
-
-            if (am == null)
-            {
-                throw new InvalidOperationException("No AuthorizationManager set.");
-            }
-
-            return am;
-        }
-
         public static IdentityResultDto ToDto(this IdentityResult result)
         {
             return new IdentityResultDto { Succeeded = result.Succeeded, Errors = result.Errors };
@@ -62,17 +35,10 @@ namespace Before.Infrastructure.Extensions
 
         public static Guid GetCustomerId(this IIdentity identity)
         {
-            //return Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
-            if (identity == null)
-            {
-                throw new ArgumentNullException("identity");
-            }
-            var ci = (ClaimsIdentity)identity;
-            //if (ci.HasClaim(x=>x.Type.Equals(SecurityConstants.CustomerIdClaimType)))
-            //{
-                return Guid.Parse(ci.FindFirstValue(SecurityConstants.CustomerIdClaimType));
-            //}
-            //return Guid.Empty;
+            ClaimsIdentity claimsId = (ClaimsIdentity)identity;
+            return claimsId.HasClaim(x => x.Type.Equals(SecurityConstants.CustomerIdClaimType)) 
+                ? Guid.Parse(claimsId.FindFirstValue(SecurityConstants.CustomerIdClaimType)) 
+                : Guid.Empty;
         }
     }
 }
