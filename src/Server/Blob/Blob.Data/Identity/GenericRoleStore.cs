@@ -3,17 +3,11 @@ using System.Data.Entity;
 using System.Data.Entity.SqlServer.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
-using Blob.Core.Models;
 using Blob.Identity;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {
-    public class BlobRoleStore : GenericRoleStore<Role, Guid, BlobUserRole>
-    {
-        public BlobRoleStore(DbContext context) : base(context) { }
-    }
-
     public class GenericRoleStore<TRole, TKey, TUserRole> : IQueryableRoleStore<TRole, TKey>
         where TUserRole : GenericUserRole<TKey>, new()
         where TRole : GenericRole<TKey, TUserRole>, new()

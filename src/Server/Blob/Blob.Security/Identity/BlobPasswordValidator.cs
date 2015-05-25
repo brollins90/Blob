@@ -38,23 +38,23 @@ namespace Blob.Security.Identity
             List<string> errors = new List<string>();
             if (string.IsNullOrWhiteSpace(item) || item.Length < RequiredLength)
             {
-                errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.PasswordTooShort, RequiredLength));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.PasswordTooShort", RequiredLength));
             }
             if (RequireNonLetterOrDigit && item.All(IsLetterOrDigit))
             {
-                errors.Add(Resources.PasswordRequireNonLetterOrDigit);
+                errors.Add("Resources.PasswordRequireNonLetterOrDigit");
             }
             if (RequireDigit && item.All(c => !IsDigit(c)))
             {
-                errors.Add(Resources.PasswordRequireDigit);
+                errors.Add("Resources.PasswordRequireDigit");
             }
             if (RequireLowercase && item.All(c => !IsLower(c)))
             {
-                errors.Add(Resources.PasswordRequireLower);
+                errors.Add("Resources.PasswordRequireLower");
             }
             if (RequireUppercase && item.All(c => !IsUpper(c)))
             {
-                errors.Add(Resources.PasswordRequireUpper);
+                errors.Add("Resources.PasswordRequireUpper");
             }
             if (errors.Count == 0)
             {

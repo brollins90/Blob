@@ -53,6 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlobDbContext.cs" />
+    <Compile Include="BlobPermissions.cs" />
+    <Compile Include="Identity\BlobRoleStore.cs" />
+    <Compile Include="Identity\BlobUserStore.cs" />
     <Compile Include="Identity\GenericEntityStore.cs" />
     <Compile Include="IdentityResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -60,13 +63,15 @@
       <DependentUpon>IdentityResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Identity\GenericDbContext.cs" />
-    <Compile Include="Identity\BlobGroupStore.cs" />
-    <Compile Include="Identity\GenericGroupStore.cs" />
+    <Compile Include="Identity\BlobCustomerStore.cs" />
     <Compile Include="Identity\GenericRoleStore.cs" />
     <Compile Include="Identity\GenericUserStore.cs" />
     <Compile Include="Mapping\BlobPermissionMap.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\AuditRecordMap.cs" />
+    <Compile Include="Mapping\BlobUserClaimMap.cs" />
+    <Compile Include="Mapping\BlobUserLoginMap.cs" />
+    <Compile Include="Mapping\BlobUserRoleMap.cs" />
     <Compile Include="Mapping\CustomerRoleMap.cs" />
     <Compile Include="Mapping\CustomerUserMap.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
@@ -78,9 +83,9 @@
     <Compile Include="Mapping\StatusRecordMap.cs" />
     <Compile Include="Mapping\PerformanceRecordMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
-    <Compile Include="Migrations\201505251517021_Initial.cs" />
-    <Compile Include="Migrations\201505251517021_Initial.Designer.cs">
-      <DependentUpon>201505251517021_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\Initial.cs" />
+    <Compile Include="Migrations\Initial.Designer.cs">
+      <DependentUpon>Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,8 +99,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505251517021_Initial.resx">
-      <DependentUpon>201505251517021_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Initial.resx">
+      <DependentUpon>Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -8,20 +8,14 @@ namespace Blob.Data.Mapping
     {
         public DeviceTypeMap()
         {
-            // Table
             ToTable("DeviceTypes");
 
-            // Keys
             HasKey(x => x.Id);
 
-            // Id
             Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
-            // Name
             Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
-                new IndexAnnotation(
-                    new IndexAttribute("IX_DeviceTypeName", 1) { IsUnique = true }));
-            // Description
+                new IndexAnnotation(new IndexAttribute("IX_DeviceTypeName", 1) { IsUnique = true }));
             Property(x => x.Description).HasColumnType("nvarchar").HasMaxLength(256).IsRequired();
         }
     }

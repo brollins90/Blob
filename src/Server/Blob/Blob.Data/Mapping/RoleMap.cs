@@ -8,19 +8,14 @@ namespace Blob.Data.Mapping
     {
         public RoleMap()
         {
-            // Table
             ToTable("Roles");
 
-            // Keys
             HasKey(x => x.Id);
 
-            // Id
             Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
-            // Name
             Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
-                new IndexAnnotation(
-                    new IndexAttribute("IX_RoleName", 1) { IsUnique = true }));
+                new IndexAnnotation(new IndexAttribute("IX_RoleName", 1) { IsUnique = true }));
         }
     }
 }

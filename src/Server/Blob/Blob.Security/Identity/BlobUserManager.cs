@@ -436,8 +436,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             return await store.GetEmailAsync(user).WithCurrentCulture();
         }
@@ -455,8 +454,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             return await store.GetEmailConfirmedAsync(user).WithCurrentCulture();
         }
@@ -475,8 +473,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             await store.SetEmailAsync(user, email).WithCurrentCulture();
             await store.SetEmailConfirmedAsync(user, false).WithCurrentCulture();
@@ -493,8 +490,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             //if (!await VerifyUserTokenAsync(userId, "Confirmation", token).WithCurrentCulture())
             //{
@@ -510,7 +506,7 @@ namespace Blob.Security.Identity
             var cast = Store as IUserEmailStore<User, Guid>;
             if (cast == null)
             {
-                throw new NotSupportedException(Resources.StoreNotIUserEmailStore);
+                throw new NotSupportedException("Resources.StoreNotIUserEmailStore");
             }
             return cast;
         }
@@ -840,8 +836,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             return await passwordStore.GetPasswordHashAsync(user).WithCurrentCulture();
         }
@@ -859,8 +854,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             return await passwordStore.HasPasswordAsync(user).WithCurrentCulture();
         }
@@ -873,8 +867,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             await passwordStore.SetPasswordHashAsync(user, passwordHash).WithCurrentCulture();
         }
@@ -885,7 +878,7 @@ namespace Blob.Security.Identity
             var cast = Store as IUserPasswordStore<User, Guid>;
             if (cast == null)
             {
-                throw new NotSupportedException(Resources.StoreNotIUserPasswordStore);
+                throw new NotSupportedException("Resources.StoreNotIUserPasswordStore");
             }
             return cast;
         }
@@ -911,8 +904,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             var userRoles = await userRoleStore.GetRolesAsync(user).WithCurrentCulture();
             if (userRoles.Contains(role))
@@ -947,8 +939,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             if (!await userRoleStore.IsInRoleAsync(user, role).WithCurrentCulture())
             {
@@ -979,8 +970,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             return await userRoleStore.GetRolesAsync(user).WithCurrentCulture();
         }
@@ -998,8 +988,7 @@ namespace Blob.Security.Identity
             var user = await FindDomainUserByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound,
-                    userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             return await userRoleStore.IsInRoleAsync(user, role).WithCurrentCulture();
         }
@@ -1009,7 +998,7 @@ namespace Blob.Security.Identity
             var cast = Store as IUserRoleStore<User, Guid>;
             if (cast == null)
             {
-                throw new NotSupportedException(Resources.StoreNotIUserRoleStore);
+                throw new NotSupportedException("Resources.StoreNotIUserRoleStore");
             }
             return cast;
         }
@@ -1692,7 +1681,7 @@ namespace Blob.Security.Identity
             var user = await FindByIdAsync(userId).WithCurrentCulture();
             if (user == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.UserIdNotFound, userId));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "Resources.UserIdNotFound", userId));
             }
             //if (await VerifyPasswordAsync(passwordStore, user, currentPassword).WithCurrentCulture())
             //{

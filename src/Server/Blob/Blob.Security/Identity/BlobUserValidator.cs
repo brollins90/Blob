@@ -54,19 +54,19 @@ namespace Blob.Security.Identity
         {
             if (string.IsNullOrWhiteSpace(user.UserName))
             {
-                errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.PropertyTooShort, "Name"));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.PropertyTooShort", "Name"));
             }
             else if (AllowOnlyAlphanumericUserNames && !Regex.IsMatch(user.UserName, @"^[A-Za-z0-9@_\.]+$"))
             {
                 // If any characters are not letters or digits, its an illegal user name
-                errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.InvalidUserName, user.UserName));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.InvalidUserName", user.UserName));
             }
             else
             {
                 User owner = await Manager.FindByNameAsync2(user.UserName).WithCurrentCulture();
                 if (owner != null && !EqualityComparer<Guid>.Default.Equals(owner.Id, user.Id))
                 {
-                    errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.DuplicateName, user.UserName));
+                    errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.DuplicateName", user.UserName));
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace Blob.Security.Identity
             string email = await Manager.GetEmailAsync(user.Id).WithCurrentCulture();
             if (string.IsNullOrWhiteSpace(email))
             {
-                errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.PropertyTooShort, "Email"));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.PropertyTooShort", "Email"));
                 return;
             }
             try
@@ -85,13 +85,13 @@ namespace Blob.Security.Identity
             }
             catch (FormatException)
             {
-                errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.InvalidEmail, email));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.InvalidEmail", email));
                 return;
             }
             User owner = await Manager.FindByEmailAsync2(email).WithCurrentCulture();
             if (owner != null && !EqualityComparer<Guid>.Default.Equals(owner.Id, user.Id))
             {
-                errors.Add(String.Format(CultureInfo.CurrentCulture, Resources.DuplicateEmail, email));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, "Resources.DuplicateEmail", email));
             }
         }
     }

@@ -14,11 +14,6 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {
-    public class BlobUserStore : GenericUserStore<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
-    {
-        public BlobUserStore(DbContext context) : base(context) { }
-    }
-
     public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IUserLoginStore<TUser, TKey>,
         IUserClaimStore<TUser, TKey>,
