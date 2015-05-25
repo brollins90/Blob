@@ -41,16 +41,6 @@ namespace Blob.Data
         {
             _log.Debug("Creating model");
 
-            //modelBuilder.Entity<CustomerGroup>()
-            //    .HasMany<CustomerGroupUser>((CustomerGroup g) => g.Members)
-            //    .WithRequired()
-            //    .HasForeignKey<Guid>((CustomerGroupUser cgu) => cgu.GroupId);
-
-            //modelBuilder.Entity<CustomerGroupUser>()
-            //    .HasKey((CustomerGroupUser cgu) =>
-            //        new { GroupId = cgu.GroupId, UserId = cgu.UserId })
-            //        .ToTable("CustomerGroupUsers");
-
             modelBuilder.Configurations.Add(new BlobUserClaimMap());
             modelBuilder.Configurations.Add(new BlobUserLoginMap());
             modelBuilder.Configurations.Add(new BlobUserRoleMap());
