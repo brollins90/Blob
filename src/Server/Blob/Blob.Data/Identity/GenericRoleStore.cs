@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.SqlServer.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
 using Blob.Identity;
@@ -46,7 +45,7 @@ namespace Blob.Data.Identity
                 throw new ArgumentNullException("role");
 
             _roleStore.Create(role);
-            await Context.SaveChangesAsync().WithCurrentCulture();
+            await Context.SaveChangesAsync();
         }
 
         public virtual async Task DeleteAsync(TRole role)
@@ -56,7 +55,7 @@ namespace Blob.Data.Identity
                 throw new ArgumentNullException("role");
 
             _roleStore.Delete(role);
-            await Context.SaveChangesAsync().WithCurrentCulture();
+            await Context.SaveChangesAsync();
         }
 
         public virtual async Task UpdateAsync(TRole role)
@@ -66,7 +65,7 @@ namespace Blob.Data.Identity
                 throw new ArgumentNullException("role");
 
             _roleStore.Update(role);
-            await Context.SaveChangesAsync().WithCurrentCulture();
+            await Context.SaveChangesAsync();
         }
 
         public IQueryable<TRole> Roles

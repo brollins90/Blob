@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IdentityModel.Selectors;
 using System.ServiceModel;
+using Blob.Core;
+using Blob.Core.Identity;
 using Blob.Core.Models;
-using Blob.Data;
-using Blob.Data.Identity;
 using Blob.Security.Identity;
 using log4net;
 

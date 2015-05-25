@@ -46,6 +46,7 @@
     <Compile Include="Commands\WindowsUpdateCommand.cs" />
     <Compile Include="Models\AddPerformanceRecordDto.cs" />
     <Compile Include="Models\AddStatusRecordDto.cs" />
+    <Compile Include="Models\RegisterCustomerDto.cs" />
     <Compile Include="Models\DeletePerformanceRecordDto.cs" />
     <Compile Include="Models\DeleteStatusRecordDto.cs" />
     <Compile Include="Models\DisableCustomerDto.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
     <Compile Include="Models\ViewModels\IdNameOtherTupleVm.cs" />
     <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerRegisterVm.cs" />
     <Compile Include="Models\ViewModels\UserPageVm.cs" />
     <Compile Include="Models\ViewModels\PerformanceRecordPageVm.cs" />
     <Compile Include="Models\ViewModels\StatusRecordPageVm.cs" />

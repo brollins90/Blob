@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Utilities;
+using System.Data.Entity.SqlServer.Utilities;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Blob.Core.Models;
 using Blob.Identity;
 using Microsoft.AspNet.Identity;
 
@@ -331,13 +330,12 @@ namespace Blob.Data.Identity
             }
             if (String.IsNullOrWhiteSpace(roleName))
             {
-                throw new ArgumentException(IdentityResource.ValueCannotBeNullOrEmpty, "roleName");
+                throw new ArgumentException("IdentityResource.ValueCannotBeNullOrEmpty", "roleName");
             }
             var roleEntity = await _roleStore.DbEntitySet.SingleOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper()).WithCurrentCulture();
             if (roleEntity == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture,
-                                                                  IdentityResource.RoleNotFound, roleName));
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "IdentityResource.RoleNotFound", roleName));
             }
 
             var ur = new TUserRole {UserId = user.Id, RoleId = roleEntity.Id};
@@ -353,7 +351,7 @@ namespace Blob.Data.Identity
             }
             if (String.IsNullOrWhiteSpace(roleName))
             {
-                throw new ArgumentException(IdentityResource.ValueCannotBeNullOrEmpty, "roleName");
+                throw new ArgumentException("IdentityResource.ValueCannotBeNullOrEmpty", "roleName");
             }
             var roleEntity = await _roleStore.DbEntitySet.SingleOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper()).WithCurrentCulture();
             if (roleEntity != null)
@@ -392,7 +390,7 @@ namespace Blob.Data.Identity
             }
             if (String.IsNullOrWhiteSpace(roleName))
             {
-                throw new ArgumentException(IdentityResource.ValueCannotBeNullOrEmpty, "roleName");
+                throw new ArgumentException("IdentityResource.ValueCannotBeNullOrEmpty", "roleName");
             }
             var role = await _roleStore.DbEntitySet.SingleOrDefaultAsync(r => r.Name.ToUpper() == roleName.ToUpper()).WithCurrentCulture();
             if (role != null)

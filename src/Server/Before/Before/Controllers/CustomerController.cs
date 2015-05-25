@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Filters;
+using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 
@@ -87,6 +88,27 @@ namespace Before.Controllers
                 return Json(new { success = true });
             }
             return PartialView("_EnableModal", model);
+        }
+
+        // Register
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            var viewModel = new CustomerRegisterVm();
+            return View("Register", viewModel);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(CustomerRegisterVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.RegisterCustomerAsync(model.ToDto()).ConfigureAwait(true);
+                return RedirectToAction("Index", "Home");
+            }
+            return View("Register", model);
         }
         
         // Single

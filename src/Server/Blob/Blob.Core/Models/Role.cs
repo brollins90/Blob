@@ -1,5 +1,5 @@
 ﻿using System;
-using Blob.Identity;
+using Blob.Core.Identity;
 
 namespace Blob.Core.Models
 {

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Blob.Contracts.Commands;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
+using Blob.Core;
 using Blob.Core.Models;
-using Blob.Data;
 using Blob.Managers.Command;
 using Blob.Managers.Extensions;
 using Blob.Security.Extensions;
@@ -56,6 +56,26 @@ namespace Blob.Managers.Blob
 
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
+        {
+            Customer customer = new Customer
+            {
+                CreateDateUtc = DateTime.UtcNow,
+                Enabled = true,
+                Id = dto.CustomerId,
+                Name = dto.CustomerName
+            };
+
+            Context.Customers.Add(customer);
+            await Context.SaveChangesAsync().ConfigureAwait(true);
+
+            if (dto.DefaultUser != null)
+            {
+                dto.DefaultUser.CustomerId = customer.Id;
+                await CreateUserAsync(dto.DefaultUser).ConfigureAwait(false);
+            }
         }
 
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)

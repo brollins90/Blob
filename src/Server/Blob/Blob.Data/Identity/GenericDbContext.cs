@@ -127,12 +127,12 @@ namespace Blob.Data.Identity
                     if (Users.Any(u => String.Equals(u.UserName, user.UserName)))
                     {
                         errors.Add(new DbValidationError("User",
-                            String.Format(CultureInfo.CurrentCulture, IdentityResource.DuplicateUserName, user.UserName)));
+                            String.Format(CultureInfo.CurrentCulture, "IdentityResource.DuplicateUserName", user.UserName)));
                     }
                     if (RequireUniqueEmail && Users.Any(u => String.Equals(u.Email, user.Email)))
                     {
                         errors.Add(new DbValidationError("User",
-                            String.Format(CultureInfo.CurrentCulture, IdentityResource.DuplicateEmail, user.Email)));
+                            String.Format(CultureInfo.CurrentCulture, "IdentityResource.DuplicateEmail", user.Email)));
                     }
                 }
                 else
@@ -142,7 +142,7 @@ namespace Blob.Data.Identity
                     if (role != null && Roles.Any(r => String.Equals(r.Name, role.Name)))
                     {
                         errors.Add(new DbValidationError("Role",
-                            String.Format(CultureInfo.CurrentCulture, IdentityResource.RoleAlreadyExists, role.Name)));
+                            String.Format(CultureInfo.CurrentCulture, "IdentityResource.RoleAlreadyExists", role.Name)));
                     }
                 }
                 if (errors.Any())

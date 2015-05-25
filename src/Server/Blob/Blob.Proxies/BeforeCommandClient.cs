@@ -33,6 +33,18 @@ namespace Blob.Proxies
             }
         }
 
+        public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
+        {
+            try
+            {
+                await Channel.RegisterCustomerAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             try

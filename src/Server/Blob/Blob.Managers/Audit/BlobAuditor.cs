@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Blob.Contracts.ServiceContracts;
+using Blob.Core;
 using Blob.Core.Models;
-using Blob.Data;
 using log4net;
 
 namespace Blob.Managers.Audit

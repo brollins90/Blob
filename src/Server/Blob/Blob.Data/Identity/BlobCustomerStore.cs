@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.SqlServer.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
 using Blob.Core.Models;
@@ -35,7 +34,7 @@ namespace Blob.Data.Identity
                 throw new ArgumentNullException("customer");
 
             _customerStore.Create(customer);
-            await Context.SaveChangesAsync().WithCurrentCulture();
+            await Context.SaveChangesAsync();
         }
 
         public virtual async Task DeleteAsync(Customer customer)
@@ -45,7 +44,7 @@ namespace Blob.Data.Identity
                 throw new ArgumentNullException("customer");
 
             _customerStore.Delete(customer);
-            await Context.SaveChangesAsync().WithCurrentCulture();
+            await Context.SaveChangesAsync();
         }
 
         public Task<Customer> FindByIdAsync(Guid customerId)
@@ -67,7 +66,7 @@ namespace Blob.Data.Identity
                 throw new ArgumentNullException("customer");
 
             _customerStore.Update(customer);
-            await Context.SaveChangesAsync().WithCurrentCulture();
+            await Context.SaveChangesAsync();
         }
         public bool DisposeContext { get; set; }
 

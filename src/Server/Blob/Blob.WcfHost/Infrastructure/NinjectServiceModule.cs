@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.Entity;
 using Blob.Contracts.ServiceContracts;
+using Blob.Core;
 using Blob.Managers.Audit;
 using Blob.Security.Identity;
 using log4net;
@@ -31,10 +32,10 @@ namespace Blob.WcfHost.Infrastructure
 
             String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
             
-            Bind<Data.BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
+            Bind<BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
-            Bind<DbContext>().To<Data.BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
+            Bind<DbContext>().To<BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
             Bind<IBlobAuditor>().To<BlobAuditor>();

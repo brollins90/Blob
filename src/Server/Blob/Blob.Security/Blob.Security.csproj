@@ -109,16 +109,9 @@
       <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
       <Name>Blob.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Blob.Data\Blob.Data.csproj">
-      <Project>{e12f5b0f-43bd-479e-b36f-553c965a8e33}</Project>
-      <Name>Blob.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Blob.Identity\Blob.Identity.csproj">
-      <Project>{659bd006-9edc-465a-8f8d-1b1693c956c0}</Project>
-      <Name>Blob.Identity</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

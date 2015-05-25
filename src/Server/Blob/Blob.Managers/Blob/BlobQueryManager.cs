@@ -6,7 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
-using Blob.Data;
+using Blob.Core;
 using EntityFramework.Extensions;
 using log4net;
 

@@ -13,6 +13,8 @@ namespace Blob.Contracts.ServiceContracts
         [OperationContract]
         Task EnableCustomerAsync(EnableCustomerDto dto);
         [OperationContract]
+        Task RegisterCustomerAsync(RegisterCustomerDto dto);
+        [OperationContract]
         Task UpdateCustomerAsync(UpdateCustomerDto dto);
 
         // Commands
