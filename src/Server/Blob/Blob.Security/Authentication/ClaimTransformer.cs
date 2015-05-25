@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.ServiceModel;
 using Blob.Contracts;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using Blob.Data;
 using Blob.Data.Identity;
 using Blob.Security.Extensions;

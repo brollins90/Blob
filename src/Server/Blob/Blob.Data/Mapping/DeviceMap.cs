@@ -1,4 +1,4 @@
-﻿using Blob.Core.Domain;
+﻿using Blob.Core.Models;
 
 namespace Blob.Data.Mapping
 {
@@ -6,47 +6,37 @@ namespace Blob.Data.Mapping
     {
         public DeviceMap()
         {
+            // Table
             ToTable("Devices");
 
-            // Id
+            // Keys
             HasKey(x => x.Id);
-            Property(x => x.Id)
-                .HasColumnType("uniqueidentifier")
-                .IsRequired();
 
+            // Id
+            Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
             // DeviceName
-            Property(x => x.DeviceName)
-                .HasColumnType("nvarchar").HasMaxLength(256)
-                .IsRequired();
-
-            // LastActivityDate
-            Property(x => x.LastActivityDate)
-                .HasColumnType("datetime2")
-                .IsRequired();
-
+            Property(x => x.DeviceName).HasColumnType("nvarchar").HasMaxLength(256).IsRequired();
+            // LastActivityDateUtc
+            Property(x => x.LastActivityDateUtc).HasColumnType("datetime2").IsRequired();
             // AlertLevel
-            Property(x => x.AlertLevel)
-                .HasColumnType("int")
-                .IsRequired();
-
-            // CreateDate
-            Property(x => x.CreateDate).HasColumnType("datetime2")
-                .IsRequired();
-
+            Property(x => x.AlertLevel).HasColumnType("int").IsRequired();
+            // CreateDateUtc
+            Property(x => x.CreateDateUtc).HasColumnType("datetime2").IsRequired();
             // Enabled
-            Property(x => x.Enabled).HasColumnType("bit")
-                .IsRequired();
+            Property(x => x.Enabled).HasColumnType("bit").IsRequired();
 
-            // DeviceType
-            Property(x => x.DeviceTypeId).HasColumnType("uniqueidentifier");
-            HasRequired(d => d.DeviceType).WithMany().HasForeignKey(d => d.DeviceTypeId);
+            //// DeviceType
+            //Property(x => x.DeviceTypeId).HasColumnType("uniqueidentifier");
+            //HasRequired(d => d.DeviceType).WithMany().HasForeignKey(d => d.DeviceTypeId);
 
-            // Customer
-            Property(x => x.CustomerId).HasColumnType("uniqueidentifier");
-            HasRequired(d => d.Customer).WithMany(c => c.Devices).HasForeignKey(d => d.CustomerId);
+            //// Customer
+            //Property(x => x.CustomerId).HasColumnType("uniqueidentifier");
+            //HasRequired(d => d.Customer).WithMany(c => c.Devices).HasForeignKey(d => d.CustomerId);
 
-            // Status ??
-            // StatusPerf ??
+            //// StatusRecords
+            //HasMany(x => x.StatusRecords).WithRequired(sr => sr.Device).HasForeignKey(x => x.DeviceId);
+            //// PerformanceRecords
+            //HasMany(x => x.PerformanceRecords).WithRequired(sr => sr.Device).HasForeignKey(x => x.DeviceId);
         }
     }
 }

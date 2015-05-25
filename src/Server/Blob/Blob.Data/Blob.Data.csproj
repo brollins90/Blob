@@ -61,70 +61,23 @@
     <Compile Include="Identity\GenericGroupStore.cs" />
     <Compile Include="Identity\GenericRoleStore.cs" />
     <Compile Include="Identity\GenericUserStore.cs" />
+    <Compile Include="Mapping\BlobPermissionMap.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
-    <Compile Include="Mapping\AuditEntryMap.cs" />
+    <Compile Include="Mapping\AuditRecordMap.cs" />
+    <Compile Include="Mapping\CustomerRoleMap.cs" />
+    <Compile Include="Mapping\CustomerUserMap.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
-    <Compile Include="Mapping\GroupMap.cs" />
-    <Compile Include="Mapping\KeyPairMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
     <Compile Include="Mapping\RoleMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mapping\StatusMap.cs" />
-    <Compile Include="Mapping\StatusPerfMap.cs" />
+    <Compile Include="Mapping\StatusRecordMap.cs" />
+    <Compile Include="Mapping\PerformanceRecordMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
-    <Compile Include="Migrations\201504152034598_NewOne.cs" />
-    <Compile Include="Migrations\201504152034598_NewOne.Designer.cs">
-      <DependentUpon>201504152034598_NewOne.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504192325531_identity.cs" />
-    <Compile Include="Migrations\201504192325531_identity.Designer.cs">
-      <DependentUpon>201504192325531_identity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201504251720232_KeyPairs.cs" />
-    <Compile Include="Migrations\201504251720232_KeyPairs.Designer.cs">
-      <DependentUpon>201504251720232_KeyPairs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505030256392_AddAlertLevelToDevice.cs" />
-    <Compile Include="Migrations\201505030256392_AddAlertLevelToDevice.Designer.cs">
-      <DependentUpon>201505030256392_AddAlertLevelToDevice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505030623419_AddCreatedDateToDeviceAndUser.cs" />
-    <Compile Include="Migrations\201505030623419_AddCreatedDateToDeviceAndUser.Designer.cs">
-      <DependentUpon>201505030623419_AddCreatedDateToDeviceAndUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505031909261_EnabledDeviceColumn.cs" />
-    <Compile Include="Migrations\201505031909261_EnabledDeviceColumn.Designer.cs">
-      <DependentUpon>201505031909261_EnabledDeviceColumn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505032022595_LinkedPerfDataToStatus.cs" />
-    <Compile Include="Migrations\201505032022595_LinkedPerfDataToStatus.Designer.cs">
-      <DependentUpon>201505032022595_LinkedPerfDataToStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505052256561_MoreEnableColumns.cs" />
-    <Compile Include="Migrations\201505052256561_MoreEnableColumns.Designer.cs">
-      <DependentUpon>201505052256561_MoreEnableColumns.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505062051058_PerfDoesntNeedAStatus.cs" />
-    <Compile Include="Migrations\201505062051058_PerfDoesntNeedAStatus.Designer.cs">
-      <DependentUpon>201505062051058_PerfDoesntNeedAStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505151527347_AuditTable.cs" />
-    <Compile Include="Migrations\201505151527347_AuditTable.Designer.cs">
-      <DependentUpon>201505151527347_AuditTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505151543080_AuditTableTime.cs" />
-    <Compile Include="Migrations\201505151543080_AuditTableTime.Designer.cs">
-      <DependentUpon>201505151543080_AuditTableTime.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505180103292_AddGroups.cs" />
-    <Compile Include="Migrations\201505180103292_AddGroups.Designer.cs">
-      <DependentUpon>201505180103292_AddGroups.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505191920078_TestGroups.cs" />
-    <Compile Include="Migrations\201505191920078_TestGroups.Designer.cs">
-      <DependentUpon>201505191920078_TestGroups.cs</DependentUpon>
+    <Compile Include="Migrations\201505251517021_Initial.cs" />
+    <Compile Include="Migrations\201505251517021_Initial.Designer.cs">
+      <DependentUpon>201505251517021_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,44 +91,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504152034598_NewOne.resx">
-      <DependentUpon>201504152034598_NewOne.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504192325531_identity.resx">
-      <DependentUpon>201504192325531_identity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504251720232_KeyPairs.resx">
-      <DependentUpon>201504251720232_KeyPairs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505030256392_AddAlertLevelToDevice.resx">
-      <DependentUpon>201505030256392_AddAlertLevelToDevice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505030623419_AddCreatedDateToDeviceAndUser.resx">
-      <DependentUpon>201505030623419_AddCreatedDateToDeviceAndUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505031909261_EnabledDeviceColumn.resx">
-      <DependentUpon>201505031909261_EnabledDeviceColumn.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505032022595_LinkedPerfDataToStatus.resx">
-      <DependentUpon>201505032022595_LinkedPerfDataToStatus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505052256561_MoreEnableColumns.resx">
-      <DependentUpon>201505052256561_MoreEnableColumns.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505062051058_PerfDoesntNeedAStatus.resx">
-      <DependentUpon>201505062051058_PerfDoesntNeedAStatus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505151527347_AuditTable.resx">
-      <DependentUpon>201505151527347_AuditTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505151543080_AuditTableTime.resx">
-      <DependentUpon>201505151543080_AuditTableTime.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505180103292_AddGroups.resx">
-      <DependentUpon>201505180103292_AddGroups.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505191920078_TestGroups.resx">
-      <DependentUpon>201505191920078_TestGroups.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505251517021_Initial.resx">
+      <DependentUpon>201505251517021_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +105,7 @@
       <Name>Blob.Identity</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -53,7 +53,8 @@ namespace Blob.Contracts.Models.ViewModels
         [Required]
         public string UserName { get; set; }
 
-        // audit logs?
-        // permissions?
+        //[DataMember]
+        //[Display(Name = "Connected Customers")]
+        //public ICollection<IdNameOtherTupleVm> Customers { get; set; }
     }
 }

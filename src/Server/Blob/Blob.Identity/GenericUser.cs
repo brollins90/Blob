@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Identity
 {
-    public class GenericUser : GenericUser<string, GenericUserLogin, GenericUserRole, GenericUserClaim, GenericUserGroup>, IUser
+    public class GenericUser : GenericUser<string, GenericUserLogin, GenericUserRole, GenericUserClaim>, IUser
     {
         public GenericUser()
         {
@@ -20,11 +20,10 @@ namespace Blob.Identity
         }
     }
 
-    public class GenericUser<TKey, TLogin, TRole, TClaim, TGroup> : IUser<TKey>
+    public class GenericUser<TKey, TLogin, TRole, TClaim> : IUser<TKey>
         where TLogin : GenericUserLogin<TKey>
         where TRole : GenericUserRole<TKey>
         where TClaim : GenericUserClaim<TKey>
-        where TGroup : GenericUserGroup<TKey>
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GenericUser()
@@ -32,7 +31,6 @@ namespace Blob.Identity
             Claims = new List<TClaim>();
             Logins = new List<TLogin>();
             Roles = new List<TRole>();
-            Groups = new List<TGroup>();
         }
 
         public virtual TKey Id { get; set; }
@@ -55,6 +53,5 @@ namespace Blob.Identity
         public virtual ICollection<TClaim> Claims { get; set; }
         public virtual ICollection<TLogin> Logins { get; set; }
         public virtual ICollection<TRole> Roles { get; set; }
-        public virtual ICollection<TGroup> Groups { get; set; }
     }
 }

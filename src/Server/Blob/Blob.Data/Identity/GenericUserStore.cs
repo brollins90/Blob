@@ -8,18 +8,18 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using Blob.Identity;
 using Microsoft.AspNet.Identity;
 
 namespace Blob.Data.Identity
 {
-    public class BlobUserStore : GenericUserStore<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim, BlobUserGroup>
+    public class BlobUserStore : GenericUserStore<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
     {
         public BlobUserStore(DbContext context) : base(context) { }
     }
 
-    public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim, TUserGroup> :
+    public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IUserLoginStore<TUser, TKey>,
         IUserClaimStore<TUser, TKey>,
         IUserRoleStore<TUser, TKey>,
@@ -31,12 +31,11 @@ namespace Blob.Data.Identity
         IUserTwoFactorStore<TUser, TKey>,
         IUserLockoutStore<TUser, TKey>
         where TKey : IEquatable<TKey>
-        where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim, TUserGroup>
+        where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim>
         where TRole : GenericRole<TKey, TUserRole>
         where TUserLogin : GenericUserLogin<TKey>, new()
         where TUserRole : GenericUserRole<TKey>, new()
         where TUserClaim : GenericUserClaim<TKey>, new()
-        where TUserGroup : GenericUserGroup<TKey>, new()
     {
         private readonly IDbSet<TUserLogin> _logins;
         private readonly IDbSet<TUserClaim> _userClaims;
@@ -205,8 +204,8 @@ namespace Blob.Data.Identity
             user.LockoutEndDateUtc = DateTime.Now;
             
             User user1 = user as User;
-            if (user1 != null) 
-                user1.CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
+            //if (user1 != null) 
+            //    user1.CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
 
             _userStore.Create(user);
             await SaveChanges().WithCurrentCulture();

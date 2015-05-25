@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
@@ -98,11 +99,11 @@ namespace Blob.Managers.Blob
                                 .Where(x => x.Id == customerId)
                                 .Select(cust => new CustomerSingleVm
                                                 {
-                                                    CreateDate = cust.CreateDate,
+                                                    CreateDate = cust.CreateDateUtc,
                                                     CustomerId = cust.Id,
                                                     Name = cust.Name,
                                                     DeviceCount = cust.Devices.Count,
-                                                    UserCount = cust.Users.Count
+                                                    UserCount = cust.CustomerUsers.Count
                                                 }).SingleAsync();
         }
 
@@ -201,9 +202,9 @@ namespace Blob.Managers.Blob
                     AvailableCommands = availableCommands,
                     DeviceId = x.Id,
                     DeviceName = x.DeviceName,
-                    DeviceType = x.DeviceType.Value,
+                    DeviceType = x.DeviceType.Name,
                     Enabled = x.Enabled,
-                    LastActivityDate = x.LastActivityDate,
+                    LastActivityDate = x.LastActivityDateUtc,
                     Status = x.AlertLevel
                 }),
             }).ConfigureAwait(false);
@@ -215,12 +216,12 @@ namespace Blob.Managers.Blob
                           where device.Id == deviceId
                           select new DeviceSingleVm
                           {
-                              CreateDate = device.CreateDate,
+                              CreateDate = device.CreateDateUtc,
                               DeviceId = device.Id,
                               DeviceName = device.DeviceName,
-                              DeviceType = device.DeviceType.Value,
+                              DeviceType = device.DeviceType.Name,
                               Enabled = device.Enabled,
-                              LastActivityDate = device.LastActivityDate,
+                              LastActivityDate = device.LastActivityDateUtc,
                               //PerformanceRecords = (from perf in device.StatusPerfs
                               //                      select new PerformanceRecordListItemVm
                               //                      {
@@ -260,7 +261,7 @@ namespace Blob.Managers.Blob
                                                 select new DeviceTypeSingleVm
                                                 {
                                                     DeviceTypeId = type.Id,
-                                                    Value = type.Value
+                                                    Value = type.Name
                                                 }),
                               DeviceId = device.Id,
                               DeviceTypeId = device.DeviceTypeId,
@@ -278,7 +279,7 @@ namespace Blob.Managers.Blob
                               DeviceName = perf.Device.DeviceName,
                               MonitorName = perf.MonitorName,
                               RecordId = perf.Id,
-                              TimeGenerated = perf.TimeGenerated
+                              TimeGenerated = perf.TimeGeneratedUtc
                           }).SingleAsync().ConfigureAwait(false);
         }
 
@@ -289,7 +290,7 @@ namespace Blob.Managers.Blob
             var count = Context.DevicePerfDatas.Where(x => x.DeviceId.Equals(deviceId)).FutureCount();
             var devices = Context.DevicePerfDatas
                 .Where(x => x.DeviceId.Equals(deviceId))
-                .OrderByDescending(x => x.TimeGenerated)
+                .OrderByDescending(x => x.TimeGeneratedUtc)
                 .Skip(pNum * pageSize).Take(pageSize).Future();
 
             // define future queries before any of them execute
@@ -309,7 +310,7 @@ namespace Blob.Managers.Blob
                     MonitorDescription = x.MonitorDescription,
                     MonitorName = x.MonitorName,
                     RecordId = x.Id,
-                    TimeGenerated = x.TimeGenerated,
+                    TimeGenerated = x.TimeGeneratedUtc,
                     Unit = x.UnitOfMeasure,
                     Value = x.Value.ToString(),
                     Warning = x.Warning.Value.ToString()
@@ -324,7 +325,7 @@ namespace Blob.Managers.Blob
             var count = Context.DevicePerfDatas.Where(x => x.StatusId == recordId).FutureCount();
             var data = Context.DevicePerfDatas
                 .Where(x => x.StatusId == recordId)
-                .OrderByDescending(x => x.TimeGenerated)
+                .OrderByDescending(x => x.TimeGeneratedUtc)
                 .Skip(pNum * pageSize).Take(pageSize).Future();
 
             // define future queries before any of them execute
@@ -344,7 +345,7 @@ namespace Blob.Managers.Blob
                     MonitorDescription = x.MonitorDescription,
                     MonitorName = x.MonitorName,
                     RecordId = x.Id,
-                    TimeGenerated = x.TimeGenerated,
+                    TimeGenerated = x.TimeGeneratedUtc,
                     Unit = x.UnitOfMeasure,
                     Value = x.Value.ToString(),
                     Warning = x.Warning.Value.ToString()
@@ -365,7 +366,7 @@ namespace Blob.Managers.Blob
                               MonitorDescription = perf.MonitorDescription,
                               MonitorName = perf.MonitorName,
                               RecordId = perf.Id,
-                              TimeGenerated = perf.TimeGenerated,
+                              TimeGenerated = perf.TimeGeneratedUtc,
                               Unit = perf.UnitOfMeasure,
                               Value = perf.Value.ToString(),
                               Warning = perf.Warning.ToString()
@@ -382,7 +383,7 @@ namespace Blob.Managers.Blob
                               DeviceName = status.Device.DeviceName,
                               MonitorName = status.MonitorName,
                               RecordId = status.Id,
-                              TimeGenerated = status.TimeGenerated
+                              TimeGenerated = status.TimeGeneratedUtc
 
                           }).SingleAsync().ConfigureAwait(false);
         }
@@ -394,7 +395,7 @@ namespace Blob.Managers.Blob
             var count = Context.DeviceStatuses.Where(x => x.DeviceId.Equals(deviceId)).FutureCount();
             var devices = Context.DeviceStatuses
                 .Where(x => x.DeviceId.Equals(deviceId))
-                .OrderByDescending(x => x.TimeGenerated)
+                .OrderByDescending(x => x.TimeGeneratedUtc)
                 .Skip(pNum * pageSize).Take(pageSize).Future();
 
             // define future queries before any of them execute
@@ -411,7 +412,7 @@ namespace Blob.Managers.Blob
                     MonitorName = x.MonitorName,
                     RecordId = x.Id,
                     Status = x.AlertLevel,
-                    TimeGenerated = x.TimeGenerated
+                    TimeGenerated = x.TimeGeneratedUtc
                 }),
             }).ConfigureAwait(false);
         }
@@ -426,7 +427,7 @@ namespace Blob.Managers.Blob
                               MonitorName = status.MonitorName,
                               RecordId = status.Id,
                               Status = status.AlertLevel,
-                              TimeGenerated = status.TimeGenerated
+                              TimeGenerated = status.TimeGeneratedUtc
 
                           }).SingleAsync().ConfigureAwait(false);
         }
@@ -494,11 +495,11 @@ namespace Blob.Managers.Blob
                           where user.Id == userId
                           select new UserSingleVm
                           {
-                              CreateDate = user.CreateDate,
+                              CreateDate = user.CreateDateUtc,
                               CustomerName = user.Customer.Name,
                               Email = user.Email,
                               EmailConfirmed = user.EmailConfirmed,
-                              Enabled = user.Enabled,
+                              //Enabled = user.Enabled,
                               HasPassword = (user.PasswordHash != null),
                               HasSecurityStamp = (user.SecurityStamp != null),
                               LastActivityDate = user.LastActivityDate,

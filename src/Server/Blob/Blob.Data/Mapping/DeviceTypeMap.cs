@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Infrastructure.Annotations;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 
 namespace Blob.Data.Mapping
 {
@@ -8,21 +8,21 @@ namespace Blob.Data.Mapping
     {
         public DeviceTypeMap()
         {
+            // Table
             ToTable("DeviceTypes");
 
-            // Id
+            // Keys
             HasKey(x => x.Id);
-            Property(x => x.Id)
-                .HasColumnType("uniqueidentifier")
-                .IsRequired();
 
-            // Value
-            Property(x => x.Value)
-                .HasColumnType("nvarchar").HasMaxLength(256)
-                .IsRequired()
+            // Id
+            Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
+            // Name
+            Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(
-                    new IndexAttribute("IX_DeviceTypeValue", 1) { IsUnique = true }));
+                    new IndexAttribute("IX_DeviceTypeName", 1) { IsUnique = true }));
+            // Description
+            Property(x => x.Description).HasColumnType("nvarchar").HasMaxLength(256).IsRequired();
         }
     }
 }

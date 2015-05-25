@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using Blob.Data.Identity;
 using Blob.Security.Authentication;
 using log4net;

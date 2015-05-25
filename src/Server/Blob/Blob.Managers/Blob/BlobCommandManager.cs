@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Blob.Contracts.Commands;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using Blob.Data;
 using Blob.Managers.Command;
 using Blob.Managers.Extensions;
@@ -134,7 +134,7 @@ namespace Blob.Managers.Blob
                 }
 
                 DateTime createDate = DateTime.Now;
-                DeviceType deviceType = await Context.Set<DeviceType>().FirstOrDefaultAsync(x => x.Value.Equals(message.DeviceType));
+                DeviceType deviceType = await Context.Set<DeviceType>().FirstOrDefaultAsync(x => x.Name.Equals(message.DeviceType));
 
                 // todo, get the customerid from the principal
                 ClaimsPrincipal id = ClaimsPrincipal.Current;
@@ -144,13 +144,13 @@ namespace Blob.Managers.Blob
                 device = new Device
                          {
                              AlertLevel = 0, // initially set to Ok
-                             CreateDate = createDate,
+                             CreateDateUtc = createDate,
                              CustomerId = customerId,
                              DeviceName = message.DeviceName,
                              DeviceType = deviceType,
                              Enabled = true,
                              Id = deviceId,
-                             LastActivityDate = createDate
+                             LastActivityDateUtc = createDate
                          };
 
                 Context.Devices.Add(device);
@@ -176,7 +176,7 @@ namespace Blob.Managers.Blob
             Device device = Context.Devices.Find(dto.DeviceId);
             device.DeviceName = dto.Name;
             device.DeviceTypeId = dto.DeviceTypeId;
-            device.LastActivityDate = DateTime.Now;
+            device.LastActivityDateUtc = DateTime.Now;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -190,14 +190,14 @@ namespace Blob.Managers.Blob
             _log.Debug("Storing status perf data " + statusPerformanceData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
             
-            device.LastActivityDate = DateTime.Now;
+            device.LastActivityDateUtc = DateTime.Now;
             Context.Entry(device).State = EntityState.Modified;
 
             if (device != null)
             {
                 foreach (PerformanceRecordValue value in statusPerformanceData.Data)
                 {
-                    Context.DevicePerfDatas.Add(new StatusPerf
+                    Context.DevicePerfDatas.Add(new PerformanceRecord
                     {
                         Critical = value.Critical.ToNullableDecimal(),
                         DeviceId = device.Id,
@@ -207,7 +207,7 @@ namespace Blob.Managers.Blob
                         MonitorDescription = statusPerformanceData.MonitorDescription,
                         MonitorName = statusPerformanceData.MonitorName,
                         StatusId = (statusPerformanceData.StatusRecordId.HasValue) ? statusPerformanceData.StatusRecordId.Value : 0,
-                        TimeGenerated = statusPerformanceData.TimeGenerated,
+                        TimeGeneratedUtc = statusPerformanceData.TimeGenerated,
                         UnitOfMeasure = value.UnitOfMeasure,
                         Value = value.Value.ToDecimal(),
                         Warning = value.Warning.ToNullableDecimal()
@@ -219,7 +219,7 @@ namespace Blob.Managers.Blob
 
         public async Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
         {
-            StatusPerf perf = Context.DevicePerfDatas.Find(dto.RecordId);
+            PerformanceRecord perf = Context.DevicePerfDatas.Find(dto.RecordId);
             Context.Entry(perf).State = EntityState.Deleted;
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -233,20 +233,20 @@ namespace Blob.Managers.Blob
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
 
             device.AlertLevel = statusData.AlertLevel;
-            device.LastActivityDate = DateTime.Now;
+            device.LastActivityDateUtc = DateTime.Now;
             Context.Entry(device).State = EntityState.Modified;
 
             if (device != null)
             {
-                Core.Domain.Status newStatus = new Core.Domain.Status
+                StatusRecord newStatus = new StatusRecord
                 {
                     AlertLevel = statusData.AlertLevel,
                     CurrentValue = statusData.CurrentValue,
                     DeviceId = device.Id,
                     MonitorDescription = statusData.MonitorDescription,
                     MonitorName = statusData.MonitorName,
-                    TimeGenerated = statusData.TimeGenerated,
-                    TimeSent = statusData.TimeSent,
+                    TimeGeneratedUtc = statusData.TimeGenerated,
+                    TimeSentUtc = statusData.TimeSent,
                 };
                 Context.DeviceStatuses.Add(newStatus);
                 await Context.SaveChangesAsync();
@@ -261,7 +261,7 @@ namespace Blob.Managers.Blob
 
         public async Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
-            Core.Domain.Status status = Context.DeviceStatuses.Find(dto.RecordId);
+            StatusRecord status = Context.DeviceStatuses.Find(dto.RecordId);
             Context.Entry(status).State = EntityState.Deleted;
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -270,10 +270,10 @@ namespace Blob.Managers.Blob
         // User
         public async Task CreateUserAsync(CreateUserDto dto)
         {
-            Core.Domain.User newUser = new Core.Domain.User
+            User newUser = new User
             {
                 AccessFailedCount = 0,
-                CreateDate = DateTime.Now,
+                CreateDateUtc = DateTime.Now,
                 CustomerId = dto.CustomerId,
                 Email = dto.Email,
                 EmailConfirmed = false,

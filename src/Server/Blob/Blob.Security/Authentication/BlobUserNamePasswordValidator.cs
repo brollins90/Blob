@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Selectors;
 using System.ServiceModel;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using Blob.Data;
 using Blob.Data.Identity;
 using Blob.Security.Identity;

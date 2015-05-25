@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using log4net;
 using Microsoft.AspNet.Identity;
 

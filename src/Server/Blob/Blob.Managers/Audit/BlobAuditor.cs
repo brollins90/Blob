@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Blob.Contracts.ServiceContracts;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using Blob.Data;
 using log4net;
 
@@ -23,14 +23,14 @@ namespace Blob.Managers.Audit
         public async Task AddAuditEntryAsync(string initiator, AuditLevel level, string operation, string resource, string resourceId)
         {
             _log.Debug("adding audit entry");
-            AuditEntry ae = new AuditEntry
+            AuditRecord ae = new AuditRecord
                             {
                                 AuditLevel = (int)level,
                                 Initiator = initiator,
                                 Operation = operation,
                                 Resource = resourceId,
                                 ResourceType = resource,
-                                Time = DateTime.Now
+                                RecordTimeUtc = DateTime.Now
                             };
                 Context.AuditLog.Add(ae);
                 await Context.SaveChangesAsync();

@@ -84,7 +84,7 @@
       <Name>Blob.Identity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Blob.Security\Blob.Security.csproj">
-      <Project>{0586D78E-FB9D-484E-AAB9-00D434E0F3CD}</Project>
+      <Project>{0586d78e-fb9d-484e-aab9-00d434e0f3cd}</Project>
       <Name>Blob.Security</Name>
     </ProjectReference>
   </ItemGroup>

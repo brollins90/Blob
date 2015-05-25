@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Infrastructure.Annotations;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 
 namespace Blob.Data.Mapping
 {
@@ -8,23 +8,19 @@ namespace Blob.Data.Mapping
     {
         public RoleMap()
         {
+            // Table
             ToTable("Roles");
 
-            // Id
+            // Keys
             HasKey(x => x.Id);
-            Property(x => x.Id)
-                .HasColumnType("uniqueidentifier")
-                .IsRequired();
 
+            // Id
+            Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
             // Name
-            Property(x => x.Name)
-                .HasColumnType("nvarchar").HasMaxLength(256)
-                .IsRequired()
+            Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(
                     new IndexAttribute("IX_RoleName", 1) { IsUnique = true }));
-
-            // Users
         }
     }
 }

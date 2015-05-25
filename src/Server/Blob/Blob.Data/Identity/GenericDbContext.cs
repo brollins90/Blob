@@ -12,15 +12,12 @@ using Blob.Identity;
 
 namespace Blob.Data.Identity
 {
-    public class GenericDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim, TUserGroup, TGroup, TGroupRole> : DbContext
-        where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim, TUserGroup>
+    public class GenericDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> : DbContext
+        where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim>
         where TRole : GenericRole<TKey, TUserRole>
         where TUserLogin : GenericUserLogin<TKey>
         where TUserRole : GenericUserRole<TKey>
         where TUserClaim : GenericUserClaim<TKey>
-        where TUserGroup : GenericUserGroup<TKey>
-        where TGroup : GenericGroup<TKey, TUserGroup, TGroupRole>
-        where TGroupRole : GenericGroupRole<TKey>
     {
         public GenericDbContext(string connectionString)
             : base(connectionString) { }

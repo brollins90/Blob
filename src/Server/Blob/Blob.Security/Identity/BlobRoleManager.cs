@@ -1,5 +1,5 @@
 ﻿using System;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 using log4net;
 using Microsoft.AspNet.Identity;
 

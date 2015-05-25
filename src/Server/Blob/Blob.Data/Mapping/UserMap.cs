@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Infrastructure.Annotations;
-using Blob.Core.Domain;
+using Blob.Core.Models;
 
 namespace Blob.Data.Mapping
 {
@@ -51,43 +51,23 @@ namespace Blob.Data.Mapping
     {
         public UserMap()
         {
+            // Table
             ToTable("Users");
 
-            // Id
+            // Keys
             HasKey(x => x.Id);
-            Property(x => x.Id)
-                .HasColumnType("uniqueidentifier")
-                .IsRequired();
 
-            // UserName
-            Property(x => x.UserName)
-                .HasColumnType("nvarchar").HasMaxLength(256)
-                .IsRequired()
+            // Id
+            Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
+            // CreateDateUtc
+            Property(x => x.CreateDateUtc).HasColumnType("datetime2").IsRequired();
+            // LastActivityDateUtc
+            Property(x => x.LastActivityDate).HasColumnType("datetime2").IsRequired();
+            // Username
+            Property(x => x.UserName).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(
                     new IndexAttribute("IX_UserUsername", 1) { IsUnique = true }));
-
-            // LastActivityDate
-            Property(x => x.LastActivityDate)
-                .HasColumnType("datetime2")
-                .IsRequired();
-
-            // CreateDate
-            Property(x => x.CreateDate).HasColumnType("datetime2")
-                .IsRequired();
-
-            // Roles
-            //HasMany(u => u.Roles)
-            //    .WithMany(r => r.Users)
-            //    .Map(m => m.MapLeftKey("UserId")
-            //               .MapRightKey("RoleId")
-            //               .ToTable("UsersInRoles"));
-
-            // Customer
-            Property(x => x.CustomerId)
-                .HasColumnType("uniqueidentifier")
-                .IsRequired();
-            HasRequired(u => u.Customer).WithMany(c => c.Users).HasForeignKey(u => u.CustomerId);
         }
     }
 }
