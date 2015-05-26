@@ -7,6 +7,11 @@ namespace Blob.Contracts.Models.ViewModels
     [DataContract]
     public class CustomerRegisterVm
     {
+        public CustomerRegisterVm()
+        {
+            CustomerId = Guid.NewGuid();
+        }
+
         [DataMember]
         public Guid CustomerId { get; set; }
 
@@ -24,7 +29,14 @@ namespace Blob.Contracts.Models.ViewModels
             return new RegisterCustomerDto
                    {
                        CustomerId = CustomerId, CustomerName = CustomerName,
-                       DefaultUser = new CreateUserDto { CustomerId = CustomerId, Email = UserRegistration.Email, UserId = Guid.NewGuid(), UserName = UserRegistration.UserName }
+                       DefaultUser = new CreateUserDto
+                                     {
+                                         CustomerId = CustomerId, 
+                                         Email = UserRegistration.Email, 
+                                         Password = UserRegistration.Password,
+                                         UserId = UserRegistration.UserId,
+                                         UserName = UserRegistration.UserName
+                                     }
                    };
         }
     }

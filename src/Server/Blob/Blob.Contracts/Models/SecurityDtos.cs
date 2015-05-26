@@ -15,7 +15,7 @@ namespace Blob.Contracts.Models
         [DataMember]
         public AuthenticationPropertiesDto Properties { get; set; }
     }
-    
+
     [DataContract]
     public class AuthenticationDescriptionDto
     {
@@ -114,6 +114,28 @@ namespace Blob.Contracts.Models
     [DataContract]
     public class IdentityResultDto
     {
+        public IdentityResultDto()
+        {
+            Succeeded = true;
+        }
+
+        public IdentityResultDto(bool success)
+        {
+            Succeeded = success;
+        }
+
+        public IdentityResultDto(string error)
+        {
+            Succeeded = false;
+            Errors = new List<string>(new[] { error });
+        }
+
+        public IdentityResultDto(IEnumerable<string> errors)
+        {
+            Succeeded = false;
+            Errors = new List<string>(errors);
+        }
+
         [DataMember]
         public bool Succeeded { get; set; }
 

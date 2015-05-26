@@ -7,6 +7,11 @@ namespace Blob.Contracts.Models.ViewModels
     [DataContract]
     public class UserCreateVm
     {
+        public UserCreateVm()
+        {
+            UserId = Guid.NewGuid();
+        }
+
         [DataMember]
         public Guid CustomerId { get; set; }
 

@@ -16,6 +16,9 @@ namespace Blob.Contracts.Models
         public string Email { get; set; }
 
         [DataMember]
+        public string Password { get; set; }
+
+        [DataMember]
         public Guid CustomerId { get; set; }
     }
 }

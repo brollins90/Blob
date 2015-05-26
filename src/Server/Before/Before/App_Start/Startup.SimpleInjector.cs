@@ -80,9 +80,11 @@ namespace Before
             {
                 username = principal.FindFirst("username").Value.ToString();
                 password = principal.FindFirst("password").Value.ToString();
-                //username = principal.Identity.GetUserName().ToString();
-                //password = (SiteGlobalConfig.UpDictionary.ContainsKey(username)) ? SiteGlobalConfig.UpDictionary[username] : "empty";
-
+            }
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                username = SiteGlobalConfig.AuthorizationServiceUsername;
+                password = SiteGlobalConfig.AuthorizationServicePassword;
             }
             return new BeforeCommandClient("BeforeCommandService", username, password);
         }
@@ -95,9 +97,11 @@ namespace Before
             {
                 username = principal.FindFirst("username").Value.ToString();
                 password = principal.FindFirst("password").Value.ToString();
-                //username = principal.Identity.GetUserName().ToString();
-                //password = (SiteGlobalConfig.UpDictionary.ContainsKey(username)) ? SiteGlobalConfig.UpDictionary[username] : "empty";
-
+            }
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                username = SiteGlobalConfig.AuthorizationServiceUsername;
+                password = SiteGlobalConfig.AuthorizationServicePassword;
             }
             return new BeforeQueryClient("BeforeQueryService", username, password);
         }

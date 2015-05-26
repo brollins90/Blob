@@ -7,6 +7,11 @@ namespace Blob.Contracts.Models.ViewModels
     [DataContract]
     public class UserRegisterVm
     {
+        public UserRegisterVm()
+        {
+            UserId = Guid.NewGuid();
+        }
+
         [DataMember]
         [Display(Name = "Id")]
         [Required]

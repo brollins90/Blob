@@ -42,49 +42,48 @@ namespace Blob.Security.Identity
         }
 
 
-        public async Task<IdentityResult> RemoveUserFromCustomersAsync(Guid userId)
+        //public async Task<IdentityResult> RemoveUserFromCustomersAsync(Guid userId)
+        //{
+        //    throw new NotImplementedException();
+        //    //return await SetUserGroupsAsync(userId).ConfigureAwait(false);
+        //}
+
+        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
-            throw new NotImplementedException();
-            //return await SetUserGroupsAsync(userId).ConfigureAwait(false);
-        }
+            //_log.Info(string.Format("Registering new customer {0}", dto.CustomerName));
+            
+            //// check if customer exists
+            //Customer custExist = await _customerStore.FindByIdAsync(dto.CustomerId);
+            //if (custExist != null)
+            //{
+            //    return new IdentityResultDto("The Customer already exists");
+            //}
 
-        public async Task<IdentityResult> RegisterCustomerAsync(RegisterCustomerDto dto)
-        {
-            Customer customer = new Customer
-                                {
-                                    CreateDateUtc = DateTime.UtcNow,
-                                    Enabled = true,
-                                    Id = dto.CustomerId,
-                                    Name = dto.CustomerName
-                                };
-            await _customerStore.CreateAsync(customer).ConfigureAwait(false);
-            var cust = _customerStore.FindByIdAsync(customer.Id);
+            //// create the customer
+            //Customer customer = new Customer
+            //{
+            //    CreateDateUtc = DateTime.UtcNow,
+            //    Enabled = true,
+            //    Id = dto.CustomerId,
+            //    Name = dto.CustomerName
+            //};
+            //await _customerStore.CreateAsync(customer).ConfigureAwait(false);
+            //var cust = _customerStore.FindByIdAsync(customer.Id);
+            //_log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
 
-            //await _userManager.CreateAsync(new UserDto
-            //                               {
-            //                                   Email = dto.DefaultUser.Email,
-            //                                   Id = dto.DefaultUser.UserId,
-            //                                   UserName = dto.DefaultUser.UserName
-            //                               });
 
-            User defaultUser = new User
-                               {
-                                   AccessFailedCount = 0,
-                                   CreateDateUtc = DateTime.UtcNow,
-                                   CustomerId = dto.DefaultUser.CustomerId,
-                                   Email = dto.DefaultUser.Email,
-                                   EmailConfirmed = true,
-                                   Enabled = true,
-                                   Id = dto.DefaultUser.UserId,
-                                   LastActivityDate = DateTime.UtcNow,
-                                   LockoutEnabled = false,
-                                   LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
-                                   PasswordHash = Guid.NewGuid().ToString(),
-                                   UserName = dto.DefaultUser.UserName
-                               };
-            _context.Users.Add(defaultUser);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+            //// create the default user
+            //if (dto.DefaultUser != null)
+            //{
+            //    _log.Info(string.Format("Creating default user for {0} with name {1}", dto.CustomerName, dto.DefaultUser.UserName));
+            //    dto.DefaultUser.CustomerId = customer.Id;
+
+            //    IdentityResultDto result = await _userManager.CreateAsync(new UserDto {Email = dto.DefaultUser.Email, Id = dto.DefaultUser.UserId.ToString(), UserName = dto.DefaultUser.UserName}, dto.DefaultUser.Password);
+                
+            //    _log.Info(string.Format("User {0} created with id {1}", dto.DefaultUser.UserName, dto.DefaultUser.UserId));
+            //}
+
+            return new IdentityResultDto(true);
         }
 
 

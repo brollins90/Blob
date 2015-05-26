@@ -18,31 +18,25 @@ namespace BMonitor.Service
     // http://adrianhesketh.com/2015/03/17/wcf-client-proxy-creation-performance-with-ninject/
     public class MonitorManager : IDisposable
     {
-        //public event EventHandler ConfigChanged; 
-
         private readonly IKernel _kernel;
         private readonly ILog _log;
         private IMonitorScheduler _jobHandler;
-        private ConnectionThread _connectionThread;
+        private IConnectionThread _connectionThread;
 
-        private string Username;
-        private string Password;
-
-
-
-        private Guid _deviceId;
+        private DeviceInfo _deviceInfo;
 
         private bool _enableCommandConnection;
         private bool _enablePerformanceMonitoring;
         private bool _enableStatusMonitoring;
         private bool _isRegistered;
 
-        public MonitorManager(IKernel kernel)
+        public MonitorManager(IKernel kernel, ILog log)
         {
             // override the callback to validate the server certificate.  This is a hack for early dev ONLY
             System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _kernel = kernel;
+            _log = log;
+            _deviceInfo = new DeviceInfo();
         }
 
         public void Initialize()
@@ -52,36 +46,25 @@ namespace BMonitor.Service
             if (config == null)
                 throw new ConfigurationErrorsException();
 
-            _deviceId = config.Service.DeviceId;
-            if (_deviceId == Guid.Empty)
+            _deviceInfo.DeviceId = config.Service.DeviceId;
+            if (_deviceInfo.DeviceId == Guid.Empty)
             {
                 _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
                 _isRegistered = false;
-                Username = config.Service.Username;
-                Password = config.Service.Password;
+                _deviceInfo.Username = config.Service.Username;
+                _deviceInfo.Password = config.Service.Password;
             }
             else
             {
-                _log.Info(string.Format("Loaded device id of {0}.", _deviceId));
+                _log.Info(string.Format("Loaded device id of {0}.", _deviceInfo.DeviceId));
                 _isRegistered = true;
-                Username = _deviceId.ToString();
-                Password = _deviceId.ToString();
+                _deviceInfo.Username = _deviceInfo.DeviceId.ToString();
+                _deviceInfo.Password = _deviceInfo.DeviceId.ToString();
             }
             _enableCommandConnection = config.Service.EnableCommandConnection;
             _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
             _enableStatusMonitoring = config.Service.EnableStatusMonitoring;
         }
-
-        //void UpdateConfigSetting(string key, string val)
-        //{
-        //    //var mySection = (BMonitorConfigurationSection)ConfigurationManager.GetSection("BMonitor");
-            
-        //    //mySection[key].Value = val;
-        //    //mySection.SectionInformation.ForceSave = true; //
-        //    //Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None); 
-        //    //config.Save(ConfigurationSaveMode.Full);
-        //    ////ConfigurationManager.RefreshSection("appSettings");
-        //}
 
         public void MonitorTick()
         {
@@ -94,7 +77,7 @@ namespace BMonitor.Service
                 if (_jobHandler != null) _jobHandler.Stop();
                 if (_connectionThread != null) _connectionThread.Stop();
 
-                RegisterDevice(Username, Password);
+                RegisterDevice(_deviceInfo);
             }
             else
             {
@@ -110,9 +93,9 @@ namespace BMonitor.Service
             }
         }
 
-        public void RegisterDevice(string username, string password)
+        public void RegisterDevice(DeviceInfo info)
         {
-            if (!_deviceId.Equals(default(Guid)))
+            if (!info.DeviceId.Equals(default(Guid)))
             {
                 _log.Error("Registration was requested even though this device is already registered.");
                 return;
@@ -136,8 +119,8 @@ namespace BMonitor.Service
                                                  };
                 _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
 
-                var u = new Ninject.Parameters.ConstructorArgument("username", Username);
-                var p = new Ninject.Parameters.ConstructorArgument("password", Password);
+                var u = new Ninject.Parameters.ConstructorArgument("username", info.Username);
+                var p = new Ninject.Parameters.ConstructorArgument("password", info.Password);
                 DeviceStatusClient statusClient = _kernel.Get<DeviceStatusClient>(u, p);
                 statusClient.ClientErrorHandler += HandleException;
 
@@ -150,7 +133,7 @@ namespace BMonitor.Service
                 _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
 
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
-                _deviceId = deviceGuid;
+                info.DeviceId = deviceGuid;
                 _isRegistered = true;
 
                 // move this to an event...
@@ -185,14 +168,14 @@ namespace BMonitor.Service
                 //todo: spin up a new thread
                 if (_connectionThread == null)
                 {
-                    _connectionThread = new ConnectionThread(_kernel, _deviceId);
+                    _connectionThread = new ConnectionThread(_kernel, _deviceInfo.DeviceId);
                     _connectionThread.Start();
                 }
             }
 
             if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
             {
-                _jobHandler = new QuartzMonitorScheduler(_kernel, new BMonitorStatusHelper(_kernel, _deviceId, _enablePerformanceMonitoring, _enableStatusMonitoring));// new BasicJobHandler(_kernel);
+                _jobHandler = new QuartzMonitorScheduler(_kernel, new BMonitorStatusHelper(_kernel, _deviceInfo.DeviceId, _enablePerformanceMonitoring, _enableStatusMonitoring));// new BasicJobHandler(_kernel);
                 _jobHandler.LoadConfig();
                 _jobHandler.Start();
             }

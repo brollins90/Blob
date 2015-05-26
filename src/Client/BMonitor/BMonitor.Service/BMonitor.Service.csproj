@@ -89,6 +89,8 @@
   <ItemGroup>
     <Compile Include="Configuration\JobElement.cs" />
     <Compile Include="Configuration\ServiceElement.cs" />
+    <Compile Include="Connection\IConnectionThread.cs" />
+    <Compile Include="DeviceInfo.cs" />
     <Compile Include="Helpers\BMonitorStatusHelper.cs" />
     <Compile Include="Configuration\JobsCollection.cs" />
     <Compile Include="Configuration\BMonitorSection.cs" />

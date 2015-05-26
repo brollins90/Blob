@@ -6,6 +6,11 @@ namespace Blob.Contracts.Models
     [DataContract]
     public class RegisterCustomerDto
     {
+        public RegisterCustomerDto()
+        {
+            CustomerId = Guid.NewGuid();
+        }
+
         [DataMember]
         public Guid CustomerId { get; set; }
 

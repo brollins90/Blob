@@ -44,25 +44,38 @@ namespace Blob.Managers.Blob
         // Customer
         public async Task DisableCustomerAsync(DisableCustomerDto dto)
         {
+            _log.Info(string.Format("Disabling customer {0}", dto.CustomerId));
             Customer customer = Context.Customers.Find(dto.CustomerId);
             customer.Enabled = false;
             // todo: disable all devices and users for customer ?
 
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            _log.Info(string.Format("Disabled customer {0}", dto.CustomerId));
         }
 
         public async Task EnableCustomerAsync(EnableCustomerDto dto)
         {
+            _log.Info(string.Format("Enabling customer {0}", dto.CustomerId));
             Customer customer = Context.Customers.Find(dto.CustomerId);
             customer.Enabled = true;
 
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            _log.Info(string.Format("Enabled customer {0}", dto.CustomerId));
         }
 
         public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
         {
+            // check if customer exists
+            Customer custExist = await Context.Customers.FindAsync(dto.CustomerId);
+            if (custExist != null)
+            {
+                // fail
+                throw new Exception("Customer exists");
+            }
+
+            // create the customer
             Customer customer = new Customer
             {
                 CreateDateUtc = DateTime.UtcNow,
@@ -70,24 +83,41 @@ namespace Blob.Managers.Blob
                 Id = dto.CustomerId,
                 Name = dto.CustomerName
             };
-
             Context.Customers.Add(customer);
-            await Context.SaveChangesAsync().ConfigureAwait(true);
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+            _log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
 
-            if (dto.DefaultUser != null)
+            User defaultUser = new User
             {
-                dto.DefaultUser.CustomerId = customer.Id;
-                await CreateUserAsync(dto.DefaultUser).ConfigureAwait(false);
-            }
+                AccessFailedCount = 0,
+                CreateDateUtc = DateTime.UtcNow,
+                CustomerId = dto.DefaultUser.CustomerId,
+                Email = dto.DefaultUser.Email,
+                EmailConfirmed = true,
+                Enabled = true,
+                Id = dto.DefaultUser.UserId,
+                LastActivityDate = DateTime.UtcNow,
+                LockoutEnabled = false,
+                LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
+                PasswordHash = Guid.NewGuid().ToString(),
+                UserName = dto.DefaultUser.UserName
+            };
+            Context.Users.Add(defaultUser);
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+
+            customer.CustomerUsers.Add(new CustomerUser { CustomerId = customer.Id, UserId = defaultUser.Id });
+            await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
+            _log.Info(string.Format("Updating customer {0}", dto.CustomerId));
             Customer customer = Context.Customers.Find(dto.CustomerId);
             customer.Name = dto.Name;
 
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            _log.Info(string.Format("Updated customer {0}", dto.CustomerId));
         }
 
 
@@ -123,7 +153,6 @@ namespace Blob.Managers.Blob
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = false;
-            //device.LastActivityDate = DateTime.Now;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -134,7 +163,6 @@ namespace Blob.Managers.Blob
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = true;
-            //device.LastActivityDate = DateTime.Now;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -156,7 +184,6 @@ namespace Blob.Managers.Blob
                     throw new InvalidOperationException("This device has already been registered.");
                 }
 
-                DateTime createDate = DateTime.Now;
                 DeviceType deviceType = await Context.Set<DeviceType>().FirstOrDefaultAsync(x => x.Name.Equals(message.DeviceType));
 
                 // todo, get the customerid from the principal
@@ -167,13 +194,13 @@ namespace Blob.Managers.Blob
                 device = new Device
                          {
                              AlertLevel = 0, // initially set to Ok
-                             CreateDateUtc = createDate,
+                             CreateDateUtc = Now(),
                              CustomerId = customerId,
                              DeviceName = message.DeviceName,
                              DeviceType = deviceType,
                              Enabled = true,
                              Id = deviceId,
-                             LastActivityDateUtc = createDate
+                             LastActivityDateUtc = OldestTime()
                          };
 
                 Context.Devices.Add(device);
@@ -189,7 +216,7 @@ namespace Blob.Managers.Blob
                                                  {
                                                      DeviceId = deviceId.ToString(),
                                                      Succeeded = succeeded,
-                                                     TimeSent = DateTime.Now
+                                                     TimeSent = Now()
                                                  };
         }
 
@@ -199,7 +226,7 @@ namespace Blob.Managers.Blob
             Device device = Context.Devices.Find(dto.DeviceId);
             device.DeviceName = dto.Name;
             device.DeviceTypeId = dto.DeviceTypeId;
-            device.LastActivityDateUtc = DateTime.Now;
+            device.LastActivityDateUtc = Now();
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -213,7 +240,7 @@ namespace Blob.Managers.Blob
             _log.Debug("Storing status perf data " + statusPerformanceData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
             
-            device.LastActivityDateUtc = DateTime.Now;
+            device.LastActivityDateUtc = Now();
             Context.Entry(device).State = EntityState.Modified;
 
             if (device != null)
@@ -256,7 +283,7 @@ namespace Blob.Managers.Blob
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
 
             device.AlertLevel = statusData.AlertLevel;
-            device.LastActivityDateUtc = DateTime.Now;
+            device.LastActivityDateUtc = Now();
             Context.Entry(device).State = EntityState.Modified;
 
             if (device != null)
@@ -296,16 +323,16 @@ namespace Blob.Managers.Blob
             User newUser = new User
             {
                 AccessFailedCount = 0,
-                CreateDateUtc = DateTime.Now,
+                CreateDateUtc = Now(),
                 CustomerId = dto.CustomerId,
                 Email = dto.Email,
                 EmailConfirmed = false,
-                Enabled = false,
+                Enabled = true,
                 Id = dto.UserId,
-                LastActivityDate = DateTime.Parse("2015-04-01").AddDays(-1),
+                LastActivityDate = OldestTime(),
                 LockoutEnabled = false,
-                LockoutEndDateUtc = DateTime.Parse("2015-04-01").AddDays(-1),
-                PasswordHash = null,
+                LockoutEndDateUtc = OldestTime(),
+                PasswordHash = dto.Password,
                 UserName = dto.UserName
             };
             Context.Users.Add(newUser);
@@ -316,7 +343,6 @@ namespace Blob.Managers.Blob
         {
             User user = Context.Users.Find(dto.UserId);
             user.Enabled = false;
-            //user.LastActivityDate = DateTime.Now;
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
@@ -340,11 +366,22 @@ namespace Blob.Managers.Blob
             {
                 user.Email = dto.Email;
                 user.EmailConfirmed = false;
-                user.LastActivityDate = DateTime.Now;
+                user.LastActivityDate = Now();
             }
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
+
+        public DateTime Now()
+        {
+            return DateTime.UtcNow;
+        }
+
+        public DateTime OldestTime()
+        {
+            return _oldestDateTime;
+        }
+        private readonly DateTime _oldestDateTime = DateTime.Parse("2010-01-01").ToUniversalTime();
     }
 }

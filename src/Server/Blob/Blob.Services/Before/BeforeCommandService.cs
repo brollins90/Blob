@@ -25,7 +25,7 @@ namespace Blob.Services.Before
         }
 
         [OperationBehavior]
-        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "create")]
+        //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "create")]
         public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;

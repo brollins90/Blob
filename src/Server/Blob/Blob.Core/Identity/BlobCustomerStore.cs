@@ -6,7 +6,7 @@ using Blob.Core.Models;
 
 namespace Blob.Core.Identity
 {
-    public class BlobCustomerStore : IDisposable
+    public class BlobCustomerStore : ICustomerStore, IDisposable
     {
         private bool _disposed;
         private GenericEntityStore<Customer> _customerStore;

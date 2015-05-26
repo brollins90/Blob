@@ -75,7 +75,6 @@
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUserListItemVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
-    <Compile Include="Models\ViewModels\IdNameOtherTupleVm.cs" />
     <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerRegisterVm.cs" />
     <Compile Include="Models\ViewModels\UserPageVm.cs" />

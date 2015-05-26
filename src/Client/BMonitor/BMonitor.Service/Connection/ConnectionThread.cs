@@ -6,7 +6,7 @@ using Ninject;
 
 namespace BMonitor.Service.Connection
 {
-    public class ConnectionThread
+    public class ConnectionThread : IConnectionThread
     {
         private readonly IKernel _kernel;
         private readonly ILog _log;

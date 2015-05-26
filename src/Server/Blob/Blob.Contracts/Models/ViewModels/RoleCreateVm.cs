@@ -7,6 +7,11 @@ namespace Blob.Contracts.Models.ViewModels
     [DataContract]
     public class RoleCreateVm
     {
+        public RoleCreateVm()
+        {
+            RoleId = Guid.NewGuid();
+        }
+
         [DataMember]
         [Display(Name = "Id")]
         [Required]
