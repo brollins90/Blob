@@ -1,14 +1,13 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
+using Blob.Contracts.Services;
 
 namespace Blob.Contracts.ServiceContracts
 {
     [ServiceContract]
-    public interface IBlobCommandManager : IBlobCustomerManager
+    public interface IBlobCommandManager : ICustomerCommandManager
     {
-        // Customer
-
         // Commands
         [OperationContract]
         Task IssueCommandAsync(IssueDeviceCommandDto dto);

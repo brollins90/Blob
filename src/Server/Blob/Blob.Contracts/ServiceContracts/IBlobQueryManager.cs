@@ -3,24 +3,16 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
+using Blob.Contracts.Services;
 
 namespace Blob.Contracts.ServiceContracts
 {
     [ServiceContract]
-    public interface IBlobQueryManager
+    public interface IBlobQueryManager : ICustomerQueryManager
     {
         [OperationContract]
         Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
-
-        [OperationContract]
-        Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId);
-        [OperationContract]
-        Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId);
-        [OperationContract]
-        Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId);
-        [OperationContract]
-        Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId);
-
+        
         [OperationContract]
         IEnumerable<DeviceCommandVm> GetDeviceCommandVmList();
         [OperationContract]

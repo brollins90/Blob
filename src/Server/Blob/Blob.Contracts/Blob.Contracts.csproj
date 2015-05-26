@@ -116,7 +116,6 @@
     <Compile Include="ServiceContracts\IAuthorizationManagerService.cs" />
     <Compile Include="ServiceContracts\IBlobAuditor.cs" />
     <Compile Include="ServiceContracts\IBlobCommandManager.cs" />
-    <Compile Include="ServiceContracts\IBlobCustomerManager.cs" />
     <Compile Include="ServiceContracts\IBlobQueryManager.cs" />
     <Compile Include="ServiceContracts\IdentityStore\IUserEmailStoreService.cs" />
     <Compile Include="ServiceContracts\IdentityStore\IUserClaimStoreService.cs" />
@@ -136,6 +135,8 @@
     <Compile Include="ServiceContracts\IIdentityStore.cs" />
     <Compile Include="ServiceContracts\IUserManagerService.cs" />
     <Compile Include="ServiceContracts\KnownCommandsMap.cs" />
+    <Compile Include="Services\ICustomerQueryManager.cs" />
+    <Compile Include="Services\ICustomerCommandManager.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

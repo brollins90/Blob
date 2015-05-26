@@ -45,6 +45,18 @@ namespace Blob.Proxies
             }
         }
 
+        //public async Task RemoveUserFromCustomersAsync(Guid userId)
+        //{
+        //    try
+        //    {
+        //        await Channel.EnableCustomerAsync(dto).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //}
+
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             try
