@@ -2,18 +2,23 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Filters;
-using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 
 namespace Before.Controllers
 {
     [Authorize]
-    public class CustomerController : BaseController
+    public class CustomerController : Controller
     {
+        protected IBlobQueryManager BlobQueryManager { get; set; }
+        protected IBlobCommandManager BlobCommandManager { get; set; }
+
         public CustomerController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
-            : base(blobCommandManager, blobQueryManager) { }
-        
+        {
+            BlobCommandManager = blobCommandManager;
+            BlobQueryManager = blobQueryManager;
+        }
+
 
         // Disable
         [BeforeAuthorize(Operation = "disable", Resource = "customer")]

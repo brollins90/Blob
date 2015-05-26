@@ -104,6 +104,9 @@ namespace Blob.Managers.Blob
                                                     Name = cust.Name,
                                                     DeviceCount = cust.Devices.Count,
                                                     UserCount = cust.CustomerUsers.Count
+                                                //Users = cust.CustomerUsers.Select(u => new CustomerUserListItemVm{
+                                                //    Email = u.
+                                                //})
                                                 }).SingleAsync();
         }
 

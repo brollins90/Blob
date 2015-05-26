@@ -11,14 +11,17 @@ using Blob.Contracts.ServiceContracts;
 namespace Before.Controllers
 {
     [Authorize]
-    public class UserController : BaseController
+    public class UserController : Controller
     {
+        protected IBlobQueryManager BlobQueryManager { get; set; }
+        protected IBlobCommandManager BlobCommandManager { get; set; }
         protected IUserManagerService UserManager { get; set; }
         protected ISignInManager SignInManager { get; set; }
 
         public UserController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, IUserManagerService userManager, ISignInManager signInManager)
-            : base(blobCommandManager, blobQueryManager)
         {
+            BlobCommandManager = blobCommandManager;
+            BlobQueryManager = blobQueryManager;
             UserManager = userManager;
             SignInManager = signInManager;
         }

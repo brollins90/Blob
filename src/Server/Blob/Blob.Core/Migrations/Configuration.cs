@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using Blob.Core.Models;
 
@@ -49,6 +50,21 @@ namespace Blob.Core.Migrations
             }
             context.SaveChanges();
 
+            // Roles
+            List<Role> roles = new List<Role>() 
+            {
+                new Role {Id = Guid.Parse("E307DF88-839D-4E1B-A3CA-31AF459CB94E"), Name = "BlobAdmin"},
+                new Role {Id = Guid.Parse("8EBC5306-37B3-402B-909E-F481845ACD02"), Name = "Customer"},
+                new Role {Id = Guid.Parse("CA600C24-CB14-480C-B58C-6EEC393B507F"), Name = "CustomerAdmin"},
+                new Role {Id = Guid.Parse("B6191FE1-C195-4BAF-8A7D-699616553636"), Name = "Device"},
+            };
+
+            foreach (var role in roles)
+            {
+                context.Set<Role>().AddOrUpdate(role);
+            }
+            context.SaveChanges();
+
             // DeviceTypes
             DeviceType testDeviceTypeWinDesktop = new DeviceType
             {
@@ -67,23 +83,23 @@ namespace Blob.Core.Migrations
 
 
             // Customers
-            Customer beforeService = new Customer
+            Customer custBeforeService = new Customer
             {
                 CreateDateUtc = DateTime.Parse("2015-04-01"),
                 Id = Guid.Parse("94779853-6C22-4FAD-89E2-65A9BBF8C288"),
                 Name = "Before Service",
                 Enabled = true
             };
-            context.Set<Customer>().AddOrUpdate(x => x.Name, beforeService);
+            context.Set<Customer>().AddOrUpdate(x => x.Name, custBeforeService);
             context.SaveChanges();
 
 
             // User
-            User beforeService1 = new User
+            User userBeforeService1 = new User
             {
                 AccessFailedCount = 0,
                 CreateDateUtc = DateTime.Parse("2015-04-01"),
-                CustomerId = beforeService.Id,
+                CustomerId = custBeforeService.Id,
                 Email = "beforeService1@rritc.com",
                 EmailConfirmed = true,
                 Enabled = true,
@@ -94,10 +110,14 @@ namespace Blob.Core.Migrations
                 PasswordHash = "BeforePassword",
                 UserName = "BeforeUser"
             };
-            context.Set<User>().AddOrUpdate(x => x.UserName, beforeService1);
+            context.Set<User>().AddOrUpdate(x => x.UserName, userBeforeService1);
             context.SaveChanges();
 
-            beforeService.CustomerUsers = new List<CustomerUser>{new CustomerUser { CustomerId = beforeService.Id, UserId = beforeService1.Id }};
+            custBeforeService.CustomerUsers = new List<CustomerUser>
+                                          {
+                                              new CustomerUser { CustomerId = custBeforeService.Id, UserId = userBeforeService1.Id }
+                                          };
+            //context.Entry(custBeforeService).State = EntityState.Modified;
             context.SaveChanges();
 
             Customer rritc = new Customer

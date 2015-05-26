@@ -10,10 +10,16 @@ using Blob.Contracts.ServiceContracts;
 namespace Before.Controllers
 {
     [Authorize]
-    public class DashboardController : BaseController
+    public class DashboardController : Controller
     {
+        protected IBlobQueryManager BlobQueryManager { get; set; }
+        protected IBlobCommandManager BlobCommandManager { get; set; }
+
         public DashboardController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
-            : base(blobCommandManager, blobQueryManager) { }
+        {
+            BlobCommandManager = blobCommandManager;
+            BlobQueryManager = blobQueryManager;
+        }
 
 
         [BeforeAuthorize(Operation = "view", Resource = "customer")]

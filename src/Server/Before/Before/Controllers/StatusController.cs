@@ -9,10 +9,16 @@ using Blob.Contracts.ServiceContracts;
 namespace Before.Controllers
 {
     [Authorize]
-    public class StatusController : BaseController
+    public class StatusController : Controller
     {
+        protected IBlobQueryManager BlobQueryManager { get; set; }
+        protected IBlobCommandManager BlobCommandManager { get; set; }
+
         public StatusController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
-            : base(blobCommandManager, blobQueryManager) { }
+        {
+            BlobCommandManager = blobCommandManager;
+            BlobQueryManager = blobQueryManager;
+        }
 
 
         [BeforeAuthorize(Operation = "delete", Resource = "status")]

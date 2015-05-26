@@ -9,10 +9,16 @@ using Blob.Contracts.ServiceContracts;
 namespace Before.Controllers
 {
     [Authorize]
-    public class PerformanceController : BaseController
+    public class PerformanceController : Controller
     {
+        protected IBlobQueryManager BlobQueryManager { get; set; }
+        protected IBlobCommandManager BlobCommandManager { get; set; }
+
         public PerformanceController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
-            : base(blobCommandManager, blobQueryManager) { }
+        {
+            BlobCommandManager = blobCommandManager;
+            BlobQueryManager = blobQueryManager;
+        }
 
 
         [BeforeAuthorize(Operation = "delete", Resource = "performance")]

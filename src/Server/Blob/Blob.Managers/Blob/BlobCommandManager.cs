@@ -11,6 +11,7 @@ using Blob.Core.Models;
 using Blob.Managers.Command;
 using Blob.Managers.Extensions;
 using Blob.Security.Extensions;
+using Blob.Security.Identity;
 using log4net;
 
 namespace Blob.Managers.Blob
@@ -18,12 +19,14 @@ namespace Blob.Managers.Blob
     public class BlobCommandManager : IBlobCommandManager
     {
         private readonly ILog _log;
+        private BlobCustomerManager _customerManager;
 
-        public BlobCommandManager(BlobDbContext context, ILog log)
+        public BlobCommandManager(BlobDbContext context, ILog log, BlobCustomerManager customerManager)
         {
             _log = log;
             _log.Debug("Constructing BlobManager");
             Context = context;
+            _customerManager = customerManager;
         }
         protected BlobDbContext Context { get; private set; }
 

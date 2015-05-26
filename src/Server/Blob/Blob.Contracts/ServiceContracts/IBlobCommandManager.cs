@@ -5,17 +5,9 @@ using Blob.Contracts.Models;
 namespace Blob.Contracts.ServiceContracts
 {
     [ServiceContract]
-    public interface IBlobCommandManager
+    public interface IBlobCommandManager : IBlobCustomerManager
     {
         // Customer
-        [OperationContract]
-        Task DisableCustomerAsync(DisableCustomerDto dto);
-        [OperationContract]
-        Task EnableCustomerAsync(EnableCustomerDto dto);
-        [OperationContract]
-        Task RegisterCustomerAsync(RegisterCustomerDto dto);
-        [OperationContract]
-        Task UpdateCustomerAsync(UpdateCustomerDto dto);
 
         // Commands
         [OperationContract]
