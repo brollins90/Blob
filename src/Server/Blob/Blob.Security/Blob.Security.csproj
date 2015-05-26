@@ -98,6 +98,7 @@
     <Compile Include="Identity\BlobUserManager.cs" />
     <Compile Include="Identity\BlobUserManagerAdapter.cs" />
     <Compile Include="Identity\BlobUserValidator.cs" />
+    <Compile Include="Identity\CustomerGroupManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\GenericUserNameSecurityTokenHandler.cs" />
   </ItemGroup>

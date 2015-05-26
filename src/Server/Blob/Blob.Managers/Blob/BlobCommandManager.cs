@@ -105,8 +105,8 @@ namespace Blob.Managers.Blob
             Context.Users.Add(defaultUser);
             await Context.SaveChangesAsync().ConfigureAwait(false);
 
-            customer.CustomerUsers.Add(new CustomerUser { CustomerId = customer.Id, UserId = defaultUser.Id });
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            //customer.CustomerUsers.Add(new CustomerGroupUser { CustomerId = customer.Id, UserId = defaultUser.Id });
+            //await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)

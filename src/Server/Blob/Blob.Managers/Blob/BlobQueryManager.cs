@@ -103,7 +103,7 @@ namespace Blob.Managers.Blob
                                                     CustomerId = cust.Id,
                                                     Name = cust.Name,
                                                     DeviceCount = cust.Devices.Count,
-                                                    UserCount = cust.CustomerUsers.Count
+                                                    //UserCount = cust.CustomerUsers.Count
                                                 //Users = cust.CustomerUsers.Select(u => new CustomerUserListItemVm{
                                                 //    Email = u.
                                                 //})

@@ -113,11 +113,11 @@ namespace Blob.Core.Migrations
             context.Set<User>().AddOrUpdate(x => x.UserName, userBeforeService1);
             context.SaveChanges();
 
-            custBeforeService.CustomerUsers = new List<CustomerUser>
-                                          {
-                                              new CustomerUser { CustomerId = custBeforeService.Id, UserId = userBeforeService1.Id }
-                                          };
-            //context.Entry(custBeforeService).State = EntityState.Modified;
+            //custBeforeService.CustomerUsers = new List<CustomerGroupUser>
+            //                              {
+            //                                  new CustomerGroupUser { CustomerId = custBeforeService.Id, UserId = userBeforeService1.Id }
+            //                              };
+            ////context.Entry(custBeforeService).State = EntityState.Modified;
             context.SaveChanges();
 
             Customer rritc = new Customer

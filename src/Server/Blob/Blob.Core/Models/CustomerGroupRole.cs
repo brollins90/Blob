@@ -2,9 +2,9 @@
 
 namespace Blob.Core.Models
 {
-    public class CustomerRole
+    public class CustomerGroupRole
     {
-        public Guid CustomerId { get; set; }
+        public Guid GroupId { get; set; }
         public Guid RoleId { get; set; }
     }
 }

@@ -79,9 +79,10 @@
     <Compile Include="Mapping\BlobUserClaimMap.cs" />
     <Compile Include="Mapping\BlobUserLoginMap.cs" />
     <Compile Include="Mapping\BlobUserRoleMap.cs" />
+    <Compile Include="Mapping\CustomerGroupMap.cs" />
     <Compile Include="Mapping\CustomerMap.cs" />
-    <Compile Include="Mapping\CustomerRoleMap.cs" />
-    <Compile Include="Mapping\CustomerUserMap.cs" />
+    <Compile Include="Mapping\CustomerGroupRoleMap.cs" />
+    <Compile Include="Mapping\CustomerGroupUserMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
     <Compile Include="Mapping\PerformanceRecordMap.cs" />
@@ -94,10 +95,11 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuditRecord.cs" />
-    <Compile Include="Models\CustomerRole.cs" />
+    <Compile Include="Models\CustomerGroup.cs" />
+    <Compile Include="Models\CustomerGroupRole.cs" />
+    <Compile Include="Models\CustomerGroupUser.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\BlobPermission.cs" />
-    <Compile Include="Models\CustomerUser.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\DeviceType.cs" />
     <Compile Include="Models\Role.cs" />
@@ -106,8 +108,6 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ICustomerManager.cs" />
-    <Compile Include="Stores\ICustomerStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -123,6 +123,9 @@
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Identity\generic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

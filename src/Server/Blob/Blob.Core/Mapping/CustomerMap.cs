@@ -21,8 +21,7 @@ namespace Blob.Core.Mapping
             Property(x => x.Enabled).HasColumnType("bit").IsRequired();
 
             HasMany(x => x.Devices).WithRequired().HasForeignKey(d => d.CustomerId);
-            HasMany(x => x.CustomerRoles).WithRequired().HasForeignKey(x2 => x2.CustomerId);
-            HasMany(x => x.CustomerUsers).WithRequired().HasForeignKey(x2 => x2.CustomerId);
+            HasMany(x => x.Groups).WithRequired().HasForeignKey(x2 => x2.CustomerId);
         }
     }
 }
