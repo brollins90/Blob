@@ -1,12 +1,9 @@
 ﻿using System;
 using Blob.Core.Identity;
+using Blob.Core.Identity.Models;
 
 namespace Blob.Core.Models
 {
-    public class BlobUserClaim : GenericUserClaim<Guid> { }
-    public class BlobUserLogin : GenericUserLogin<Guid> { }
-    public class BlobUserRole : GenericUserRole<Guid> { }
-
     public class User : GenericUser<Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
     {
         public DateTime CreateDateUtc { get; set; }

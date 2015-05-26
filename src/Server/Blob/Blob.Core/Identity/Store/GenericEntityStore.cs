@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Store
 {
     internal class GenericEntityStore<TEntity> where TEntity : class
     {

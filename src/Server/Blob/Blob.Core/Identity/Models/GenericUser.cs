@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Blob.Core.Identity.Store;
 using Microsoft.AspNet.Identity;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Models
 {
     public class GenericUser : GenericUser<string, GenericUserLogin, GenericUserRole, GenericUserClaim>, IUser
     {

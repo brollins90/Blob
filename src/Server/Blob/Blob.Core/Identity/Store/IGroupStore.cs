@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Blob.Core.Identity.Models;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Store
 {
     public interface IGroupStore<TGroup, in TKey> : IDisposable where TGroup : IGroup<TKey>
     {

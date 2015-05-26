@@ -1,5 +1,5 @@
 ﻿
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Store
 {
     public class GenericUserRole : GenericUserRole<string> { }
 

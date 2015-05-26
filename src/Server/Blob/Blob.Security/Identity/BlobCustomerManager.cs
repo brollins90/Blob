@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Core;
 using Blob.Core.Identity;
+using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using log4net;
 using Microsoft.AspNet.Identity;

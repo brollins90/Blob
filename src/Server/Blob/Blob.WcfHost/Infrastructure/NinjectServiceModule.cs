@@ -4,6 +4,7 @@ using System.Data.Entity;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core;
 using Blob.Core.Identity;
+using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Managers.Audit;
 using Blob.Security.Identity;

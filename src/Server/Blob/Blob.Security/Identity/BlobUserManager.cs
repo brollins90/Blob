@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core.Identity;
+using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Security.Authentication;
 using log4net;

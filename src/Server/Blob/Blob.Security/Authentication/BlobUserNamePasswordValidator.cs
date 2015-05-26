@@ -3,6 +3,7 @@ using System.IdentityModel.Selectors;
 using System.ServiceModel;
 using Blob.Core;
 using Blob.Core.Identity;
+using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Security.Identity;
 using log4net;

@@ -7,10 +7,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Blob.Core.Identity.Models;
 using Blob.Core.Models;
 using Microsoft.AspNet.Identity;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Store
 {
     public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IUserLoginStore<TUser, TKey>,

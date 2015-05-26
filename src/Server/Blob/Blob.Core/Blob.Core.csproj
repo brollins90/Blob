@@ -54,25 +54,28 @@
   <ItemGroup>
     <Compile Include="BlobDbContext.cs" />
     <Compile Include="BlobPermissions.cs" />
-    <Compile Include="Identity\BlobCustomerStore.cs" />
-    <Compile Include="Identity\BlobRoleStore.cs" />
-    <Compile Include="Identity\BlobUserStore.cs" />
     <Compile Include="Identity\GenericDbContext.cs" />
-    <Compile Include="Identity\GenericEntityStore.cs" />
-    <Compile Include="Identity\GenericGroup.cs" />
-    <Compile Include="Identity\GenericGroupRole.cs" />
-    <Compile Include="Identity\GenericRole.cs" />
-    <Compile Include="Identity\GenericRoleStore.cs" />
-    <Compile Include="Identity\GenericUser.cs" />
-    <Compile Include="Identity\GenericUserClaim.cs" />
-    <Compile Include="Identity\GenericUserGroup.cs" />
-    <Compile Include="Identity\GenericUserLogin.cs" />
-    <Compile Include="Identity\GenericUserRole.cs" />
-    <Compile Include="Identity\GenericUserStore.cs" />
-    <Compile Include="Identity\ICustomerStore.cs" />
-    <Compile Include="Identity\IGroup.cs" />
-    <Compile Include="Identity\IGroupStore.cs" />
-    <Compile Include="Identity\IQueryableGroupStore.cs" />
+    <Compile Include="Identity\Store\ICustomerGroupUserStore.cs" />
+    <Compile Include="Identity\Store\ICustomerGroupRoleStore.cs" />
+    <Compile Include="Identity\Store\ICustomerGroupStore.cs" />
+    <Compile Include="Identity\Store\ICustomerStore.cs" />
+    <Compile Include="Identity\Store\IGroupStore.cs" />
+    <Compile Include="Identity\Store\IQueryableGroupStore.cs" />
+    <Compile Include="Identity\Models\GenericGroup.cs" />
+    <Compile Include="Identity\Models\GenericGroupRole.cs" />
+    <Compile Include="Identity\Models\GenericRole.cs" />
+    <Compile Include="Identity\Models\GenericUser.cs" />
+    <Compile Include="Identity\Models\GenericUserClaim.cs" />
+    <Compile Include="Identity\Models\GenericUserGroup.cs" />
+    <Compile Include="Identity\Models\GenericUserLogin.cs" />
+    <Compile Include="Identity\Models\IGroup.cs" />
+    <Compile Include="Identity\Store\BlobCustomerStore.cs" />
+    <Compile Include="Identity\Store\BlobRoleStore.cs" />
+    <Compile Include="Identity\Store\BlobUserStore.cs" />
+    <Compile Include="Identity\Store\GenericEntityStore.cs" />
+    <Compile Include="Identity\Store\GenericRoleStore.cs" />
+    <Compile Include="Identity\Store\GenericUserRole.cs" />
+    <Compile Include="Identity\Store\GenericUserStore.cs" />
     <Compile Include="Mapping\AuditRecordMap.cs" />
     <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
     <Compile Include="Mapping\BlobPermissionMap.cs" />
@@ -89,12 +92,15 @@
     <Compile Include="Mapping\RoleMap.cs" />
     <Compile Include="Mapping\StatusRecordMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
-    <Compile Include="Migrations\201505251831068_Initial.cs" />
-    <Compile Include="Migrations\201505251831068_Initial.Designer.cs">
-      <DependentUpon>201505251831068_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\Initial.cs" />
+    <Compile Include="Migrations\Initial.Designer.cs">
+      <DependentUpon>Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuditRecord.cs" />
+    <Compile Include="Models\BlobUserClaim.cs" />
+    <Compile Include="Models\BlobUserLogin.cs" />
+    <Compile Include="Models\BlobUserRole.cs" />
     <Compile Include="Models\CustomerGroup.cs" />
     <Compile Include="Models\CustomerGroupRole.cs" />
     <Compile Include="Models\CustomerGroupUser.cs" />
@@ -114,8 +120,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505251831068_Initial.resx">
-      <DependentUpon>201505251831068_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Initial.resx">
+      <DependentUpon>Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +130,7 @@
       <Name>Blob.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Identity\generic\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

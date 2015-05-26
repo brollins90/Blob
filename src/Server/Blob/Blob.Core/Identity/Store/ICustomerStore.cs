@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Blob.Core.Models;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Store
 {
-    public interface ICustomerStore
+    public interface ICustomerStore : IDisposable
     {
         Task CreateAsync(Customer customer);
         Task DeleteAsync(Customer customer);

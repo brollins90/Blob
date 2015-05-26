@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Models
 {
     public class GenericGroup : GenericGroup<string, GenericUserGroup, GenericGroupRole>
     {

@@ -2,9 +2,10 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Blob.Core.Identity.Models;
 using Microsoft.AspNet.Identity;
 
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Store
 {
     public class GenericRoleStore<TRole, TKey, TUserRole> : IQueryableRoleStore<TRole, TKey>
         where TUserRole : GenericUserRole<TKey>, new()

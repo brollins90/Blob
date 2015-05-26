@@ -1,5 +1,5 @@
 ﻿
-namespace Blob.Core.Identity
+namespace Blob.Core.Identity.Models
 {
     public class GenericUserClaim : GenericUserClaim<string> { }
 

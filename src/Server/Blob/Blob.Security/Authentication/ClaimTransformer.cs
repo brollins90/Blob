@@ -5,6 +5,7 @@ using System.ServiceModel;
 using Blob.Contracts;
 using Blob.Core;
 using Blob.Core.Identity;
+using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Security.Extensions;
 using Blob.Security.Identity;

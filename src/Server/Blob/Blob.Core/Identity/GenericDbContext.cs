@@ -8,6 +8,8 @@ using System.Data.Entity.Infrastructure.Annotations;
 using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
+using Blob.Core.Identity.Models;
+using Blob.Core.Identity.Store;
 
 namespace Blob.Core.Identity
 {
