@@ -243,7 +243,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Customer\_UpdateModal.cshtml" />
+    <Content Include="Views\Customer\_EditModal.cshtml" />
     <Content Include="Views\Customer\Single.cshtml" />
     <Content Include="Views\Dashboard\_DashDevicesLarge.cshtml" />
     <Content Include="Views\Dashboard\DashWidget.cshtml" />
@@ -276,7 +276,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\CustomerRegistration\Register.cshtml" />
-    <Content Include="Views\CustomerGroup\_UpdateModal.cshtml" />
+    <Content Include="Views\CustomerGroup\_EditModal.cshtml" />
     <Content Include="Views\CustomerGroup\_CreateModal.cshtml" />
     <Content Include="Views\CustomerGroup\_DeleteModal.cshtml" />
     <Content Include="Views\CustomerGroup\Single.cshtml" />

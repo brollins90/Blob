@@ -32,6 +32,24 @@
                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                @if (Model.AvailableRoles != null)
+                {
+                    <div class="form-group">
+                        <label class="control-label col-md-2">
+                            Select Roles
+                        </label>
+                        <div class="col-md-10">
+                            @foreach (var item in Model.AvailableRoles)
+                            {
+                                <div>
+                                    <input type="checkbox" name="selectedRoles" value="@item.RoleId" checked="@item.Selected" class="checkbox-inline" />
+                                    @Html.Label(item.Name, new { @class = "control-label" })
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
             </div>
         </div>
 

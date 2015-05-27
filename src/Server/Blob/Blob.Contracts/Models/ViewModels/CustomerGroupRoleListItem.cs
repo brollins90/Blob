@@ -20,6 +20,9 @@ namespace Blob.Contracts.Models.ViewModels
         public string Name { get; set; }
 
         [DataMember]
-        public IEnumerable<string> Users { get; set; }
+        public bool Selected { get; set; }
+
+        //[DataMember]
+        //public IEnumerable<string> Users { get; set; }
     }
 }

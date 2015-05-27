@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core;
 using Blob.Core.Models;
-using Blob.Core.Services;
 using Blob.Security.Identity;
 using EntityFramework.Extensions;
 using log4net;
@@ -541,6 +538,17 @@ namespace Blob.Managers.Blob
                           }).SingleAsync().ConfigureAwait(false);
         }
 
+        public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
+        {
+            var roles = await GetCustomerRolesAsync(customerId);
+            return new CustomerGroupCreateVm
+            {
+                CustomerId = customerId,
+                GroupId = Guid.NewGuid(),
+                AvailableRoles = roles
+            };
+        }
+
         public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
         {
             CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
@@ -554,8 +562,8 @@ namespace Blob.Managers.Blob
         public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
         {
             CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
-            IEnumerable<Role> roles = await _customerGroupManager.GetGroupRolesAsync(groupId);
-            IEnumerable<User> users = await _customerGroupManager.GetGroupUsersAsync(groupId);
+            var roles = await GetCustomerGroupRolesAsync(groupId);
+            var users = await GetCustomerGroupUsersAsync(groupId);
             return new CustomerGroupSingleVm
             {
                 CustomerId = group.CustomerId,
@@ -563,9 +571,9 @@ namespace Blob.Managers.Blob
                 GroupId = group.Id,
                 Name = group.Name,
                 RoleCount = roles.Count(),
-                Roles = roles.Select(x => new CustomerRoleListItemVm{RoleId = x.Id, RoleName = x.Name}),
+                Roles = roles,
                 UserCount = users.Count(),
-                Users = users.Select(x => new CustomerUserListItemVm { Email = x.Email, UserName = x.UserName, UserId = x.Id})
+                Users = users
             };
         }
 
@@ -580,18 +588,6 @@ namespace Blob.Managers.Blob
                        Name = group.Name
                    };
         }
-
-
-
-        //public async Task<IEnumerable<CustomerGroupRoleListItem>> GetGroupRolesAsync(Guid groupId)
-        //{
-        //    return await _customerGroupManager.GetGroupRolesAsync(groupId);
-        //}
-
-        //public async Task<IEnumerable<CustomerGroupUserListItem>> GetGroupUsersAsync(Guid groupId)
-        //{
-        //    return await _customerGroupManager.GetGroupUsersAsync(groupId);
-        //}
 
         public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId)
         {
@@ -623,6 +619,16 @@ namespace Blob.Managers.Blob
                     Name = x.Name
                 }),
             }).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId)
+        {
+            return (await _customerGroupManager.GetGroupRolesAsync(groupId)).Select(x => new CustomerGroupRoleListItem { Name = x.Name, RoleId = x.Id }).ToList();
+        }
+
+        public async Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId)
+        {
+            return (await _customerGroupManager.GetGroupUsersAsync(groupId)).Select(x => new CustomerGroupUserListItem { UserName = x.UserName, UserId = x.Id }).ToList();
         }
     }
 }

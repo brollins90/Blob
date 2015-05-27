@@ -11,14 +11,14 @@ namespace Blob.Contracts.Models.ViewModels
         [DataMember]
         [Display(Name = "Id")]
         [Required]
-        public Guid RoleId { get; set; }
+        public Guid UserId { get; set; }
 
         [DataMember]
         [Display(Name = "Name")]
         [Required]
         public string UserName { get; set; }
 
-        [DataMember]
-        public IEnumerable<string> Roles { get; set; }
+        //[DataMember]
+        //public IEnumerable<string> Roles { get; set; }
     }
 }

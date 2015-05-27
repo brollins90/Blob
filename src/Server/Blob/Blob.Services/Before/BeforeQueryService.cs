@@ -293,5 +293,32 @@ namespace Blob.Services.Before
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "group", customerId.ToString());
             return await _blobQueryManager.GetCustomerGroupPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "create")]
+        public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "create", "group", customerId.ToString());
+            return await _blobQueryManager.GetCustomerGroupCreateVmAsync(customerId).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "view")]
+        public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "group", groupId.ToString());
+            return await _blobQueryManager.GetCustomerGroupRolesAsync(groupId).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "view")]
+        public async Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "group", groupId.ToString());
+            return await _blobQueryManager.GetCustomerGroupUsersAsync(groupId).ConfigureAwait(false);
+        }
     }
 }

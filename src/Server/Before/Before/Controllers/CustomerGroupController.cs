@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Before.Filters;
 using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models;
@@ -27,17 +29,15 @@ namespace Before.Controllers
         [BeforeAuthorize(Operation = "create", Resource = "group")]
         public async Task<ActionResult> Create()
         {
+            // is there a better way to get the customer id?
             ClaimsPrincipal me = ClaimsPrincipal.Current;
             Guid customerId = me.Identity.GetCustomerId();
 
-            var roles = await BlobQueryManager.GetCustomerRolesAsync(customerId);
-
-            CustomerGroupCreateVm viewModel = new CustomerGroupCreateVm
-                                              {
-                                                  CustomerId = customerId,
-                                                  GroupId = Guid.NewGuid(),
-                                                  AvailableRoles = roles
-                                              };
+            var viewModel = await BlobQueryManager.GetCustomerGroupCreateVmAsync(customerId).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
             return PartialView("_CreateModal", viewModel);
         }
 
@@ -97,6 +97,53 @@ namespace Before.Controllers
         }
 
         //
+        // GET: /CustomerGroup/Edit
+        [BeforeAuthorize(Operation = "edit", Resource = "group")]
+        public async Task<ActionResult> Edit(Guid id)
+        {
+            var viewModel = await BlobQueryManager.GetCustomerGroupUpdateVmAsync(id).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            var allRoles = await BlobQueryManager.GetCustomerRolesAsync(viewModel.CustomerId);
+            var groupRoles = await BlobQueryManager.GetCustomerGroupRolesAsync(viewModel.GroupId);
+
+            foreach (var role in allRoles)
+            {
+                role.Selected = groupRoles.Any(x => x.RoleId == role.RoleId);
+            }
+            viewModel.AvailableRoles = allRoles;
+
+            return PartialView("_EditModal", viewModel);
+        }
+
+        //
+        // POST: /CustomerGroup/Edit
+        [BeforeAuthorize(Operation = "edit", Resource = "group")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(CustomerGroupUpdateVm model, params string[] selectedRoles)
+        {
+            if (ModelState.IsValid)
+            {
+                UpdateCustomerGroupDto dto = model.ToDto();
+                dto.RolesIdStrings = selectedRoles ?? new string[] { };
+                await BlobCommandManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+
+            var allRoles = await BlobQueryManager.GetCustomerRolesAsync(model.CustomerId);
+            var groupRoles = await BlobQueryManager.GetCustomerGroupRolesAsync(model.GroupId);
+
+            foreach (var role in allRoles)
+            {
+                role.Selected = groupRoles.Any(x => x.RoleId == role.RoleId);
+            }
+            return PartialView("_EditModal", model);
+        }
+
+        //
         // GET: /CustomerGroup/PageForCustomer
         [BeforeAuthorize(Operation = "view", Resource = "group")]
         public ActionResult PageForCustomer(Guid id, int? page, int? pageSize)
@@ -127,40 +174,6 @@ namespace Before.Controllers
             }
 
             return View(viewModel);
-        }
-
-        //
-        // GET: /CustomerGroup/Update
-        [BeforeAuthorize(Operation = "update", Resource = "group")]
-        public async Task<ActionResult> Update(Guid id)
-        {
-            var viewModel = await BlobQueryManager.GetCustomerGroupUpdateVmAsync(id).ConfigureAwait(true);
-            if (viewModel == null)
-            {
-                return HttpNotFound();
-            }
-            var roles = await BlobQueryManager.GetCustomerRolesAsync(viewModel.CustomerId);
-            viewModel.AvailableRoles = roles;
-
-            return PartialView("_UpdateModal", viewModel);
-        }
-
-        //
-        // POST: /CustomerGroup/Update
-        [BeforeAuthorize(Operation = "update", Resource = "group")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Update(CustomerGroupUpdateVm model)
-        {
-            if (ModelState.IsValid)
-            {
-                await BlobCommandManager.UpdateCustomerGroupAsync(model.ToDto()).ConfigureAwait(true);
-                return Json(new { success = true });
-            }
-
-            var roles = await BlobQueryManager.GetCustomerRolesAsync(model.CustomerId);
-            model.AvailableRoles = roles;
-            return PartialView("_UpdateModal", model);
         }
     }
 }

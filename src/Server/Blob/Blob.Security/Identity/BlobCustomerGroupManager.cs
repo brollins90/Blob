@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
+using Blob.Core;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
-using Blob.Security.Identity;
 
-namespace Blob.Core.Services
+namespace Blob.Security.Identity
 {
     public class BlobCustomerGroupManager : Blob.Security.Identity.IBlobCustomerGroupManager
     {
@@ -26,21 +23,24 @@ namespace Blob.Core.Services
             _roleManager = roleManager;
             _customerStore = customerStore;
         }
-
+        public async Task<CustomerGroup> FindGroupByIdAsync(Guid groupId)
+        {
+            return await _customerStore.FindGroupByIdAsync(groupId);
+        }
 
         public async Task<BlobResultDto> AddRoleToCustomerGroup(AddRoleToCustomerGroupDto dto)
         {
-            CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
+            CustomerGroup group = await _customerStore.FindGroupByIdAsync(dto.GroupId);
             Role role = await _roleManager.FindByIdAsync(dto.RoleId);
-            await _customerStore.AddRoleAsync(group, role.Name);
+            await _customerStore.AddRoleToGroupAsync(group, role.Name);
             return BlobResultDto.Success;
         }
 
 
         public async Task<BlobResultDto> AddUserToCustomerGroup(AddUserToCustomerGroupDto dto)
         {
-            CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
-            await _customerStore.AddUserAsync(group, dto.UserId);
+            CustomerGroup group = await _customerStore.FindGroupByIdAsync(dto.GroupId);
+            await _customerStore.AddUserToGroupAsync(group, dto.UserId);
             return BlobResultDto.Success;
         }
 
@@ -59,7 +59,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> DeleteGroupAsync(Guid groupId)
         {
-            CustomerGroup group = await FindGroupByIdAsync(groupId);
+            CustomerGroup group = await _customerStore.FindGroupByIdAsync(groupId);
             if (group == null)
             {
                 // the task is done, just not the way they wanted...
@@ -84,55 +84,53 @@ namespace Blob.Core.Services
             return BlobResultDto.Success;
         }
 
-        public async Task<CustomerGroup> FindGroupByIdAsync(Guid id)
-        {
-            return await _customerStore.FindGroupByIdAsync(id).ConfigureAwait(false);
-        }
-
         public async Task<IEnumerable<Role>> GetGroupRolesAsync(Guid groupId)
         {
-            var grp = await FindGroupByIdAsync(groupId).ConfigureAwait(true);
-            var roles = await _roleManager.Roles.ToListAsync().ConfigureAwait(true);
-            var groupRoles = (from r in roles
-                              where grp.Roles.Any(ap => ap.RoleId == r.Id)
-                              select r).ToList();
-            return groupRoles;
+            return await _customerStore.GetRolesForGroupAsync(groupId);
         }
 
         public async Task<IEnumerable<User>> GetGroupUsersAsync(Guid groupId)
         {
-            var group = await this.FindGroupByIdAsync(groupId).ConfigureAwait(true);
-            var users = new List<User>();
-            foreach (var groupUser in group.Users)
-            {
-                var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == groupUser.UserId);
-                users.Add(user);
-            }
-            return users;
+            return await _customerStore.GetUsersInGroupAsync(groupId);
         }
 
         public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
-            CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
+            CustomerGroup group = await _customerStore.FindGroupByIdAsync(dto.GroupId);
             Role role = await _roleManager.FindByIdAsync(dto.RoleId);
-            await _customerStore.RemoveRoleAsync(group, role.Name);
+            await _customerStore.RemoveRoleFromGroupAsync(group, role.Name);
             return BlobResultDto.Success;
         }
 
         public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
-            CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
-            await _customerStore.RemoveUserAsync(group, dto.UserId);
+            CustomerGroup group = await _customerStore.FindGroupByIdAsync(dto.GroupId);
+            await _customerStore.RemoveUserFromGroupAsync(group, dto.UserId);
             return BlobResultDto.Success;
         }
         
         public async Task<BlobResultDto> UpdateGroupAsync(UpdateCustomerGroupDto dto)
         {
-            CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
+            CustomerGroup group = await _customerStore.FindGroupByIdAsync(dto.GroupId);
             group.Name = dto.Name;
             group.Description = dto.Description;
 
+            var beforeRoles = (await GetGroupRolesAsync(group.Id)).Select(x => x.Id);
+            var nowRoles = dto.RolesIdStrings.Select(x=>Guid.Parse(x));
+
+            var removedRoles = beforeRoles.Except(nowRoles);
+            var addedRoles = nowRoles.Except(beforeRoles);
+
             await _customerStore.UpdateGroupAsync(group);
+            foreach (var roleId in removedRoles)
+            {
+                await _customerStore.RemoveRoleFromGroupAsync(group, roleId);
+            } 
+            foreach (var roleId in addedRoles)
+            {
+                await _customerStore.AddRoleToGroupAsync(group, roleId);
+            }
+
             //foreach (var groupUser in group.Users)
             //{
             //    await this.RefreshUserGroupRolesAsync(groupUser.UserId);

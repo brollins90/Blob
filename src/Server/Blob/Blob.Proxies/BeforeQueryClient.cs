@@ -375,33 +375,6 @@ namespace Blob.Proxies
         }
 
 
-        //public async Task<IEnumerable<CustomerGroupRoleListItem>> GetGroupRolesAsync(Guid groupId)
-        //{
-        //    try
-        //    {
-        //        return await Channel.GetGroupRolesAsync(groupId).ConfigureAwait(false);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HandleError(ex);
-        //    }
-        //    return null;
-        //}
-
-        //public async Task<IEnumerable<CustomerGroupUserListItem>> GetGroupUsersAsync(Guid groupId)
-        //{
-        //    try
-        //    {
-        //        return await Channel.GetGroupUsersAsync(groupId).ConfigureAwait(false);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HandleError(ex);
-        //    }
-        //    return null;
-        //}
-
-
         public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId)
         {
             try
@@ -421,6 +394,45 @@ namespace Blob.Proxies
             try
             {
                 return await Channel.GetCustomerGroupPageVmAsync(groupId, pageNum, pageSize).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupCreateVmAsync(customerId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupRolesAsync(groupId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupUsersAsync(groupId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

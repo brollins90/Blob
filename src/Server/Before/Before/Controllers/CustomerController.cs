@@ -48,6 +48,34 @@ namespace Before.Controllers
         }
 
         //
+        // GET: /Customer/Edit
+        [BeforeAuthorize(Operation = "edit", Resource = "customer")]
+        public async Task<ActionResult> Edit(Guid id)
+        {
+            var viewModel = await BlobQueryManager.GetCustomerUpdateVmAsync(id).ConfigureAwait(true);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("_EditModal", viewModel);
+        }
+
+        //
+        // POST: /Customer/Edit
+        [BeforeAuthorize(Operation = "edit", Resource = "customer")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(CustomerUpdateVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                await BlobCommandManager.UpdateCustomerAsync(model.ToDto()).ConfigureAwait(true);
+                return Json(new { success = true });
+            }
+            return PartialView("_EditModal", model);
+        }
+
+        //
         // GET: /Customer/Enable
         [BeforeAuthorize(Operation = "enable", Resource = "customer")]
         public async Task<ActionResult> Enable(Guid id)
@@ -86,34 +114,6 @@ namespace Before.Controllers
                 return HttpNotFound();
             }
             return View(viewModel);
-        }
-
-        //
-        // GET: /Customer/Update
-        [BeforeAuthorize(Operation = "update", Resource = "customer")]
-        public async Task<ActionResult> Update(Guid id)
-        {
-            var viewModel = await BlobQueryManager.GetCustomerUpdateVmAsync(id).ConfigureAwait(true);
-            if (viewModel == null)
-            {
-                return HttpNotFound();
-            }
-            return PartialView("_UpdateModal", viewModel);
-        }
-
-        //
-        // POST: /Customer/Update
-        [BeforeAuthorize(Operation = "update", Resource = "customer")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Update(CustomerUpdateVm model)
-        {
-            if (ModelState.IsValid)
-            {
-                await BlobCommandManager.UpdateCustomerAsync(model.ToDto()).ConfigureAwait(true);
-                return Json(new { success = true });
-            }
-            return PartialView("_UpdateModal", model);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace Blob.Security.Identity
             await _customerStore.CreateGroupAsync(adminGroup);
 
             // add user to admin group
-            await _customerStore.AddUserAsync(adminGroup, defaultUser.Id);
+            await _customerStore.AddUserToGroupAsync(adminGroup, defaultUser.Id);
 
             return BlobResultDto.Success;
         }

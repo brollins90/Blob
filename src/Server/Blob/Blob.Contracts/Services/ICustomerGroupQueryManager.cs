@@ -9,8 +9,8 @@ namespace Blob.Contracts.Services
     [ServiceContract]
     public interface ICustomerGroupQueryManager
     {
-        //[OperationContract]
-        //Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid groupId);
+        [OperationContract]
+        Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId);
 
         [OperationContract]
         Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId);
@@ -21,11 +21,11 @@ namespace Blob.Contracts.Services
         [OperationContract]
         Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId);
 
-        //[OperationContract]
-        //Task<IEnumerable<CustomerGroupRoleListItem>> GetGroupRolesAsync(Guid groupId);
+        [OperationContract]
+        Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId);
 
-        //[OperationContract]
-        //Task<IEnumerable<CustomerGroupUserListItem>> GetGroupUsersAsync(Guid groupId);
+        [OperationContract]
+        Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId);
 
     }
 }

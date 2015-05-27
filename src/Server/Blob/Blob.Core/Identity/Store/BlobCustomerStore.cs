@@ -12,11 +12,11 @@ namespace Blob.Core.Identity.Store
     {
         private bool _disposed;
 
-        private readonly GenericEntityStore<Customer> _customerStore;
-        private readonly GenericEntityStore<CustomerGroup> _customerGroupStore;
+        private GenericEntityStore<Customer> _customerStore;
+        private GenericEntityStore<CustomerGroup> _customerGroupStore;
         private readonly IDbSet<CustomerGroupRole> _customerGroupRoles;
         private readonly IDbSet<CustomerGroupUser> _customerGroupUsers;
-        private readonly GenericEntityStore<Role> _roleStore;
+        private GenericEntityStore<Role> _roleStore;
         private GenericEntityStore<User> _userStore;
 
         public BlobCustomerStore(DbContext context)
@@ -45,7 +45,7 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("customer");
 
             _customerStore.Create(customer);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await Context.SaveChangesAsync();
         }
 
         public virtual async Task DeleteCustomerAsync(Customer customer)
@@ -55,7 +55,7 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("customer");
 
             _customerStore.Delete(customer);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await Context.SaveChangesAsync();
         }
 
         public Task<Customer> FindCustomerByIdAsync(Guid customerId)
@@ -77,8 +77,10 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("customer");
 
             _customerStore.Update(customer);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await Context.SaveChangesAsync();
         }
+
+
         public bool DisposeContext { get; set; }
 
         private void ThrowIfDisposed()
@@ -101,7 +103,10 @@ namespace Blob.Core.Identity.Store
             }
             _disposed = true;
             Context = null;
-            //_customerStore = null;
+            _customerStore = null;
+            _customerGroupStore = null;
+            _userStore = null;
+            _roleStore = null;
         }
 
         public async Task CreateGroupAsync(CustomerGroup group)
@@ -111,7 +116,7 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("group");
 
             _customerGroupStore.Create(group);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await Context.SaveChangesAsync();
         }
 
         public async Task DeleteGroupAsync(CustomerGroup group)
@@ -121,7 +126,7 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("group");
 
             _customerGroupStore.Delete(group);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await Context.SaveChangesAsync();
         }
 
         public async Task<CustomerGroup> FindGroupByIdAsync(Guid groupId)
@@ -137,10 +142,10 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("group");
 
             _customerGroupStore.Update(group);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await Context.SaveChangesAsync();
         }
 
-        public async Task AddRoleAsync(CustomerGroup group, string roleName)
+        public async Task AddRoleToGroupAsync(CustomerGroup group, string roleName)
         {
             ThrowIfDisposed();
             if (group == null)
@@ -157,11 +162,30 @@ namespace Blob.Core.Identity.Store
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "IdentityResources.RoleNotFound", roleName));
             }
 
-            var ur = new CustomerGroupRole {GroupId = group.Id, RoleId = roleEntity.Id };
+            var ur = new CustomerGroupRole { GroupId = group.Id, RoleId = roleEntity.Id };
             _customerGroupRoles.Add(ur);
+            await Context.SaveChangesAsync();
         }
 
-        public async Task RemoveRoleAsync(CustomerGroup group, string roleName)
+        public async Task AddRoleToGroupAsync(CustomerGroup group, Guid roleId)
+        {
+            ThrowIfDisposed();
+            if (group == null)
+            {
+                throw new ArgumentNullException("group");
+            }
+            var roleEntity = await _roleStore.DbEntitySet.SingleOrDefaultAsync(r => r.Id == roleId);
+            if (roleEntity == null)
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "IdentityResources.RoleNotFound", roleId));
+            }
+
+            var ur = new CustomerGroupRole { GroupId = group.Id, RoleId = roleEntity.Id };
+            _customerGroupRoles.Add(ur);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task RemoveRoleFromGroupAsync(CustomerGroup group, string roleName)
         {
             ThrowIfDisposed();
             if (group == null)
@@ -183,20 +207,31 @@ namespace Blob.Core.Identity.Store
                     _customerGroupRoles.Remove(userRole);
                 }
             }
+            await Context.SaveChangesAsync();
         }
 
-        public async Task<IList<string>> GetRolesAsync(CustomerGroup group)
+        public async Task RemoveRoleFromGroupAsync(CustomerGroup group, Guid roleId)
         {
             ThrowIfDisposed();
             if (group == null)
             {
                 throw new ArgumentNullException("group");
             }
-            var groupId = group.Id;
+            var userRole = await _customerGroupRoles.FirstOrDefaultAsync(r => roleId.Equals(r.RoleId) && r.GroupId.Equals(group.Id));
+            if (userRole != null)
+            {
+                _customerGroupRoles.Remove(userRole);
+            }
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task<IList<Role>> GetRolesForGroupAsync(Guid groupId)
+        {
+            ThrowIfDisposed();
             var query = from gr in _customerGroupRoles
                         where gr.GroupId.Equals(groupId)
                         join role in _roleStore.DbEntitySet on gr.RoleId equals role.Id
-                        select role.Name;
+                        select role;
             return await query.ToListAsync();
         }
 
@@ -221,7 +256,7 @@ namespace Blob.Core.Identity.Store
             return false;
         }
 
-        public async Task AddUserAsync(CustomerGroup group, Guid userId)
+        public async Task AddUserToGroupAsync(CustomerGroup group, Guid userId)
         {
             ThrowIfDisposed();
             if (group == null)
@@ -237,21 +272,39 @@ namespace Blob.Core.Identity.Store
 
             var ur = new CustomerGroupUser { GroupId = group.Id, UserId = user.Id };
             _customerGroupUsers.Add(ur);
+            await Context.SaveChangesAsync();
         }
 
-        public Task RemoveUserAsync(CustomerGroup group, Guid userId)
+        public async Task RemoveUserFromGroupAsync(CustomerGroup group, Guid userId)
         {
-            throw new NotImplementedException();
+            ThrowIfDisposed();
+            if (group == null)
+            {
+                throw new ArgumentNullException("group");
+            }
+            var userRole = await _customerGroupUsers.FirstOrDefaultAsync(x => userId.Equals(x.UserId) && x.GroupId.Equals(group.Id));
+            if (userRole != null)
+            {
+                _customerGroupUsers.Remove(userRole);
+            }
+            await Context.SaveChangesAsync();
         }
 
-        public Task<IList<User>> GetUsersAsync(CustomerGroup group)
+        public async Task<IList<User>> GetUsersInGroupAsync(Guid groupId)
         {
-            throw new NotImplementedException();
+            ThrowIfDisposed();
+            var query = from gr in _customerGroupUsers
+                        where gr.GroupId.Equals(groupId)
+                        join user in _userStore.DbEntitySet on gr.UserId equals user.Id
+                        select user;
+            return await query.ToListAsync();
         }
 
-        public Task<bool> HasUserAsync(CustomerGroup group, Guid userId)
+        public async Task<bool> HasUserAsync(CustomerGroup group, Guid userId)
         {
-            throw new NotImplementedException();
+            ThrowIfDisposed();
+            var users = await GetUsersInGroupAsync(group.Id);
+            return users.Any(x => x.Id.Equals(userId));
         }
     }
 }

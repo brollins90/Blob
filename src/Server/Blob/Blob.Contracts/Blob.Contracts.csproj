@@ -80,11 +80,9 @@
     <Compile Include="Models\ViewModels\CustomerGroupDeleteVm.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerListItemVm.cs" />
-    <Compile Include="Models\ViewModels\CustomerRoleListItemVm.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
-    <Compile Include="Models\ViewModels\CustomerUserListItemVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupRoleListItem.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupPageVm.cs" />

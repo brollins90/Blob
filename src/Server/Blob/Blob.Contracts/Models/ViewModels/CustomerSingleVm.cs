@@ -36,13 +36,13 @@ namespace Blob.Contracts.Models.ViewModels
         [Required]
         public int RoleCount { get; set; }
         [DataMember]
-        public IEnumerable<CustomerRoleListItemVm> Roles { get; set; }
+        public IEnumerable<CustomerGroupRoleListItem> Roles { get; set; }
 
         [DataMember]
         [Display(Name = "User count")]
         [Required]
         public int UserCount { get; set; }
         [DataMember]
-        public IEnumerable<CustomerUserListItemVm> Users { get; set; } 
+        public IEnumerable<CustomerGroupUserListItem> Users { get; set; } 
     }
 }

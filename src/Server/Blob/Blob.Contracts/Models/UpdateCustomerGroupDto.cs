@@ -6,9 +6,6 @@ namespace Blob.Contracts.Models
     [DataContract]
     public class UpdateCustomerGroupDto
     {
-        //[DataMember]
-        //public Guid CustomerId { get; set; }
-
         [DataMember]
         public Guid GroupId { get; set; }
 
@@ -17,5 +14,8 @@ namespace Blob.Contracts.Models
 
         [DataMember]
         public string Description { get; set; }
+
+        [DataMember]
+        public string[] RolesIdStrings { get; set; }
     }
 }
