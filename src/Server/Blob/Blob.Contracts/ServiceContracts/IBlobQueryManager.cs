@@ -8,7 +8,7 @@ using Blob.Contracts.Services;
 namespace Blob.Contracts.ServiceContracts
 {
     [ServiceContract]
-    public interface IBlobQueryManager : ICustomerQueryManager
+    public interface IBlobQueryManager : ICustomerQueryManager, ICustomerGroupQueryManager
     {
         [OperationContract]
         Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);

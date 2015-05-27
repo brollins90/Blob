@@ -1,0 +1,48 @@
+﻿@using Before.Infrastructure.Extensions
+@using Blob.Contracts.Models.ViewModels
+@using PagedList
+@using PagedList.Mvc
+@model CustomerGroupPageVm
+
+<div id="customerGroupPageContent">
+
+    @if (Model != null && Model.Items != null && Model.Items.Any())
+    {
+        <table class="table table-hover table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().Name)
+                    </th>
+                    <th>
+                        <div class="pull-right">
+                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a group", "Create", "CustomerGroup", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td> </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {@:
+        <div class="text-muted">&nbsp;No devices found.</div>
+    }
+    @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "customerGroupPageContent")
+</div>
+
+@section Scripts {
+    
+    bindPaginator("#devicePageContentPager a[href]", "#devicePageContent");
+}

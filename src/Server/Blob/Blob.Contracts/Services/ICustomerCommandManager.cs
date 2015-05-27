@@ -1,5 +1,4 @@
-﻿using System;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 
@@ -8,8 +7,6 @@ namespace Blob.Contracts.Services
     [ServiceContract]
     public interface ICustomerCommandManager
     {
-        //[OperationContract]
-        //Task DeleteCustomerAsync(Guid customerId);
         [OperationContract]
         Task DisableCustomerAsync(DisableCustomerDto dto);
         
@@ -18,9 +15,6 @@ namespace Blob.Contracts.Services
         
         [OperationContract]
         Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto);
-        
-        //[OperationContract]
-        //Task RemoveUserFromCustomersAsync(Guid userId);
 
         [OperationContract]
         Task UpdateCustomerAsync(UpdateCustomerDto dto);

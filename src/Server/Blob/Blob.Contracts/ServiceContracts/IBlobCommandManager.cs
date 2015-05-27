@@ -6,7 +6,9 @@ using Blob.Contracts.Services;
 namespace Blob.Contracts.ServiceContracts
 {
     [ServiceContract]
-    public interface IBlobCommandManager : ICustomerCommandManager
+    public interface IBlobCommandManager : 
+        ICustomerCommandManager, 
+        ICustomerGroupCommandManager
     {
         // Commands
         [OperationContract]

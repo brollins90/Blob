@@ -71,6 +71,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#groups">Groups</a>
+                    </h4>
+                </div>
+                <div id="groups" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        @{ Html.RenderAction("PageForCustomer", "CustomerGroup", routeValues: new {customerId = Model.CustomerId});}
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#users">Users</a>
                     </h4>
                 </div>

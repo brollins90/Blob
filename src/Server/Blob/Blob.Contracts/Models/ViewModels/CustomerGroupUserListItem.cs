@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Blob.Contracts.Models.ViewModels
 {
     [DataContract]
-    public class CustomerUserListItemVm
+    public class CustomerGroupUserListItem
     {
         [DataMember]
         [Display(Name = "Id")]
         [Required]
-        public Guid UserId { get; set; }
+        public Guid RoleId { get; set; }
 
-        [EmailAddress]
         [DataMember]
-        [Display(Name = "Email")]
+        [Display(Name = "Name")]
         [Required]
-        public string Email { get; set; }
-
-        [DataMember]
         public string UserName { get; set; }
     }
 }

@@ -176,5 +176,68 @@ namespace Blob.Services.Before
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "user", dto.UserId.ToString());
             await _blobCommandManager.UpdateUserAsync(dto).ConfigureAwait(false);
         }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "create")]
+        public async Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "group", dto.GroupId.ToString());
+            await _blobCommandManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "delete")]
+        public async Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "delete", "group", dto.GroupId.ToString());
+            await _blobCommandManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
+        public async Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "group", dto.GroupId.ToString());
+            await _blobCommandManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
+        public async Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
+            await _blobCommandManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
+        public async Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
+            await _blobCommandManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
+        public async Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
+            await _blobCommandManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
+        public async Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
+            await _blobCommandManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
     }
 }

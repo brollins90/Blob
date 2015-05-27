@@ -226,5 +226,89 @@ namespace Blob.Proxies
                 HandleError(ex);
             }
         }
+
+        public async Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        public async Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        public async Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        public async Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        public async Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        public async Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        public async Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        {
+            try
+            {
+                await Channel.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
     }
 }

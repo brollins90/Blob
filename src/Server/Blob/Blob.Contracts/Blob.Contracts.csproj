@@ -46,6 +46,8 @@
     <Compile Include="Commands\WindowsUpdateCommand.cs" />
     <Compile Include="Models\AddPerformanceRecordDto.cs" />
     <Compile Include="Models\AddStatusRecordDto.cs" />
+    <Compile Include="Models\BlobResultDto.cs" />
+    <Compile Include="Models\DeleteCustomerGroupDto.cs" />
     <Compile Include="Models\RegisterCustomerDto.cs" />
     <Compile Include="Models\DeletePerformanceRecordDto.cs" />
     <Compile Include="Models\DeleteStatusRecordDto.cs" />
@@ -63,18 +65,29 @@
     <Compile Include="Models\RegisterDeviceDto.cs" />
     <Compile Include="Models\RegisterDeviceResponseDto.cs" />
     <Compile Include="Models\SecurityDtos.cs" />
+    <Compile Include="Models\CreateCustomerGroupDto.cs" />
+    <Compile Include="Models\AddRoleToCustomerGroupDto.cs" />
+    <Compile Include="Models\UpdateCustomerGroupDto.cs" />
     <Compile Include="Models\UpdateCustomerDto.cs" />
     <Compile Include="Models\UpdateDeviceDto.cs" />
     <Compile Include="Models\CreateUserDto.cs" />
     <Compile Include="Models\UpdateUserDto.cs" />
     <Compile Include="Models\ViewModels\CustomerDisableVm.cs" />
     <Compile Include="Models\ViewModels\CustomerEnableVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupListItemVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupUserListItem.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupUpdateVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupDeleteVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerListItemVm.cs" />
     <Compile Include="Models\ViewModels\CustomerRoleListItemVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUserListItemVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupRoleListItem.cs" />
+    <Compile Include="Models\ViewModels\CustomerGroupPageVm.cs" />
     <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerRegisterVm.cs" />
     <Compile Include="Models\ViewModels\UserPageVm.cs" />
@@ -134,6 +147,8 @@
     <Compile Include="ServiceContracts\IIdentityStore.cs" />
     <Compile Include="ServiceContracts\IUserManagerService.cs" />
     <Compile Include="ServiceContracts\KnownCommandsMap.cs" />
+    <Compile Include="Services\ICustomerGroupCommandManager.cs" />
+    <Compile Include="Services\ICustomerGroupQueryManager.cs" />
     <Compile Include="Services\ICustomerQueryManager.cs" />
     <Compile Include="Services\ICustomerCommandManager.cs" />
   </ItemGroup>

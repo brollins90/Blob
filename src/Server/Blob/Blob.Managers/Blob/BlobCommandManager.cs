@@ -8,6 +8,7 @@ using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core;
 using Blob.Core.Models;
+using Blob.Core.Services;
 using Blob.Managers.Command;
 using Blob.Managers.Extensions;
 using Blob.Security.Extensions;
@@ -20,13 +21,15 @@ namespace Blob.Managers.Blob
     {
         private readonly ILog _log;
         private BlobCustomerManager _customerManager;
+        private BlobCustomerGroupManager _customerGroupManager;
 
-        public BlobCommandManager(BlobDbContext context, ILog log, BlobCustomerManager customerManager)
+        public BlobCommandManager(BlobDbContext context, ILog log, BlobCustomerManager customerManager, BlobCustomerGroupManager customerGroupManager)
         {
             _log = log;
             _log.Debug("Constructing BlobManager");
             Context = context;
             _customerManager = customerManager;
+            _customerGroupManager = customerGroupManager;
         }
         protected BlobDbContext Context { get; private set; }
 
@@ -344,5 +347,44 @@ namespace Blob.Managers.Blob
             return _oldestDateTime;
         }
         private readonly DateTime _oldestDateTime = DateTime.Parse("2010-01-01").ToUniversalTime();
+
+
+        #region CustomerGroup
+
+        public async Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        {
+            await _customerGroupManager.CreateGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        public async Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        {
+            await _customerGroupManager.DeleteGroupAsync(dto.GroupId).ConfigureAwait(false);
+        }
+
+        public async Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        {
+            await _customerGroupManager.UpdateGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        public async Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        {
+            await _customerGroupManager.AddRoleToCustomerGroup(dto).ConfigureAwait(false);
+        }
+
+        public async Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        {
+            await _customerGroupManager.AddUserToCustomerGroup(dto).ConfigureAwait(false);
+        }
+
+        public async Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        {
+            await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+
+        public async Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        {
+            await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+        }
+        #endregion
     }
 }

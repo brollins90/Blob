@@ -10,6 +10,8 @@ using Ninject;
 
 namespace BMonitor.WindowsService
 {
+    // http://thecurlybrace.blogspot.com/2010/12/how-to-create-c-windows-service.html
+
     public static class Program
     {
         static readonly ManualResetEvent CancelKeyStopEvent = new ManualResetEvent(false);

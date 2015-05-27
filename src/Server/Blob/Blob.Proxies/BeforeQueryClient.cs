@@ -334,5 +334,99 @@ namespace Blob.Proxies
             }
             return null;
         }
+
+        public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupDeleteVmAsync(groupId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupSingleVmAsync(groupId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+        public async Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupUpdateVmAsync(groupId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+
+        //public async Task<IEnumerable<CustomerGroupRoleListItem>> GetGroupRolesAsync(Guid groupId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetGroupRolesAsync(groupId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
+
+        //public async Task<IEnumerable<CustomerGroupUserListItem>> GetGroupUsersAsync(Guid groupId)
+        //{
+        //    try
+        //    {
+        //        return await Channel.GetGroupUsersAsync(groupId).ConfigureAwait(false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleError(ex);
+        //    }
+        //    return null;
+        //}
+
+
+        public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId)
+        {
+            try
+            {
+                return await Channel.GetCustomerRolesAsync(customerId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
+
+        public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid groupId, int pageNum = 1, int pageSize = 10)
+        {
+            try
+            {
+                return await Channel.GetCustomerGroupPageVmAsync(groupId, pageNum, pageSize).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
     }
 }

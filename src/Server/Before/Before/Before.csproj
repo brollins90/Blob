@@ -166,12 +166,11 @@
     <Compile Include="App_Start\Startup.Routes.cs" />
     <Compile Include="App_Start\Startup.SimpleInjector.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CustomerGroupsController.cs" />
+    <Compile Include="Controllers\CustomerGroupController.cs" />
     <Compile Include="Controllers\CustomerRegistrationController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
-    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PerformanceController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
@@ -277,10 +276,16 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\CustomerRegistration\Register.cshtml" />
+    <Content Include="Views\CustomerGroup\Single1.cshtml" />
+    <Content Include="Views\CustomerGroup\_EditModal.cshtml" />
+    <Content Include="Views\CustomerGroup\_CreateModal.cshtml" />
+    <Content Include="Views\CustomerGroup\_DeleteModal.cshtml" />
+    <Content Include="Views\CustomerGroup\Single.cshtml" />
+    <Content Include="Views\CustomerGroup\_Page.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\CustomerGroups\" />
+    <Folder Include="ViewModels\" />
     <Folder Include="Views\Role\" />
   </ItemGroup>
   <ItemGroup>
