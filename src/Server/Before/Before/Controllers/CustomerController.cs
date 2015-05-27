@@ -2,12 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Filters;
-using Before.Infrastructure.Extensions;
-using Before.Infrastructure.Identity;
-using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace Before.Controllers
 {
@@ -16,13 +12,11 @@ namespace Before.Controllers
     {
         protected IBlobQueryManager BlobQueryManager { get; set; }
         protected IBlobCommandManager BlobCommandManager { get; set; }
-        protected ISignInManager SignInManager { get; set; }
 
-        public CustomerController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager, ISignInManager signInManager)
+        public CustomerController(IBlobCommandManager blobCommandManager, IBlobQueryManager blobQueryManager)
         {
             BlobCommandManager = blobCommandManager;
             BlobQueryManager = blobQueryManager;
-            SignInManager = signInManager;
         }
 
 
@@ -99,41 +93,6 @@ namespace Before.Controllers
                 return Json(new { success = true });
             }
             return PartialView("_EnableModal", model);
-        }
-
-        // Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            var viewModel = new CustomerRegisterVm();
-            return View("Register", viewModel);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(CustomerRegisterVm model)
-        {
-            if (ModelState.IsValid)
-            {
-                await BlobCommandManager.RegisterCustomerAsync(model.ToDto()).ConfigureAwait(true);
-
-                // login hack?
-
-                SignInStatusDto resultDto = await SignInManager.PasswordSignInAsync(model.UserRegistration.UserName, model.UserRegistration.Password, isPersistent: false, shouldLockout: false);
-                //switch (resultDto.ToResult())
-                //{
-                //    case SignInStatus.Success:
-                //        return RedirectToAction("Index", "Home");
-                //    case SignInStatus.Failure:
-                //    default:
-                //        ModelState.AddModelError("", "Invalid login attempt.");
-                //return RedirectToAction("Index", "Home");
-                //}
-                //AddErrors(result);
-                return RedirectToAction("Index", "Home");
-            }
-            return View("Register", model);
         }
         
         // Single

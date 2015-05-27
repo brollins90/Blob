@@ -166,6 +166,8 @@
     <Compile Include="App_Start\Startup.Routes.cs" />
     <Compile Include="App_Start\Startup.SimpleInjector.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CustomerGroupsController.cs" />
+    <Compile Include="Controllers\CustomerRegistrationController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
@@ -258,8 +260,6 @@
     <Content Include="Views\Performance\_DeleteModal.cshtml" />
     <Content Include="Views\Performance\_Page.cshtml" />
     <Content Include="Views\Performance\Single.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\DeviceListItemVm.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\DevicePageVm.cshtml" />
     <Content Include="Views\Shared\_GenericModal.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -276,10 +276,11 @@
     <Content Include="Views\User\Single.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Customer\Register.cshtml" />
+    <Content Include="Views\CustomerRegistration\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\CustomerGroups\" />
     <Folder Include="Views\Role\" />
   </ItemGroup>
   <ItemGroup>
