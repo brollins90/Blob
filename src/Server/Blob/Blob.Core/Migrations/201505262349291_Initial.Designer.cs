@@ -13,7 +13,7 @@ namespace Blob.Core.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201505251831068_Initial"; }
+            get { return "201505262349291_Initial"; }
         }
         
         string IMigrationMetadata.Source

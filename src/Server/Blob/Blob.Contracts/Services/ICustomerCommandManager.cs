@@ -17,7 +17,7 @@ namespace Blob.Contracts.Services
         Task EnableCustomerAsync(EnableCustomerDto dto);
         
         [OperationContract]
-        Task RegisterCustomerAsync(RegisterCustomerDto dto);
+        Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto);
         
         //[OperationContract]
         //Task RemoveUserFromCustomersAsync(Guid userId);

@@ -65,48 +65,9 @@ namespace Blob.Managers.Blob
             _log.Info(string.Format("Enabled customer {0}", dto.CustomerId));
         }
 
-        public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
-            // check if customer exists
-            Customer custExist = await Context.Customers.FindAsync(dto.CustomerId);
-            if (custExist != null)
-            {
-                // fail
-                throw new Exception("Customer exists");
-            }
-
-            // create the customer
-            Customer customer = new Customer
-            {
-                CreateDateUtc = DateTime.UtcNow,
-                Enabled = true,
-                Id = dto.CustomerId,
-                Name = dto.CustomerName
-            };
-            Context.Customers.Add(customer);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            _log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
-
-            User defaultUser = new User
-            {
-                AccessFailedCount = 0,
-                CreateDateUtc = DateTime.UtcNow,
-                CustomerId = dto.DefaultUser.CustomerId,
-                Email = dto.DefaultUser.Email,
-                EmailConfirmed = true,
-                Enabled = true,
-                Id = dto.DefaultUser.UserId,
-                LastActivityDate = DateTime.UtcNow,
-                LockoutEnabled = false,
-                LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
-                PasswordHash = Guid.NewGuid().ToString(),
-                UserName = dto.DefaultUser.UserName
-            };
-            Context.Users.Add(defaultUser);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-
-            //customer.CustomerUsers.Add(new CustomerGroupUser { CustomerId = customer.Id, UserId = defaultUser.Id });
-            //await Context.SaveChangesAsync().ConfigureAwait(false);
+            return await _customerManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
         }
 
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)

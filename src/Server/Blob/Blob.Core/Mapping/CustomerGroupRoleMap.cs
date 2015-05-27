@@ -7,7 +7,7 @@ namespace Blob.Core.Mapping
     {
         public CustomerGroupRoleMap()
         {
-            ToTable("CustomerRoles");
+            ToTable("CustomerGroupRoles");
 
             HasKey(x => new { x.GroupId, x.RoleId });
 

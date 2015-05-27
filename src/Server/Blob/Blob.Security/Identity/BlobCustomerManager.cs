@@ -34,201 +34,71 @@ namespace Blob.Security.Identity
 
         public IQueryable<Customer> Customers { get { return _customerStore.Customers; } }
 
-        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
-        {
-        //    //_log.Info(string.Format("Registering new customer {0}", dto.CustomerName));
-            
-        //    //// check if customer exists
-        //    //Customer custExist = await _customerStore.FindByIdAsync(dto.CustomerId);
-        //    //if (custExist != null)
-        //    //{
-        //    //    return new IdentityResultDto("The Customer already exists");
-        //    //}
 
-        //    //// create the customer
-        //    //Customer customer = new Customer
-        //    //{
-        //    //    CreateDateUtc = DateTime.UtcNow,
-        //    //    Enabled = true,
-        //    //    Id = dto.CustomerId,
-        //    //    Name = dto.CustomerName
-        //    //};
-        //    //await _customerStore.CreateAsync(customer).ConfigureAwait(false);
-        //    //var cust = _customerStore.FindByIdAsync(customer.Id);
-        //    //_log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
-
-
-        //    //// create the default user
-        //    //if (dto.DefaultUser != null)
-        //    //{
-        //    //    _log.Info(string.Format("Creating default user for {0} with name {1}", dto.CustomerName, dto.DefaultUser.UserName));
-        //    //    dto.DefaultUser.CustomerId = customer.Id;
-
-        //    //    IdentityResultDto result = await _userManager.CreateAsync(new UserDto {Email = dto.DefaultUser.Email, Id = dto.DefaultUser.UserId.ToString(), UserName = dto.DefaultUser.UserName}, dto.DefaultUser.Password);
-                
-        //    //    _log.Info(string.Format("User {0} created with id {1}", dto.DefaultUser.UserName, dto.DefaultUser.UserId));
-        //    //}
-
-            return new IdentityResultDto(true);
-        }
 
         public async Task<IdentityResult> DeleteCustomerAsync(Guid customerId)
         {
-            Customer customer = await _customerStore.FindByIdAsync(customerId).ConfigureAwait(true);
+            Customer customer = await _customerStore.FindCustomerByIdAsync(customerId).ConfigureAwait(true);
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync().ConfigureAwait(true);
             return IdentityResult.Success;
         }
 
-        //public async Task<IEnumerable<Role>> GetGroupRolesAsync(Guid groupId)
-        //{
-        //    Customer customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == customerId).ConfigureAwait(true);
-        //    List<Role> allRoles = await _roleManager.Roles.ToListAsync().ConfigureAwait(true);
-        //    List<Role> customerRoles = (from r in allRoles
-        //                             where customer.CustomerRoles
-        //                               .Any(ap => ap.RoleId == r.Id)
-        //                             select r).ToList();
-        //    return customerRoles;
-        //}
+        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        {
 
-        //public async Task<IEnumerable<User>> GetCustomerUsersAsync(Guid customerId)
-        //{
-        //    Customer customer = await FindByIdAsync(customerId).ConfigureAwait(true);
-        //    List<User> users = new List<User>();
-        //    foreach (CustomerGroupUser customerUser in customer.Groups.SelectMany(@group => @group.Users)) {
-        //        User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == customerUser.UserId);
-        //        users.Add(user);
-        //    }
-        //    return users;
-        //}
+            // check if customer exists
+            Customer custExist = await _customerStore.FindCustomerByIdAsync(dto.CustomerId);
+            if (custExist != null)
+            {
+                return new IdentityResultDto("Customer id already exists");
+            }
 
-        //public async Task<IEnumerable<Role>> GetCustomerRolesAsync(Guid customerId)
-        //{
-        //    Customer customer = await FindByIdAsync(customerId).ConfigureAwait(true);
-        //    List<Role> roles = new List<Role>();
-        //    foreach (CustomerGroupRole customerRole in customer.Groups.SelectMany(@group => @group.Roles))
-        //    {
-        //        Role role = await _context.Roles.FirstOrDefaultAsync(u => u.Id == customerRole.RoleId);
-        //        roles.Add(role);
-        //    }
-        //    return roles;
-        //}
+            // create the customer
+            Customer customer = new Customer
+            {
+                CreateDateUtc = DateTime.UtcNow,
+                Enabled = true,
+                Id = dto.CustomerId,
+                Name = dto.CustomerName
+            };
 
-        //public async Task<IEnumerable<CustomerGroup>> GetCustomerGroupsAsync(Guid customerId)
-        //{
-        //    Customer customer = await FindByIdAsync(customerId).ConfigureAwait(true);
-        //    return customer.Groups.ToList();
-        //}
+            await _customerStore.CreateCustomerAsync(customer);
+            _log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
 
-        //public async Task<IEnumerable<CustomerGroup>> GetUserGroupsAsync(Guid userId)
-        //{
-        //    return await (from g in Groups
-        //                  where g.Users
-        //                    .Any(u => u.UserId == userId)
-        //                  select g).ToListAsync().ConfigureAwait(false);
-        //}
+            // create first user
+            User defaultUser = new User
+            {
+                AccessFailedCount = 0,
+                CreateDateUtc = DateTime.UtcNow,
+                CustomerId = dto.DefaultUser.CustomerId,
+                Email = dto.DefaultUser.Email,
+                EmailConfirmed = true,
+                Enabled = true,
+                Id = dto.DefaultUser.UserId,
+                LastActivityDate = DateTime.UtcNow,
+                LockoutEnabled = false,
+                LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
+                PasswordHash = dto.DefaultUser.Password,
+                UserName = dto.DefaultUser.UserName
+            };
+            await _userManager.CreateBlobUserAsync(defaultUser);
 
-        //public async Task<IEnumerable<CustomerRole>> GetCustomerRolesAsync(Guid userId)
-        //{
-        //    IEnumerable<Customer> customers = await this.GetUserGroupsAsync(userId).ConfigureAwait(true);
-        //    List<BlobGroupRole> userGroupRoles = new List<BlobGroupRole>();
-        //    foreach (CustomerGroup group in customers)
-        //    {
-        //        userGroupRoles.AddRange(group.Roles.ToArray());
-        //    }
-        //    return userGroupRoles;
-        //}
 
-        //public async Task<IdentityResult> RefreshUserGroupRolesAsync(Guid userId)
-        //{
-        //    UserDto user = await _userManager.FindByIdAsync(userId).ConfigureAwait(true);
-        //    if (user == null)
-        //    {
-        //        throw new ArgumentNullException("User");
-        //    }
+            // create admin group
+            CustomerGroup adminGroup = new CustomerGroup
+                                       {
+                                           CustomerId = customer.Id,
+                                           Description = "Admins",
+                                           Id = Guid.NewGuid(),
+                                           Name = "Admins"
+                                       };
+            await _customerStore.CreateGroupAsync(adminGroup);
 
-        //    // Remove user from previous roles:
-        //    IList<string> oldUserRoles = await _userManager.GetRolesAsync(userId).ConfigureAwait(true);
-        //    if (oldUserRoles.Count > 0)
-        //    {
-        //        await _userManager.RemoveFromRolesAsync(userId, oldUserRoles.ToArray());
-        //    }
+            // add user to admin group
+            await _customerStore.AddUserAsync(adminGroup, defaultUser.Id);
 
-        //    // Find the roles this user is entitled to from group membership:
-        //    var newGroupRoles = await this.GetCustomerRolesAsync(userId).ConfigureAwait(true);
-
-        //    // Get the damn role names:
-        //    var allRoles = await _roleManager.Roles.ToListAsync().ConfigureAwait(true);
-        //    var addTheseRoles = allRoles.Where(r => newGroupRoles.Any(gr => gr.RoleId == r.Id));
-        //    var roleNames = addTheseRoles.Select(n => n.Name).ToArray();
-
-        //    // Add the user to the proper roles
-        //    await _userManager.AddToRolesAsync(userId, roleNames).ConfigureAwait(true);
-
-        //    return IdentityResult.Success;
-        //}
-
-        //public async Task<IdentityResult> SetGroupRolesAsync(Guid groupId, params string[] roleNames)
-        //{
-        //    // Clear all the roles associated with this group:
-        //    CustomerGroup thisGroup = await FindByIdAsync(groupId);
-        //    thisGroup.Roles.Clear();
-        //    await _context.SaveChangesAsync();
-
-        //    // Add the new roles passed in:
-        //    var newRoles = _roleManager.Roles.Where(r => roleNames.Any(n => n == r.Name));
-        //    foreach (var role in newRoles)
-        //    {
-        //        thisGroup.Roles.Add(new BlobGroupRole
-        //                                {
-        //                                    GroupId = groupId,
-        //                                    RoleId = role.Id
-        //                                });
-        //    }
-        //    await _context.SaveChangesAsync();
-
-        //    // Reset the roles for all affected users:
-        //    foreach (var groupUser in thisGroup.Users)
-        //    {
-        //        await this.RefreshUserGroupRolesAsync(groupUser.UserId);
-        //    }
-        //    return IdentityResult.Success;
-        //}
-
-        //public async Task<IdentityResult> SetUserGroupsAsync(Guid userId, params Guid[] groupIds)
-        //{
-        //    // Clear current group membership:
-        //    var currentGroups = await GetUserGroupsAsync(userId);
-        //    foreach (var group in currentGroups)
-        //    {
-        //        group.Users.Remove(group.Users.FirstOrDefault(gr => gr.UserId == userId));
-        //    }
-        //    await _context.SaveChangesAsync();
-
-        //    // Add the user to the new groups:
-        //    foreach (Guid groupId in groupIds)
-        //    {
-        //        CustomerGroup newGroup = await this.FindByIdAsync(groupId);
-        //        newGroup.Users.Add(new BlobUserGroup
-        //        {
-        //            UserId = userId,
-        //            GroupId = groupId
-        //        });
-        //    }
-        //    await _context.SaveChangesAsync();
-
-        //    await this.RefreshUserGroupRolesAsync(userId);
-        //    return IdentityResult.Success;
-        //}
-
-        //public async Task<IdentityResult> UpdateGroupAsync(CustomerGroup group)
-        //{
-        //    await _customerStore.UpdateAsync(group).ConfigureAwait(true);
-        //    foreach (var groupUser in group.Users)
-        //    {
-        //        await this.RefreshUserGroupRolesAsync(groupUser.UserId).ConfigureAwait(true);
-        //    }
-        //    return IdentityResult.Success;
-        //}
+            return new IdentityResultDto(true);
+        }
     }
 }

@@ -26,11 +26,11 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "create")]
-        public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "customer", dto.CustomerId.ToString());
-            await _blobCommandManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]

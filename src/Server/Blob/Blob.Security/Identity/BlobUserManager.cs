@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity.Utilities;
 using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Core.Identity;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Security.Authentication;
@@ -1333,6 +1331,29 @@ namespace Blob.Security.Identity
         #endregion
 
 
+
+
+        public async Task CreateBlobUserAsync(User user)
+        {
+            _log.Debug(string.Format("CreateBlobUserAsync({0})", user));
+            ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            //await UpdateSecurityStampInternal(user).WithCurrentCulture();
+            //var result = await UserValidator.ValidateAsync(user).WithCurrentCulture();
+            //if (!result.Succeeded)
+            //{
+            //    return result.ToDto();
+            //}
+            //if (UserLockoutEnabledByDefault && SupportsUserLockout)
+            //{
+            //    await GetUserLockoutStore().SetLockoutEnabledAsync(user, true).WithCurrentCulture();
+            //}
+            await Store.CreateAsync(user).WithCurrentCulture();
+            //return IdentityResult.Success.ToDto();
+        }
 
         public async Task<bool> CheckUserNamePasswordAsync(string userName, string password)
         {

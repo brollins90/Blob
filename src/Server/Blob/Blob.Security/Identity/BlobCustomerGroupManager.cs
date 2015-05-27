@@ -1,0 +1,199 @@
+﻿using Microsoft.AspNet.Identity;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using Blob.Core.Identity.Store;
+using Blob.Core.Models;
+using Blob.Security.Identity;
+
+namespace Blob.Core.Services
+{
+    public class BlobCustomerGroupManager : ICustomerGroupManager
+    {
+        private readonly BlobCustomerStore _customerStore;
+        private readonly BlobDbContext _db;
+        private readonly BlobUserManager _userManager;
+        private readonly BlobRoleManager _roleManager;
+
+        public BlobCustomerGroupManager(BlobCustomerStore customerStore, BlobDbContext context, BlobUserManager userManager, BlobRoleManager roleManager)
+        {
+            _db = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _customerStore = customerStore;
+        }
+
+
+        public IQueryable<CustomerGroup> Groups { get { return _customerStore.Groups; } }
+
+        public async Task<IdentityResult> ClearUserGroupsAsync(Guid userId)
+        {
+            return await this.SetUserGroupsAsync(userId, new Guid[] { });
+        }
+
+        public async Task<IdentityResult> CreateGroupAsync(CustomerGroup group)
+        {
+            await _customerStore.CreateGroupAsync(group);
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> DeleteGroupAsync(Guid groupId)
+        {
+            var group = await this.FindGroupByIdAsync(groupId);
+            if (group == null)
+            {
+                throw new ArgumentNullException("User");
+            }
+
+            var currentGroupMembers = (await this.GetGroupUsersAsync(groupId)).ToList();
+            // remove the roles from the group:
+            group.Roles.Clear();
+
+            // Remove all the users:
+            group.Users.Clear();
+
+            // Remove the group itself:
+            await _customerStore.DeleteGroupAsync(group);
+
+            // Reset all the user roles:
+            foreach (var user in currentGroupMembers)
+            {
+                await this.RefreshUserGroupRolesAsync(user.Id);
+            }
+            return IdentityResult.Success;
+        }
+
+        public async Task<CustomerGroup> FindGroupByIdAsync(Guid id)
+        {
+            return await _customerStore.FindGroupByIdAsync(id).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<Role>> GetGroupRolesAsync(Guid groupId)
+        {
+            var grp = await FindGroupByIdAsync(groupId).ConfigureAwait(true);
+            var roles = await _roleManager.Roles.ToListAsync().ConfigureAwait(true);
+            var groupRoles = (from r in roles
+                              where grp.Roles.Any(ap => ap.RoleId == r.Id)
+                              select r).ToList();
+            return groupRoles;
+        }
+
+        public async Task<IEnumerable<User>> GetGroupUsersAsync(Guid groupId)
+        {
+            var group = await this.FindGroupByIdAsync(groupId).ConfigureAwait(true);
+            var users = new List<User>();
+            foreach (var groupUser in group.Users)
+            {
+                var user = await _db.Users
+                    .FirstOrDefaultAsync(u => u.Id == groupUser.UserId);
+                users.Add(user);
+            }
+            return users;
+        }
+
+        public async Task<IEnumerable<CustomerGroupRole>> GetUserGroupRolesAsync(Guid userId)
+        {
+            var userGroups = await this.GetUserGroupsAsync(userId).ConfigureAwait(true);
+            var userGroupRoles = new List<CustomerGroupRole>();
+            foreach (var group in userGroups)
+            {
+                userGroupRoles.AddRange(group.Roles.ToArray());
+            }
+            return userGroupRoles;
+        }
+
+        public async Task<IEnumerable<CustomerGroup>> GetUserGroupsAsync(Guid userId)
+        {
+            var result = new List<CustomerGroup>();
+            var userGroups = (from g in this.Groups
+                              where g.Users.Any(u => u.UserId == userId)
+                              select g).ToListAsync();
+            return await userGroups;
+        }
+
+        public async Task<IdentityResult> RefreshUserGroupRolesAsync(Guid userId)
+        {
+            //var user = await _userManager.FindByIdAsync(userId);
+            //if (user == null)
+            //{
+            //    throw new ArgumentNullException("User");
+            //}
+            //// Remove user from previous roles:
+            //var oldUserRoles = await _userManager.GetRolesAsync(userId);
+            //if (oldUserRoles.Count > 0)
+            //{
+            //    await _userManager.RemoveFromRolesAsync(userId, oldUserRoles.ToArray());
+            //}
+
+            //// Find the roles this user is entitled to from group membership:
+            //var newGroupRoles = await this.GetUserGroupRolesAsync(userId);
+
+            //// Get the damn role names:
+            //var allRoles = await _roleManager.Roles.ToListAsync();
+            //var addTheseRoles = allRoles.Where(r => newGroupRoles.Any(gr => gr.RoleId == r.Id));
+            //var roleNames = addTheseRoles.Select(n => n.Name).ToArray();
+
+            //// Add the user to the proper roles
+            //await _userManager.AddToRolesAsync(userId, roleNames);
+
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> SetGroupRolesAsync(Guid groupId, params string[] roleNames)
+        {
+            // Clear all the roles associated with this group:
+            CustomerGroup thisGroup = await this.FindGroupByIdAsync(groupId);
+            thisGroup.Roles.Clear();
+            await _db.SaveChangesAsync();
+
+            // Add the new roles passed in:
+            var newRoles = _roleManager.Roles.Where(r => roleNames.Any(n => n == r.Name));
+            foreach (var role in newRoles)
+            {
+                thisGroup.Roles.Add(new CustomerGroupRole { GroupId = groupId, RoleId = role.Id });
+            }
+            await _db.SaveChangesAsync();
+
+            // Reset the roles for all affected users:
+            foreach (var groupUser in thisGroup.Users)
+            {
+                await this.RefreshUserGroupRolesAsync(groupUser.UserId);
+            }
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> SetUserGroupsAsync(Guid userId, params Guid[] groupIds)
+        {
+            // Clear current group membership:
+            var currentGroups = await this.GetUserGroupsAsync(userId);
+            foreach (var group in currentGroups)
+            {
+                group.Users.Remove(group.Users.FirstOrDefault(gr => gr.UserId == userId));
+            }
+            await _db.SaveChangesAsync();
+
+            // Add the user to the new groups:
+            foreach (var groupId in groupIds)
+            {
+                var newGroup = await this.FindGroupByIdAsync(groupId);
+                newGroup.Users.Add(new CustomerGroupUser { UserId = userId, GroupId = groupId });
+            }
+            await _db.SaveChangesAsync();
+
+            await this.RefreshUserGroupRolesAsync(userId);
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> UpdateGroupAsync(CustomerGroup group)
+        {
+            await _customerStore.UpdateGroupAsync(group);
+            foreach (var groupUser in group.Users)
+            {
+                await this.RefreshUserGroupRolesAsync(groupUser.UserId);
+            }
+            return IdentityResult.Success;
+        }
+    }
+}

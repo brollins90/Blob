@@ -6,10 +6,10 @@ namespace Blob.Core.Identity.Store
 {
     public interface ICustomerStore : IDisposable
     {
-        Task CreateAsync(Customer customer);
-        Task DeleteAsync(Customer customer);
-        Task<Customer> FindByIdAsync(Guid customerId);
-        Task<Customer> FindByNameAsync(string customerName);
-        Task UpdateAsync(Customer customer);
+        Task CreateCustomerAsync(Customer customer);
+        Task DeleteCustomerAsync(Customer customer);
+        Task<Customer> FindCustomerByIdAsync(Guid customerId);
+        Task<Customer> FindCustomerByNameAsync(string customerName);
+        Task UpdateCustomerAsync(Customer customer);
     }
 }

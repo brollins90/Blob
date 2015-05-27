@@ -8,7 +8,7 @@ using Blob.Core.Models;
 
 namespace Blob.Core.Identity.Store
 {
-    public class BlobCustomerStore : ICustomerStore, ICustomerGroupStore, ICustomerGroupRoleStore
+    public class BlobCustomerStore : ICustomerStore, ICustomerGroupStore, ICustomerGroupRoleStore, ICustomerGroupUserStore
     {
         private bool _disposed;
 
@@ -34,10 +34,11 @@ namespace Blob.Core.Identity.Store
         }
 
         public IQueryable<Customer> Customers { get { return _customerStore.EntitySet; } }
+        public IQueryable<CustomerGroup> Groups { get { return _customerGroupStore.EntitySet; } }
 
         public DbContext Context { get; private set; }
 
-        public virtual async Task CreateAsync(Customer customer)
+        public virtual async Task CreateCustomerAsync(Customer customer)
         {
             ThrowIfDisposed();
             if (customer == null)
@@ -47,7 +48,7 @@ namespace Blob.Core.Identity.Store
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public virtual async Task DeleteAsync(Customer customer)
+        public virtual async Task DeleteCustomerAsync(Customer customer)
         {
             ThrowIfDisposed();
             if (customer == null)
@@ -57,19 +58,19 @@ namespace Blob.Core.Identity.Store
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public Task<Customer> FindByIdAsync(Guid customerId)
+        public Task<Customer> FindCustomerByIdAsync(Guid customerId)
         {
             ThrowIfDisposed();
             return _customerStore.GetByIdAsync(customerId);
         }
 
-        public Task<Customer> FindByNameAsync(string customerName)
+        public Task<Customer> FindCustomerByNameAsync(string customerName)
         {
             ThrowIfDisposed();
             return _customerStore.EntitySet.FirstOrDefaultAsync(u => u.Name.ToUpper().Equals(customerName.ToUpper()));
         }
 
-        public virtual async Task UpdateAsync(Customer customer)
+        public virtual async Task UpdateCustomerAsync(Customer customer)
         {
             ThrowIfDisposed();
             if (customer == null)
@@ -103,7 +104,7 @@ namespace Blob.Core.Identity.Store
             //_customerStore = null;
         }
 
-        public async Task CreateAsync(CustomerGroup group)
+        public async Task CreateGroupAsync(CustomerGroup group)
         {
             ThrowIfDisposed();
             if (group == null)
@@ -113,7 +114,7 @@ namespace Blob.Core.Identity.Store
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task DeleteAsync(CustomerGroup group)
+        public async Task DeleteGroupAsync(CustomerGroup group)
         {
             ThrowIfDisposed();
             if (group == null)
@@ -123,13 +124,13 @@ namespace Blob.Core.Identity.Store
             await Context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        Task<CustomerGroup> ICustomerGroupStore.FindByIdAsync(Guid groupId)
+        public async Task<CustomerGroup> FindGroupByIdAsync(Guid groupId)
         {
             ThrowIfDisposed();
-            return _customerGroupStore.GetByIdAsync(groupId);
+            return await _customerGroupStore.GetByIdAsync(groupId);
         }
 
-        public async Task UpdateAsync(CustomerGroup group)
+        public async Task UpdateGroupAsync(CustomerGroup group)
         {
             ThrowIfDisposed();
             if (group == null)
@@ -218,6 +219,39 @@ namespace Blob.Core.Identity.Store
                 return await _customerGroupRoles.AnyAsync(ur => ur.RoleId.Equals(roleId) && ur.GroupId.Equals(groupId));
             }
             return false;
+        }
+
+        public async Task AddUserAsync(CustomerGroup group, Guid userId)
+        {
+            ThrowIfDisposed();
+            if (group == null)
+            {
+                throw new ArgumentNullException("group");
+            }
+            var user = await _userStore.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "IdentityResources.UserNotFound", ""));
+            }
+
+            var ur = new CustomerGroupUser { GroupId = group.Id, UserId = user.Id };
+            _customerGroupUsers.Add(ur);
+        }
+
+        public Task RemoveUserAsync(CustomerGroup group, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<User>> GetUsersAsync(CustomerGroup group)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> HasUserAsync(CustomerGroup group, Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -93,6 +93,23 @@ namespace Blob.Core.Migrations
             context.Set<Customer>().AddOrUpdate(x => x.Name, custBeforeService);
             context.SaveChanges();
 
+            CustomerGroup beforeAdmins = new CustomerGroup
+            {
+                CustomerId = custBeforeService.Id,
+                Description = "Admins",
+                Id = Guid.Parse("91077FA4-C80D-4447-A518-5B594EA01253"),
+                Name = "Admins"
+            };
+            CustomerGroup beforeViewers = new CustomerGroup
+            {
+                CustomerId = custBeforeService.Id,
+                Description = "Viewers",
+                Id = Guid.Parse("A75FCB3D-A9C9-4214-9176-185F7275E8EE"),
+                Name = "Viewers"
+            };
+            context.Set<CustomerGroup>().AddOrUpdate(x => new { x.CustomerId, x.Name }, beforeAdmins, beforeViewers);
+            context.SaveChanges();
+
 
             // User
             User userBeforeService1 = new User
@@ -113,13 +130,6 @@ namespace Blob.Core.Migrations
             context.Set<User>().AddOrUpdate(x => x.UserName, userBeforeService1);
             context.SaveChanges();
 
-            //custBeforeService.CustomerUsers = new List<CustomerGroupUser>
-            //                              {
-            //                                  new CustomerGroupUser { CustomerId = custBeforeService.Id, UserId = userBeforeService1.Id }
-            //                              };
-            ////context.Entry(custBeforeService).State = EntityState.Modified;
-            context.SaveChanges();
-
             Customer rritc = new Customer
             {
                 CreateDateUtc = DateTime.Parse("2015-04-01"),
@@ -129,6 +139,25 @@ namespace Blob.Core.Migrations
             };
             context.Set<Customer>().AddOrUpdate(x => x.Name, rritc);
             context.SaveChanges();
+
+            CustomerGroup rritcAdmins = new CustomerGroup
+            {
+                CustomerId = rritc.Id,
+                Description = "Admins",
+                Id = Guid.Parse("E4032D40-12E3-450F-962B-CD9D55AC77D8"),
+                Name = "Admins"
+            };
+            CustomerGroup rritcViewers = new CustomerGroup
+            {
+                CustomerId = rritc.Id,
+                Description = "Viewers",
+                Id = Guid.Parse("9F134DF4-8E64-497D-8D80-199B30C76D60"),
+                Name = "Viewers"
+            };
+            context.Set<CustomerGroup>().AddOrUpdate(x => new { x.CustomerId, x.Name }, rritcAdmins, rritcViewers);
+            context.SaveChanges();
+
+
 
             User rritc1 = new User
             {
@@ -147,6 +176,19 @@ namespace Blob.Core.Migrations
             };
             context.Set<User>().AddOrUpdate(x => x.UserName, rritc1);
             context.SaveChanges();
+
+
+            List<CustomerGroupUser> groupUsers = new List<CustomerGroupUser>
+                                                 {
+                                                     new CustomerGroupUser { GroupId = rritcAdmins.Id, UserId = rritc1.Id }
+                                                 };
+            foreach (var groupUser in groupUsers)
+            {
+                context.Set<CustomerGroupUser>().AddOrUpdate(groupUser);
+                context.SaveChanges();
+                
+            }
+
 
             // User
             User testUser1 = new User
@@ -169,16 +211,16 @@ namespace Blob.Core.Migrations
 
             // Devices
             Device device1 = new Device
-                                 {
-                                     AlertLevel = 0,
-                                     CreateDateUtc = DateTime.Parse("2015-04-01"),
-                                     CustomerId = rritc.Id,
-                                     DeviceName = "Test device 1",
-                                     DeviceTypeId = testDeviceTypeWinDesktop.Id,
-                                     Enabled = true,
-                                     Id = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
-                                     LastActivityDateUtc = DateTime.Parse("2015-04-14")
-                                 };
+            {
+                AlertLevel = 0,
+                CreateDateUtc = DateTime.Parse("2015-04-01"),
+                CustomerId = rritc.Id,
+                DeviceName = "Test device 1",
+                DeviceTypeId = testDeviceTypeWinDesktop.Id,
+                Enabled = true,
+                Id = Guid.Parse("1c6f0042-750e-4f5a-b1fa-41dd4ca9368a"),
+                LastActivityDateUtc = DateTime.Parse("2015-04-14")
+            };
         }
 
     }

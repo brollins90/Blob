@@ -20,16 +20,17 @@ namespace Before.Controllers
             SignInManager = signInManager;
         }
 
-        // Login
+        //
+        // GET: /Account/Login
         [AllowAnonymous]
-        [HttpGet]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
-        // Login
+        //
+        // POST: /Account/Login
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]

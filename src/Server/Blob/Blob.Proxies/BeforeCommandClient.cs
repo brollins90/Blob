@@ -33,16 +33,17 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             try
             {
-                await Channel.RegisterCustomerAsync(dto).ConfigureAwait(false);
+                return await Channel.RegisterCustomerAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return null;
         }
 
         //public async Task RemoveUserFromCustomersAsync(Guid userId)

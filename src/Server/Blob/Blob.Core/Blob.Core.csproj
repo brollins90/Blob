@@ -59,8 +59,6 @@
     <Compile Include="Identity\Store\ICustomerGroupRoleStore.cs" />
     <Compile Include="Identity\Store\ICustomerGroupStore.cs" />
     <Compile Include="Identity\Store\ICustomerStore.cs" />
-    <Compile Include="Identity\Store\IGroupStore.cs" />
-    <Compile Include="Identity\Store\IQueryableGroupStore.cs" />
     <Compile Include="Identity\Models\GenericGroup.cs" />
     <Compile Include="Identity\Models\GenericGroupRole.cs" />
     <Compile Include="Identity\Models\GenericRole.cs" />
@@ -92,9 +90,9 @@
     <Compile Include="Mapping\RoleMap.cs" />
     <Compile Include="Mapping\StatusRecordMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
-    <Compile Include="Migrations\Initial.cs" />
-    <Compile Include="Migrations\Initial.Designer.cs">
-      <DependentUpon>Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201505262349291_Initial.cs" />
+    <Compile Include="Migrations\201505262349291_Initial.Designer.cs">
+      <DependentUpon>201505262349291_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuditRecord.cs" />
@@ -120,17 +118,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Initial.resx">
-      <DependentUpon>Initial.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505262349291_Initial.resx">
+      <DependentUpon>201505262349291_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

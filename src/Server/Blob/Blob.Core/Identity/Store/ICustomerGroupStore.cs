@@ -6,9 +6,9 @@ namespace Blob.Core.Identity.Store
 {
     public interface ICustomerGroupStore
     {
-        Task CreateAsync(CustomerGroup group);
-        Task DeleteAsync(CustomerGroup group);
-        Task<CustomerGroup> FindByIdAsync(Guid groupId);
-        Task UpdateAsync(CustomerGroup group);
+        Task CreateGroupAsync(CustomerGroup group);
+        Task DeleteGroupAsync(CustomerGroup group);
+        Task<CustomerGroup> FindGroupByIdAsync(Guid groupId);
+        Task UpdateGroupAsync(CustomerGroup group);
     }
 }

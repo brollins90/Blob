@@ -13,10 +13,12 @@ namespace Blob.Core.Mapping
 
             HasKey(x => x.Id);
 
-            Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired();
-            Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
+            Property(x => x.Id).HasColumnType("uniqueidentifier").IsRequired()
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                 new IndexAnnotation(new IndexAttribute("IX_CustomerGroupName", 1) { IsUnique = true }));
+            Property(x => x.Name).HasColumnType("nvarchar").HasMaxLength(256).IsRequired()
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName,
+                new IndexAnnotation(new IndexAttribute("IX_CustomerGroupName", 2) { IsUnique = true }));
             Property(x => x.Description).HasColumnType("nvarchar").HasMaxLength(256).IsRequired();
 
             HasMany(x => x.Roles).WithRequired().HasForeignKey(r => r.GroupId);

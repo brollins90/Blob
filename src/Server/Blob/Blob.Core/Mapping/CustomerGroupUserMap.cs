@@ -7,7 +7,7 @@ namespace Blob.Core.Mapping
     {
         public CustomerGroupUserMap()
         {
-            ToTable("CustomerUsers");
+            ToTable("CustomerGroupUsers");
 
             HasKey(x => new { x.GroupId, x.UserId });
 

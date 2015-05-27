@@ -34,28 +34,6 @@ namespace Blob.Core.Migrations
                 .Index(t => t.Name, unique: true, name: "IX_CustomerName");
             
             CreateTable(
-                "dbo.CustomerRoles",
-                c => new
-                    {
-                        CustomerId = c.Guid(nullable: false),
-                        RoleId = c.Guid(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.CustomerId, t.RoleId })
-                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
-                .Index(t => t.CustomerId);
-            
-            CreateTable(
-                "dbo.CustomerUsers",
-                c => new
-                    {
-                        CustomerId = c.Guid(nullable: false),
-                        UserId = c.Guid(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.CustomerId, t.UserId })
-                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
-                .Index(t => t.CustomerId);
-            
-            CreateTable(
                 "dbo.Devices",
                 c => new
                     {
@@ -126,6 +104,42 @@ namespace Blob.Core.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Devices", t => t.DeviceId, cascadeDelete: true)
                 .Index(t => t.DeviceId);
+            
+            CreateTable(
+                "dbo.CustomerGroups",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        CustomerId = c.Guid(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 256),
+                        Description = c.String(nullable: false, maxLength: 256),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Customers", t => t.CustomerId, cascadeDelete: true)
+                .Index(t => new { t.Id, t.Name }, unique: true, name: "IX_CustomerGroupName")
+                .Index(t => t.CustomerId);
+            
+            CreateTable(
+                "dbo.CustomerGroupRoles",
+                c => new
+                    {
+                        GroupId = c.Guid(nullable: false),
+                        RoleId = c.Guid(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.GroupId, t.RoleId })
+                .ForeignKey("dbo.CustomerGroups", t => t.GroupId, cascadeDelete: true)
+                .Index(t => t.GroupId);
+            
+            CreateTable(
+                "dbo.CustomerGroupUsers",
+                c => new
+                    {
+                        GroupId = c.Guid(nullable: false),
+                        UserId = c.Guid(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.GroupId, t.UserId })
+                .ForeignKey("dbo.CustomerGroups", t => t.GroupId, cascadeDelete: true)
+                .Index(t => t.GroupId);
             
             CreateTable(
                 "dbo.Roles",
@@ -221,13 +235,14 @@ namespace Blob.Core.Migrations
             DropForeignKey("dbo.Users", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.UserClaims", "UserId", "dbo.Users");
             DropForeignKey("dbo.UserRoles", "RoleId", "dbo.Roles");
+            DropForeignKey("dbo.CustomerGroupUsers", "GroupId", "dbo.CustomerGroups");
+            DropForeignKey("dbo.CustomerGroupRoles", "GroupId", "dbo.CustomerGroups");
+            DropForeignKey("dbo.CustomerGroups", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.PerformanceRecords", "StatusId", "dbo.StatusRecords");
             DropForeignKey("dbo.StatusRecords", "DeviceId", "dbo.Devices");
             DropForeignKey("dbo.PerformanceRecords", "DeviceId", "dbo.Devices");
             DropForeignKey("dbo.Devices", "DeviceTypeId", "dbo.DeviceTypes");
             DropForeignKey("dbo.Devices", "CustomerId", "dbo.Customers");
-            DropForeignKey("dbo.CustomerUsers", "CustomerId", "dbo.Customers");
-            DropForeignKey("dbo.CustomerRoles", "CustomerId", "dbo.Customers");
             DropIndex("dbo.UserLogins", new[] { "User_Id" });
             DropIndex("dbo.UserClaims", new[] { "UserId" });
             DropIndex("dbo.Users", "IX_UserUsername");
@@ -235,14 +250,16 @@ namespace Blob.Core.Migrations
             DropIndex("dbo.UserRoles", new[] { "UserId" });
             DropIndex("dbo.UserRoles", new[] { "RoleId" });
             DropIndex("dbo.Roles", "IX_RoleName");
+            DropIndex("dbo.CustomerGroupUsers", new[] { "GroupId" });
+            DropIndex("dbo.CustomerGroupRoles", new[] { "GroupId" });
+            DropIndex("dbo.CustomerGroups", new[] { "CustomerId" });
+            DropIndex("dbo.CustomerGroups", "IX_CustomerGroupName");
             DropIndex("dbo.StatusRecords", new[] { "DeviceId" });
             DropIndex("dbo.PerformanceRecords", new[] { "StatusId" });
             DropIndex("dbo.PerformanceRecords", new[] { "DeviceId" });
             DropIndex("dbo.DeviceTypes", "IX_DeviceTypeName");
             DropIndex("dbo.Devices", new[] { "CustomerId" });
             DropIndex("dbo.Devices", new[] { "DeviceTypeId" });
-            DropIndex("dbo.CustomerUsers", new[] { "CustomerId" });
-            DropIndex("dbo.CustomerRoles", new[] { "CustomerId" });
             DropIndex("dbo.Customers", "IX_CustomerName");
             DropTable("dbo.BlobPermissions");
             DropTable("dbo.UserLogins");
@@ -250,12 +267,13 @@ namespace Blob.Core.Migrations
             DropTable("dbo.Users");
             DropTable("dbo.UserRoles");
             DropTable("dbo.Roles");
+            DropTable("dbo.CustomerGroupUsers");
+            DropTable("dbo.CustomerGroupRoles");
+            DropTable("dbo.CustomerGroups");
             DropTable("dbo.StatusRecords");
             DropTable("dbo.PerformanceRecords");
             DropTable("dbo.DeviceTypes");
             DropTable("dbo.Devices");
-            DropTable("dbo.CustomerUsers");
-            DropTable("dbo.CustomerRoles");
             DropTable("dbo.Customers");
             DropTable("dbo.AuditRecords");
         }
