@@ -9,31 +9,33 @@ namespace Blob.Proxies
     {
         public BeforeCommandClient(string endpointName, string username, string password) : base(endpointName, username, password) { }
 
-        public async Task DisableCustomerAsync(DisableCustomerDto dto)
+        public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
         {
             try
             {
-                await Channel.DisableCustomerAsync(dto).ConfigureAwait(false);
+                return await Channel.DisableCustomerAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task EnableCustomerAsync(EnableCustomerDto dto)
+        public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
         {
             try
             {
-                await Channel.EnableCustomerAsync(dto).ConfigureAwait(false);
+                return await Channel.EnableCustomerAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             try
             {
@@ -43,67 +45,59 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return null;
+            return new BlobResultDto("Client proxy error.");
         }
 
-        //public async Task RemoveUserFromCustomersAsync(Guid userId)
-        //{
-        //    try
-        //    {
-        //        await Channel.EnableCustomerAsync(dto).ConfigureAwait(false);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HandleError(ex);
-        //    }
-        //}
-
-        public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
+        public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             try
             {
-                await Channel.UpdateCustomerAsync(dto).ConfigureAwait(false);
+                return await Channel.UpdateCustomerAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task IssueCommandAsync(IssueDeviceCommandDto dto)
+        public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
         {
             try
             {
-                await Channel.IssueCommandAsync(dto).ConfigureAwait(false);
+                return await Channel.IssueCommandAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task DisableDeviceAsync(DisableDeviceDto dto)
+        public async Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto)
         {
             try
             {
-                await Channel.DisableDeviceAsync(dto).ConfigureAwait(false);
+                return await Channel.DisableDeviceAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task EnableDeviceAsync(EnableDeviceDto dto)
+        public async Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto)
         {
             try
             {
-                await Channel.EnableDeviceAsync(dto).ConfigureAwait(false);
+                return await Channel.EnableDeviceAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
         public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
@@ -116,199 +110,215 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return null;
+            return new RegisterDeviceResponseDto();
         }
 
-        public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
+        public async Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto)
         {
             try
             {
-                await Channel.UpdateDeviceAsync(dto).ConfigureAwait(false);
+                return await Channel.UpdateDeviceAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
+        public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
         {
             try
             {
-                await Channel.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
+                return await Channel.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        public async Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
         {
             try
             {
-                await Channel.DeletePerformanceRecordAsync(dto).ConfigureAwait(false);
+                return await Channel.DeletePerformanceRecordAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task AddStatusRecordAsync(AddStatusRecordDto dto)
+        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
         {
             try
             {
-                await Channel.AddStatusRecordAsync(dto).ConfigureAwait(false);
+                return await Channel.AddStatusRecordAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        public async Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
             try
             {
-                await Channel.DeleteStatusRecordAsync(dto).ConfigureAwait(false);
+                return await Channel.DeleteStatusRecordAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task CreateUserAsync(CreateUserDto dto)
+        public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
         {
             try
             {
-                await Channel.CreateUserAsync(dto).ConfigureAwait(false);
+                return await Channel.CreateUserAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task DisableUserAsync(DisableUserDto dto)
+        public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
         {
             try
             {
-                await Channel.DisableUserAsync(dto).ConfigureAwait(false);
+                return await Channel.DisableUserAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task EnableUserAsync(EnableUserDto dto)
+        public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
         {
             try
             {
-                await Channel.EnableUserAsync(dto).ConfigureAwait(false);
+                return await Channel.EnableUserAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task UpdateUserAsync(UpdateUserDto dto)
+        public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
         {
             try
             {
-                await Channel.UpdateUserAsync(dto).ConfigureAwait(false);
+                return await Channel.UpdateUserAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
             try
             {
-                await Channel.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
             try
             {
-                await Channel.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
             try
             {
-                await Channel.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
             try
             {
-                await Channel.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
             try
             {
-                await Channel.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
             try
             {
-                await Channel.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
 
-        public async Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             try
             {
-                await Channel.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+                return await Channel.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+            return new BlobResultDto("Client proxy error.");
         }
     }
 }

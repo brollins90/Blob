@@ -36,22 +36,22 @@ namespace Blob.Security.Identity
 
 
 
-        public async Task<IdentityResult> DeleteCustomerAsync(Guid customerId)
+        public async Task<BlobResultDto> DeleteCustomerAsync(Guid customerId)
         {
             Customer customer = await _customerStore.FindCustomerByIdAsync(customerId).ConfigureAwait(true);
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync().ConfigureAwait(true);
-            return IdentityResult.Success;
+            return BlobResultDto.Success;
         }
 
-        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
 
             // check if customer exists
             Customer custExist = await _customerStore.FindCustomerByIdAsync(dto.CustomerId);
             if (custExist != null)
             {
-                return new IdentityResultDto("Customer id already exists");
+                return new BlobResultDto("Customer id already exists");
             }
 
             // create the customer
@@ -98,7 +98,7 @@ namespace Blob.Security.Identity
             // add user to admin group
             await _customerStore.AddUserAsync(adminGroup, defaultUser.Id);
 
-            return new IdentityResultDto(true);
+            return BlobResultDto.Success;
         }
     }
 }

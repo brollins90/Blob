@@ -8,15 +8,15 @@ namespace Blob.Contracts.Services
     public interface ICustomerCommandManager
     {
         [OperationContract]
-        Task DisableCustomerAsync(DisableCustomerDto dto);
+        Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto);
         
         [OperationContract]
-        Task EnableCustomerAsync(EnableCustomerDto dto);
+        Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto);
         
         [OperationContract]
-        Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto);
+        Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto);
 
         [OperationContract]
-        Task UpdateCustomerAsync(UpdateCustomerDto dto);
+        Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto);
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
@@ -16,5 +18,8 @@ namespace Blob.Contracts.Models.ViewModels
         [Display(Name = "Name")]
         [Required]
         public string Name { get; set; }
+
+        [DataMember]
+        public IEnumerable<string> Users { get; set; }
     }
 }

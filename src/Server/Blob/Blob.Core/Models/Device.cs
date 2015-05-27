@@ -5,6 +5,12 @@ namespace Blob.Core.Models
 {
     public class Device
     {
+        public Device()
+        {
+            StatusRecords = new List<StatusRecord>();
+            PerformanceRecords = new List<PerformanceRecord>();
+        }
+
         public Guid Id { get; set; }
         public string DeviceName { get; set; }
         public DateTime LastActivityDateUtc { get; set; }

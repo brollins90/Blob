@@ -30,6 +30,8 @@ namespace Blob.Managers.Blob
             _log = log;
             _log.Debug("Constructing BlobQueryManager");
             Context = context;
+            _customerManager = customerManager;
+            _customerGroupManager = customerGroupManager;
         }
         public BlobDbContext Context { get; private set; }
 
@@ -552,8 +554,8 @@ namespace Blob.Managers.Blob
         public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
         {
             CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
-            var roles = await _customerGroupManager.GetGroupRolesAsync(groupId);
-            var users = await _customerGroupManager.GetGroupUsersAsync(groupId);
+            IEnumerable<Role> roles = await _customerGroupManager.GetGroupRolesAsync(groupId);
+            IEnumerable<User> users = await _customerGroupManager.GetGroupUsersAsync(groupId);
             return new CustomerGroupSingleVm
             {
                 CustomerId = group.CustomerId,
@@ -572,6 +574,7 @@ namespace Blob.Managers.Blob
             CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
             return new CustomerGroupUpdateVm
                    {
+                       CustomerId = group.CustomerId,
                        Description = group.Description,
                        GroupId = group.Id,
                        Name = group.Name

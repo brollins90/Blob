@@ -12,39 +12,38 @@ namespace Blob.Contracts.ServiceContracts
     {
         // Commands
         [OperationContract]
-        Task IssueCommandAsync(IssueDeviceCommandDto dto);
+        Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto);
 
         // Device
         [OperationContract]
-        Task DisableDeviceAsync(DisableDeviceDto dto);
+        Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto);
         [OperationContract]
-        Task EnableDeviceAsync(EnableDeviceDto dto);
+        Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto);
         [OperationContract]
         Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto);
         [OperationContract]
-        Task UpdateDeviceAsync(UpdateDeviceDto dto);
+        Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto);
 
         // PerformanceRecord
         [OperationContract]
-        Task AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData);
+        Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData);
         [OperationContract]
-        Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
+        Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
 
         // StatusRecord
         [OperationContract]
-        Task AddStatusRecordAsync(AddStatusRecordDto statusData);
+        Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto statusData);
         [OperationContract]
-        Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
+        Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
 
         // User
         [OperationContract]
-        Task CreateUserAsync(CreateUserDto dto);
+        Task<BlobResultDto> CreateUserAsync(CreateUserDto dto);
         [OperationContract]
-        Task DisableUserAsync(DisableUserDto dto);
+        Task<BlobResultDto> DisableUserAsync(DisableUserDto dto);
         [OperationContract]
-        Task EnableUserAsync(EnableUserDto dto);
+        Task<BlobResultDto> EnableUserAsync(EnableUserDto dto);
         [OperationContract]
-        Task UpdateUserAsync(UpdateUserDto dto);
-
+        Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto);
     }
 }

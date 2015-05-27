@@ -6,6 +6,7 @@
 function beforeBindings() {
     bindAllModals();
     //bindPaginators();
+    bindPaginator("#customerGroupPageContentPager a[href]", "#customerGroupPageContent");
     bindPaginator("#dashDevicesLargeContentPager a[href]", "#dashDevicesLargeContent");
     bindPaginator("#devicePageContentPager a[href]", "#devicePageContent");
     bindPaginator("#performanceRecordPageContentPager a[href]", "#performanceRecordPageContent");

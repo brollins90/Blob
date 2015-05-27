@@ -5,6 +5,11 @@ namespace Blob.Core.Models
 {
     public class StatusRecord
     {
+        public StatusRecord()
+        {
+            PerformanceRecords = new List<PerformanceRecord>();
+        }
+
         public long Id { get; set; }
         public string MonitorId { get; set; }
         public string MonitorName { get; set; }

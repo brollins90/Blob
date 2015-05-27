@@ -1,8 +1,6 @@
 ﻿@using Before.Infrastructure.Extensions
-@using Blob.Contracts.Models.ViewModels
 @using PagedList
-@using PagedList.Mvc
-@model CustomerGroupPageVm
+@model Blob.Contracts.Models.ViewModels.CustomerGroupPageVm
 
 <div id="customerGroupPageContent">
 
@@ -16,7 +14,7 @@
                     </th>
                     <th>
                         <div class="pull-right">
-                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a group", "Create", "CustomerGroup", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })
+                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a group", "Create", "CustomerGroup", routeValues: null, htmlAttributes: new { data_modal = "", @class = "btn btn-primary" })
                         </div>
                     </th>
                 </tr>
@@ -27,7 +25,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            <a href="@Url.Action("Single", "CustomerGroup", new {id = item.GroupId})">@Html.DisplayFor(modelItem => item.Name)</a>
                         </td>
                         <td> </td>
                     </tr>
@@ -43,6 +41,6 @@
 </div>
 
 @section Scripts {
-    
-    bindPaginator("#devicePageContentPager a[href]", "#devicePageContent");
+
+    bindPaginator("#customerGroupPageContentPager a[href]", "#customerGroupPageContent");
 }

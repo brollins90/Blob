@@ -33,7 +33,7 @@ namespace Blob.Core.Services
             CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
             Role role = await _roleManager.FindByIdAsync(dto.RoleId);
             await _customerStore.AddRoleAsync(group, role.Name);
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
 
 
@@ -41,7 +41,7 @@ namespace Blob.Core.Services
         {
             CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
             await _customerStore.AddUserAsync(group, dto.UserId);
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
 
         public async Task<BlobResultDto> CreateGroupAsync(CreateCustomerGroupDto dto)
@@ -54,7 +54,7 @@ namespace Blob.Core.Services
                                       Name = dto.Name
                                   };
             await _customerStore.CreateGroupAsync(group).ConfigureAwait(false);
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
 
         public async Task<BlobResultDto> DeleteGroupAsync(Guid groupId)
@@ -81,7 +81,7 @@ namespace Blob.Core.Services
             //{
             //    await this.RefreshUserGroupRolesAsync(user.Id);
             //}
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
 
         public async Task<CustomerGroup> FindGroupByIdAsync(Guid id)
@@ -116,14 +116,14 @@ namespace Blob.Core.Services
             CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
             Role role = await _roleManager.FindByIdAsync(dto.RoleId);
             await _customerStore.RemoveRoleAsync(group, role.Name);
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
 
         public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             CustomerGroup group = await FindGroupByIdAsync(dto.GroupId);
             await _customerStore.RemoveUserAsync(group, dto.UserId);
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
         
         public async Task<BlobResultDto> UpdateGroupAsync(UpdateCustomerGroupDto dto)
@@ -137,7 +137,7 @@ namespace Blob.Core.Services
             //{
             //    await this.RefreshUserGroupRolesAsync(groupUser.UserId);
             //}
-            return new BlobResultDto(true);
+            return BlobResultDto.Success;
         }
 
 
@@ -162,7 +162,7 @@ namespace Blob.Core.Services
         //    //{
         //    //    await this.RefreshUserGroupRolesAsync(groupUser.UserId);
         //    //}
-        //    return new BlobResultDto(true);
+        //    return BlobResultDto.Success;
         //}
 
 
@@ -216,7 +216,7 @@ namespace Blob.Core.Services
         //    //// Add the user to the proper roles
         //    //await _userManager.AddToRolesAsync(userId, roleNames);
 
-        //    return new BlobResultDto(true);
+        //    return BlobResultDto.Success;
         //}
 
         //public async Task<BlobResultDto> SetGroupRolesAsync(Guid groupId, params string[] roleNames)
@@ -239,7 +239,7 @@ namespace Blob.Core.Services
         //    {
         //        await this.RefreshUserGroupRolesAsync(groupUser.UserId);
         //    }
-        //    return new BlobResultDto(true);
+        //    return BlobResultDto.Success;
         //}
 
         //public async Task<BlobResultDto> SetUserGroupsAsync(Guid userId, params Guid[] groupIds)
@@ -261,7 +261,7 @@ namespace Blob.Core.Services
         //    await _db.SaveChangesAsync();
 
         //    await this.RefreshUserGroupRolesAsync(userId);
-        //    return new BlobResultDto(true);
+        //    return BlobResultDto.Success;
         //}
 
 

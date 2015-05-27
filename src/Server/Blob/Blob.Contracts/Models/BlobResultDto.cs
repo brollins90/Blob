@@ -38,5 +38,10 @@ namespace Blob.Contracts.Models
             set { _errors = value; }
         }
         private IEnumerable<string> _errors;
+
+        public static BlobResultDto Success
+        {
+            get { return new BlobResultDto(true); }
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace Blob.Managers.Blob
 
 
         // Customer
-        public async Task DisableCustomerAsync(DisableCustomerDto dto)
+        public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
         {
             _log.Info(string.Format("Disabling customer {0}", dto.CustomerId));
             Customer customer = Context.Customers.Find(dto.CustomerId);
@@ -55,9 +55,10 @@ namespace Blob.Managers.Blob
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
             _log.Info(string.Format("Disabled customer {0}", dto.CustomerId));
+            return BlobResultDto.Success;
         }
 
-        public async Task EnableCustomerAsync(EnableCustomerDto dto)
+        public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
         {
             _log.Info(string.Format("Enabling customer {0}", dto.CustomerId));
             Customer customer = Context.Customers.Find(dto.CustomerId);
@@ -66,14 +67,15 @@ namespace Blob.Managers.Blob
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
             _log.Info(string.Format("Enabled customer {0}", dto.CustomerId));
+            return BlobResultDto.Success;
         }
 
-        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             return await _customerManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
         }
 
-        public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
+        public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             _log.Info(string.Format("Updating customer {0}", dto.CustomerId));
             Customer customer = Context.Customers.Find(dto.CustomerId);
@@ -82,11 +84,12 @@ namespace Blob.Managers.Blob
             Context.Entry(customer).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
             _log.Info(string.Format("Updated customer {0}", dto.CustomerId));
+            return BlobResultDto.Success;
         }
 
 
         // Device Command
-        public async Task IssueCommandAsync(IssueDeviceCommandDto dto)
+        public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
         {
             string assemblyName = KnownCommandsMap.GetCommandHandlerInterfaceAssembly().FullName;
             Type commandType = Type.GetType(dto.Command + ", " + assemblyName);
@@ -110,26 +113,29 @@ namespace Blob.Managers.Blob
             {
                 // todo: remove from table, or mark as not queued
             }
+            return BlobResultDto.Success;
         }
 
         // Device
-        public async Task DisableDeviceAsync(DisableDeviceDto dto)
+        public async Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto)
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = false;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
 
-        public async Task EnableDeviceAsync(EnableDeviceDto dto)
+        public async Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto)
         {
             Device device = await Context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = true;
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
 
@@ -185,7 +191,7 @@ namespace Blob.Managers.Blob
         }
 
 
-        public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
+        public async Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto)
         {
             Device device = Context.Devices.Find(dto.DeviceId);
             device.DeviceName = dto.Name;
@@ -194,12 +200,13 @@ namespace Blob.Managers.Blob
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
 
         // Performance Record
 
-        public async Task AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData)
+        public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData)
         {
             _log.Debug("Storing status perf data " + statusPerformanceData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
@@ -229,19 +236,21 @@ namespace Blob.Managers.Blob
                     await Context.SaveChangesAsync();
                 }
             }
+            return BlobResultDto.Success;
         }
 
-        public async Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        public async Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
         {
             PerformanceRecord perf = Context.DevicePerfDatas.Find(dto.RecordId);
             Context.Entry(perf).State = EntityState.Deleted;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
 
         // Status Record
 
-        public async Task AddStatusRecordAsync(AddStatusRecordDto statusData)
+        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto statusData)
         {
             _log.Debug("Storing status data " + statusData);
             Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
@@ -271,18 +280,20 @@ namespace Blob.Managers.Blob
                     await AddPerformanceRecordAsync(statusData.PerformanceRecordDto);
                 }
             }
+            return BlobResultDto.Success;
         }
 
-        public async Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        public async Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
             StatusRecord status = Context.DeviceStatuses.Find(dto.RecordId);
             Context.Entry(status).State = EntityState.Deleted;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
 
         // User
-        public async Task CreateUserAsync(CreateUserDto dto)
+        public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
         {
             User newUser = new User
             {
@@ -301,27 +312,30 @@ namespace Blob.Managers.Blob
             };
             Context.Users.Add(newUser);
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task DisableUserAsync(DisableUserDto dto)
+        public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
         {
             User user = Context.Users.Find(dto.UserId);
             user.Enabled = false;
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task EnableUserAsync(EnableUserDto dto)
+        public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
         {
             User user = Context.Users.Find(dto.UserId);
             user.Enabled = true;
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task UpdateUserAsync(UpdateUserDto dto)
+        public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
         {
             User user = Context.Users.Find(dto.UserId);
             // todo: can username change?
@@ -335,6 +349,7 @@ namespace Blob.Managers.Blob
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
         public DateTime Now()
@@ -351,39 +366,46 @@ namespace Blob.Managers.Blob
 
         #region CustomerGroup
 
-        public async Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
             await _customerGroupManager.CreateGroupAsync(dto).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
             await _customerGroupManager.DeleteGroupAsync(dto.GroupId).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
             await _customerGroupManager.UpdateGroupAsync(dto).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
             await _customerGroupManager.AddRoleToCustomerGroup(dto).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
             await _customerGroupManager.AddUserToCustomerGroup(dto).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
             await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
 
-        public async Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return BlobResultDto.Success;
         }
         #endregion
     }

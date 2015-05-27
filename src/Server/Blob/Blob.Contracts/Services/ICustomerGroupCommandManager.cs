@@ -9,24 +9,24 @@ namespace Blob.Contracts.Services
     public interface ICustomerGroupCommandManager
     {
         [OperationContract]
-        Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto);
+        Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto);
 
         [OperationContract]
-        Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto);
+        Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto);
 
         [OperationContract]
-        Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto);
+        Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto);
 
         [OperationContract]
-        Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto);
+        Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto);
 
         [OperationContract]
-        Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto);
+        Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto);
 
         [OperationContract]
-        Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto);
+        Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto);
 
         [OperationContract]
-        Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto);
+        Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto);
     }
 }

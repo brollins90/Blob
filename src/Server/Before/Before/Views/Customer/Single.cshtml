@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            @*<div class="panel panel-default">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#devices">Devices</a>
@@ -66,7 +66,7 @@
                         @{ Html.RenderAction("PageForCustomer", "Device", routeValues: new { customerId = Model.CustomerId });}
                     </div>
                 </div>
-            </div>*@
+            </div>
 
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -76,7 +76,7 @@
                 </div>
                 <div id="groups" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        @{ Html.RenderAction("PageForCustomer", "CustomerGroup", routeValues: new {customerId = Model.CustomerId});}
+                        @{ Html.RenderAction("PageForCustomer", "CustomerGroup", routeValues: new { customerId = Model.CustomerId });}
                     </div>
                 </div>
             </div>

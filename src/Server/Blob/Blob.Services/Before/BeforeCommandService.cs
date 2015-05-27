@@ -26,7 +26,7 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "create")]
-        public async Task<IdentityResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "customer", dto.CustomerId.ToString());
@@ -35,56 +35,56 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "disable")]
-        public async Task DisableCustomerAsync(DisableCustomerDto dto)
+        public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "disable", "customer", dto.CustomerId.ToString());
-            await _blobCommandManager.DisableCustomerAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.DisableCustomerAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "enable")]
-        public async Task EnableCustomerAsync(EnableCustomerDto dto)
+        public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "enable", "customer", dto.CustomerId.ToString());
-            await _blobCommandManager.EnableCustomerAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.EnableCustomerAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "update")]
-        public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
+        public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "customer", dto.CustomerId.ToString());
-            await _blobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "issueCommand")]
-        public async Task IssueCommandAsync(IssueDeviceCommandDto dto)
+        public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.IssueCommand, "issueCommand", "device", dto.DeviceId.ToString());
-            await _blobCommandManager.IssueCommandAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.IssueCommandAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "disable")]
-        public async Task DisableDeviceAsync(DisableDeviceDto dto)
+        public async Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "disable", "device", dto.DeviceId.ToString());
-            await _blobCommandManager.DisableDeviceAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.DisableDeviceAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "enable")]
-        public async Task EnableDeviceAsync(EnableDeviceDto dto)
+        public async Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "enable", "device", dto.DeviceId.ToString());
-            await _blobCommandManager.EnableDeviceAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.EnableDeviceAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
@@ -98,146 +98,146 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "update")]
-        public async Task UpdateDeviceAsync(UpdateDeviceDto dto)
+        public async Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "device", dto.DeviceId.ToString());
-            await _blobCommandManager.UpdateDeviceAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.UpdateDeviceAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "add")]
-        public async Task AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
+        public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Create, "add", "performance", dto.DeviceId.ToString());
-            await _blobCommandManager.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "delete")]
-        public async Task DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        public async Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Delete, "delete", "performance", dto.RecordId.ToString());
-            await _blobCommandManager.DeletePerformanceRecordAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.DeletePerformanceRecordAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "status", Operation = "add")]
-        public async Task AddStatusRecordAsync(AddStatusRecordDto dto)
+        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Create, "add", "status", dto.DeviceId.ToString());
-            await _blobCommandManager.AddStatusRecordAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.AddStatusRecordAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "status", Operation = "delete")]
-        public async Task DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        public async Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Delete, "delete", "status", dto.RecordId.ToString());
-            await _blobCommandManager.DeleteStatusRecordAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.DeleteStatusRecordAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "create")]
-        public async Task CreateUserAsync(CreateUserDto dto)
+        public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "user", dto.UserId.ToString());
-            await _blobCommandManager.CreateUserAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.CreateUserAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "disable")]
-        public async Task DisableUserAsync(DisableUserDto dto)
+        public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "disable", "user", dto.UserId.ToString());
-            await _blobCommandManager.DisableUserAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.DisableUserAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "enable")]
-        public async Task EnableUserAsync(EnableUserDto dto)
+        public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "enable", "user", dto.UserId.ToString());
-            await _blobCommandManager.EnableUserAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.EnableUserAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "update")]
-        public async Task UpdateUserAsync(UpdateUserDto dto)
+        public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "user", dto.UserId.ToString());
-            await _blobCommandManager.UpdateUserAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.UpdateUserAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "create")]
-        public async Task CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "group", dto.GroupId.ToString());
-            await _blobCommandManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "delete")]
-        public async Task DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "delete", "group", dto.GroupId.ToString());
-            await _blobCommandManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
-        public async Task UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "group", dto.GroupId.ToString());
-            await _blobCommandManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
-        public async Task AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            await _blobCommandManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
-        public async Task AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            await _blobCommandManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
-        public async Task RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            await _blobCommandManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "edit")]
-        public async Task RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            await _blobCommandManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _blobCommandManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
         }
     }
 }
