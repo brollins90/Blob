@@ -14,5 +14,8 @@ namespace Blob.Contracts.Models
 
         [DataMember]
         public string Email { get; set; }
+
+        [DataMember]
+        public Guid ScheduleId { get; set; }
     }
 }

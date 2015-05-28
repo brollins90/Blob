@@ -78,6 +78,7 @@ namespace Before.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ScheduleId = new SelectList(viewModel.AvailableSchedules, "ScheduleId", "Name", viewModel.ScheduleId);
             return PartialView("_EditModal", viewModel);
         }
 

@@ -35,6 +35,7 @@ namespace Blob.Core
         public DbSet<StatusRecord> DeviceStatuses { get; set; }
         public DbSet<PerformanceRecord> DevicePerfDatas { get; set; }
         public DbSet<CustomerGroupRole> Groups { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
         //public DbSet<KeyPair> Keys { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -56,6 +57,7 @@ namespace Blob.Core
             modelBuilder.Configurations.Add(new RoleMap());
             modelBuilder.Configurations.Add(new StatusRecordMap());
             modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.Configurations.Add(new UserProfileMap());
         }
     }
 }

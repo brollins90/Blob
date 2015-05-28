@@ -86,14 +86,20 @@
     <Compile Include="Mapping\CustomerGroupRoleMap.cs" />
     <Compile Include="Mapping\CustomerGroupUserMap.cs" />
     <Compile Include="Mapping\DeviceMap.cs" />
+    <Compile Include="Mapping\NotificationSchedule.cs" />
     <Compile Include="Mapping\DeviceTypeMap.cs" />
     <Compile Include="Mapping\PerformanceRecordMap.cs" />
     <Compile Include="Mapping\RoleMap.cs" />
     <Compile Include="Mapping\StatusRecordMap.cs" />
+    <Compile Include="Mapping\UserProfileMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
     <Compile Include="Migrations\201505262349291_Initial.cs" />
     <Compile Include="Migrations\201505262349291_Initial.Designer.cs">
       <DependentUpon>201505262349291_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281815236_Schedule.cs" />
+    <Compile Include="Migrations\201505281815236_Schedule.Designer.cs">
+      <DependentUpon>201505281815236_Schedule.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuditRecord.cs" />
@@ -107,6 +113,7 @@
     <Compile Include="Models\BlobPermission.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\DeviceType.cs" />
+    <Compile Include="Models\NotificationSchedule.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\StatusRecord.cs" />
     <Compile Include="Models\PerformanceRecord.cs" />
@@ -127,6 +134,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201505262349291_Initial.resx">
       <DependentUpon>201505262349291_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281815236_Schedule.resx">
+      <DependentUpon>201505281815236_Schedule.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

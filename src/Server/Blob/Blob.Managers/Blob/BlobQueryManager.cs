@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core;
+using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Security.Identity;
 using EntityFramework.Extensions;
@@ -109,9 +110,9 @@ namespace Blob.Managers.Blob
                                                     Name = cust.Name,
                                                     DeviceCount = cust.Devices.Count,
                                                     //UserCount = cust.CustomerUsers.Count
-                                                //Users = cust.CustomerUsers.Select(u => new CustomerUserListItemVm{
-                                                //    Email = u.
-                                                //})
+                                                    //Users = cust.CustomerUsers.Select(u => new CustomerUserListItemVm{
+                                                    //    Email = u.
+                                                    //})
                                                 }).SingleAsync();
         }
 
@@ -516,16 +517,25 @@ namespace Blob.Managers.Blob
                           }).SingleAsync().ConfigureAwait(false);
         }
 
+        public IEnumerable<NotificationScheduleListItemVm> GetAllNotificationSchedules()
+        {
+            return new List<NotificationScheduleListItemVm> { new NotificationScheduleListItemVm { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
+        }
+
         public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
         {
-            return await (from user in Context.Users
-                          where user.Id == userId
-                          select new UserUpdateVm
-                          {
-                              UserId = user.Id,
-                              Email = user.Email,
-                              UserName = user.UserName
-                          }).SingleAsync().ConfigureAwait(false);
+            var availableSchedules = GetAllNotificationSchedules();
+            var u = await (from p in Context.UserProfiles.Include("User")
+                           where p.UserId == userId
+                           select new UserUpdateVm
+                           {
+                               UserId = p.User.Id,
+                               Email = p.User.Email,
+                               UserName = p.User.UserName,
+                               ScheduleId = p.EmailNotificationScheduleId
+                           }).SingleAsync().ConfigureAwait(false);
+            u.AvailableSchedules = availableSchedules;
+            return u;
         }
 
         public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)

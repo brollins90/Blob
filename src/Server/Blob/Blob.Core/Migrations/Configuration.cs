@@ -65,6 +65,18 @@ namespace Blob.Core.Migrations
             }
             context.SaveChanges();
 
+            // schedules
+            List<NotificationSchedule> sched = new List<NotificationSchedule>() 
+            {
+                new NotificationSchedule {Id = Guid.Parse("4A957E9F-B936-4713-B414-EBE4B4A15F9E"), Name = "None", Description = "Never enabled"},
+            };
+
+            foreach (var s in sched)
+            {
+                context.Set<NotificationSchedule>().AddOrUpdate(s);
+            }
+            context.SaveChanges();
+
             // DeviceTypes
             DeviceType testDeviceTypeWinDesktop = new DeviceType
             {

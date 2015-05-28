@@ -8,6 +8,7 @@ namespace Blob.Core.Models
         public virtual User User { get; set; }
 
         public bool SendEmailNotifications { get; set; }
-        public string EmailNotificationSchedule { get; set; }
+        public Guid EmailNotificationScheduleId { get; set; }
+        public NotificationSchedule EmailNotificationSchedule { get; set; }
     }
 }
