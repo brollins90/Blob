@@ -22,6 +22,7 @@ namespace BMonitor.Service
         private readonly ILog _log;
         private IMonitorScheduler _jobHandler;
         private IConnectionThread _connectionThread;
+        private Registrator _registrator;
 
         private DeviceInfo _deviceInfo;
 
@@ -30,12 +31,13 @@ namespace BMonitor.Service
         private bool _enableStatusMonitoring;
         private bool _isRegistered;
 
-        public MonitorManager(IKernel kernel, ILog log)
+        public MonitorManager(IKernel kernel, ILog log, Registrator registrator)
         {
             // override the callback to validate the server certificate.  This is a hack for early dev ONLY
             System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
             _kernel = kernel;
             _log = log;
+            _registrator = registrator;
             _deviceInfo = new DeviceInfo();
         }
 
@@ -77,8 +79,16 @@ namespace BMonitor.Service
                 //if things are running, stop them
                 if (_jobHandler != null) _jobHandler.Stop();
                 if (_connectionThread != null) _connectionThread.Stop();
+                if (!_registrator.IsRegistered())
+                {
+                    var u = new Ninject.Parameters.ConstructorArgument("username", _deviceInfo.Username);
+                    var p = new Ninject.Parameters.ConstructorArgument("password", _deviceInfo.Password);
+                    Guid devId = _registrator.RegisterDevice(_kernel.Get<DeviceStatusClient>(u, p));
+                    _log.Debug(devId);
+                    SaveRegistration(new RegisterDeviceResponseDto {DeviceId = devId});
 
-                RegisterDevice(_deviceInfo);
+                    Start();
+                }
             }
             else
             {
@@ -101,7 +111,7 @@ namespace BMonitor.Service
             if (config == null) { throw new ConfigurationErrorsException(); }
             ConfigurationManager.RefreshSection("BMonitor");
 
-            config.Service.DeviceId = Guid.Parse(response.DeviceId);
+            config.Service.DeviceId = response.DeviceId;
             //config.Service.Username = "";
             //config.Service.Password = "";
 
@@ -110,61 +120,9 @@ namespace BMonitor.Service
 
             _isRegistered = true;
             LoadConfig();
-            Start();
+            //Start();
         }
-
-        public void RegisterDevice(DeviceInfo info)
-        {
-            if (!info.DeviceId.Equals(default(Guid)))
-            {
-                _log.Error("Registration was requested even though this device is already registered.");
-                return;
-            }
-
-            try
-            {
-                Guid deviceGuid = Guid.NewGuid();
-                _log.Info(string.Format("Registering this agent with the BlobService with id:{0}.", deviceGuid));
-                RegisterDeviceDto regMessage = new RegisterDeviceDto
-                                                 {
-                                                     DeviceId = deviceGuid.ToString(),
-                                                     DeviceKey1 = "key1",
-                                                     DeviceKey1Format = 0,
-                                                     DeviceKey2 = "key2",
-                                                     DeviceKey2Format = 0,
-                                                     DeviceName = "Test 1",
-                                                     DeviceType = "WindowsDesktop",
-                                                     TimeSent = DateTime.Now
-                                                 };
-                _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
-
-                var u = new Ninject.Parameters.ConstructorArgument("username", info.Username);
-                var p = new Ninject.Parameters.ConstructorArgument("password", info.Password);
-                DeviceStatusClient statusClient = _kernel.Get<DeviceStatusClient>(u, p);
-                statusClient.ClientErrorHandler += HandleException;
-
-
-                RegisterDeviceResponseDto regInfo = Task.Run(() => statusClient.RegisterDeviceAsync(regMessage)).Result;
-                if (regInfo.Succeeded != true)
-                {
-                    _log.Error("Registration failed");
-                }
-                _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
-
-                Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
-                //info.DeviceId = deviceGuid;
-                SaveRegistration(regInfo);
-
-                
-
-            }
-            catch (Exception e)
-            {
-                _log.Error("Error while registering this agent with the server.", e);
-            }
-        }
-
-
+        
         private void HandleException(Exception ex)
         {
             _log.Error(string.Format("Error from client proxy."), ex);

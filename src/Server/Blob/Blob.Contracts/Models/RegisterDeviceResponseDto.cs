@@ -9,7 +9,7 @@ namespace Blob.Contracts.Models
         //public bool Succeeded { get; set; }
 
         [DataMember]
-        public string DeviceId { get; set; }
+        public Guid DeviceId { get; set; }
 
         [DataMember]
         public DateTime TimeSent { get; set; }

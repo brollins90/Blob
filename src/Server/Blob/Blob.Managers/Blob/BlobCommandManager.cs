@@ -183,7 +183,7 @@ namespace Blob.Managers.Blob
             }
             return new RegisterDeviceResponseDto
                                                  {
-                                                     DeviceId = deviceId.ToString(),
+                                                     DeviceId = deviceId,
                                                      Succeeded = succeeded,
                                                      TimeSent = Now()
                                                  };
