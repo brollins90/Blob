@@ -69,7 +69,7 @@ namespace BMonitor.WindowsService
         {
             _log.Debug("MonitorService thread start.");
 
-            _manager.Initialize();
+            _manager.LoadConfig();
             _manager.Start();
 
             // add as a task when i have a scheduler

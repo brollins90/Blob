@@ -39,12 +39,13 @@ namespace BMonitor.Service
             _deviceInfo = new DeviceInfo();
         }
 
-        public void Initialize()
+        public void LoadConfig()
         {
-            _log.Debug("Initializing MonitorManager");
-            BMonitorSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorSection;
-            if (config == null)
-                throw new ConfigurationErrorsException();
+            _log.Debug("LoadingConfig"); 
+            System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            BMonitorSection config = configFile.GetSection("BMonitor") as BMonitorSection;
+            if (config == null) { throw new ConfigurationErrorsException(); }
+            ConfigurationManager.RefreshSection("BMonitor");
 
             _deviceInfo.DeviceId = config.Service.DeviceId;
             if (_deviceInfo.DeviceId == Guid.Empty)
@@ -93,13 +94,31 @@ namespace BMonitor.Service
             }
         }
 
+        private void SaveRegistration(RegisterDeviceResponseDto response)
+        {
+            System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            BMonitorSection config = configFile.GetSection("BMonitor") as BMonitorSection;
+            if (config == null) { throw new ConfigurationErrorsException(); }
+            ConfigurationManager.RefreshSection("BMonitor");
+
+            config.Service.DeviceId = Guid.Parse(response.DeviceId);
+            //config.Service.Username = "";
+            //config.Service.Password = "";
+
+
+            configFile.Save(ConfigurationSaveMode.Full, true);
+
+            _isRegistered = true;
+            LoadConfig();
+            Start();
+        }
+
         public void RegisterDevice(DeviceInfo info)
         {
             if (!info.DeviceId.Equals(default(Guid)))
             {
                 _log.Error("Registration was requested even though this device is already registered.");
                 return;
-                // throw?
             }
 
             try
@@ -133,12 +152,10 @@ namespace BMonitor.Service
                 _log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
 
                 Debug.Assert(deviceGuid.Equals(Guid.Parse(regInfo.DeviceId)));
-                info.DeviceId = deviceGuid;
-                _isRegistered = true;
+                //info.DeviceId = deviceGuid;
+                SaveRegistration(regInfo);
 
-                // move this to an event...
-                // todo:
-                Start();
+                
 
             }
             catch (Exception e)
@@ -151,7 +168,6 @@ namespace BMonitor.Service
         private void HandleException(Exception ex)
         {
             _log.Error(string.Format("Error from client proxy."), ex);
-            ;
         }
 
         public void Dispose()

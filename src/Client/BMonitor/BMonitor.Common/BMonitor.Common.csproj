@@ -60,11 +60,21 @@
     <Compile Include="Extensions\Prettify.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />
     <Compile Include="Models\AlertLevel.cs" />
+    <Compile Include="Models\Metrics\AverageResponseTimeMetric.cs" />
+    <Compile Include="Models\Metrics\EvaluationOperation.cs" />
+    <Compile Include="Models\Metrics\GreaterThan.cs" />
+    <Compile Include="Models\Metrics\LessThan.cs" />
+    <Compile Include="Models\Metrics\Metric.cs" />
+    <Compile Include="Models\Metrics\MetricEvaluationService.cs" />
     <Compile Include="Models\PerformanceData.cs" />
+    <Compile Include="Models\Metrics\PerformanceSummary.cs" />
     <Compile Include="Models\Range.cs" />
     <Compile Include="Models\ResultData.cs" />
+    <Compile Include="Models\Metrics\Threshold.cs" />
     <Compile Include="Models\Threshold.cs" />
+    <Compile Include="Models\Metrics\ThresholdEvaluationResult.cs" />
     <Compile Include="Models\UnitOfMeasure.cs" />
+    <Compile Include="Models\Metrics\UrlCallsPassedPerMinuteMetric.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

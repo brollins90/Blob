@@ -5,17 +5,14 @@ namespace BMonitor.Service.Configuration
 {
     public class JobElement : ConfigurationElement
     {
+        public JobElement() : this("FreeDiskSpace", "BMonitor.Monitors.FreeDiskSpace, BMonitor.Monitors") 
+        {
+        }
+
         public JobElement(string name, string monitorType)
         {
             Name = name;
             MonitorType = monitorType;
-        }
-
-        public JobElement()
-        {
-
-            this.Name = "FreeDiskSpace";
-            this.MonitorType = "BMonitor.Monitors.FreeDiskSpace, BMonitor.Monitors";
         }
 
         [ConfigurationProperty("name", IsRequired = true, IsKey = true)]

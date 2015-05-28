@@ -7,6 +7,11 @@ namespace BMonitor.Service.Configuration
     {
         private ServiceElement() { }
 
+        public override bool IsReadOnly()
+        {
+            return false;
+        }
+
         [ConfigurationProperty("deviceId", IsRequired = false)]
         public Guid DeviceId
         {

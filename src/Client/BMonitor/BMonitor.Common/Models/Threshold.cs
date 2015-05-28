@@ -2,6 +2,7 @@
 
 namespace BMonitor.Common.Models
 {
+
     public class Threshold
     {
         public Range Critical { get; private set; }
