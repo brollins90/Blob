@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Monitors", "BMonit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers", "BMonitor.Handlers\BMonitor.Handlers.csproj", "{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Common.Tests", "BMonitor.Common.Tests\BMonitor.Common.Tests.csproj", "{8D0B8ED8-F45B-45ED-A4E2-E96192A8019B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers.Runner", "BMonitor.Handlers.Runner\BMonitor.Handlers.Runner.csproj", "{8EF350CC-D2C0-4D48-9200-3E05C9CDD503}"
 EndProject
 Global
@@ -55,10 +53,6 @@ Global
 		{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D0B8ED8-F45B-45ED-A4E2-E96192A8019B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D0B8ED8-F45B-45ED-A4E2-E96192A8019B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D0B8ED8-F45B-45ED-A4E2-E96192A8019B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D0B8ED8-F45B-45ED-A4E2-E96192A8019B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EF350CC-D2C0-4D48-9200-3E05C9CDD503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EF350CC-D2C0-4D48-9200-3E05C9CDD503}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EF350CC-D2C0-4D48-9200-3E05C9CDD503}.Release|Any CPU.ActiveCfg = Release|Any CPU
