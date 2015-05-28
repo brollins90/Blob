@@ -10,8 +10,8 @@ namespace BMonitor.Common.Models.Metrics
 
         public Threshold(Metric metric, EvaluationOperation operation, double thresholdValue)
         {
-            if (metric == null) throw new ArgumentNullException("Metric");
-            if (operation == null) throw new ArgumentNullException("Operation");
+            if (metric == null) throw new ArgumentNullException("metric");
+            if (operation == null) throw new ArgumentNullException("operation");
             _metric = metric;
             _operation = operation;
             _thresholdValue = thresholdValue;

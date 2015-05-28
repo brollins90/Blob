@@ -61,9 +61,9 @@
     <Compile Include="Interfaces\IMonitor.cs" />
     <Compile Include="Models\AlertLevel.cs" />
     <Compile Include="Models\Metrics\AverageResponseTimeMetric.cs" />
-    <Compile Include="Models\Metrics\EvaluationOperation.cs" />
-    <Compile Include="Models\Metrics\GreaterThan.cs" />
-    <Compile Include="Models\Metrics\LessThan.cs" />
+    <Compile Include="Models\Metrics\Evaluation\EvaluationOperation.cs" />
+    <Compile Include="Models\Metrics\Evaluation\GreaterThan.cs" />
+    <Compile Include="Models\Metrics\Evaluation\LessThan.cs" />
     <Compile Include="Models\Metrics\Metric.cs" />
     <Compile Include="Models\Metrics\MetricEvaluationService.cs" />
     <Compile Include="Models\PerformanceData.cs" />
