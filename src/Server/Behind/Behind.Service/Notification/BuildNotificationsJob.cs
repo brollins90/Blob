@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq;
+using Blob.Core;
 using Blob.Data;
 using Blob.Managers.Notification;
 using log4net;

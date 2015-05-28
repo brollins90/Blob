@@ -35,6 +35,18 @@ namespace Blob.Security.Identity
         public IQueryable<Customer> Customers { get { return _customerStore.Customers; } }
 
 
+        //public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
+        //{
+        //    _log.Info(string.Format("Disabling customer {0}", dto.CustomerId));
+        //    Customer customer = Context.Customers.Find(dto.CustomerId);
+        //    customer.Enabled = false;
+        //    // todo: disable all devices and users for customer ?
+
+        //    Context.Entry(customer).State = EntityState.Modified;
+        //    await Context.SaveChangesAsync().ConfigureAwait(false);
+        //    _log.Info(string.Format("Disabled customer {0}", dto.CustomerId));
+        //    return BlobResultDto.Success;
+        //}
 
         public async Task<BlobResultDto> DeleteCustomerAsync(Guid customerId)
         {

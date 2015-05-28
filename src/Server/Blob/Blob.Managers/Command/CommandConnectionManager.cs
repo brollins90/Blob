@@ -29,7 +29,7 @@ namespace Blob.Managers.Command
                 }
             }
         }
-
+        
         /// <summary>
         /// Adds a callback to the CommandManager
         /// </summary>
@@ -66,6 +66,27 @@ namespace Blob.Managers.Command
                 _log.Error(string.Format("Failed to store callback for device {0}.  It was already connected.", deviceId));
                 throw new InvalidOperationException("A callback has already been registered for this device.");
             }
+        }
+
+
+
+        public IEnumerable<Guid> GetActiveDeviceIds()
+        {
+            ThrowIfDisposed();
+            List<Guid> activeDevices = new List<Guid>();
+            //try
+            //{
+            lock (SyncLock)
+            {
+                activeDevices = new List<Guid>(_callbacks.Keys);
+            }
+            //}
+            //catch (Exception e)
+            //{
+            //    _log.Error("Error getting callback.", e);
+            //    throw;
+            //}
+            return activeDevices;
         }
 
         /// <summary>

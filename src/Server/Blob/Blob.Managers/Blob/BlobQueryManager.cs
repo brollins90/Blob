@@ -8,6 +8,7 @@ using Blob.Contracts.ServiceContracts;
 using Blob.Core;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
+using Blob.Managers.Command;
 using Blob.Security.Identity;
 using EntityFramework.Extensions;
 using log4net;
@@ -22,6 +23,7 @@ namespace Blob.Managers.Blob
         private readonly ILog _log;
         private BlobCustomerManager _customerManager;
         private BlobCustomerGroupManager _customerGroupManager;
+        private ICommandConnectionManager _connectionManager;
 
         public BlobQueryManager(BlobDbContext context, ILog log, BlobCustomerManager customerManager, BlobCustomerGroupManager customerGroupManager)
         {
@@ -30,6 +32,7 @@ namespace Blob.Managers.Blob
             Context = context;
             _customerManager = customerManager;
             _customerGroupManager = customerGroupManager;
+            _connectionManager = CommandConnectionManager.Instance;
         }
         public BlobDbContext Context { get; private set; }
 
@@ -188,6 +191,8 @@ namespace Blob.Managers.Blob
 
         public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
+            var activeDeviceConnections = _connectionManager.GetActiveDeviceIds();
+
             IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
@@ -208,7 +213,7 @@ namespace Blob.Managers.Blob
                 PageSize = pageSize,
                 Items = devices.Select(x => new DeviceListItemVm
                 {
-                    AvailableCommands = availableCommands,
+                    AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
                     DeviceId = x.Id,
                     DeviceName = x.DeviceName,
                     DeviceType = x.DeviceType.Name,
