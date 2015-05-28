@@ -31,6 +31,10 @@ namespace Blob.Contracts.Models.ViewModels
         [DataMember]
         [Required]
         public bool EmailConfirmed { get; set; }
+
+        [DataMember]
+        [Required]
+        public bool EmailNotificationsEnabled { get; set; }
         
         [DataMember]
         [Required]

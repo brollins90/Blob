@@ -500,7 +500,9 @@ namespace Blob.Managers.Blob
 
         public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
         {
+            // NotificationSchedule
             return await (from user in Context.Users.Include("Customers")
+                          join p in Context.UserProfiles on user.Id equals p.UserId
                           where user.Id == userId
                           select new UserSingleVm
                           {
@@ -508,23 +510,31 @@ namespace Blob.Managers.Blob
                               CustomerName = user.Customer.Name,
                               Email = user.Email,
                               EmailConfirmed = user.EmailConfirmed,
-                              //Enabled = user.Enabled,
+                              EmailNotificationsEnabled = p.SendEmailNotifications,
+                              Enabled = user.Enabled,
                               HasPassword = (user.PasswordHash != null),
                               HasSecurityStamp = (user.SecurityStamp != null),
                               LastActivityDate = user.LastActivityDate,
                               UserId = user.Id,
                               UserName = user.UserName,
+                              NotificationSchedule = new NotificationScheduleListItemVm {Name = p.EmailNotificationSchedule.Name, ScheduleId = p.EmailNotificationSchedule.Id},
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public IEnumerable<NotificationScheduleListItemVm> GetAllNotificationSchedules()
+        public async Task<IEnumerable<NotificationScheduleListItemVm>> GetAllNotificationSchedules()
         {
-            return new List<NotificationScheduleListItemVm> { new NotificationScheduleListItemVm { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
+            return await(from x in Context.NotificationSchedules
+                         select new NotificationScheduleListItemVm
+                         {
+                             ScheduleId = x.Id,
+                             Name = x.Name
+                         }).ToListAsync().ConfigureAwait(false);
+            //return new List<NotificationScheduleListItemVm> { new NotificationScheduleListItemVm { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
         }
 
         public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
         {
-            var availableSchedules = GetAllNotificationSchedules();
+            var availableSchedules = await GetAllNotificationSchedules();
             var u = await (from p in Context.UserProfiles.Include("User")
                            where p.UserId == userId
                            select new UserUpdateVm

@@ -96,10 +96,17 @@
                             </dd>
 
                             <dt>
+                                @Html.DisplayNameFor(model => model.EmailNotificationsEnabled)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.EmailNotificationsEnabled)
+                            </dd>
+
+                            <dt>
                                 @Html.DisplayNameFor(model => model.NotificationSchedule)
                             </dt>
                             <dd>
-                                @Html.DisplayFor(model => model.NotificationSchedule)
+                                <a href="@Url.Action("Single", "NotificationSchedule", new { id = Model.NotificationSchedule.ScheduleId })">@Html.DisplayFor(modelItem => Model.NotificationSchedule.Name)</a>
                             </dd>
 
                         </dl>

@@ -35,6 +35,7 @@ namespace Blob.Core
         public DbSet<StatusRecord> DeviceStatuses { get; set; }
         public DbSet<PerformanceRecord> DevicePerfDatas { get; set; }
         public DbSet<CustomerGroupRole> Groups { get; set; }
+        public DbSet<NotificationSchedule> NotificationSchedules { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         //public DbSet<KeyPair> Keys { get; set; }
 
