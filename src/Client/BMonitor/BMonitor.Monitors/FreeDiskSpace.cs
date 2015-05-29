@@ -8,6 +8,10 @@ namespace BMonitor.Monitors
 {
     public class FreeDiskSpace : BaseMonitor
     {
+        protected override string MonitorId { get { return MonitorName + DriveLetter; } }
+        protected override string MonitorName { get { return "FreeDiskSpace"; } }
+        protected override string MonitorDescription { get { return "FreeDiskSpace Description"; } }
+
         public string DriveLetter { get; set; }
         public string DriveDescription { get; set; }
 
@@ -23,8 +27,6 @@ namespace BMonitor.Monitors
             DriveDescription = driveDescription;
         }
 
-        protected override string MonitorName { get { return "FreeDiskSpace"; } }
-        protected override string MonitorDescription { get { return "FreeDiskSpace Description"; } }
 
 
         public override ResultData Execute(bool collectPerfData = false)

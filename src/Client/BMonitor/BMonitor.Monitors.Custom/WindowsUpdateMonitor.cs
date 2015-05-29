@@ -7,15 +7,9 @@ namespace BMonitor.Monitors.Custom
 {
     public class WindowsUpdateMonitor : BaseMonitor
     {
-        protected override string MonitorName
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        protected override string MonitorDescription
-        {
-            get { throw new NotImplementedException(); }
-        }
+        protected override string MonitorId { get { return MonitorName; } }
+        protected override string MonitorName { get { return "WindowsUpdateMonitor"; } }
+        protected override string MonitorDescription { get { return "Checks the status of Windows Updates"; } }
 
         public override ResultData Execute(bool collectPerfData = false)
         {

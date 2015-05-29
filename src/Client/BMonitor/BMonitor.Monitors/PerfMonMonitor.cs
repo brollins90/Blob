@@ -19,6 +19,10 @@ namespace BMonitor.Monitors
                 return Manager.GetCounter(CategoryName, CounterName, InstanceName);
             }
         }
+
+        protected override string MonitorId { get { return MonitorName + CounterKey; } }
+        protected override string MonitorName { get { return "PerfMonMonitor"; } }
+        protected override string MonitorDescription { get { return "PerfMonMonitor Description"; } }
         
         public string CategoryName { get; set; }
         public string CounterName { get; set; }
@@ -27,10 +31,6 @@ namespace BMonitor.Monitors
 
         public PerfMonMonitor()
         {
-            CategoryName = "Memory";
-            CounterName = "Available Bytes";
-            InstanceName = string.Empty;
-
             MonitorThreshold = new Threshold
                 (
                     critical: new Range(90, double.PositiveInfinity, false),
@@ -38,8 +38,6 @@ namespace BMonitor.Monitors
                 );
         }
 
-        protected override string MonitorName { get { return "PerfMonMonitor"; } }
-        protected override string MonitorDescription { get { return "PerfMonMonitor Description"; } }
 
 
         public override ResultData Execute(bool collectPerfData = false)
