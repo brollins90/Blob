@@ -5,13 +5,18 @@
 {
     <div class="jumbotron"></div>
     @*<div class="partialContents" data-url="/dashboard/deviceslarge">
-        <img src="~/Images/indicator.white.gif" /> Loading ...
-    </div>*@
+            <img src="~/Images/indicator.white.gif" /> Loading ...
+        </div>*@
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Active Connections</strong>
+        </div>
+        @{ Html.RenderAction("CurrentConnectionsLarge", "Dashboard", routeValues: null);}
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Devices</strong>
         </div>
-
         @{ Html.RenderAction("DevicesLarge", "Dashboard", routeValues: null);}
     </div>
 }

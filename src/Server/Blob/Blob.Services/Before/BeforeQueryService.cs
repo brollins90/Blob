@@ -27,6 +27,15 @@ namespace Blob.Services.Before
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
+        public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid customerId, int pageNum, int pageSize)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "customer", customerId.ToString());
+            return await _blobQueryManager.GetDashCurrentConnectionsLargeVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+        }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
         public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;

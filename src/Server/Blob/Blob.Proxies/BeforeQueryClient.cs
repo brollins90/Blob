@@ -23,6 +23,19 @@ namespace Blob.Proxies
             return null;
         }
 
+        public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum, int pageSize)
+        {
+            try
+            {
+                return await Channel.GetDashCurrentConnectionsLargeVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
+
         public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
         {
             try

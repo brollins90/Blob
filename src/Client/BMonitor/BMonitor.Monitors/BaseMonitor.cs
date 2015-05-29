@@ -10,23 +10,28 @@ namespace BMonitor.Monitors
         protected abstract string MonitorName { get; }
         protected abstract string MonitorDescription { get; }
 
-        protected virtual Threshold MonitorThreshold { get; set; }
-        protected virtual UoM Unit { get; set; }
-        protected virtual Range Warning { get; set; }
-        protected virtual Range Critical { get; set; }
-        
-        public BaseMonitor()
-        {
-            Unit = UoM.Percent;
+        public virtual EvaluationOperation Operation { get; set; }
+        public virtual double Warning { get; set; }
+        public virtual double Critical { get; set; }
 
-            MonitorThreshold = new Threshold
-                (
-                    critical: Critical,
-                    warning: Warning
-                );
-        }
 
         public abstract ResultData Execute(bool collectPerfData = false);
+
+        public AlertLevel CheckAlertLevel(double actual)
+        {
+            if (Operation.LimitBroken(Critical, actual))
+            {
+                return AlertLevel.CRITICAL;
+            }
+            else if (Operation.LimitBroken(Warning, actual))
+            {
+                return (AlertLevel.WARNING);
+            }
+            else
+            {
+                return AlertLevel.OK;
+            }
+        }
 
         public void Dispose()
         {

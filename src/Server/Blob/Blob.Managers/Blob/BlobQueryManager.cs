@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
@@ -38,17 +39,44 @@ namespace Blob.Managers.Blob
 
 
         // Dash
-
-
-        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
+            var activeDeviceConnections = _connectionManager.GetActiveDeviceIds().ToList();
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            //var cust = Context.Customers.Where(x => x.Id.Equals(customerId));
+            var count = Context.Devices.Where(x => activeDeviceConnections.Contains(x.Id)).FutureCount();
+            var devices = Context.Devices.Where(x => activeDeviceConnections.Contains(x.Id))
+                .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            return await Task.FromResult(new DashCurrentConnectionsLargeVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = devices.Select(x => new DashCurrentConnectionsListItemVm
+                {
+                    CustomerId = x.CustomerId,
+                    DeviceId = x.Id,
+                    DeviceName = x.DeviceName,
+                    Status = x.AlertLevel
+                }),
+            }).ConfigureAwait(false);
+        }
+        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        {
+            var activeDeviceConnections = _connectionManager.GetActiveDeviceIds().ToList();
             IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             //var cust = Context.Customers.Where(x => x.Id.Equals(customerId));
-            var count = Context.Devices.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
+            var count = Context.Devices.Where(x => x.CustomerId.Equals(searchId)).FutureCount();
             var devices = Context.Devices
-                .Where(x => x.CustomerId.Equals(customerId))
+                .Where(x => x.CustomerId.Equals(searchId))
                 .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
                 .Skip(pNum * pageSize).Take(pageSize).Future();
 
@@ -61,16 +89,16 @@ namespace Blob.Managers.Blob
                 PageNum = pNum + 1,
                 PageSize = pageSize,
                 Items = devices.Select(x => new DashDevicesLargeListItemVm
-                                           {
-                                               AvailableCommands = availableCommands,
-                                               DeviceId = x.Id,
-                                               DeviceName = x.DeviceName,
-                                               Reason = string.Empty,
-                                               Recomendations = (x.AlertLevel == 0)
-                                               ? new string[] { "Everything is Ok" }
-                                               : new string[] { string.Empty },
-                                               Status = x.AlertLevel
-                                           }),
+                {
+                    AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
+                    DeviceId = x.Id,
+                    DeviceName = x.DeviceName,
+                    Reason = string.Empty,
+                    Recomendations = (x.AlertLevel == 0)
+                    ? new string[] { "Everything is Ok" }
+                    : new string[] { string.Empty },
+                    Status = x.AlertLevel
+                }),
             }).ConfigureAwait(false);
         }
 

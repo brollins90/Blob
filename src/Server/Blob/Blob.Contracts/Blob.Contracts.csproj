@@ -87,9 +87,11 @@
     <Compile Include="Models\ViewModels\CustomerGroupSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerSingleVm.cs" />
     <Compile Include="Models\ViewModels\CustomerUpdateVm.cs" />
+    <Compile Include="Models\ViewModels\DashCurrentConnectionsListItemVm.cs" />
     <Compile Include="Models\ViewModels\DashDevicesLargeListItemVm.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupRoleListItem.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupPageVm.cs" />
+    <Compile Include="Models\ViewModels\DashCurrentConnectionsLargeVm.cs" />
     <Compile Include="Models\ViewModels\NotificationScheduleListItemVm.cs" />
     <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerRegisterVm.cs" />

@@ -31,11 +31,9 @@ namespace BMonitor.Monitors
 
         public PerfMonMonitor()
         {
-            MonitorThreshold = new Threshold
-                (
-                    critical: new Range(90, double.PositiveInfinity, false),
-                    warning: new Range(80d, double.PositiveInfinity, false)
-                );
+            Operation = EvaluationOperation.GreaterThan;
+            Critical = 90d;
+            Warning = 80d;
         }
 
 
@@ -44,8 +42,7 @@ namespace BMonitor.Monitors
         {
 
             double executionValue = Counter.NextValue();
-
-            AlertLevel alertLevel = MonitorThreshold.CheckAlertLevel(executionValue);
+            AlertLevel alertLevel = base.CheckAlertLevel(executionValue);
 
             string currentValueString = string.Empty;
             switch (alertLevel)
@@ -55,7 +52,7 @@ namespace BMonitor.Monitors
                         CounterKey,
                         "CRITICAL",
                         executionValue,
-                        MonitorThreshold.Critical.Limit);
+                        base.Critical);
                     break;
                 case AlertLevel.OK:
                     currentValueString = string.Format("{0}: {1} ({2})",
@@ -71,7 +68,7 @@ namespace BMonitor.Monitors
                         CounterKey,
                         "WARNING",
                         executionValue,
-                        MonitorThreshold.Warning.Limit);
+                        base.Warning);
                     break;
             }
 
@@ -82,7 +79,7 @@ namespace BMonitor.Monitors
                                     MonitorName = MonitorName,
                                     Perf = new List<PerformanceData>(),
                                     TimeGenerated = DateTime.Now,
-                                    UnitOfMeasure = Unit.ShortName,
+                                    UnitOfMeasure = "",//Unit.ShortName,
                                     Value = currentValueString
                                 };
 
@@ -99,13 +96,13 @@ namespace BMonitor.Monitors
                 // also we want to invert the numbers in the results
                 PerformanceData perf = new PerformanceData
                                        {
-                                           Critical = MonitorThreshold.Critical.Limit.ToString(),
+                                           Critical = base.Critical.ToString(),
                                            Label = CounterKey,
                                            Max = "0",//.BytesToGb().ToString(), // the largest a %value can be (not required for %)
                                            Min = "0", // the smallest a %value can be (not required for %)
                                            UnitOfMeasure = "_",
                                            Value = executionValue.ToString(),
-                                           Warning = MonitorThreshold.Warning.Limit.ToString()
+                                           Warning = base.Warning.ToString()
                                        };
                 result.Perf.Add(perf);
 

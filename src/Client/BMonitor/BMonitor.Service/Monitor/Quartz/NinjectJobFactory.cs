@@ -39,7 +39,7 @@ namespace BMonitor.Service.Monitor.Quartz
                 {
                     if (bundle.JobDetail.JobDataMap.ContainsKey(property.Name))
                     {
-                        property.SetValue(monitorInstance, bundle.JobDetail.JobDataMap[property.Name], null);
+                        property.SetValue(monitorInstance, Convert.ChangeType(bundle.JobDetail.JobDataMap[property.Name],property.PropertyType), null);
                     }
                 }
 

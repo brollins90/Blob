@@ -15,16 +15,15 @@ namespace BMonitor.Monitors
         public string DriveLetter { get; set; }
         public string DriveDescription { get; set; }
 
-        public FreeDiskSpace()
-        {
-            DriveLetter = "C";
-            DriveDescription = "OS-default";
-        }
+        public FreeDiskSpace() : this("C", "OS-default") { }
 
         public FreeDiskSpace(string driveLetter, string driveDescription)
         {
             DriveLetter = driveLetter;
             DriveDescription = driveDescription;
+            Operation = EvaluationOperation.LessThan;
+            Critical = 10d;
+            Warning = 20d;
         }
 
 
@@ -45,11 +44,9 @@ namespace BMonitor.Monitors
             totalFreeSpace = driveInfo.TotalFreeSpace;
             totalSize = driveInfo.TotalSize;
             freePercent = Math.Round(((double)totalFreeSpace / (double)totalSize) * 100);
-            
+
             executionValue = freePercent;
-
-
-            AlertLevel alertLevel = MonitorThreshold.CheckAlertLevel(executionValue);
+            AlertLevel alertLevel = base.CheckAlertLevel(executionValue);
 
             string currentValueString = string.Empty;
             switch (alertLevel)
@@ -62,7 +59,7 @@ namespace BMonitor.Monitors
                         freePercent,
                         totalFreeSpace.BytesToGb(),
                         totalSize.BytesToGb(),
-                        MonitorThreshold.Critical.Low); // is this the correct value to display
+                        base.Critical); // is this the correct value to display
                     break;
                 case AlertLevel.OK:
                     currentValueString = string.Format("{0}% free space ({1}GB) : OK", 
@@ -80,7 +77,7 @@ namespace BMonitor.Monitors
                         freePercent,
                         totalFreeSpace.BytesToGb(),
                         totalSize.BytesToGb(),
-                        MonitorThreshold.Warning.Low); // is this the correct value to display
+                        base.Warning); // is this the correct value to display
                     break;
             }
 
@@ -91,19 +88,21 @@ namespace BMonitor.Monitors
                                     MonitorName = MonitorName,
                                     Perf = new List<PerformanceData>(),
                                     TimeGenerated = DateTime.Now,
-                                    UnitOfMeasure = Unit.ShortName,
+                                    UnitOfMeasure = "",//Unit.ShortName,
                                     Value = currentValueString
                                 };
 
             if (collectPerfData)
             {
                 // perfdata for this monitor is always in GB
-                long crit = (MonitorThreshold.Critical.Percent)
-                                ? ((long)(MonitorThreshold.Critical.Limit * .01d * totalSize))
-                                : ((long)(MonitorThreshold.Critical.Limit));
-                long warn = (MonitorThreshold.Warning.Percent)
-                                ? ((long)(MonitorThreshold.Warning.Limit * .01d * totalSize))
-                                : ((long)(MonitorThreshold.Warning.Limit));
+                long crit = (long)base.Critical;
+                    //(base.Critical.Percent)
+                    //            ? ((long)(MonitorThreshold.Critical.Limit * .01d * totalSize))
+                    //            : ((long)(MonitorThreshold.Critical.Limit));
+                long warn = (long)base.Warning;
+                    //(MonitorThreshold.Warning.Percent)
+                    //            ? ((long)(MonitorThreshold.Warning.Limit * .01d * totalSize))
+                    //            : ((long)(MonitorThreshold.Warning.Limit));
 
                 // also we want to invert the numbers in the results
                 PerformanceData perf = new PerformanceData

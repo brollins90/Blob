@@ -11,7 +11,10 @@ namespace Blob.Contracts.ServiceContracts
     public interface IBlobQueryManager : ICustomerQueryManager, ICustomerGroupQueryManager
     {
         [OperationContract]
-        Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
+        Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+        
         
         [OperationContract]
         IEnumerable<DeviceCommandVm> GetDeviceCommandVmList();

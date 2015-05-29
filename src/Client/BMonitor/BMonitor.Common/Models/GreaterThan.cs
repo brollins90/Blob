@@ -1,5 +1,4 @@
-﻿
-namespace BMonitor.Common.Models.Metrics
+﻿namespace BMonitor.Common.Models
 {
     public class GreaterThan : EvaluationOperation
     {
