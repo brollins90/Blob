@@ -4,7 +4,6 @@ using System.Reflection;
 using BMonitor.Common.Interfaces;
 using log4net;
 using Ninject;
-using Ninject.Parameters;
 using Quartz;
 using Quartz.Spi;
 

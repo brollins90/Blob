@@ -1,5 +1,4 @@
-﻿
-using BMonitor.Common.Models;
+﻿using BMonitor.Common.Models;
 
 namespace BMonitor.Common.Interfaces
 {

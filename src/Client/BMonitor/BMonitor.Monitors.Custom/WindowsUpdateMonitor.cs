@@ -9,8 +9,8 @@ namespace BMonitor.Monitors.Custom
         protected override string MonitorName { get { return "WindowsUpdateMonitor"; } }
         protected override string MonitorDescription { get { return "Checks the status of Windows Updates"; } }
 
-        //public override ResultData Execute(bool collectPerfData = false)
-        //{
+        public override ResultData Execute(bool collectPerfData = false)
+        {
         //    // https://msdn.microsoft.com/en-us/library/aa387102%28v=vs.85%29.aspx
 
         //    //UpdateSession uSession = new UpdateSession();
@@ -43,7 +43,7 @@ namespace BMonitor.Monitors.Custom
         //    ////}
 
 
-        //    return null;
-        //}
+            return null;
+        }
     }
 }

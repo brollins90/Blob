@@ -58,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\EvaluationOperationTest.cs" />
-    <Compile Include="Models\RangeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

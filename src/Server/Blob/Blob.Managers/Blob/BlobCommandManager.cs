@@ -262,21 +262,23 @@ namespace Blob.Managers.Blob
             Device device = Context.Devices.Find(statusData.DeviceId);
             await UpdateDeviceActivityTimeAsync(statusData.DeviceId);
             
-            var allMonPrev = (from s1 in Context.DeviceStatuses
-                join s2 in (
-                        from s in Context.DeviceStatuses
-                        where s.DeviceId == statusData.DeviceId
-                        group s by s.MonitorId
-                        into r
-                        select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
-                    )
-                    on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
-                    select s1).ToList();
+            //var allMonPrev = (from s1 in Context.DeviceStatuses
+            //    join s2 in (
+            //            from s in Context.DeviceStatuses
+            //            where s.DeviceId == statusData.DeviceId
+            //            group s by s.MonitorId
+            //            into r
+            //            select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
+            //        )
+            //        on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
+            //        select s1).ToList();
 
-            if (device.AlertLevel == 0)
-            {
+            //if (device.AlertLevel == 0)
+            //{
                 
-            }
+            //}
+            // ...
+
             //var thisPrevStatus = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
             //if (thisPrevStatus != null)
             //{

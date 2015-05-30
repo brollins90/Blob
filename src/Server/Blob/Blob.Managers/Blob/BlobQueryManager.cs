@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core;
-using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Managers.Command;
 using Blob.Security.Identity;
@@ -16,9 +14,6 @@ using log4net;
 
 namespace Blob.Managers.Blob
 {
-    // http://www.agile-code.com/blog/entity-framework-code-first-filtering-and-sorting-with-paging-1/
-
-
     public class BlobQueryManager : IBlobQueryManager
     {
         private readonly ILog _log;
@@ -63,10 +58,11 @@ namespace Blob.Managers.Blob
                     CustomerId = x.CustomerId,
                     DeviceId = x.Id,
                     DeviceName = x.DeviceName,
-                    Status = x.AlertLevel
+                    Status = ChangeStatusRecordsToStatusInt(GetDeviceRecentStatus(x.Id))
                 }),
             }).ConfigureAwait(false);
         }
+
         public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var activeDeviceConnections = _connectionManager.GetActiveDeviceIds().ToList();
@@ -82,26 +78,33 @@ namespace Blob.Managers.Blob
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+
+            List<DashDevicesLargeListItemVm> dItems = new List<DashDevicesLargeListItemVm>();
+            foreach (var x in devices)
+            {
+                var deviceRecent = GetDeviceRecentStatus(x.Id);
+
+                var li = new DashDevicesLargeListItemVm
+                         {
+                             AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
+                             DeviceId = x.Id,
+                             DeviceName = x.DeviceName,
+                             Reason = ChangeStatusRecordsToReasonString(deviceRecent),
+                             Recomendations = new string[] { "not yet" },
+                             Status = ChangeStatusRecordsToStatusInt(deviceRecent)
+                         };
+                dItems.Add(li);
+            }
             return await Task.FromResult(new DashDevicesLargeVm
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new DashDevicesLargeListItemVm
-                {
-                    AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
-                    DeviceId = x.Id,
-                    DeviceName = x.DeviceName,
-                    Reason = string.Empty,
-                    Recomendations = (x.AlertLevel == 0)
-                    ? new string[] { "Everything is Ok" }
-                    : new string[] { string.Empty },
-                    Status = x.AlertLevel
-                }),
-            }).ConfigureAwait(false);
-        }
+                Items = dItems
+            });
 
+        }
 
         // Customer
 
@@ -140,10 +143,6 @@ namespace Blob.Managers.Blob
                                                     CustomerId = cust.Id,
                                                     Name = cust.Name,
                                                     DeviceCount = cust.Devices.Count,
-                                                    //UserCount = cust.CustomerUsers.Count
-                                                    //Users = cust.CustomerUsers.Select(u => new CustomerUserListItemVm{
-                                                    //    Email = u.
-                                                    //})
                                                 }).SingleAsync();
         }
 
@@ -233,7 +232,7 @@ namespace Blob.Managers.Blob
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new DevicePageVm
+            var items = await Task.FromResult(new DevicePageVm
             {
                 TotalCount = count,
                 PageCount = pCount,
@@ -247,50 +246,33 @@ namespace Blob.Managers.Blob
                     DeviceType = x.DeviceType.Name,
                     Enabled = x.Enabled,
                     LastActivityDate = x.LastActivityDateUtc,
-                    Status = x.AlertLevel
+                    //Status = x.AlertLevel
                 }),
             }).ConfigureAwait(false);
+            foreach (var item in items.Items)
+            {
+                item.Status = await GetCurrentAlertLevelAsync(item.DeviceId);
+            }
+            return items;
         }
 
 
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
         {
             var d = await (from device in Context.Devices.Include("DeviceStatuses").Include("DeviceTypes").Include("DevicePerfDatas")
-                          where device.Id == deviceId
-                          select new DeviceSingleVm
-                          {
-                              CreateDate = device.CreateDateUtc,
-                              DeviceId = device.Id,
-                              DeviceName = device.DeviceName,
-                              DeviceType = device.DeviceType.Name,
-                              Enabled = device.Enabled,
-                              LastActivityDate = device.LastActivityDateUtc,
-                              //PerformanceRecords = (from perf in device.StatusPerfs
-                              //                      select new PerformanceRecordListItemVm
-                              //                      {
-                              //                          Critical = perf.Max.ToString(),
-                              //                          Label = perf.Label,
-                              //                          Max = perf.Max.ToString(),
-                              //                          Min = perf.Min.ToString(),
-                              //                          MonitorDescription = perf.MonitorDescription,
-                              //                          MonitorName = perf.MonitorName,
-                              //                          RecordId = perf.Id,
-                              //                          TimeGenerated = perf.TimeGenerated,
-                              //                          Unit = perf.UnitOfMeasure,
-                              //                          Value = perf.Value.ToString(),
-                              //                          Warning = perf.Warning.ToString(),
-                              //                      }),
-                              Status = device.AlertLevel,
-                              //StatusRecords = (from status in device.Statuses
-                              //                 select new StatusRecordListItemVm
-                              //                 {
-                              //                     MonitorDescription = status.MonitorDescription,
-                              //                     MonitorName = status.MonitorName,
-                              //                     RecordId = status.Id,
-                              //                     Status = status.AlertLevel,
-                              //                     TimeGenerated = status.TimeGenerated
-                              //                 }),
-                          }).SingleAsync().ConfigureAwait(false);
+                           where device.Id == deviceId
+                           select new DeviceSingleVm
+                           {
+                               CreateDate = device.CreateDateUtc,
+                               DeviceId = device.Id,
+                               DeviceName = device.DeviceName,
+                               DeviceType = device.DeviceType.Name,
+                               Enabled = device.Enabled,
+                               LastActivityDate = device.LastActivityDateUtc,
+                               //Status = device.AlertLevel,
+                           }).SingleAsync().ConfigureAwait(false);
+
+            d.Status = await GetCurrentAlertLevelAsync(deviceId);
             return d;
         }
 
@@ -552,18 +534,18 @@ namespace Blob.Managers.Blob
                               LastActivityDate = user.LastActivityDate,
                               UserId = user.Id,
                               UserName = user.UserName,
-                              NotificationSchedule = new NotificationScheduleListItemVm {Name = p.EmailNotificationSchedule.Name, ScheduleId = p.EmailNotificationSchedule.Id},
+                              NotificationSchedule = new NotificationScheduleListItemVm { Name = p.EmailNotificationSchedule.Name, ScheduleId = p.EmailNotificationSchedule.Id },
                           }).SingleAsync().ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<NotificationScheduleListItemVm>> GetAllNotificationSchedules()
         {
-            return await(from x in Context.NotificationSchedules
-                         select new NotificationScheduleListItemVm
-                         {
-                             ScheduleId = x.Id,
-                             Name = x.Name
-                         }).ToListAsync().ConfigureAwait(false);
+            return await (from x in Context.NotificationSchedules
+                          select new NotificationScheduleListItemVm
+                          {
+                              ScheduleId = x.Id,
+                              Name = x.Name
+                          }).ToListAsync().ConfigureAwait(false);
             //return new List<NotificationScheduleListItemVm> { new NotificationScheduleListItemVm { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
         }
 
@@ -684,6 +666,63 @@ namespace Blob.Managers.Blob
         public async Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId)
         {
             return (await _customerGroupManager.GetGroupUsersAsync(groupId)).Select(x => new CustomerGroupUserListItem { UserName = x.UserName, UserId = x.Id }).ToList();
+        }
+
+
+
+        private async Task<IEnumerable<StatusRecord>> GetDeviceRecentStatusAsync(Guid deviceId)
+        {
+            return await (from s1 in Context.DeviceStatuses
+                          join s2 in
+                              (
+                                  from s in Context.DeviceStatuses
+                                  where s.DeviceId == deviceId
+                                  group s by s.MonitorId
+                                      into r
+                                      select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
+                                  )
+                              on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
+                          select s1).ToListAsync();
+        }
+        private IEnumerable<StatusRecord> GetDeviceRecentStatus(Guid deviceId)
+        {
+            using (BlobDbContext context = new BlobDbContext())
+            {
+                return (from s1 in context.DeviceStatuses
+                        join s2 in
+                            (
+                                from s in context.DeviceStatuses
+                                where s.DeviceId == deviceId
+                                group s by s.MonitorId
+                                    into r
+                                    select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
+                            )
+                            on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
+                        select s1).ToList();
+            }
+        }
+
+        private async Task<int> GetCurrentAlertLevelAsync(Guid deviceId)
+        {
+            IEnumerable<StatusRecord> records = await GetDeviceRecentStatusAsync(deviceId);
+            return ChangeStatusRecordsToStatusInt(records);
+        }
+
+        private int GetCurrentAlertLevel(Guid deviceId)
+        {
+            IEnumerable<StatusRecord> records = GetDeviceRecentStatus(deviceId);
+            return ChangeStatusRecordsToStatusInt(records);
+        }
+
+        private string ChangeStatusRecordsToReasonString(IEnumerable<StatusRecord> records)
+        {
+            return records.Where(s => s.AlertLevel != 0)
+                          .Aggregate<StatusRecord, string>(null, (accum, r) => accum + (accum == null ? accum : ", ") + r.CurrentValue);
+        }
+
+        private int ChangeStatusRecordsToStatusInt(IEnumerable<StatusRecord> records)
+        {
+            return records.Select(statusRecord => statusRecord.AlertLevel).Concat(new[] { 0 }).Max();
         }
     }
 }

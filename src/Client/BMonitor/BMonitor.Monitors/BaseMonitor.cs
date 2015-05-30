@@ -14,8 +14,9 @@ namespace BMonitor.Monitors
         public virtual EvaluationOperation Operation { get; set; }
         public virtual double Warning { get; set; }
         public virtual double Critical { get; set; }
-        
-        public virtual ResultData Execute(bool collectPerfData = false) { 
+
+        public virtual ResultData Execute(bool collectPerfData = false)
+        {
             return new ResultData
                    {
                        AlertLevel = AlertLevel.OK,

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Proxies;
 using BMonitor.Monitors;
