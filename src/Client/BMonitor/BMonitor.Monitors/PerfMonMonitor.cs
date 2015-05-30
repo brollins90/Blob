@@ -58,6 +58,7 @@ namespace BMonitor.Monitors
                                 {
                                     AlertLevel = alertLevel,
                                     MonitorDescription = MonitorDescription,
+                                    MonitorId = MonitorId,
                                     MonitorName = MonitorName,
                                     Perf = new List<PerformanceData>(),
                                     TimeGenerated = DateTime.Now,

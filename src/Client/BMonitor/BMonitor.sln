@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Service", "BMonito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers.Custom", "BMonitor.Handlers.Custom\BMonitor.Handlers.Custom.csproj", "{861F4E97-E039-4EEE-8B99-DF345E7AD902}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Monitors.Custom", "BMonitor.Monitors.Custom\BMonitor.Monitors.Custom.csproj", "{B0336DAD-387A-4D07-890D-13354B131F22}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.WindowsService", "BMonitor.WindowsService\BMonitor.WindowsService.csproj", "{88832E91-33A4-42FB-B7C1-C90758E1CDFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Monitors", "BMonitor.Monitors\BMonitor.Monitors.csproj", "{A7811934-D990-4F77-9013-E66FE9513144}"
@@ -39,10 +37,6 @@ Global
 		{861F4E97-E039-4EEE-8B99-DF345E7AD902}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{861F4E97-E039-4EEE-8B99-DF345E7AD902}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{861F4E97-E039-4EEE-8B99-DF345E7AD902}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0336DAD-387A-4D07-890D-13354B131F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0336DAD-387A-4D07-890D-13354B131F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0336DAD-387A-4D07-890D-13354B131F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0336DAD-387A-4D07-890D-13354B131F22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88832E91-33A4-42FB-B7C1-C90758E1CDFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88832E91-33A4-42FB-B7C1-C90758E1CDFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88832E91-33A4-42FB-B7C1-C90758E1CDFC}.Release|Any CPU.ActiveCfg = Release|Any CPU

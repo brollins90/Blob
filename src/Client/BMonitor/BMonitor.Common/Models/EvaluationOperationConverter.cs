@@ -15,9 +15,17 @@ namespace BMonitor.Common.Models
                     return EvaluationOperation.GreaterThan;
                 }
                 else if (lowerInvariant.Equals("lessthan"))
-                    {
-                        return EvaluationOperation.LessThan;
-                    }
+                {
+                    return EvaluationOperation.LessThan;
+                }
+                else if (lowerInvariant.Equals("equal"))
+                {
+                    return EvaluationOperation.Equal;
+                }
+                else if (lowerInvariant.Equals("notequal"))
+                {
+                    return EvaluationOperation.NotEqual;
+                }
             }
 
             return EvaluationOperation.LessThan;

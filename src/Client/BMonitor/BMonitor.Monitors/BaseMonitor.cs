@@ -15,6 +15,13 @@ namespace BMonitor.Monitors
         public virtual double Warning { get; set; }
         public virtual double Critical { get; set; }
 
+        protected BaseMonitor()
+        {
+            Operation = EvaluationOperation.LessThan;
+            Warning = 20d;
+            Critical = 10d;
+        }
+
         public virtual ResultData Execute(bool collectPerfData = false)
         {
             return new ResultData

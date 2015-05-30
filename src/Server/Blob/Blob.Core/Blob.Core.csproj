@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201505281815236_Schedule.Designer.cs">
       <DependentUpon>201505281815236_Schedule.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505301805442_RequireMonitorId.cs" />
+    <Compile Include="Migrations\201505301805442_RequireMonitorId.Designer.cs">
+      <DependentUpon>201505301805442_RequireMonitorId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuditRecord.cs" />
     <Compile Include="Models\BlobUserClaim.cs" />
@@ -137,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505281815236_Schedule.resx">
       <DependentUpon>201505281815236_Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505301805442_RequireMonitorId.resx">
+      <DependentUpon>201505301805442_RequireMonitorId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

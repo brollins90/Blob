@@ -3,7 +3,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Blob.Contracts.Commands;
 using Blob.Contracts.Models;
@@ -301,7 +300,7 @@ namespace Blob.Managers.Blob
             
             int dal = device.AlertLevel;
             int thisal = statusData.AlertLevel;
-            var prev = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
+            var prev = allMonPrev.First(x => x.MonitorId.Equals(statusData.MonitorId));
             int preval = prev.AlertLevel;
 
 

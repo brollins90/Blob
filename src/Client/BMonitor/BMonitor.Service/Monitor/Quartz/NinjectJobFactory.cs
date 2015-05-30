@@ -14,12 +14,14 @@ namespace BMonitor.Service.Monitor.Quartz
         private readonly IKernel _kernel;
         private readonly ILog _log;
         private readonly bool _enablePerformanceMonitoring;
+        //private readonly string _monitorPath;
 
-        public NinjectJobFactory(IKernel kernel, bool enablePerformanceMonitoring)
+        public NinjectJobFactory(IKernel kernel, bool enablePerformanceMonitoring)//, string monitorPath)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _kernel = kernel;
             _enablePerformanceMonitoring = enablePerformanceMonitoring;
+            //_monitorPath = monitorPath;
             _log.Debug("Constructing NinjectJobFactory");
         }
 
@@ -30,8 +32,10 @@ namespace BMonitor.Service.Monitor.Quartz
             {
                 string monitorTypeString = bundle.JobDetail.JobDataMap.GetString("MonitorType");
                 _log.Debug(string.Format("MonitorType {0}", monitorTypeString));
-
+                
+                //Assembly assembly = Assembly.LoadFrom(_monitorPath + "BMonitor.Monitors.Custom.dll");
                 Type monitorType = Type.GetType(monitorTypeString, throwOnError: true);
+                //Type monitorType = System.Reflection.Assembly.GetExecutingAssembly().GetType(monitorTypeString, throwOnError: true, ignoreCase: true);
                 var monitorInstance = Activator.CreateInstance(monitorType);
                 PropertyInfo[] properties = monitorType.GetProperties();
 

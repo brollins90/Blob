@@ -7,6 +7,8 @@ namespace BMonitor.Common.Models
     {
         public static EvaluationOperation GreaterThan { get { return new GreaterThan(); } }
         public static EvaluationOperation LessThan { get { return new LessThan(); } }
+        public static EvaluationOperation Equal { get { return new Equal(); } }
+        public static EvaluationOperation NotEqual { get { return new NotEqual(); } }
         
         public abstract string LongString { get; }
         public abstract string ShortString { get; }
