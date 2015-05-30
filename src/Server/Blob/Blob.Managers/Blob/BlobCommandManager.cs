@@ -261,55 +261,89 @@ namespace Blob.Managers.Blob
             _log.Debug("Storing status data " + statusData);
             Device device = Context.Devices.Find(statusData.DeviceId);
             await UpdateDeviceActivityTimeAsync(statusData.DeviceId);
+
+
+            StatusRecord newStatus = new StatusRecord
+            {
+                AlertLevel = statusData.AlertLevel,
+                CurrentValue = statusData.CurrentValue,
+                DeviceId = statusData.DeviceId,
+                MonitorDescription = statusData.MonitorDescription,
+                MonitorId = statusData.MonitorId,
+                MonitorName = statusData.MonitorName,
+                TimeGeneratedUtc = statusData.TimeGenerated,
+                TimeSentUtc = statusData.TimeSent,
+            };
+            Context.DeviceStatuses.Add(newStatus);
+            await Context.SaveChangesAsync();
+
+            if (statusData.PerformanceRecordDto != null)
+            {
+                statusData.PerformanceRecordDto.StatusRecordId = newStatus.Id;
+                await AddPerformanceRecordAsync(statusData.PerformanceRecordDto);
+            }
+
+            // now update the device alert level to reflect the new status
+
+
+            var allMonPrev = (from s1 in Context.DeviceStatuses
+                              join s2 in
+                                  (
+                                      from s in Context.DeviceStatuses
+                                      where s.DeviceId == statusData.DeviceId
+                                      group s by s.MonitorId
+                                          into r
+                                          select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
+                                      )
+                                  on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
+                              select s1).ToList();
+
             
-            //var allMonPrev = (from s1 in Context.DeviceStatuses
-            //    join s2 in (
-            //            from s in Context.DeviceStatuses
-            //            where s.DeviceId == statusData.DeviceId
-            //            group s by s.MonitorId
-            //            into r
-            //            select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
-            //        )
-            //        on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
-            //        select s1).ToList();
+            int dal = device.AlertLevel;
+            int thisal = statusData.AlertLevel;
+            var prev = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
+            int preval = prev.AlertLevel;
 
-            //if (device.AlertLevel == 0)
+
+            allMonPrev.Remove(prev);
+            allMonPrev.Add(newStatus);
+            int worstNow = allMonPrev.Select(statusRecord => statusRecord.AlertLevel).Concat(new[] { 0 }).Max();
+
+            // just set it????
+            device.AlertLevel = worstNow;
+            Context.Entry(device).State = EntityState.Modified;
+
+            //if (dal == 0)
             //{
-                
+            //    if (thisal == 0)
+            //    {
+            //        //await AddRec(statusData);
+            //    }
+            //    else
+            //    {
+            //        SetDeviceAlertLevel(device, thisal);
+            //        //await AddRec(statusData);
+            //    }
             //}
-            // ...
-
-            //var thisPrevStatus = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
-            //if (thisPrevStatus != null)
+            //else // dal != 0
             //{
-            //    if (thisPrevStatus.AlertLevel != )
+            //    if (preval != thisal) // this monitor changed
+            //    {
+            //        // check if this is the only bad status
+            //        allMonPrev.Remove(prev);
+            //        allMonPrev.Add(newStatus);
+            //        int worstNow = allMonPrev.Select(statusRecord => statusRecord.AlertLevel).Concat(new[] { 0 }).Max();
+                    
+            //        // just set it????
+            //        SetDeviceAlertLevel(device, worstNow);
+            //    }
+            //    if (thisal > dal) // this one is worse
+            //    {
+            //        SetDeviceAlertLevel(device, thisal);
+            //    }
             //}
 
-            //device.LastActivityDateUtc = Now();
-            //Context.Entry(device).State = EntityState.Modified;
-
-            //if (device != null)
-            //{
-                StatusRecord newStatus = new StatusRecord
-                {
-                    AlertLevel = statusData.AlertLevel,
-                    CurrentValue = statusData.CurrentValue,
-                    DeviceId = statusData.DeviceId,
-                    MonitorDescription = statusData.MonitorDescription,
-                    MonitorId = statusData.MonitorId,
-                    MonitorName = statusData.MonitorName,
-                    TimeGeneratedUtc = statusData.TimeGenerated,
-                    TimeSentUtc = statusData.TimeSent,
-                };
-                Context.DeviceStatuses.Add(newStatus);
-                await Context.SaveChangesAsync();
-
-                if (statusData.PerformanceRecordDto != null)
-                {
-                    statusData.PerformanceRecordDto.StatusRecordId = newStatus.Id;
-                    await AddPerformanceRecordAsync(statusData.PerformanceRecordDto);
-                }
-            //}
+            await Context.SaveChangesAsync().ConfigureAwait(false);
             return BlobResultDto.Success;
         }
 
