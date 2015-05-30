@@ -10,23 +10,23 @@ namespace BMonitor.Monitors
     {
         protected override string MonitorId { get { return MonitorName + DriveLetter; } }
         protected override string MonitorName { get { return "FreeDiskSpace"; } }
-        protected override string MonitorDescription { get { return "FreeDiskSpace Description"; } }
+        protected override string MonitorDescription { get { return "Checks the amount of disk space available"; } }
 
         public string DriveLetter { get; set; }
         public string DriveDescription { get; set; }
 
-        public FreeDiskSpace() : this("C", "OS-default") { }
-
-        public FreeDiskSpace(string driveLetter, string driveDescription)
+        public FreeDiskSpace() : this("C", "OS-default")
         {
-            DriveLetter = driveLetter;
-            DriveDescription = driveDescription;
             Operation = EvaluationOperation.LessThan;
             Critical = 10d;
             Warning = 20d;
         }
 
-
+        public FreeDiskSpace(string driveLetter, string driveDescription)
+        {
+            DriveLetter = driveLetter;
+            DriveDescription = driveDescription;
+        }
 
         public override ResultData Execute(bool collectPerfData = false)
         {
@@ -52,13 +52,14 @@ namespace BMonitor.Monitors
             switch (alertLevel)
             {
                 case AlertLevel.CRITICAL:
-                    currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) (<{6}%) : CRITICAL", 
+                    currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) ({6}{7}%) : CRITICAL", 
                         driveName,
                         driveLabel,
                         DriveDescription,
                         freePercent,
                         totalFreeSpace.BytesToGb(),
                         totalSize.BytesToGb(),
+                        Operation.ShortString,
                         base.Critical); // is this the correct value to display
                     break;
                 case AlertLevel.OK:
@@ -70,13 +71,14 @@ namespace BMonitor.Monitors
                     currentValueString = string.Format("UNKNOWN");
                     break;
                 case AlertLevel.WARNING:
-                    currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) (<{6}%) : WARNING", 
+                    currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) ({6}{7}%) : WARNING", 
                         driveName,
                         driveLabel,
                         DriveDescription,
                         freePercent,
                         totalFreeSpace.BytesToGb(),
                         totalSize.BytesToGb(),
+                        Operation.ShortString,
                         base.Warning); // is this the correct value to display
                     break;
             }
@@ -85,6 +87,7 @@ namespace BMonitor.Monitors
                                 {
                                     AlertLevel = alertLevel,
                                     MonitorDescription = MonitorDescription,
+                                    MonitorId = MonitorId,
                                     MonitorName = MonitorName,
                                     Perf = new List<PerformanceData>(),
                                     TimeGenerated = DateTime.Now,

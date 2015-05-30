@@ -252,9 +252,10 @@ namespace Blob.Managers.Blob
             }).ConfigureAwait(false);
         }
 
+
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
         {
-            return await (from device in Context.Devices.Include("DeviceStatuses").Include("DeviceTypes").Include("DevicePerfDatas")
+            var d = await (from device in Context.Devices.Include("DeviceStatuses").Include("DeviceTypes").Include("DevicePerfDatas")
                           where device.Id == deviceId
                           select new DeviceSingleVm
                           {
@@ -290,6 +291,7 @@ namespace Blob.Managers.Blob
                               //                     TimeGenerated = status.TimeGenerated
                               //                 }),
                           }).SingleAsync().ConfigureAwait(false);
+            return d;
         }
 
 

@@ -7,40 +7,20 @@ namespace BMonitor.Monitors
 {
     public class PerfMonMonitor : BaseMonitor
     {
-        private PerfmonCounterManager Manager
-        {
-            get { return PerfmonCounterManager.Instance; }
-        }
-
-        private PerformanceCounter Counter
-        {
-            get
-            {
-                return Manager.GetCounter(CategoryName, CounterName, InstanceName);
-            }
-        }
-
         protected override string MonitorId { get { return MonitorName + CounterKey; } }
         protected override string MonitorName { get { return "PerfMonMonitor"; } }
-        protected override string MonitorDescription { get { return "PerfMonMonitor Description"; } }
-        
+        protected override string MonitorDescription { get { return "Checks the status in the Windows Performance Monitor"; } }
+
+        private static PerfmonCounterManager Manager { get { return PerfmonCounterManager.Instance; } }
+        private PerformanceCounter Counter { get { return Manager.GetCounter(CategoryName, CounterName, InstanceName); } }
+
         public string CategoryName { get; set; }
         public string CounterName { get; set; }
         public string InstanceName { get; set; }
         private string CounterKey { get { return string.Format("{0}_{1}_{2}", CategoryName, CounterName, InstanceName); } }
 
-        public PerfMonMonitor()
-        {
-            Operation = EvaluationOperation.GreaterThan;
-            Critical = 90d;
-            Warning = 80d;
-        }
-
-
-
         public override ResultData Execute(bool collectPerfData = false)
         {
-
             double executionValue = Counter.NextValue();
             AlertLevel alertLevel = base.CheckAlertLevel(executionValue);
 
@@ -48,10 +28,11 @@ namespace BMonitor.Monitors
             switch (alertLevel)
             {
                 case AlertLevel.CRITICAL:
-                    currentValueString = string.Format("{0}: {1} ({2} < {3})",
+                    currentValueString = string.Format("{0}: {1} ({2} {3} {4})",
                         CounterKey,
                         "CRITICAL",
                         executionValue,
+                        Operation,
                         base.Critical);
                     break;
                 case AlertLevel.OK:
@@ -64,10 +45,11 @@ namespace BMonitor.Monitors
                     currentValueString = string.Format("UNKNOWN");
                     break;
                 case AlertLevel.WARNING:
-                    currentValueString = string.Format("{0}: {1} ({2} < {3})",
+                    currentValueString = string.Format("{0}: {1} ({2} {3} {4})",
                         CounterKey,
                         "WARNING",
                         executionValue,
+                        Operation,
                         base.Warning);
                     break;
             }

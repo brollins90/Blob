@@ -39,6 +39,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PingMonitor.cs" />
+    <Compile Include="WindowsServiceMonitor.cs" />
+    <Compile Include="WindowsEventLogMonitor.cs" />
     <Compile Include="WindowsUpdateMonitor.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,8 @@
 {
     public class LessThan : EvaluationOperation
     {
-        public LessThan() : base("Less than") { }
+        public override string LongString { get { return "Less than"; } }
+        public override string ShortString { get { return "<"; } }
 
         public override bool LimitBroken(double limit, double actual)
         {

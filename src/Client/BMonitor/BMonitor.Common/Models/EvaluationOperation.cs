@@ -8,17 +8,9 @@ namespace BMonitor.Common.Models
     {
         public static EvaluationOperation GreaterThan { get { return new GreaterThan(); } }
         public static EvaluationOperation LessThan { get { return new LessThan(); } }
-
-        private readonly string _description;
-
-        protected EvaluationOperation(string description)
-        {
-            if (string.IsNullOrEmpty(description)) throw new ArgumentNullException("description");
-            _description = description;
-        }
-
-        public string Description { get { return _description; } }
-
+        
+        public abstract string LongString { get; }
+        public abstract string ShortString { get; }
         public abstract bool LimitBroken(double limit, double actual);
     }
 }

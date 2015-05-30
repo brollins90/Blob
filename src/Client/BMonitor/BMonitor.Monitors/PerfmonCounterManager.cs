@@ -12,10 +12,10 @@ namespace BMonitor.Monitors
         {
             Counters = new Dictionary<string, PerformanceCounter>();
 
-            GetCounter("Memory", "Available Bytes", string.Empty);
-            GetCounter("Processor", "% Processor Time", "_Total");
-            //PerformanceCounter _memoryCounter = new PerformanceCounter("Memory", "Available Bytes");
-            //PerformanceCounter _processorCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            //GetCounter("Memory", "Available Bytes", string.Empty);
+            //GetCounter("Processor", "% Processor Time", "_Total");
+            ////PerformanceCounter _memoryCounter = new PerformanceCounter("Memory", "Available Bytes");
+            ////PerformanceCounter _processorCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
 
         public static PerfmonCounterManager Instance

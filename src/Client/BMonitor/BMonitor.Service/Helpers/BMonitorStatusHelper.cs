@@ -35,6 +35,7 @@ namespace BMonitor.Service.Helpers
                 CurrentValue = result.Value,
                 DeviceId = _deviceId,
                 MonitorDescription = result.MonitorDescription,
+                MonitorId = result.MonitorId,
                 MonitorName = result.MonitorName,
                 TimeGenerated = result.TimeGenerated,
                 TimeSent = DateTime.Now
@@ -47,6 +48,7 @@ namespace BMonitor.Service.Helpers
                 {
                     DeviceId = _deviceId,
                     MonitorDescription = result.MonitorDescription,
+                    MonitorId = result.MonitorId,
                     MonitorName = result.MonitorName,
                     TimeGenerated = result.TimeGenerated,
                     TimeSent = DateTime.Now

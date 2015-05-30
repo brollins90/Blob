@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Blob.Contracts.Commands;
 using Blob.Contracts.Models;
@@ -195,10 +197,12 @@ namespace Blob.Managers.Blob
             Device device = Context.Devices.Find(dto.DeviceId);
             device.DeviceName = dto.Name;
             device.DeviceTypeId = dto.DeviceTypeId;
-            device.LastActivityDateUtc = Now();
+            //device.LastActivityDateUtc = Now();
 
             Context.Entry(device).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+
+            await UpdateDeviceActivityTimeAsync(dto.DeviceId);
             return BlobResultDto.Success;
         }
 
@@ -208,19 +212,20 @@ namespace Blob.Managers.Blob
         public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData)
         {
             _log.Debug("Storing status perf data " + statusPerformanceData);
-            Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
-            
-            device.LastActivityDateUtc = Now();
-            Context.Entry(device).State = EntityState.Modified;
+            await UpdateDeviceActivityTimeAsync(statusPerformanceData.DeviceId);
+            //Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusPerformanceData.DeviceId));
 
-            if (device != null)
-            {
+            //device.LastActivityDateUtc = Now();
+            //Context.Entry(device).State = EntityState.Modified;
+
+            //if (device != null)
+            //{
                 foreach (PerformanceRecordValue value in statusPerformanceData.Data)
                 {
                     Context.DevicePerfDatas.Add(new PerformanceRecord
                     {
                         Critical = value.Critical.ToNullableDecimal(),
-                        DeviceId = device.Id,
+                        DeviceId = statusPerformanceData.DeviceId,// device.Id,
                         Label = value.Label,
                         Max = value.Max.ToNullableDecimal(),
                         Min = value.Min.ToNullableDecimal(),
@@ -234,7 +239,7 @@ namespace Blob.Managers.Blob
                     });
                     await Context.SaveChangesAsync();
                 }
-            }
+            //}
             return BlobResultDto.Success;
         }
 
@@ -243,6 +248,8 @@ namespace Blob.Managers.Blob
             PerformanceRecord perf = Context.DevicePerfDatas.Find(dto.RecordId);
             Context.Entry(perf).State = EntityState.Deleted;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+
+            await UpdateDeviceActivityTimeAsync(perf.DeviceId);
             return BlobResultDto.Success;
         }
 
@@ -252,20 +259,42 @@ namespace Blob.Managers.Blob
         public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto statusData)
         {
             _log.Debug("Storing status data " + statusData);
-            Device device = await Context.Devices.FirstOrDefaultAsync(x => x.Id.Equals(statusData.DeviceId));
+            Device device = Context.Devices.Find(statusData.DeviceId);
+            await UpdateDeviceActivityTimeAsync(statusData.DeviceId);
+            
+            var allMonPrev = (from s1 in Context.DeviceStatuses
+                join s2 in (
+                        from s in Context.DeviceStatuses
+                        where s.DeviceId == statusData.DeviceId
+                        group s by s.MonitorId
+                        into r
+                        select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
+                    )
+                    on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
+                    select s1).ToList();
 
-            device.AlertLevel = statusData.AlertLevel;
-            device.LastActivityDateUtc = Now();
-            Context.Entry(device).State = EntityState.Modified;
-
-            if (device != null)
+            if (device.AlertLevel == 0)
             {
+                
+            }
+            //var thisPrevStatus = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
+            //if (thisPrevStatus != null)
+            //{
+            //    if (thisPrevStatus.AlertLevel != )
+            //}
+
+            //device.LastActivityDateUtc = Now();
+            //Context.Entry(device).State = EntityState.Modified;
+
+            //if (device != null)
+            //{
                 StatusRecord newStatus = new StatusRecord
                 {
                     AlertLevel = statusData.AlertLevel,
                     CurrentValue = statusData.CurrentValue,
-                    DeviceId = device.Id,
+                    DeviceId = statusData.DeviceId,
                     MonitorDescription = statusData.MonitorDescription,
+                    MonitorId = statusData.MonitorId,
                     MonitorName = statusData.MonitorName,
                     TimeGeneratedUtc = statusData.TimeGenerated,
                     TimeSentUtc = statusData.TimeSent,
@@ -278,7 +307,7 @@ namespace Blob.Managers.Blob
                     statusData.PerformanceRecordDto.StatusRecordId = newStatus.Id;
                     await AddPerformanceRecordAsync(statusData.PerformanceRecordDto);
                 }
-            }
+            //}
             return BlobResultDto.Success;
         }
 
@@ -287,6 +316,8 @@ namespace Blob.Managers.Blob
             StatusRecord status = Context.DeviceStatuses.Find(dto.RecordId);
             Context.Entry(status).State = EntityState.Deleted;
             await Context.SaveChangesAsync().ConfigureAwait(false);
+
+            await UpdateDeviceActivityTimeAsync(status.DeviceId);
             return BlobResultDto.Success;
         }
 
@@ -345,6 +376,26 @@ namespace Blob.Managers.Blob
                 user.EmailConfirmed = false;
                 user.LastActivityDate = Now();
             }
+
+            Context.Entry(user).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
+        }
+
+        private async Task<BlobResultDto> UpdateDeviceActivityTimeAsync(Guid deviceId)
+        {
+            Device device = Context.Devices.Find(deviceId);
+            device.LastActivityDateUtc = Now();
+
+            Context.Entry(device).State = EntityState.Modified;
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+            return BlobResultDto.Success;
+        }
+
+        private async Task<BlobResultDto> UpdateUserActivityTimeAsync(Guid userId)
+        {
+            User user = Context.Users.Find(userId);
+            user.LastActivityDate = Now();
 
             Context.Entry(user).State = EntityState.Modified;
             await Context.SaveChangesAsync().ConfigureAwait(false);

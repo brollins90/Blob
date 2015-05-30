@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using BMonitor.Common.Interfaces;
 using log4net;
@@ -39,7 +40,9 @@ namespace BMonitor.Service.Monitor.Quartz
                 {
                     if (bundle.JobDetail.JobDataMap.ContainsKey(property.Name))
                     {
-                        property.SetValue(monitorInstance, Convert.ChangeType(bundle.JobDetail.JobDataMap[property.Name],property.PropertyType), null);
+                        TypeConverter converter = TypeDescriptor.GetConverter(property.PropertyType);
+                        var prop = converter.ConvertFrom(bundle.JobDetail.JobDataMap[property.Name]);
+                        property.SetValue(monitorInstance, prop, null);
                     }
                 }
 

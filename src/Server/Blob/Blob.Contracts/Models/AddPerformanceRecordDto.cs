@@ -11,6 +11,9 @@ namespace Blob.Contracts.Models
         public Guid DeviceId { get; set; }
 
         [DataMember]
+        public string MonitorId { get; set; }
+
+        [DataMember]
         public string MonitorName { get; set; }
 
         [DataMember]

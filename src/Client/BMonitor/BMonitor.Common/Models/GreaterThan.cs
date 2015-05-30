@@ -2,7 +2,8 @@
 {
     public class GreaterThan : EvaluationOperation
     {
-        public GreaterThan() : base("Greater than") { }
+        public override string LongString { get { return "Greater than"; } }
+        public override string ShortString { get { return ">"; } }
 
         public override bool LimitBroken(double limit, double actual)
         {

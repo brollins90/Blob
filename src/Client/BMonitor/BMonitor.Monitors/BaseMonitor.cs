@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BMonitor.Common.Interfaces;
 using BMonitor.Common.Models;
 
@@ -13,9 +14,20 @@ namespace BMonitor.Monitors
         public virtual EvaluationOperation Operation { get; set; }
         public virtual double Warning { get; set; }
         public virtual double Critical { get; set; }
-
-
-        public abstract ResultData Execute(bool collectPerfData = false);
+        
+        public virtual ResultData Execute(bool collectPerfData = false) { 
+            return new ResultData
+                   {
+                       AlertLevel = AlertLevel.OK,
+                       MonitorDescription = MonitorDescription,
+                       MonitorId = MonitorId,
+                       MonitorName = MonitorName,
+                       Perf = new List<PerformanceData>(),
+                       TimeGenerated = DateTime.UtcNow,
+                       UnitOfMeasure = null,
+                       Value = string.Empty
+                   };
+        }
 
         public AlertLevel CheckAlertLevel(double actual)
         {

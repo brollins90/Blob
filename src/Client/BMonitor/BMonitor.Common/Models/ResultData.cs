@@ -7,6 +7,7 @@ namespace BMonitor.Common.Models
     {
         public AlertLevel AlertLevel { get; set; }
         public string MonitorDescription { get; set; }
+        public string MonitorId { get; set; }
         public string MonitorName { get; set; }
         public DateTime TimeGenerated { get; set; }
         public string UnitOfMeasure { get; set; }

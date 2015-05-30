@@ -22,7 +22,7 @@ namespace BMonitor.Service.Monitor
         private readonly ICollection<IMonitor> _monitors;
 
         private Guid _deviceId;
-        private string _monitorPath;
+        //private string _monitorPath;
 
         private bool _enableStatusMonitoring;
         private bool _enablePerformanceMonitoring;
@@ -50,8 +50,8 @@ namespace BMonitor.Service.Monitor
             _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
             _enableStatusMonitoring = config.Service.EnableStatusMonitoring;
 
-            _monitorPath = config.Service.MonitorPath;
-            _log.Info(string.Format("Loading monitors from {0}", _monitorPath));
+            //_monitorPath = config.Service.MonitorPath;
+            //_log.Info(string.Format("Loading monitors from {0}", _monitorPath));
             
             _monitors.Add(new FreeDiskSpace(driveLetter: "C", driveDescription: "OS"));
             //,
