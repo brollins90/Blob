@@ -50,6 +50,17 @@
     <Compile Include="WindowsUpdateMonitor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="WUApiLib">
+      <Guid>{B596CC9F-56E5-419E-A622-E01BB457431E}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BMonitor.Common\BMonitor.Common.csproj">
       <Project>{4c1c9b97-e90d-45bf-be89-48cfe705c211}</Project>
       <Name>BMonitor.Common</Name>

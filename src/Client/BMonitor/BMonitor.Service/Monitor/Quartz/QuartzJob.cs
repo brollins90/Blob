@@ -8,6 +8,7 @@ namespace BMonitor.Service.Monitor.Quartz
 {
     // http://www.codeproject.com/Tips/399786/Quartz-Net-Custom-Base-Job
 
+    [DisallowConcurrentExecution]
     public class QuartzJob : IJob
     {
         private readonly ILog _log;
