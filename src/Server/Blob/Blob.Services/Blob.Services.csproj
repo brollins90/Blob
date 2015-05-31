@@ -47,6 +47,7 @@
     <Compile Include="Before\BeforeCommandService.cs" />
     <Compile Include="Before\BeforeQueryService.cs" />
     <Compile Include="Before\BeforeAuthorizationService.cs" />
+    <Compile Include="Before\BeforeUserManagerService.cs" />
     <Compile Include="Device\DeviceConnectionService.cs" />
     <Compile Include="Device\DeviceStatusService.cs" />
     <Compile Include="GlobalErrorBehaviorAttribute.cs" />
@@ -61,14 +62,6 @@
     <ProjectReference Include="..\Blob.Core\Blob.Core.csproj">
       <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
       <Name>Blob.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Blob.Managers\Blob.Managers.csproj">
-      <Project>{bfb7e4d5-e72e-401d-b576-ae890e35bb52}</Project>
-      <Name>Blob.Managers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Blob.Security\Blob.Security.csproj">
-      <Project>{0586d78e-fb9d-484e-aab9-00d434e0f3cd}</Project>
-      <Name>Blob.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

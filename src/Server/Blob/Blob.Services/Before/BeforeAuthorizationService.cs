@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Security.Authorization;
+using Blob.Core.Authorization;
 
 namespace Blob.Services.Before
 {

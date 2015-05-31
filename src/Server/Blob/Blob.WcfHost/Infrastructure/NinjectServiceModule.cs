@@ -3,11 +3,12 @@ using System.Configuration;
 using System.Data.Entity;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core;
+using Blob.Core.Audit;
+using Blob.Core.Blob;
 using Blob.Core.Identity;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
-using Blob.Managers.Audit;
-using Blob.Security.Identity;
+using Blob.Services.Before;
 using log4net;
 using Microsoft.AspNet.Identity;
 using Ninject.Modules;
@@ -47,12 +48,12 @@ namespace Blob.WcfHost.Infrastructure
             Bind<BlobRoleManager>().ToSelf();
 
             Bind<IBlobAuditor>().To<BlobAuditor>();
-            Bind<IBlobCommandManager>().To<Managers.Blob.BlobCommandManager>();
-            Bind<IBlobQueryManager>().To<Managers.Blob.BlobQueryManager>();
+            Bind<IBlobCommandManager>().To<BlobCommandManager>();
+            Bind<IBlobQueryManager>().To<BlobQueryManager>();
 
             Bind<IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
             Bind<IDeviceStatusService>().To<Services.Device.DeviceStatusService>();
-            Bind<IUserManagerService>().To<BlobUserManagerAdapter>();
+            Bind<IUserManagerService>().To<BeforeUserManagerService>();
 
             // logging
             Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));

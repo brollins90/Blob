@@ -35,6 +35,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
@@ -47,15 +51,65 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audit\BlobAuditor.cs" />
+    <Compile Include="Authentication\BlobClaimsIdentityFactory.cs" />
+    <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
+    <Compile Include="Authentication\ClaimTransformer.cs" />
+    <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
     <Compile Include="BlobDbContext.cs" />
     <Compile Include="BlobPermissions.cs" />
+    <Compile Include="Blob\BlobCommandManager.cs" />
+    <Compile Include="Blob\BlobQueryManager.cs" />
+    <Compile Include="Command\CommandConnectionManager.cs" />
+    <Compile Include="Command\CommandQueueManager.cs" />
+    <Compile Include="Extensions\IdentityExtentions.cs" />
+    <Compile Include="Extensions\Parsing.cs" />
+    <Compile Include="Identity\BlobCustomerGroupManager.cs" />
+    <Compile Include="Identity\BlobCustomerManager.cs" />
+    <Compile Include="Identity\BlobPasswordHasher.cs" />
+    <Compile Include="Identity\BlobPasswordValidator.cs" />
+    <Compile Include="Identity\BlobRoleManager.cs" />
+    <Compile Include="Identity\BlobUserManager.cs" />
+    <Compile Include="Identity\BlobUserValidator.cs" />
     <Compile Include="Identity\GenericDbContext.cs" />
+    <Compile Include="Identity\IBlobCustomerGroupManager.cs" />
     <Compile Include="Identity\Store\ICustomerGroupUserStore.cs" />
     <Compile Include="Identity\Store\ICustomerGroupRoleStore.cs" />
     <Compile Include="Identity\Store\ICustomerGroupStore.cs" />
@@ -123,7 +177,13 @@
     <Compile Include="Models\PerformanceRecord.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Notification\NotificationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Command\ICommandConnectionManager.cs" />
+    <Compile Include="Command\ICommandQueueManager.cs" />
+    <Compile Include="Services\ICustomerGroupService.cs" />
+    <Compile Include="Services\ICustomerService.cs" />
+    <Compile Include="Tokens\GenericUserNameSecurityTokenHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -146,6 +206,7 @@
       <DependentUpon>201505301805442_RequireMonitorId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

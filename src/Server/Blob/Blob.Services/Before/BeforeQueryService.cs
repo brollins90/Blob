@@ -7,7 +7,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
-using Blob.Security.Extensions;
+using Blob.Core.Extensions;
 
 namespace Blob.Services.Before
 {

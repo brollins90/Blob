@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Security.Extensions;
+using Blob.Core.Extensions;
 using AuditLevel = Blob.Contracts.ServiceContracts.AuditLevel;
 
 namespace Blob.Services.Before

@@ -126,14 +126,6 @@
       <Project>{A8395CBD-FDD2-4A90-8A9E-719B8266773F}</Project>
       <Name>Blob.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Blob.Managers\Blob.Managers.csproj">
-      <Project>{bfb7e4d5-e72e-401d-b576-ae890e35bb52}</Project>
-      <Name>Blob.Managers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Blob.Security\Blob.Security.csproj">
-      <Project>{0586d78e-fb9d-484e-aab9-00d434e0f3cd}</Project>
-      <Name>Blob.Security</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Blob.Services\Blob.Services.csproj">
       <Project>{0ca5cc90-d2bb-4847-98b4-3849cc5d422d}</Project>
       <Name>Blob.Services</Name>

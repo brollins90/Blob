@@ -46,7 +46,6 @@
     <Compile Include="Commands\IDeviceCommandHandler.cs" />
     <Compile Include="Commands\PrintLineCommand.cs" />
     <Compile Include="Commands\PsExecuteCommand.cs" />
-    <Compile Include="Commands\WindowsBackupCommand.cs" />
     <Compile Include="Commands\WindowsUpdateCommand.cs" />
     <Compile Include="Models\AddPerformanceRecordDto.cs" />
     <Compile Include="Models\AddStatusRecordDto.cs" />

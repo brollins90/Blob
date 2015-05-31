@@ -3,7 +3,7 @@ using System.IdentityModel.Configuration;
 using System.IdentityModel.Tokens;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using Blob.Security.Tokens;
+using Blob.Core.Tokens;
 using log4net;
 using Ninject;
 using Ninject.Extensions.Wcf;

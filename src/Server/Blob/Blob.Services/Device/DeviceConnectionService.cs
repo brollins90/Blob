@@ -3,7 +3,7 @@ using System.IdentityModel.Services;
 using System.Security.Permissions;
 using System.ServiceModel;
 using Blob.Contracts.ServiceContracts;
-using Blob.Managers.Command;
+using Blob.Core.Command;
 using log4net;
 
 namespace Blob.Services.Device
