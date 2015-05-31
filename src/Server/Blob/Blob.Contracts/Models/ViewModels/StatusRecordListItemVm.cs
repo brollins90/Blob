@@ -13,6 +13,16 @@ namespace Blob.Contracts.Models.ViewModels
         public long RecordId { get; set; }
 
         [DataMember]
+        [Display(Name = "Monitor id")]
+        //[Required]
+        public string MonitorId { get; set; }
+
+        [DataMember]
+        //[Display(Name = "Monitor id")]
+        //[Required]
+        public string CurrentValue { get; set; }
+
+        [DataMember]
         [Display(Name = "Monitor name")]
         [Required]
         public string MonitorName { get; set; }

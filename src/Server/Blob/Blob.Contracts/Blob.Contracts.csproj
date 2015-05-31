@@ -152,6 +152,10 @@
     <Compile Include="ServiceContracts\IUserManagerService.cs" />
     <Compile Include="ServiceContracts\KnownCommandsMap.cs" />
     <Compile Include="Services\ICustomerGroupService.cs" />
+    <Compile Include="Services\IPerformanceRecordService.cs" />
+    <Compile Include="Services\IStatusRecordService.cs" />
+    <Compile Include="Services\IDeviceCommandService.cs" />
+    <Compile Include="Services\IDeviceService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
   </ItemGroup>
   <ItemGroup />

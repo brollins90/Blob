@@ -102,6 +102,10 @@
     <Compile Include="Extensions\IdentityExtentions.cs" />
     <Compile Include="Extensions\Parsing.cs" />
     <Compile Include="Services\BlobCustomerGroupManager.cs" />
+    <Compile Include="Services\BlobDeviceCommandManager.cs" />
+    <Compile Include="Services\BlobPerformanceRecordManager.cs" />
+    <Compile Include="Services\BlobStatusRecordManager.cs" />
+    <Compile Include="Services\BlobDeviceManager.cs" />
     <Compile Include="Services\BlobCustomerManager.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />

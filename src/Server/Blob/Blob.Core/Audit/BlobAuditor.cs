@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Blob.Contracts.ServiceContracts;
-using Blob.Core;
 using Blob.Core.Models;
 using log4net;
 
@@ -30,7 +29,7 @@ namespace Blob.Core.Audit
                                 Operation = operation,
                                 Resource = resourceId,
                                 ResourceType = resource,
-                                RecordTimeUtc = DateTime.Now
+                                RecordTimeUtc = DateTime.UtcNow
                             };
                 Context.AuditLog.Add(ae);
                 await Context.SaveChangesAsync();

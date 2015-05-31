@@ -8,14 +8,8 @@ using Microsoft.AspNet.Identity;
 
 namespace Blob.Core.Extensions
 {
-    public static class IdentityUtil
+    public static class UserLoginExtensions
     {
-        // todo: move these to util folder
-        //public static IdentityResultDto ToDto(this IdentityResult res)
-        //{
-        //    return new IdentityResultDto(res);
-        //}
-
         public static UserLoginInfo ToLoginInfo(this UserLoginInfoDto res)
         {
             return new UserLoginInfo(res.LoginProvider, res.ProviderKey);
@@ -26,7 +20,8 @@ namespace Blob.Core.Extensions
             return new UserLoginInfoDto { LoginProvider = res.LoginProvider, ProviderKey = res.ProviderKey };
         }
     }
-    public static class IdentityExtentions
+
+    public static class BlobSecurityExtentions
     {
 
         public static UserDto ToDto(this User user)

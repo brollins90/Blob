@@ -176,7 +176,7 @@ namespace Blob.Core.Services
         public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
         {
             ThrowIfDisposed();
-            CustomerGroup group = CustomerGroups.Find(groupId);
+            CustomerGroup group = await CustomerGroups.FindAsync(groupId);
             return new CustomerGroupDeleteVm
             {
                 GroupId = group.Id,
@@ -231,7 +231,7 @@ namespace Blob.Core.Services
         public async Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId)
         {
             ThrowIfDisposed();
-            CustomerGroup group = CustomerGroups.Find(groupId);
+            CustomerGroup group = await CustomerGroups.FindAsync(groupId);
             return new CustomerGroupUpdateVm
             {
                 CustomerId = group.CustomerId,
