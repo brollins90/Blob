@@ -20,7 +20,7 @@ namespace Blob.Core.Authentication
 
         public override void Validate(string userName, string password)
         {
-            _log.Debug("Validate");
+            _log.Debug("Validating Username and password");
 
             //if (userName.ToLowerInvariant().Equals("beforeuser") && password.ToLowerInvariant().Equals("beforepassword"))
             //    return;

@@ -42,6 +42,7 @@ namespace Blob.Core.Services
 
         public async Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId)
         {
+            _log.Debug(string.Format("GetStatusRecordDeleteVmAsync({0})", recordId));
             return await(from status in StatusRecords.Include("Devices")
                          where status.Id == recordId
                          select new StatusRecordDeleteVm
@@ -85,6 +86,7 @@ namespace Blob.Core.Services
 
         public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
         {
+            _log.Debug(string.Format("GetStatusRecordSingleVmAsync({0})", recordId));
             return await(from status in StatusRecords
                          where status.Id == recordId
                          select new StatusRecordSingleVm
@@ -98,10 +100,11 @@ namespace Blob.Core.Services
                          }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto statusData)
+        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
         {
-            _log.Debug("Storing status data " + statusData);
-            Device device = Devices.Find(statusData.DeviceId);
+            _log.Debug(string.Format("AddStatusRecordAsync({0} - {1})", dto.DeviceId, dto.MonitorId));
+            _log.Debug("Storing status data " + dto);
+            Device device = Devices.Find(dto.DeviceId);
             device.LastActivityDateUtc = DateTime.UtcNow;
             _context.Entry(device).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -109,32 +112,32 @@ namespace Blob.Core.Services
 
             StatusRecord newStatus = new StatusRecord
             {
-                AlertLevel = statusData.AlertLevel,
-                CurrentValue = statusData.CurrentValue,
-                DeviceId = statusData.DeviceId,
-                MonitorDescription = statusData.MonitorDescription,
-                MonitorId = statusData.MonitorId,
-                MonitorName = statusData.MonitorName,
-                TimeGeneratedUtc = statusData.TimeGenerated,
-                TimeSentUtc = statusData.TimeSent,
+                AlertLevel = dto.AlertLevel,
+                CurrentValue = dto.CurrentValue,
+                DeviceId = dto.DeviceId,
+                MonitorDescription = dto.MonitorDescription,
+                MonitorId = dto.MonitorId,
+                MonitorName = dto.MonitorName,
+                TimeGeneratedUtc = dto.TimeGenerated,
+                TimeSentUtc = dto.TimeSent,
             };
             StatusRecords.Add(newStatus);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             
-            if (statusData.PerformanceRecordDto != null)
+            if (dto.PerformanceRecordDto != null)
             {
-                statusData.PerformanceRecordDto.StatusRecordId = newStatus.Id;
-                await _performanceRecordManager.AddPerformanceRecordAsync(statusData.PerformanceRecordDto);
+                dto.PerformanceRecordDto.StatusRecordId = newStatus.Id;
+                await _performanceRecordManager.AddPerformanceRecordAsync(dto.PerformanceRecordDto);
             }
 
             // now update the device alert level to reflect the new status
 
-            var allMonPrev = GetRecentStatus(statusData.DeviceId).ToList();
+            var allMonPrev = GetRecentStatus(dto.DeviceId).ToList();
 
 
             int deviceAlertLevel = device.AlertLevel;
-            int newAlertLevel = statusData.AlertLevel;
-            var monitorPreviousRecord = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
+            int newAlertLevel = dto.AlertLevel;
+            var monitorPreviousRecord = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(dto.MonitorId));
             int monitorPreviousValue = (monitorPreviousRecord == null) ? 0 : monitorPreviousRecord.AlertLevel;
 
 
@@ -182,6 +185,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
+            _log.Debug(string.Format("DeleteStatusRecordAsync({0})", dto.RecordId));
             StatusRecord status = StatusRecords.Find(dto.RecordId);
             _context.Entry(status).State = EntityState.Deleted;
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -193,6 +197,7 @@ namespace Blob.Core.Services
 
         private IQueryable<StatusRecord> GetRecentStatus(Guid deviceId)
         {
+            _log.Debug(string.Format("GetRecentStatus({0})", deviceId));
             return from s1 in StatusRecords
                           join s2 in
                               (
@@ -205,26 +210,20 @@ namespace Blob.Core.Services
                               on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
                           select s1;
         }
+
         public async Task<IList<StatusRecordListItemVm>> GetDeviceRecentStatusAsync(Guid deviceId)
         {
-            return await (from s1 in StatusRecords
-                          join s2 in
-                              (
-                                  from s in StatusRecords
-                                  where s.DeviceId == deviceId
-                                  group s by s.MonitorId
-                                      into r
-                                      select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
-                                  )
-                              on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
-                          select new StatusRecordListItemVm
+            _log.Debug(string.Format("GetDeviceRecentStatusAsync({0})", deviceId));
+            var s = await Task.FromResult(GetRecentStatus(deviceId));
+            return s.Select(s1 =>
+                          new StatusRecordListItemVm
                           {
                               MonitorDescription = s1.MonitorDescription,
                               MonitorName = s1.MonitorName,
                               RecordId = s1.Id,
                               Status = s1.AlertLevel,
                               TimeGenerated = s1.TimeGeneratedUtc
-                          }).ToListAsync();
+                          }).ToList();
         }
     }
 }

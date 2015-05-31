@@ -19,13 +19,15 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private ICommandConnectionManager _connectionManager;
-        private ICommandQueueManager _queueManager;
+        private readonly ICommandConnectionManager _connectionManager;
+        private readonly ICommandQueueManager _queueManager;
 
         public BlobDeviceCommandManager(ILog log, BlobDbContext context)
         {
             _log = log;
+            _log.Debug("Constructing BlobDeviceCommandManager");
             _context = context;
+            // todo: inject these
             _connectionManager = CommandConnectionManager.Instance;
             _queueManager = CommandQueueManager.Instance;
         }
@@ -33,6 +35,7 @@ namespace Blob.Core.Services
 
         public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
         {
+            _log.Debug(string.Format("GetDeviceCommandVmList()"));
             IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes(null);
             return commandTypes.Select(t => new DeviceCommandVm
             {
@@ -49,6 +52,7 @@ namespace Blob.Core.Services
 
         public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
         {
+            _log.Debug(string.Format("GetDeviceCommandIssueVm({0}, {1})", deviceId, commandType));
             var commandTypes = GetDeviceCommandVmList();
             var command = commandTypes.Single(type => type.CommandType.Equals(commandType));
 
@@ -64,11 +68,13 @@ namespace Blob.Core.Services
 
         public IEnumerable<Guid> GetActiveDeviceIds()
         {
+            _log.Debug(string.Format("GetActiveDeviceIds()"));
             return _connectionManager.GetActiveDeviceIds();
         }
 
         public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
         {
+            _log.Debug(string.Format("IssueCommandAsync({0})", dto.DeviceId));
             string assemblyName = KnownCommandsMap.GetCommandHandlerInterfaceAssembly().FullName;
             Type commandType = Type.GetType(dto.Command + ", " + assemblyName);
             var cmdInstance = Activator.CreateInstance(commandType);

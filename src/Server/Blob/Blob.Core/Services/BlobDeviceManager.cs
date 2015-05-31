@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Services;
-using Blob.Core.Command;
 using Blob.Core.Extensions;
 using Blob.Core.Models;
 using EntityFramework.Extensions;
@@ -20,11 +19,12 @@ namespace Blob.Core.Services
         private readonly ILog _log;
         private readonly BlobDbContext _context;
         private readonly BlobDeviceCommandManager _deviceCommandManager;
-        private BlobStatusRecordManager _statusRecordManager;
+        private readonly BlobStatusRecordManager _statusRecordManager;
 
         public BlobDeviceManager(ILog log, BlobDbContext context, BlobDeviceCommandManager deviceCommandManager, BlobStatusRecordManager statusRecordManager)
         {
             _log = log;
+            _log.Debug("Constructing BlobDeviceManager");
             _context = context;
             _deviceCommandManager = deviceCommandManager;
             _statusRecordManager = statusRecordManager;
@@ -34,10 +34,9 @@ namespace Blob.Core.Services
         public DbSet<DeviceType> DeviceTypes { get { return _context.Set<DeviceType>(); } }
 
 
-
-
         public async Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto)
         {
+            _log.Debug(string.Format("DisableDeviceAsync({0})", dto.DeviceId));
             Device device = await _context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = false;
 
@@ -48,6 +47,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto)
         {
+            _log.Debug(string.Format("EnableDeviceAsync({0})", dto.DeviceId));
             Device device = await _context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
             device.Enabled = true;
 
@@ -58,7 +58,7 @@ namespace Blob.Core.Services
 
         public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
         {
-            _log.Debug("BlobManager registering device " + dto.DeviceId);
+            _log.Debug(string.Format("RegisterDeviceAsync({0})", dto.DeviceId));
 
             bool succeeded = false;
             Guid deviceId = Guid.Parse(dto.DeviceId);
@@ -109,6 +109,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto)
         {
+            _log.Debug(string.Format("UpdateDeviceAsync({0})", dto.DeviceId));
             Device device = Devices.Find(dto.DeviceId);
             device.DeviceName = dto.Name;
             device.DeviceTypeId = dto.DeviceTypeId;
@@ -122,6 +123,7 @@ namespace Blob.Core.Services
 
         public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
         {
+            _log.Debug(string.Format("GetDeviceDisableVmAsync({0})", deviceId));
             return await (from device in Devices
                           where device.Id == deviceId
                           select new DeviceDisableVm
@@ -134,6 +136,7 @@ namespace Blob.Core.Services
 
         public async Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId)
         {
+            _log.Debug(string.Format("GetDeviceEnableVmAsync({0})", deviceId));
             return await (from device in Devices
                           where device.Id == deviceId
                           select new DeviceEnableVm
@@ -146,6 +149,7 @@ namespace Blob.Core.Services
 
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
         {
+            _log.Debug(string.Format("GetDeviceSingleVmAsync({0})", deviceId));
             var d = await(from device in Devices.Include("DeviceType")
                           where device.Id == deviceId
                           select new DeviceSingleVm
@@ -165,6 +169,7 @@ namespace Blob.Core.Services
 
         public async Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId)
         {
+            _log.Debug(string.Format("GetDeviceUpdateVmAsync({0})", deviceId));
             return await(from device in Devices.Include("DeviceTypes")
                          where device.Id == deviceId
                          select new DeviceUpdateVm
@@ -181,8 +186,9 @@ namespace Blob.Core.Services
                          }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
         {
+            _log.Debug(string.Format("GetDevicePageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds();
 
             IEnumerable<DeviceCommandVm> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
@@ -223,42 +229,9 @@ namespace Blob.Core.Services
 
         public int CalculateDeviceAlertLevel(Guid deviceId)
         {
+            _log.Debug(string.Format("CalculateDeviceAlertLevel({0})", deviceId));
             var records = _statusRecordManager.GetDeviceRecentStatusAsync(deviceId).Result;
             return records.Select(statusRecord => statusRecord.Status).Concat(new[] { 0 }).Max();
         }
-
-        ////private async Task<int> GetCurrentAlertLevelAsync(Guid deviceId)
-        ////{
-        ////    IEnumerable<StatusRecord> records = await GetDeviceRecentStatusAsync(deviceId);
-        ////    return ChangeStatusRecordsToStatusInt(records);
-        ////}
-        //private int GetCurrentAlertLevel(Guid deviceId)
-        //{
-        //    IEnumerable<StatusRecord> records = GetDeviceRecentStatus(deviceId);
-        //    return ChangeStatusRecordsToStatusInt(records);
-        //}
-
-        ////private IEnumerable<StatusRecord> GetDeviceRecentStatus(Guid deviceId)
-        ////{
-        ////    using (BlobDbContext context = new BlobDbContext())
-        ////    {
-        ////        return (from s1 in context.DeviceStatuses
-        ////                join s2 in
-        ////                    (
-        ////                        from s in context.DeviceStatuses
-        ////                        where s.DeviceId == deviceId
-        ////                        group s by s.MonitorId
-        ////                            into r
-        ////                            select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
-        ////                    )
-        ////                    on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
-        ////                select s1).ToList();
-        ////    }
-        ////}
-
-
-
-
-
     }
 }

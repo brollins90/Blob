@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
@@ -24,6 +23,7 @@ namespace Blob.Core.Services
         public BlobCustomerGroupManager(ILog log, BlobDbContext context)
         {
             _log = log;
+            _log.Debug("Constructing BlobCustomerGroupManager");
             _context = context;
         }
 
@@ -37,6 +37,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("CreateCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = new CustomerGroup
                                   {
@@ -53,6 +54,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("DeleteCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(dto.GroupId);
             CustomerGroups.Remove(group);
@@ -85,6 +87,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("UpdateCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(dto.GroupId);
             group.Name = dto.Name;
@@ -116,6 +119,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("AddRoleToCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(dto.GroupId);
             Role role = Roles.Find(dto.RoleId);
@@ -130,6 +134,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("AddUserToCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(dto.GroupId);
             var ur = new CustomerGroupUser { GroupId = group.Id, UserId = dto.UserId };
@@ -141,6 +146,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("RemoveRoleFromCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(dto.GroupId);
             CustomerGroupRole cgr = _context.Set<CustomerGroupRole>().FirstOrDefault(r => dto.RoleId.Equals(r.RoleId) && r.GroupId.Equals(group.Id));
@@ -152,6 +158,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
+            _log.Debug(string.Format("RemoveUserFromCustomerGroupAsync"));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(dto.GroupId);
             CustomerGroupUser cgr = _context.Set<CustomerGroupUser>().FirstOrDefault(r => dto.UserId.Equals(r.UserId) && r.GroupId.Equals(group.Id));
@@ -163,6 +170,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
         {
+            _log.Debug(string.Format("GetCustomerGroupCreateVmAsync({0})", customerId));
             ThrowIfDisposed();
             var roles = await GetCustomerRolesAsync(customerId);
             return new CustomerGroupCreateVm
@@ -175,6 +183,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
         {
+            _log.Debug(string.Format("GetCustomerGroupDeleteVmAsync({0})", groupId));
             ThrowIfDisposed();
             CustomerGroup group = await CustomerGroups.FindAsync(groupId);
             return new CustomerGroupDeleteVm
@@ -183,8 +192,9 @@ namespace Blob.Core.Services
                 Name = group.Name
             };
         }
-        public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum, int pageSize)
         {
+            _log.Debug(string.Format("GetCustomerGroupPageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             var count = CustomerGroups.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
@@ -211,6 +221,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
         {
+            _log.Debug(string.Format("GetCustomerGroupSingleVmAsync({0})", groupId));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(groupId);
             var roles = await GetCustomerGroupRolesAsync(groupId);
@@ -230,6 +241,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId)
         {
+            _log.Debug(string.Format("GetCustomerGroupUpdateVmAsync({0})", groupId));
             ThrowIfDisposed();
             CustomerGroup group = await CustomerGroups.FindAsync(groupId);
             return new CustomerGroupUpdateVm
@@ -243,12 +255,14 @@ namespace Blob.Core.Services
 
         public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid groupId)
         {
+            _log.Debug(string.Format("GetCustomerRolesAsync({0})", groupId));
             ThrowIfDisposed();
             return await _context.Roles.Select(x => new CustomerGroupRoleListItem { Name = x.Name, RoleId = x.Id }).ToListAsync();
         }
 
         public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId)
         {
+            _log.Debug(string.Format("GetCustomerGroupRolesAsync({0})", groupId));
             ThrowIfDisposed();
             var query = from gr in CustomerGroupRoles
                         where gr.GroupId.Equals(groupId)
@@ -259,6 +273,7 @@ namespace Blob.Core.Services
 
         public async Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId)
         {
+            _log.Debug(string.Format("GetCustomerGroupUsersAsync({0})", groupId));
             ThrowIfDisposed();
             var query = from gr in CustomerGroupUsers
                         where gr.GroupId.Equals(groupId)

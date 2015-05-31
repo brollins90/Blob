@@ -22,7 +22,8 @@ namespace Blob.Core.Authentication
 
         public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
         {
-            _log.Debug("Authenticate");
+            _log.Debug(string.Format("Authenticating {0} for access to {1}", incomingPrincipal.Identity.GetUserName(), resourceName));
+
             incomingPrincipal.Identities.First().AddClaim(new Claim("touchedat", DateTime.Now.ToString()));
             incomingPrincipal.Identities.First().AddClaim(new Claim("touched", resourceName)); // this is the .svc url
 

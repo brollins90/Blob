@@ -21,7 +21,7 @@ namespace Blob.Core.Audit
 
         public async Task AddAuditEntryAsync(string initiator, AuditLevel level, string operation, string resource, string resourceId)
         {
-            _log.Debug("adding audit entry");
+            _log.Debug("Adding audit entry");
             AuditRecord ae = new AuditRecord
                             {
                                 AuditLevel = (int)level,

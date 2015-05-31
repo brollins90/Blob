@@ -19,22 +19,13 @@ namespace Blob.Core.Services
         public BlobCustomerManager(ILog log, BlobDbContext context)
         {
             _log = log;
+            _log.Debug("Constructing BlobCustomerManager");
             _context = context;
         }
 
-
-        //public async Task<BlobResultDto> DeleteCustomerAsync(Guid customerId)
-        //{
-        //    Customer customer = await _customerStore.FindCustomerByIdAsync(customerId).ConfigureAwait(true);
-        //    _context.Customers.Remove(customer);
-        //    await _context.SaveChangesAsync().ConfigureAwait(true);
-        //    return BlobResultDto.Success;
-        //}
-
-
         public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
         {
-            _log.Info(string.Format("Disabling customer {0}", dto.CustomerId));
+            _log.Debug(string.Format("DisableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
             customer.Enabled = false;
             
@@ -46,12 +37,12 @@ namespace Blob.Core.Services
             _context.Entry(customer).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            _log.Info(string.Format("Disabled customer {0}", dto.CustomerId));
             return BlobResultDto.Success;
         }
 
         public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
         {
+            _log.Debug(string.Format("EnableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
             customer.Enabled = true;
 
@@ -62,6 +53,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
+            _log.Debug(string.Format("RegisterCustomerAsync({0})", dto.CustomerName));
 
             // check if customer exists
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -125,6 +117,7 @@ namespace Blob.Core.Services
 
         public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
+            _log.Debug(string.Format("UpdateCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
             customer.Name = dto.Name;
 
@@ -135,6 +128,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
         {
+            _log.Debug(string.Format("GetCustomerDisableVmAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
                           select new CustomerDisableVm
@@ -147,6 +141,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId)
         {
+            _log.Debug(string.Format("GetCustomerEnableVmAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
                           select new CustomerEnableVm
@@ -159,6 +154,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
         {
+            _log.Debug(string.Format("GetCustomerSingleVmAsync({0})", customerId));
             return await _context.Customers
                 .Include("Devices").Include("Users")
                                 .Where(x => x.Id == customerId)
@@ -173,6 +169,7 @@ namespace Blob.Core.Services
 
         public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
         {
+            _log.Debug(string.Format("GetCustomerUpdateVmAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
                           select new CustomerUpdateVm
@@ -181,18 +178,5 @@ namespace Blob.Core.Services
                               CustomerName = customer.Name
                           }).SingleAsync().ConfigureAwait(false);
         }
-
-        public Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
     }
 }

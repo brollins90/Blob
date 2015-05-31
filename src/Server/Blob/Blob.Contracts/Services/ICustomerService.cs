@@ -20,7 +20,5 @@ namespace Blob.Contracts.Services
         Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId);
         Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId);
 
-        Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId);
-        Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
     }
 }

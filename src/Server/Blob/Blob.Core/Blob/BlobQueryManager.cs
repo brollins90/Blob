@@ -368,7 +368,6 @@ namespace Blob.Core.Blob
             return await _customerGroupManager.GetCustomerRolesAsync(customerId).ConfigureAwait(false);
         }
 
-
         public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             return await _customerGroupManager.GetCustomerGroupPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);

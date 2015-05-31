@@ -20,7 +20,7 @@ namespace Blob.Core.Authentication
 
         public Task<ClaimsIdentity> CreateAsync(BlobUserManager manager, User user, string authenticationType)
         {
-            _log.Debug("CreateAsync");
+            _log.Debug("Creating claims identity");
             if (manager == null)
             {
                 throw new ArgumentNullException("manager");
