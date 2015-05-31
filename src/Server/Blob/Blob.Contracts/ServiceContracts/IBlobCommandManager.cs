@@ -1,16 +1,38 @@
-﻿using System;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
-using Blob.Contracts.Services;
 
 namespace Blob.Contracts.ServiceContracts
 {
     [ServiceContract]
-    public interface IBlobCommandManager : 
-        ICustomerCommandManager, 
-        ICustomerGroupCommandManager
+    public interface IBlobCommandManager
     {
+        // Customer
+        [OperationContract]
+        Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto);
+        [OperationContract]
+        Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto);
+        [OperationContract]
+        Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto);
+        [OperationContract]
+        Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto);
+
+        // Customer Group
+        [OperationContract]
+        Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto);
+        [OperationContract]
+        Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto);
+        [OperationContract]
+        Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto);
+        [OperationContract]
+        Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto);
+        [OperationContract]
+        Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto);
+        [OperationContract]
+        Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto);
+        [OperationContract]
+        Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto);
+
         // Commands
         [OperationContract]
         Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto);

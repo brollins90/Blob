@@ -43,7 +43,7 @@ namespace Blob.WcfHost.Infrastructure
             Bind<DbContext>().To<BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
-            Bind<BlobCustomerStore>().ToSelf();
+            //Bind<BlobCustomerStore>().ToSelf();
             Bind<IRoleStore<Role, Guid>>().To<BlobRoleStore>();
             Bind<BlobRoleManager>().ToSelf();
 

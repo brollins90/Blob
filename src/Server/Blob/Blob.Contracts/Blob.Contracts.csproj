@@ -151,10 +151,8 @@
     <Compile Include="ServiceContracts\IIdentityStore.cs" />
     <Compile Include="ServiceContracts\IUserManagerService.cs" />
     <Compile Include="ServiceContracts\KnownCommandsMap.cs" />
-    <Compile Include="Services\ICustomerGroupCommandManager.cs" />
-    <Compile Include="Services\ICustomerGroupQueryManager.cs" />
-    <Compile Include="Services\ICustomerQueryManager.cs" />
-    <Compile Include="Services\ICustomerCommandManager.cs" />
+    <Compile Include="Services\ICustomerGroupService.cs" />
+    <Compile Include="Services\ICustomerService.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

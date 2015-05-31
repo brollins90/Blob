@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 
-namespace Blob.Core.Services
+namespace Blob.Contracts.Services
 {
     public interface ICustomerService
     {
@@ -13,8 +13,7 @@ namespace Blob.Core.Services
         Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto);
         Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto);
         Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto);
-
-
+        
         // Query
         Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId);
         Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId);

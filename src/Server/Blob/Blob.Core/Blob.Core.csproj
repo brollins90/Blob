@@ -101,15 +101,14 @@
     <Compile Include="Command\CommandQueueManager.cs" />
     <Compile Include="Extensions\IdentityExtentions.cs" />
     <Compile Include="Extensions\Parsing.cs" />
-    <Compile Include="Identity\BlobCustomerGroupManager.cs" />
-    <Compile Include="Identity\BlobCustomerManager.cs" />
+    <Compile Include="Services\BlobCustomerGroupManager.cs" />
+    <Compile Include="Services\BlobCustomerManager.cs" />
     <Compile Include="Identity\BlobPasswordHasher.cs" />
     <Compile Include="Identity\BlobPasswordValidator.cs" />
     <Compile Include="Identity\BlobRoleManager.cs" />
     <Compile Include="Identity\BlobUserManager.cs" />
     <Compile Include="Identity\BlobUserValidator.cs" />
     <Compile Include="Identity\GenericDbContext.cs" />
-    <Compile Include="Identity\IBlobCustomerGroupManager.cs" />
     <Compile Include="Identity\Store\ICustomerGroupUserStore.cs" />
     <Compile Include="Identity\Store\ICustomerGroupRoleStore.cs" />
     <Compile Include="Identity\Store\ICustomerGroupStore.cs" />
@@ -181,8 +180,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Command\ICommandConnectionManager.cs" />
     <Compile Include="Command\ICommandQueueManager.cs" />
-    <Compile Include="Services\ICustomerGroupService.cs" />
-    <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Tokens\GenericUserNameSecurityTokenHandler.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@ using Blob.Core.Command;
 using Blob.Core.Extensions;
 using Blob.Core.Identity;
 using Blob.Core.Models;
+using Blob.Core.Services;
 using log4net;
 
 namespace Blob.Core.Blob
@@ -451,44 +452,37 @@ namespace Blob.Core.Blob
 
         public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
-            await _customerGroupManager.CreateGroupAsync(dto).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
-            await _customerGroupManager.DeleteGroupAsync(dto.GroupId).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
-            await _customerGroupManager.UpdateGroupAsync(dto).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
-            await _customerGroupManager.AddRoleToCustomerGroup(dto).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
-            await _customerGroupManager.AddUserToCustomerGroup(dto).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
-            await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
-            await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
         }
         #endregion
     }

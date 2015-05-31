@@ -9,6 +9,7 @@ using Blob.Core;
 using Blob.Core.Models;
 using Blob.Core.Command;
 using Blob.Core.Identity;
+using Blob.Core.Services;
 using EntityFramework.Extensions;
 using log4net;
 
@@ -577,95 +578,43 @@ namespace Blob.Core.Blob
 
         public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
         {
-            var roles = await GetCustomerRolesAsync(customerId);
-            return new CustomerGroupCreateVm
-            {
-                CustomerId = customerId,
-                GroupId = Guid.NewGuid(),
-                AvailableRoles = roles
-            };
+            return await _customerGroupManager.GetCustomerGroupCreateVmAsync(customerId);
         }
 
         public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
         {
-            CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
-            return new CustomerGroupDeleteVm
-            {
-                GroupId = group.Id,
-                Name = group.Name
-            };
+            return await _customerGroupManager.GetCustomerGroupDeleteVmAsync(groupId); 
         }
 
         public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
         {
-            CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
-            var roles = await GetCustomerGroupRolesAsync(groupId);
-            var users = await GetCustomerGroupUsersAsync(groupId);
-            return new CustomerGroupSingleVm
-            {
-                CustomerId = group.CustomerId,
-                Description = group.Description,
-                GroupId = group.Id,
-                Name = group.Name,
-                RoleCount = roles.Count(),
-                Roles = roles,
-                UserCount = users.Count(),
-                Users = users
-            };
+            return await _customerGroupManager.GetCustomerGroupSingleVmAsync(groupId);
         }
 
         public async Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId)
         {
-            CustomerGroup group = await _customerGroupManager.FindGroupByIdAsync(groupId);
-            return new CustomerGroupUpdateVm
-                   {
-                       CustomerId = group.CustomerId,
-                       Description = group.Description,
-                       GroupId = group.Id,
-                       Name = group.Name
-                   };
+            return await _customerGroupManager.GetCustomerGroupUpdateVmAsync(groupId);
         }
 
         public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId)
         {
-            return await Context.Roles.Select(x => new CustomerGroupRoleListItem { Name = x.Name, RoleId = x.Id }).ToListAsync();
+            return await _customerGroupManager.GetCustomerRolesAsync(customerId);
         }
 
 
         public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
-            var pNum = pageNum < 1 ? 0 : pageNum - 1;
-
-            var count = Context.Set<CustomerGroup>().Where(x => x.CustomerId.Equals(customerId)).FutureCount();
-            var groups = Context.Set<CustomerGroup>()
-                .Where(x => x.CustomerId.Equals(customerId))
-                .OrderByDescending(x => x.Name)
-                .Skip(pNum * pageSize).Take(pageSize).Future();
-
-            // define future queries before any of them execute
-            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new CustomerGroupPageVm
-            {
-                TotalCount = count,
-                PageCount = pCount,
-                PageNum = pNum + 1,
-                PageSize = pageSize,
-                Items = groups.Select(x => new CustomerGroupListItemVm
-                {
-                    GroupId = x.Id,
-                    Name = x.Name
-                }),
-            }).ConfigureAwait(false);
+            return await _customerGroupManager.GetCustomerGroupPageVmAsync(customerId, pageNum, pageSize);
         }
 
         public async Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId)
         {
-            return (await _customerGroupManager.GetGroupRolesAsync(groupId)).Select(x => new CustomerGroupRoleListItem { Name = x.Name, RoleId = x.Id }).ToList();
+            return await _customerGroupManager.GetCustomerGroupRolesAsync(groupId);
         }
 
         public async Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId)
         {
-            return (await _customerGroupManager.GetGroupUsersAsync(groupId)).Select(x => new CustomerGroupUserListItem { UserName = x.UserName, UserId = x.Id }).ToList();
+            return await _customerGroupManager.GetCustomerGroupUsersAsync(groupId);
         }
 
 
