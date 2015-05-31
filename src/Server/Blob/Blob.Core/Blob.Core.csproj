@@ -94,6 +94,7 @@
     <Compile Include="Authentication\ClaimTransformer.cs" />
     <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
     <Compile Include="BlobDbContext.cs" />
+    <Compile Include="BlobInterceptorLogging.cs" />
     <Compile Include="BlobPermissions.cs" />
     <Compile Include="Blob\BlobCommandManager.cs" />
     <Compile Include="Blob\BlobQueryManager.cs" />

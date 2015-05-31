@@ -28,6 +28,10 @@ namespace BMonitor.Service.Helpers
 
         public void SendResults(ResultData result)
         {
+            if (result.MonitorId == null)
+            {
+                throw new Exception("MonitorId is required");
+            }
 
             AddStatusRecordDto statusData = new AddStatusRecordDto()
             {

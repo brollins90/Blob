@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.Entity.Infrastructure.Interception;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Tokens;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using Blob.Core;
 using Blob.Core.Tokens;
 using log4net;
 using Ninject;
@@ -25,6 +27,10 @@ namespace Blob.WcfHost.Infrastructure
             StandardKernel kernel = new StandardKernel(new NinjectServiceModule());
             kernel.Bind<ServiceHost>().To<NinjectServiceHost>();
             SetKernel(kernel);
+
+
+
+            DbInterception.Add(new BlobInterceptorLogging());
         }
 
         /// <summary>

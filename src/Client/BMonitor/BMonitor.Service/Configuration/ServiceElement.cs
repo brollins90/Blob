@@ -40,19 +40,19 @@ namespace BMonitor.Service.Configuration
             set { base["enableStatusMonitoring"] = value; }
         }
 
-        [ConfigurationProperty("handlerPath", DefaultValue = "/Handlers/")]
-        public string HandlerPath
-        {
-            get { return (string)base["handlerPath"]; }
-            set { base["handlerPath"] = value; }
-        }
+        //[ConfigurationProperty("handlerPath", DefaultValue = "/Handlers/")]
+        //public string HandlerPath
+        //{
+        //    get { return (string)base["handlerPath"]; }
+        //    set { base["handlerPath"] = value; }
+        //}
 
-        [ConfigurationProperty("monitorPath", DefaultValue = "/Monitors/")]
-        public string MonitorPath
-        {
-            get { return (string)base["monitorPath"]; }
-            set { base["monitorPath"] = value; }
-        }
+        //[ConfigurationProperty("monitorPath", DefaultValue = "/Monitors/")]
+        //public string MonitorPath
+        //{
+        //    get { return (string)base["monitorPath"]; }
+        //    set { base["monitorPath"] = value; }
+        //}
 
         [ConfigurationProperty("password")]
         public string Password

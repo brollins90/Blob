@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Proxies;
 using log4net;
 
 namespace BMonitor.Service
@@ -14,12 +9,10 @@ namespace BMonitor.Service
     public class Registrator
     {
         private readonly ILog _log;
-        //private IDeviceStatusService _statusClient;
 
         public Registrator(ILog log)
         {
             _log = log;
-            //_statusClient = statusClient;
         }
 
         public bool IsRegistered()
@@ -48,6 +41,11 @@ namespace BMonitor.Service
             _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
             
             RegisterDeviceResponseDto regInfo = Task.Run(() => statusClient.RegisterDeviceAsync(regMessage)).Result;
+
+            //WcfServiceInvoker invoker = new WcfServiceInvoker();
+            //RegisterDeviceResponseDto regInfo = invoker.InvokeService<IDeviceStatusService, RegisterDeviceResponseDto>(
+            //    proxy => proxy.RegisterDeviceAsync(regMessage)
+            //);
             //_log.Debug(string.Format("RegistrationInformation response: {0}", regInfo));
             if (regInfo.Succeeded)
             {

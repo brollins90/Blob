@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Linq;
 using Blob.Core.Models;
 
 namespace Blob.Core.Migrations
@@ -187,6 +188,15 @@ namespace Blob.Core.Migrations
                 UserName = "rritc1"
             };
             context.Set<User>().AddOrUpdate(x => x.UserName, rritc1);
+            context.SaveChanges();
+
+            UserProfile up1 = new UserProfile
+                              {
+                                  EmailNotificationScheduleId = sched.First().Id,
+                                  SendEmailNotifications = true,
+                                  UserId = rritc1.Id
+                              };
+            context.Set<UserProfile>().AddOrUpdate(x => x.UserId, up1);
             context.SaveChanges();
 
 

@@ -129,25 +129,18 @@ namespace Blob.Core.Services
 
             // now update the device alert level to reflect the new status
 
-            var allMonPrev = await GetDeviceRecentStatusAsync(statusData.DeviceId);
+            var allMonPrev = GetRecentStatus(statusData.DeviceId).ToList();
 
 
-            int dal = device.AlertLevel;
-            int thisal = statusData.AlertLevel;
-            var prev = allMonPrev.First(x => x.MonitorId.Equals(statusData.MonitorId));
-            int preval = prev.Status;
+            int deviceAlertLevel = device.AlertLevel;
+            int newAlertLevel = statusData.AlertLevel;
+            var monitorPreviousRecord = allMonPrev.FirstOrDefault(x => x.MonitorId.Equals(statusData.MonitorId));
+            int monitorPreviousValue = (monitorPreviousRecord == null) ? 0 : monitorPreviousRecord.AlertLevel;
 
 
-            allMonPrev.Remove(prev);
-            allMonPrev.Add(new StatusRecordListItemVm
-                           {
-                               MonitorDescription = newStatus.MonitorDescription,
-                               MonitorName = newStatus.MonitorName,
-                               MonitorId = newStatus.MonitorId,
-                               Status = newStatus.AlertLevel,
-                               TimeGenerated = newStatus.TimeGeneratedUtc
-                           });
-            int worstNow = allMonPrev.Select(statusRecord => statusRecord.Status).Concat(new[] { 0 }).Max();
+            allMonPrev.Remove(monitorPreviousRecord);
+            allMonPrev.Add(newStatus);
+            int worstNow = allMonPrev.Select(statusRecord => statusRecord.AlertLevel).Concat(new[] { 0 }).Max();
 
             // just set it????
             device.AlertLevel = worstNow;
@@ -198,6 +191,20 @@ namespace Blob.Core.Services
         }
 
 
+        private IQueryable<StatusRecord> GetRecentStatus(Guid deviceId)
+        {
+            return from s1 in StatusRecords
+                          join s2 in
+                              (
+                                  from s in StatusRecords
+                                  where s.DeviceId == deviceId
+                                  group s by s.MonitorId
+                                  into r
+                                  select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
+                              )
+                              on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
+                          select s1;
+        }
         public async Task<IList<StatusRecordListItemVm>> GetDeviceRecentStatusAsync(Guid deviceId)
         {
             return await (from s1 in StatusRecords
@@ -211,13 +218,13 @@ namespace Blob.Core.Services
                                   )
                               on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
                           select new StatusRecordListItemVm
-                                 {
-                                     MonitorDescription = s1.MonitorDescription,
-                                     MonitorName = s1.MonitorName,
-                                     RecordId = s1.Id,
-                                     Status = s1.AlertLevel,
-                                     TimeGenerated = s1.TimeGeneratedUtc
-                                 }).ToListAsync();
+                          {
+                              MonitorDescription = s1.MonitorDescription,
+                              MonitorName = s1.MonitorName,
+                              RecordId = s1.Id,
+                              Status = s1.AlertLevel,
+                              TimeGenerated = s1.TimeGeneratedUtc
+                          }).ToListAsync();
         }
     }
 }

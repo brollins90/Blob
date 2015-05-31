@@ -114,7 +114,7 @@
     <Compile Include="Monitor\Quartz\NinjectJobFactory.cs" />
     <Compile Include="Monitor\Quartz\QuartzMonitorScheduler.cs" />
     <Compile Include="Monitor\Quartz\QuartzJob.cs" />
-    <Compile Include="Registrator.cs" />
+    <Compile Include="Helpers\Registrator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BMonitor.Common\BMonitor.Common.csproj">

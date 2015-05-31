@@ -146,32 +146,21 @@ namespace Blob.Core.Services
 
         public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
         {
-            var device = await Devices.FindAsync(deviceId);
-            //var d = await(from device in Devices
-            //              where device.Id == deviceId
-            //              select new DeviceSingleVm
-            //              {
-            //                  CreateDate = device.CreateDateUtc,
-            //                  DeviceId = device.Id,
-            //                  DeviceName = device.DeviceName,
-            //                  DeviceType = device.DeviceType.Name,
-            //                  Enabled = device.Enabled,
-            //                  LastActivityDate = device.LastActivityDateUtc,
-            //                  //Status = device.AlertLevel,
-            //              }).SingleAsync();
+            var d = await(from device in Devices.Include("DeviceType")
+                          where device.Id == deviceId
+                          select new DeviceSingleVm
+                          {
+                              CreateDate = device.CreateDateUtc,
+                              DeviceId = device.Id,
+                              DeviceName = device.DeviceName,
+                              DeviceType = device.DeviceType.Name,
+                              Enabled = device.Enabled,
+                              LastActivityDate = device.LastActivityDateUtc,
+                              //Status = device.AlertLevel,
+                          }).SingleAsync();
+            d.Status = CalculateDeviceAlertLevel(d.DeviceId);
 
-            var vm = new DeviceSingleVm
-                      {
-                          CreateDate = device.CreateDateUtc,
-                          DeviceId = device.Id,
-                          DeviceName = device.DeviceName,
-                          DeviceType = device.DeviceType.Name,
-                          Enabled = device.Enabled,
-                          LastActivityDate = device.LastActivityDateUtc,
-                          Status = CalculateDeviceAlertLevel(device.Id)
-                      };
-
-            return vm;
+            return d;
         }
 
         public async Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId)
