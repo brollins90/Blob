@@ -453,5 +453,19 @@ namespace Blob.Proxies
             }
             return null;
         }
+
+
+        public async Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId)
+        {
+            try
+            {
+                return await Channel.GetMonitorListVmAsync(deviceId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
     }
 }

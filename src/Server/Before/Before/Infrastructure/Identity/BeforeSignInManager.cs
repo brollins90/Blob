@@ -38,7 +38,6 @@ namespace Before.Infrastructure.Identity
             // Clear any partial cookies from external or two factor partial sign ins
             SignOut();
 
-            //SiteGlobalConfig.UpDictionary[user.UserName] = password;
             // todo cheat the passwork until i make the passthrough tokens work
             userIdentity.AddClaim(new Claim("username", user.UserName));
             userIdentity.AddClaim(new Claim("password", password));

@@ -29,10 +29,8 @@
     <div class="container body-content">
         @*@{ Html.RenderPartial("_Alerts"); }*@        @{ Html.RenderPartial("_GenericModal"); }
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Blob Monitoring</p>
-        </footer>
+        <hr/> 
+        @Html.Partial("_Footer")
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")

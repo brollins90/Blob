@@ -81,12 +81,25 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#monitors">Monitors</a>
+                    </h4>
+                </div>
+                <div id="monitors" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        @{ Html.RenderAction("MonitorList", "Status", routeValues: new { deviceId = Model.DeviceId });}
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#status">Status</a>
                     </h4>
                 </div>
                 <div id="status" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        @{ Html.RenderAction("PageForDevice", "Status", routeValues: new {deviceId = Model.DeviceId});}
+                        @{ Html.RenderAction("PageForDevice", "Status", routeValues: new { deviceId = Model.DeviceId });}
                     </div>
                 </div>
             </div>
@@ -98,7 +111,7 @@
                 </div>
                 <div id="performance" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        @{ Html.RenderAction("PageForDevice", "Performance", routeValues: new {deviceId = Model.DeviceId});}
+                        @{ Html.RenderAction("PageForDevice", "Performance", routeValues: new { deviceId = Model.DeviceId });}
                     </div>
                 </div>
             </div>

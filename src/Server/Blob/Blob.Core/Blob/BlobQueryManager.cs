@@ -171,6 +171,10 @@ namespace Blob.Core.Blob
         {
             return await _statusRecordManager.GetStatusRecordSingleVmAsync(recordId).ConfigureAwait(false);
         }
+        public async Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId)
+        {
+            return await _statusRecordManager.GetMonitorListVmAsync(deviceId).ConfigureAwait(false);
+        }
 
 
         // User
@@ -383,6 +387,8 @@ namespace Blob.Core.Blob
             return await _customerGroupManager.GetCustomerGroupUsersAsync(groupId).ConfigureAwait(false);
         }
         #endregion
+
+
 
 
 

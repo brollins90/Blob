@@ -78,6 +78,9 @@ namespace Blob.Contracts.ServiceContracts
         Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId);
 
         [OperationContract]
+        Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId);
+
+        [OperationContract]
         Task<UserDisableVm> GetUserDisableVmAsync(Guid userId);
         [OperationContract]
         Task<UserEnableVm> GetUserEnableVmAsync(Guid userId);

@@ -43,16 +43,16 @@ namespace Blob.Core.Services
         public async Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId)
         {
             _log.Debug(string.Format("GetStatusRecordDeleteVmAsync({0})", recordId));
-            return await(from status in StatusRecords.Include("Devices")
-                         where status.Id == recordId
-                         select new StatusRecordDeleteVm
-                         {
-                             DeviceName = status.Device.DeviceName,
-                             MonitorName = status.MonitorName,
-                             RecordId = status.Id,
-                             TimeGenerated = status.TimeGeneratedUtc
+            return await (from status in StatusRecords.Include("Devices")
+                          where status.Id == recordId
+                          select new StatusRecordDeleteVm
+                          {
+                              DeviceName = status.Device.DeviceName,
+                              MonitorName = status.MonitorName,
+                              RecordId = status.Id,
+                              TimeGenerated = status.TimeGeneratedUtc
 
-                         }).SingleAsync().ConfigureAwait(false);
+                          }).SingleAsync().ConfigureAwait(false);
         }
 
         public async Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
@@ -87,17 +87,17 @@ namespace Blob.Core.Services
         public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
         {
             _log.Debug(string.Format("GetStatusRecordSingleVmAsync({0})", recordId));
-            return await(from status in StatusRecords
-                         where status.Id == recordId
-                         select new StatusRecordSingleVm
-                         {
-                             MonitorDescription = status.MonitorDescription,
-                             MonitorName = status.MonitorName,
-                             RecordId = status.Id,
-                             Status = status.AlertLevel,
-                             TimeGenerated = status.TimeGeneratedUtc
+            return await (from status in StatusRecords
+                          where status.Id == recordId
+                          select new StatusRecordSingleVm
+                          {
+                              MonitorDescription = status.MonitorDescription,
+                              MonitorName = status.MonitorName,
+                              RecordId = status.Id,
+                              Status = status.AlertLevel,
+                              TimeGenerated = status.TimeGeneratedUtc
 
-                         }).SingleAsync().ConfigureAwait(false);
+                          }).SingleAsync().ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
@@ -108,7 +108,7 @@ namespace Blob.Core.Services
             device.LastActivityDateUtc = DateTime.UtcNow;
             _context.Entry(device).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            
+
 
             StatusRecord newStatus = new StatusRecord
             {
@@ -123,7 +123,7 @@ namespace Blob.Core.Services
             };
             StatusRecords.Add(newStatus);
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            
+
             if (dto.PerformanceRecordDto != null)
             {
                 dto.PerformanceRecordDto.StatusRecordId = newStatus.Id;
@@ -207,10 +207,10 @@ namespace Blob.Core.Services
                                 from s in con.DeviceStatuses
                                 where s.DeviceId == deviceId
                                 group s by s.MonitorId
-                                into r
-                                select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
+                                    into r
+                                    select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
                             )
-                            on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
+                            on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
                         select s1).ToList();
             }
         }
@@ -229,5 +229,25 @@ namespace Blob.Core.Services
                               TimeGenerated = s1.TimeGeneratedUtc
                           }).ToList();
         }
+
+        public async Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId)
+        {
+            _log.Debug(string.Format("GetMonitorListVmAsync({0})", deviceId));
+            var items = GetRecentStatus(deviceId).Select(s1 => new MonitorListListItemVm
+                               {
+                                   CurrentValue = s1.CurrentValue,
+                                   MonitorDescription = s1.MonitorDescription,
+                                   MonitorId = s1.MonitorId,
+                                   MonitorName = s1.MonitorName,
+                                   Status = s1.AlertLevel,
+                                   TimeGenerated = s1.TimeGeneratedUtc
+                               });
+            return await Task.FromResult(new MonitorListVm
+                   {
+                       Items = items
+                   });
+        }
+
+
     }
 }

@@ -96,6 +96,8 @@
     <Compile Include="Models\ViewModels\NotificationScheduleListItemVm.cs" />
     <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerRegisterVm.cs" />
+    <Compile Include="Models\ViewModels\MonitorListVm.cs" />
+    <Compile Include="Models\ViewModels\MonitorListListItemVm.cs" />
     <Compile Include="Models\ViewModels\UserPageVm.cs" />
     <Compile Include="Models\ViewModels\PerformanceRecordPageVm.cs" />
     <Compile Include="Models\ViewModels\StatusRecordPageVm.cs" />

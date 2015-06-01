@@ -46,6 +46,16 @@ namespace Before.Controllers
         }
 
         [BeforeAuthorize(Operation = "page", Resource = "status")]
+        public ActionResult MonitorList(Guid id)
+        {
+            // add paging?
+            var pageVm = AsyncHelpers.RunSync<MonitorListVm>(() => BlobQueryManager.GetMonitorListVmAsync(id));
+
+            ViewBag.DeviceId = id;
+            return PartialView("_MonitorList", pageVm);
+        }
+
+        [BeforeAuthorize(Operation = "page", Resource = "status")]
         public ActionResult PageForDevice(Guid id, int? page, int? pageSize)
         {
             if (!page.HasValue) page = 1;
