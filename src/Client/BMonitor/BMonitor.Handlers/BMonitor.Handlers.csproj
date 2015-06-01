@@ -45,11 +45,27 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
+    <ItemGroup>
+    <COMReference Include="WUApiLib">
+      <Guid>{B596CC9F-56E5-419E-A622-E01BB457431E}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmdExecuteCommandHandler.cs" />
     <Compile Include="ExceptionCommandHandlerDecorator.cs" />
     <Compile Include="LoggingCommandHandlerDecorator.cs" />
+    <Compile Include="PrintLineCommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PsExecuteCommandHandler.cs" />
     <Compile Include="UnknownCommandHandler.cs" />
+    <Compile Include="WindowsBackupCommandHandler.cs" />
+    <Compile Include="WindowsUpdateCommandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

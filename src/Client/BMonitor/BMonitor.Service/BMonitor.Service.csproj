@@ -121,10 +121,6 @@
       <Project>{4c1c9b97-e90d-45bf-be89-48cfe705c211}</Project>
       <Name>BMonitor.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BMonitor.Handlers.Custom\BMonitor.Handlers.Custom.csproj">
-      <Project>{861f4e97-e039-4eee-8b99-df345e7ad902}</Project>
-      <Name>BMonitor.Handlers.Custom</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BMonitor.Handlers\BMonitor.Handlers.csproj">
       <Project>{639a1b6c-b4f4-4acb-9562-a48bbee8aa74}</Project>
       <Name>BMonitor.Handlers</Name>

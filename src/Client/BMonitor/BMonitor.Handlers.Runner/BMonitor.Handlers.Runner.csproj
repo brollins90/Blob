@@ -56,9 +56,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BMonitor.Handlers.Custom\BMonitor.Handlers.Custom.csproj">
-      <Project>{861F4E97-E039-4EEE-8B99-DF345E7AD902}</Project>
-      <Name>BMonitor.Handlers.Custom</Name>
+    <ProjectReference Include="..\BMonitor.Handlers\BMonitor.Handlers.csproj">
+      <Project>{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}</Project>
+      <Name>BMonitor.Handlers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

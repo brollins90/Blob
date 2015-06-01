@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
-using BMonitor.Service;
 using BMonitor.Service.Infrastructure;
 using log4net;
 using Ninject;
