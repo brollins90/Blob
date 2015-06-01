@@ -26,7 +26,7 @@ namespace BMonitor.Service.Monitor.Quartz
             try
             {
                 ResultData result = InternalExecute(context);
-                _log.Debug(string.Format("Results: {0}", result.Value));
+                _log.Debug(string.Format("Results from {0}: {1}", _internalMonitor.GetType().Name, result.Value));
 
                 context.Result = result;
 

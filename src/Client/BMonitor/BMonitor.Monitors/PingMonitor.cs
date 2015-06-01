@@ -77,36 +77,31 @@ namespace BMonitor.Monitors
             {
                 case IPStatus.Success:
                     return AlertLevel.OK;
-                    break;
-
                 case IPStatus.BadOption:
                 case IPStatus.Unknown:
                     return AlertLevel.UNKNOWN;
-                    break;
-
-                case IPStatus.DestinationNetworkUnreachable:
-                case IPStatus.DestinationHostUnreachable:
-                case IPStatus.DestinationProtocolUnreachable:
-                case IPStatus.DestinationPortUnreachable:
-                case IPStatus.NoResources:
-                case IPStatus.HardwareError:
-                case IPStatus.PacketTooBig:
-                case IPStatus.TimedOut:
-                case IPStatus.BadRoute:
-                case IPStatus.TtlExpired:
-                case IPStatus.TtlReassemblyTimeExceeded:
-                case IPStatus.ParameterProblem:
-                case IPStatus.SourceQuench:
-                case IPStatus.BadDestination:
-                case IPStatus.DestinationUnreachable:
-                case IPStatus.TimeExceeded:
-                case IPStatus.BadHeader:
-                case IPStatus.UnrecognizedNextHeader:
-                case IPStatus.IcmpError:
-                case IPStatus.DestinationScopeMismatch:
+                //case IPStatus.DestinationNetworkUnreachable:
+                //case IPStatus.DestinationHostUnreachable:
+                //case IPStatus.DestinationProtocolUnreachable:
+                //case IPStatus.DestinationPortUnreachable:
+                //case IPStatus.NoResources:
+                //case IPStatus.HardwareError:
+                //case IPStatus.PacketTooBig:
+                //case IPStatus.TimedOut:
+                //case IPStatus.BadRoute:
+                //case IPStatus.TtlExpired:
+                //case IPStatus.TtlReassemblyTimeExceeded:
+                //case IPStatus.ParameterProblem:
+                //case IPStatus.SourceQuench:
+                //case IPStatus.BadDestination:
+                //case IPStatus.DestinationUnreachable:
+                //case IPStatus.TimeExceeded:
+                //case IPStatus.BadHeader:
+                //case IPStatus.UnrecognizedNextHeader:
+                //case IPStatus.IcmpError:
+                //case IPStatus.DestinationScopeMismatch:
                 default:
                     return AlertLevel.CRITICAL;
-                    break;
             }
         }
     }

@@ -11,6 +11,7 @@ using log4net;
 namespace Blob.Services.Before
 {
     [ServiceBehavior]
+    [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     public class BeforeUserManagerService : IUserManagerService
     {
         private ILog _log;

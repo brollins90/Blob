@@ -12,7 +12,7 @@ using Blob.Core.Extensions;
 namespace Blob.Services.Before
 {
     [ServiceBehavior]
-    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
+    [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]
     public class BeforeQueryService : IBlobQueryManager
     {

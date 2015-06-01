@@ -65,7 +65,9 @@
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\PagedListExtensions.cs" />
     <Compile Include="Models\PagingUtils.cs" />
+    <Compile Include="Models\CheckDeviceRegistrationDto.cs" />
     <Compile Include="Models\RegisterDeviceDto.cs" />
+    <Compile Include="Models\CheckDeviceRegistrationResponseDto.cs" />
     <Compile Include="Models\RegisterDeviceResponseDto.cs" />
     <Compile Include="Models\SecurityDtos.cs" />
     <Compile Include="Models\CreateCustomerGroupDto.cs" />

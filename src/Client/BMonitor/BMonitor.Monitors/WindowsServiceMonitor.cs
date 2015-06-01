@@ -78,17 +78,14 @@ namespace BMonitor.Monitors
             {
                 case ServiceControllerStatus.Running:
                     return AlertLevel.OK;
-                    break;
-
-                case ServiceControllerStatus.ContinuePending:
-                case ServiceControllerStatus.Paused:
-                case ServiceControllerStatus.PausePending:
-                case ServiceControllerStatus.StartPending:
-                case ServiceControllerStatus.Stopped:
-                case ServiceControllerStatus.StopPending:
+                //case ServiceControllerStatus.ContinuePending:
+                //case ServiceControllerStatus.Paused:
+                //case ServiceControllerStatus.PausePending:
+                //case ServiceControllerStatus.StartPending:
+                //case ServiceControllerStatus.Stopped:
+                //case ServiceControllerStatus.StopPending:
                 default:
                     return AlertLevel.CRITICAL;
-                    break;
             }
         }
     }

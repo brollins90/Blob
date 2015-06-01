@@ -9,7 +9,7 @@ using log4net;
 namespace Blob.Services.Device
 {
     [ServiceBehavior]
-    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
+    [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]
     public class DeviceStatusService : IDeviceStatusService
     {
@@ -23,6 +23,12 @@ namespace Blob.Services.Device
         }
 
         #region Customer
+
+        //[OperationBehavior]
+        //public async Task<CheckDeviceRegistrationResponseDto> CheckDeviceRegistration(CheckDeviceRegistrationDto dto)
+        //{
+        //    return await _blobCommandManager.CheckDeviceRegistration(dto).ConfigureAwait(false);
+        //}
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "create")]

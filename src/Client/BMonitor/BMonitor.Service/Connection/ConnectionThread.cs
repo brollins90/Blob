@@ -16,10 +16,11 @@ namespace BMonitor.Service.Connection
 
         public ConnectionThread(IKernel kernel, Guid deviceId)
         {
-            _kernel = kernel;
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _kernel = kernel;
             _deviceId = deviceId;
 
+            _log.Debug("ctor ConnectionThread");
             var u = new Ninject.Parameters.ConstructorArgument("username", _deviceId.ToString());
             var p = new Ninject.Parameters.ConstructorArgument("password", _deviceId.ToString());
             _commandClient = _kernel.Get<DeviceConnectionClient>(u, p);

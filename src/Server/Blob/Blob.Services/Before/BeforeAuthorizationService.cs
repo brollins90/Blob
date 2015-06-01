@@ -10,13 +10,13 @@ using Blob.Core.Authorization;
 namespace Blob.Services.Before
 {
     [ServiceBehavior]
-    //[GlobalErrorBehaviorAttribute(typeof(GlobalErrorHandler))]
+    [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     public class BeforeAuthorizationService : IAuthorizationManagerService
     {
         [OperationBehavior]
         public Task<bool> CheckAccessAsync(AuthorizationContextDto context)
         {
-            var am = new BlobClaimsAuthorizationManager();
+            BlobClaimsAuthorizationManager am = new BlobClaimsAuthorizationManager();
 
             Collection<Claim> actions = new Collection<Claim>(context.Action.ToList());
             Collection<Claim> resources = new Collection<Claim>(context.Resource.ToList());

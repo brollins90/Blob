@@ -195,20 +195,24 @@ namespace Blob.Core.Services
         }
 
 
-        private IQueryable<StatusRecord> GetRecentStatus(Guid deviceId)
+        private IList<StatusRecord> GetRecentStatus(Guid deviceId)
         {
-            _log.Debug(string.Format("GetRecentStatus({0})", deviceId));
-            return from s1 in StatusRecords
-                          join s2 in
-                              (
-                                  from s in StatusRecords
-                                  where s.DeviceId == deviceId
-                                  group s by s.MonitorId
-                                  into r
-                                  select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
-                              )
-                              on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
-                          select s1;
+            // todo: fix this cheating
+            using (BlobDbContext con = new BlobDbContext())
+            {
+                _log.Debug(string.Format("GetRecentStatus({0})", deviceId));
+                return (from s1 in con.DeviceStatuses
+                        join s2 in
+                            (
+                                from s in con.DeviceStatuses
+                                where s.DeviceId == deviceId
+                                group s by s.MonitorId
+                                into r
+                                select new {MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc)}
+                            )
+                            on new {s1.MonitorId, s1.TimeGeneratedUtc} equals new {s2.MonitorId, s2.TimeGeneratedUtc}
+                        select s1).ToList();
+            }
         }
 
         public async Task<IList<StatusRecordListItemVm>> GetDeviceRecentStatusAsync(Guid deviceId)
