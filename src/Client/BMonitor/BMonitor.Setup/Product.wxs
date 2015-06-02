@@ -10,6 +10,7 @@
     
     <Package InstallerVersion="300" Compressed="yes"/>
     <Media Id="1" Cabinet="$(var.BMonitor.WindowsService.ProjectName).cab" EmbedCab="yes" />
+    
     <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
     
     <!-- Define the directory structure -->
@@ -125,5 +126,9 @@
       <ComponentGroupRef Id="$(var.BMonitor.Service.ProjectName)"/>
       <ComponentGroupRef Id="$(var.BMonitor.WindowsService.ProjectName)"/>
     </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
+    <UIRef Id="WixUI_InstallDir"/>
+    
   </Product>
 </Wix>

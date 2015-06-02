@@ -198,3 +198,5 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 /src/Server/Blob/dev.blobstsservice.rritc.com.cer
+/src/Server/Before/Before/ConnectionStrings.config
+/src/Server/Before/Before/Web.config
