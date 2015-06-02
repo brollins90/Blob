@@ -337,6 +337,9 @@
     <Content Include="Scripts\jquery-2.1.4.min.map" />
     <Content Include="Views\Status\_MonitorList.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Device\List.cshtml" />
+    <Content Include="Views\Customer\List.cshtml" />
+    <Content Include="Views\Customer\_Page.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

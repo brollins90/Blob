@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Filters;
@@ -122,6 +123,16 @@ namespace Before.Controllers
                 return Json(new { success = true });
             }
             return PartialView("_IssueCommandModal", model);
+        }
+
+        // List
+        [BeforeAuthorize(Operation = "view", Resource = "device")]
+        public ActionResult List(Guid? id, int? page, int? pageSize)
+        {
+            ViewBag.SearchId = (id.HasValue) ? id.Value : ClaimsPrincipal.Current.Identity.GetCustomerId();
+            ViewBag.PageNum = page;
+            ViewBag.PageSize = pageSize;
+            return View();
         }
 
         // Page

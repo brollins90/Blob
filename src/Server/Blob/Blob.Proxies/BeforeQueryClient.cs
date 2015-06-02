@@ -467,5 +467,19 @@ namespace Blob.Proxies
             }
             return null;
         }
+
+
+        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        {
+            try
+            {
+                return await Channel.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return null;
+        }
     }
 }

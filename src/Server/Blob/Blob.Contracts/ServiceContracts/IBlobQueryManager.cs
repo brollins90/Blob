@@ -16,6 +16,8 @@ namespace Blob.Contracts.ServiceContracts
         [OperationContract]
         Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId);
         [OperationContract]
+        Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
         Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId);
         [OperationContract]
         Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId);

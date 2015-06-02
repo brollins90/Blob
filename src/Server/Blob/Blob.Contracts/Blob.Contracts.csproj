@@ -93,6 +93,7 @@
     <Compile Include="Models\ViewModels\CustomerGroupRoleListItem.cs" />
     <Compile Include="Models\ViewModels\CustomerGroupPageVm.cs" />
     <Compile Include="Models\ViewModels\DashCurrentConnectionsLargeVm.cs" />
+    <Compile Include="Models\ViewModels\CustomerPageVm.cs" />
     <Compile Include="Models\ViewModels\NotificationScheduleListItemVm.cs" />
     <Compile Include="Models\ViewModels\RoleCreateVm.cs" />
     <Compile Include="Models\ViewModels\CustomerRegisterVm.cs" />

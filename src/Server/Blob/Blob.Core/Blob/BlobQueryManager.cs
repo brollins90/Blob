@@ -42,11 +42,13 @@ namespace Blob.Core.Blob
         public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
+            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             //var cust = Context.Customers.Where(x => x.Id.Equals(customerId));
             var count = Context.Devices.Where(x => activeDeviceConnections.Contains(x.Id)).FutureCount();
             var devices = Context.Devices.Where(x => activeDeviceConnections.Contains(x.Id))
+                .Include("Customer")
                 .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
                 .Skip(pNum * pageSize).Take(pageSize).Future();
 
@@ -60,7 +62,9 @@ namespace Blob.Core.Blob
                 PageSize = pageSize,
                 Items = devices.Select(x => new DashCurrentConnectionsListItemVm
                 {
+                    AvailableCommands = availableCommands,
                     CustomerId = x.CustomerId,
+                    CustomerName = x.Customer.Name,
                     DeviceId = x.Id,
                     DeviceName = x.DeviceName,
                     Status = _deviceManager.CalculateDeviceAlertLevel(x.Id)
@@ -392,5 +396,11 @@ namespace Blob.Core.Blob
 
 
 
+
+
+        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        {
+            return await _customerManager.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+        }
     }
 }

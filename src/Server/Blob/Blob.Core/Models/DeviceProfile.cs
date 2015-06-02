@@ -2,13 +2,12 @@
 
 namespace Blob.Core.Models
 {
-    public class UserProfile
+    public class DeviceProfile
     {
-        public Guid UserId { get; set; }
-        public virtual User User { get; set; }
+        public Guid DeviceId { get; set; }
+        public virtual Device Device { get; set; }
 
-        public bool SendEmailNotifications { get; set; }
-        public Guid EmailNotificationScheduleId { get; set; }
-        public NotificationSchedule EmailNotificationSchedule { get; set; }
+        public DateTime ProfileUpdateTimeUtc { get; set; }
+        public string OperatingSystem { get; set; }
     }
 }

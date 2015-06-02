@@ -7,6 +7,7 @@ using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Services;
 using Blob.Core.Models;
+using EntityFramework.Extensions;
 using log4net;
 
 namespace Blob.Core.Services
@@ -177,6 +178,38 @@ namespace Blob.Core.Services
                               CustomerId = customer.Id,
                               CustomerName = customer.Name
                           }).SingleAsync().ConfigureAwait(false);
+        }
+
+
+        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum, int pageSize)
+        {
+            _log.Debug(string.Format("GetCustomerPageVmAsync({0}, {1}, {2})", searchId, pageNum, pageSize));
+
+            var pNum = pageNum < 1 ? 0 : pageNum - 1;
+
+            var count = _context.Customers.Where(x => true).FutureCount();
+            var devices = _context.Customers
+                .Where(x => true)
+                .OrderByDescending(x => x.Name).ThenBy(x => x.CreateDateUtc)
+                .Skip(pNum * pageSize).Take(pageSize).Future();
+
+            // define future queries before any of them execute
+            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
+            var items = await Task.FromResult(new CustomerPageVm
+            {
+                TotalCount = count,
+                PageCount = pCount,
+                PageNum = pNum + 1,
+                PageSize = pageSize,
+                Items = devices.Select(x => new CustomerListItemVm
+                {
+                    CreateDate = x.CreateDateUtc,
+                    CustomerId = x.Id,
+                    Enabled = x.Enabled,
+                    Name = x.Name
+                }),
+            }).ConfigureAwait(false);
+            return items;
         }
     }
 }

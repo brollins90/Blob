@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Before.Filters;
+using Before.Infrastructure.Extensions;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 
@@ -101,6 +103,34 @@ namespace Before.Controllers
                 return Json(new { success = true });
             }
             return PartialView("_EnableModal", model);
+        }
+        
+        // List
+        [BeforeAuthorize(Operation = "view", Resource = "customer")]
+        public ActionResult List(Guid? id, int? page, int? pageSize)
+        {
+            ViewBag.SearchId = (id.HasValue) ? id.Value : ClaimsPrincipal.Current.Identity.GetCustomerId();
+            ViewBag.PageNum = page;
+            ViewBag.PageSize = pageSize;
+            return View();
+        }
+
+        // Page
+        [BeforeAuthorize(Operation = "view", Resource = "customer")]
+        public ActionResult PageForUser(Guid id, int? page, int? pageSize)
+        {
+            if (!page.HasValue) page = 1;
+            if (!pageSize.HasValue) pageSize = 10;
+
+            var pageVm = AsyncHelpers.RunSync<CustomerPageVm>(() => BlobQueryManager.GetCustomerPageVmAsync(id, page.Value, pageSize.Value));
+
+            ViewBag.CustomerId = id;
+
+            var c = Lambda<Func<int, string>>.Cast;
+            Func<int, string> pageUrl = c(p => Url.Action("PageForUser", "Customer", routeValues: new { id = id, page = p, pageSize = pageVm.PageSize }));
+            ViewBag.PageUrl = pageUrl;
+            ViewBag.PagingMetaData = pageVm.GetPagedListMetaData();
+            return PartialView("_Page", pageVm);
         }
 
         //

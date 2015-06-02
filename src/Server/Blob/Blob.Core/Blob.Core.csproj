@@ -102,6 +102,7 @@
     <Compile Include="Command\CommandQueueManager.cs" />
     <Compile Include="Extensions\IdentityExtentions.cs" />
     <Compile Include="Extensions\Parsing.cs" />
+    <Compile Include="Models\DeviceProfile.cs" />
     <Compile Include="Services\BlobCustomerGroupManager.cs" />
     <Compile Include="Services\BlobDeviceCommandManager.cs" />
     <Compile Include="Services\BlobPerformanceRecordManager.cs" />

@@ -338,5 +338,14 @@ namespace Blob.Services.Before
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "device", deviceId.ToString());
             return await _blobQueryManager.GetMonitorListVmAsync(deviceId).ConfigureAwait(false);
         }
+
+        [OperationBehavior]
+        [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
+        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        {
+            var identity = ClaimsPrincipal.Current.Identity;
+            await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "device", searchId.ToString());
+            return await _blobQueryManager.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+        }
     }
 }
