@@ -10,6 +10,8 @@ namespace BMonitor.Monitors
         protected override string MonitorId { get { return MonitorName; } }
         protected override string MonitorName { get { return "WindowsUpdateMonitor"; } }
         protected override string MonitorDescription { get { return "Checks the status of Windows Updates"; } }
+        protected override string MonitorLabel { get { return Label ?? MonitorName; } }
+        public string Label { get; set; }
 
         public override ResultData Execute(bool collectPerfData = false)
         {
@@ -62,6 +64,7 @@ namespace BMonitor.Monitors
                 AlertLevel = alertLevel,
                 MonitorDescription = MonitorDescription,
                 MonitorId = MonitorId,
+                MonitorLabel = MonitorLabel,
                 MonitorName = MonitorName,
                 Perf = new List<PerformanceData>(),
                 TimeGenerated = DateTime.Now,

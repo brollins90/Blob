@@ -10,6 +10,9 @@ using BMonitor.Handlers;
 using BMonitor.Monitors;
 using BMonitor.Service.Connection;
 using BMonitor.Service.Extensions;
+using BMonitor.Service.Helpers;
+using BMonitor.Service.Monitor;
+using BMonitor.Service.Monitor.Quartz;
 using log4net;
 using Ninject;
 using Ninject.Modules;
@@ -36,6 +39,8 @@ namespace BMonitor.Service.Infrastructure
             Bind<ServiceHostBase>().ToSelf();
             Bind<MonitorManager>().ToSelf();
 
+            Bind<BlobClientFactory>().ToSelf();
+
             // Callback
             Bind<IDeviceConnectionServiceCallback>().To<CommandServiceCallbackHandler>();
             Bind<DeviceConnectionClient>().ToSelf()
@@ -43,6 +48,8 @@ namespace BMonitor.Service.Infrastructure
                 .WithConstructorArgument("endpointName", "DeviceConnectionService");
             Bind<DeviceStatusClient>().ToSelf()
                 .WithConstructorArgument("endpointName", "DeviceStatusService");
+
+            Bind<IMonitorScheduler>().To<QuartzMonitorScheduler>();
 
 
             // load monitors

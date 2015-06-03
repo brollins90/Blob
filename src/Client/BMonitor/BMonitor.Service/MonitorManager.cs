@@ -92,6 +92,10 @@ namespace BMonitor.Service
             {
                 if (_enableCommandConnection) // && connection is open
                 {
+                    if (!_connectionThread.IsConnected())
+                    {
+                        _connectionThread.Start();
+                    }
                     //commandClient.Ping(_deviceId);
                 }
 
@@ -137,17 +141,17 @@ namespace BMonitor.Service
             if (_isRegistered && _enableCommandConnection)
             {
                 _log.Info("Creating command connection.");
-                //todo: spin up a new thread
                 if (_connectionThread == null)
                 {
-                    _connectionThread = new ConnectionThread(_kernel, _deviceInfo.DeviceId);
+                    var u = new Ninject.Parameters.ConstructorArgument("deviceId", _deviceInfo.DeviceId);
+                    _connectionThread = _kernel.Get<ConnectionThread>(u); //new ConnectionThread(_kernel, _deviceInfo.DeviceId);
                     _connectionThread.Start();
                 }
             }
 
             if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
             {
-                _jobHandler = new QuartzMonitorScheduler(_kernel, new BMonitorStatusHelper(_kernel, _deviceInfo.DeviceId, _enablePerformanceMonitoring, _enableStatusMonitoring));// new BasicJobHandler(_kernel);
+                _jobHandler = _kernel.Get<IMonitorScheduler>();
                 _jobHandler.LoadConfig();
                 _jobHandler.Start();
             }

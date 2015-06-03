@@ -10,6 +10,7 @@ namespace BMonitor.Monitors
         protected abstract string MonitorId { get; }
         protected abstract string MonitorName { get; }
         protected abstract string MonitorDescription { get; }
+        protected abstract string MonitorLabel { get; }
 
         public virtual EvaluationOperation Operation { get; set; }
         public virtual double Warning { get; set; }
@@ -30,6 +31,7 @@ namespace BMonitor.Monitors
                        MonitorDescription = MonitorDescription,
                        MonitorId = MonitorId,
                        MonitorName = MonitorName,
+                       MonitorLabel = MonitorLabel,
                        Perf = new List<PerformanceData>(),
                        TimeGenerated = DateTime.UtcNow,
                        UnitOfMeasure = null,

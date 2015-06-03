@@ -9,6 +9,7 @@ namespace BMonitor.Common.Models
         public string MonitorDescription { get; set; }
         public string MonitorId { get; set; }
         public string MonitorName { get; set; }
+        public string MonitorLabel { get; set; }
         public DateTime TimeGenerated { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Value { get; set; }

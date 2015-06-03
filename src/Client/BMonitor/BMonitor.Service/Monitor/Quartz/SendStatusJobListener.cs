@@ -1,4 +1,5 @@
-﻿using BMonitor.Common.Models;
+﻿using System;
+using BMonitor.Common.Models;
 using BMonitor.Service.Helpers;
 using log4net;
 using Quartz;
@@ -8,12 +9,18 @@ namespace BMonitor.Service.Monitor.Quartz
     public class SendStatusJobListener : IJobListener
     {
         private readonly ILog _log;
-        private BMonitorStatusHelper _statusHelper;
+        private readonly BMonitorStatusReporter _statusReporter;
+        private Guid _deviceId;
+        private bool _enableStatus;
+        private bool _enablePerf;
 
-        public SendStatusJobListener(BMonitorStatusHelper statusHelper)
+        public SendStatusJobListener(BMonitorStatusReporter statusReporter, Guid deviceId, bool enableStatus, bool enablePerf)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _statusHelper = statusHelper;
+            _statusReporter = statusReporter;
+            _deviceId = deviceId;
+            _enableStatus = enableStatus;
+            _enablePerf = enablePerf;
         }
 
         public void JobExecutionVetoed(IJobExecutionContext context) { }
@@ -26,7 +33,7 @@ namespace BMonitor.Service.Monitor.Quartz
             if (context.Result != null)
             {
                 ResultData result = context.Result as ResultData;
-                _statusHelper.SendResults(result);
+                _statusReporter.SendResults(result, _deviceId, _enableStatus, _enablePerf);
 
             }
         }

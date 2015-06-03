@@ -6,16 +6,9 @@ namespace BMonitor.Monitors
 {
     public class PerfmonCounterManager : IDisposable
     {
-        // http://blogs.msdn.com/b/bclteam/archive/2006/06/02/618156.aspx
-        // http://geekswithblogs.net/akraus1/archive/2009/05/27/132456.aspx
         private PerfmonCounterManager()
         {
             Counters = new Dictionary<string, PerformanceCounter>();
-
-            //GetCounter("Memory", "Available Bytes", string.Empty);
-            //GetCounter("Processor", "% Processor Time", "_Total");
-            ////PerformanceCounter _memoryCounter = new PerformanceCounter("Memory", "Available Bytes");
-            ////PerformanceCounter _processorCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
 
         public static PerfmonCounterManager Instance

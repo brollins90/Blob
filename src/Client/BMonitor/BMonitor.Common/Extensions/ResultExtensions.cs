@@ -20,6 +20,7 @@ namespace BMonitor.Common.Extensions
                 DeviceId = deviceId,
                 MonitorDescription = result.MonitorDescription,
                 MonitorId = result.MonitorId,
+                MonitorLabel = result.MonitorLabel,
                 MonitorName = result.MonitorName,
                 TimeGenerated = result.TimeGenerated,
                 TimeSent = DateTime.Now

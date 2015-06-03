@@ -19,6 +19,9 @@ namespace Blob.Contracts.Models
         public string MonitorDescription { get; set; }
 
         [DataMember]
+        public string MonitorLabel { get; set; }
+
+        [DataMember]
         public int AlertLevel { get; set; }
 
         [DataMember]

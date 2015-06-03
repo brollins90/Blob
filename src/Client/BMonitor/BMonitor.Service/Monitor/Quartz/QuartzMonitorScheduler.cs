@@ -17,12 +17,12 @@ namespace BMonitor.Service.Monitor.Quartz
         private readonly ILog _log;
         private readonly IKernel _kernel;
         private IScheduler _scheduler;
-        private readonly BMonitorStatusHelper _statusHelper;
+        private readonly BMonitorStatusReporter _statusHelper;
 
         private Guid _deviceId;
         private bool _enablePerformanceMonitoring;
 
-        public QuartzMonitorScheduler(IKernel kernel, BMonitorStatusHelper statusHelper)
+        public QuartzMonitorScheduler(IKernel kernel, BMonitorStatusReporter statusHelper)
         {
             _kernel = kernel;
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -43,7 +43,7 @@ namespace BMonitor.Service.Monitor.Quartz
 
                 _scheduler = StdSchedulerFactory.GetDefaultScheduler();
                 _scheduler.JobFactory = new NinjectJobFactory(_kernel, _enablePerformanceMonitoring);
-                _scheduler.ListenerManager.AddJobListener(new SendStatusJobListener(_statusHelper), GroupMatcher<JobKey>.AnyGroup());
+                _scheduler.ListenerManager.AddJobListener(new SendStatusJobListener(_statusHelper, config.Service.DeviceId, config.Service.EnableStatusMonitoring, config.Service.EnablePerformanceMonitoring), GroupMatcher<JobKey>.AnyGroup());
 
                 return true;
             }

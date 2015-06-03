@@ -14,12 +14,13 @@ namespace Blob.Contracts.Models.ViewModels
 
         [DataMember]
         [Display(Name = "Monitor id")]
-        //[Required]
         public string MonitorId { get; set; }
 
         [DataMember]
-        //[Display(Name = "Monitor id")]
-        //[Required]
+        [Display(Name = "Monitor label")]
+        public string MonitorLabel { get; set; }
+
+        [DataMember]
         public string CurrentValue { get; set; }
 
         [DataMember]

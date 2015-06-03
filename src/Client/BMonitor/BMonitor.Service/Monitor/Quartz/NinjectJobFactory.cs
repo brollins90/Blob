@@ -14,14 +14,12 @@ namespace BMonitor.Service.Monitor.Quartz
         private readonly IKernel _kernel;
         private readonly ILog _log;
         private readonly bool _enablePerformanceMonitoring;
-        //private readonly string _monitorPath;
 
-        public NinjectJobFactory(IKernel kernel, bool enablePerformanceMonitoring)//, string monitorPath)
+        public NinjectJobFactory(IKernel kernel, bool enablePerformanceMonitoring)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _kernel = kernel;
             _enablePerformanceMonitoring = enablePerformanceMonitoring;
-            //_monitorPath = monitorPath;
             _log.Debug("Constructing NinjectJobFactory");
         }
 

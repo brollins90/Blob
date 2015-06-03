@@ -11,7 +11,9 @@ namespace BMonitor.Monitors
         protected override string MonitorId { get { return MonitorName + ServiceName; } }
         protected override string MonitorName { get { return "WindowsServiceMonitor"; } }
         protected override string MonitorDescription { get { return "Checks the windows service status"; } }
+        protected override string MonitorLabel { get { return Label ?? MonitorName; } }
 
+        public string Label { get; set; }
         public string ServiceName { get; set; }
 
         public WindowsServiceMonitor() : this("BMonitor") { }
@@ -62,6 +64,7 @@ namespace BMonitor.Monitors
                 AlertLevel = alertLevel,
                 MonitorDescription = MonitorDescription,
                 MonitorId = MonitorId,
+                MonitorLabel = MonitorLabel,
                 MonitorName = MonitorName,
                 Perf = new List<PerformanceData>(),
                 TimeGenerated = DateTime.Now,

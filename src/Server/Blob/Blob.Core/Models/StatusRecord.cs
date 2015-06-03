@@ -13,6 +13,7 @@ namespace Blob.Core.Models
         public long Id { get; set; }
         public string MonitorId { get; set; }
         public string MonitorName { get; set; }
+        public string MonitorLabel { get; set; }
         public string MonitorDescription { get; set; }
         public int AlertLevel { get; set; }
         public DateTime TimeGeneratedUtc { get; set; }

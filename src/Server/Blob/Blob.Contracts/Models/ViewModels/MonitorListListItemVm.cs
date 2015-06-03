@@ -17,6 +17,11 @@ namespace Blob.Contracts.Models.ViewModels
         public string MonitorName { get; set; }
 
         [DataMember]
+        [Display(Name = "Monitor label")]
+        [Required]
+        public string MonitorLabel { get; set; }
+
+        [DataMember]
         [Display(Name = "Monitor description")]
         [Required]
         public string MonitorDescription { get; set; }

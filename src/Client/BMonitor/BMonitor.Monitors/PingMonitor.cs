@@ -10,6 +10,7 @@ namespace BMonitor.Monitors
         protected override string MonitorId { get { return MonitorName + RemoteDevice; } }
         protected override string MonitorName { get { return "PingMonitor"; } }
         protected override string MonitorDescription { get { return "Checks if the service can ping the remote device"; } }
+        protected override string MonitorLabel { get { return string.Format("Ping {0}", RemoteDevice); } }
 
         public string RemoteDevice { get; set; }
 
@@ -61,6 +62,7 @@ namespace BMonitor.Monitors
                 AlertLevel = alertLevel,
                 MonitorDescription = MonitorDescription,
                 MonitorId = MonitorId,
+                MonitorLabel = MonitorLabel,
                 MonitorName = MonitorName,
                 Perf = new List<PerformanceData>(),
                 TimeGenerated = DateTime.Now,

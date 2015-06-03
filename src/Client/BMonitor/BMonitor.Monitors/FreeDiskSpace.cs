@@ -11,6 +11,7 @@ namespace BMonitor.Monitors
         protected override string MonitorId { get { return MonitorName + DriveLetter; } }
         protected override string MonitorName { get { return "FreeDiskSpace"; } }
         protected override string MonitorDescription { get { return "Checks the amount of disk space available"; } }
+        protected override string MonitorLabel { get { return string.Format("Disk {0} - {1}", DriveLetter.ToUpperInvariant(), DriveDescription); } }
 
         public string DriveLetter { get; set; }
         public string DriveDescription { get; set; }
@@ -88,6 +89,7 @@ namespace BMonitor.Monitors
                                     AlertLevel = alertLevel,
                                     MonitorDescription = MonitorDescription,
                                     MonitorId = MonitorId,
+                                    MonitorLabel = MonitorLabel,
                                     MonitorName = MonitorName,
                                     Perf = new List<PerformanceData>(),
                                     TimeGenerated = DateTime.Now,

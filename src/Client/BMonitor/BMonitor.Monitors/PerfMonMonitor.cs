@@ -10,10 +10,12 @@ namespace BMonitor.Monitors
         protected override string MonitorId { get { return MonitorName + CounterKey; } }
         protected override string MonitorName { get { return "PerfMonMonitor"; } }
         protected override string MonitorDescription { get { return "Checks the status in the Windows Performance Monitor"; } }
+        protected override string MonitorLabel { get { return Label ?? MonitorName; } }
 
         private static PerfmonCounterManager Manager { get { return PerfmonCounterManager.Instance; } }
         private PerformanceCounter Counter { get { return Manager.GetCounter(CategoryName, CounterName, InstanceName); } }
 
+        public string Label { get; set; }
         public string CategoryName { get; set; }
         public string CounterName { get; set; }
         public string InstanceName { get; set; }
@@ -59,6 +61,7 @@ namespace BMonitor.Monitors
                                     AlertLevel = alertLevel,
                                     MonitorDescription = MonitorDescription,
                                     MonitorId = MonitorId,
+                                    MonitorLabel = MonitorLabel,
                                     MonitorName = MonitorName,
                                     Perf = new List<PerformanceData>(),
                                     TimeGenerated = DateTime.Now,

@@ -12,13 +12,7 @@
                         @Html.DisplayNameFor(model => model.Items.First().Status)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Items.First().MonitorId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().MonitorName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Items.First().MonitorDescription)
+                        @Html.DisplayNameFor(model => model.Items.First().MonitorLabel)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Items.First().CurrentValue)
@@ -26,6 +20,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Items.First().TimeGenerated)
                     </th>
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.Items.First().Duration)
+                    </th>*@
                     <th>
                         <div class="pull-right">
                         </div>
@@ -41,13 +38,7 @@
                             @Html.AlertLevelValue(item.Status)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonitorName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonitorDescription)
+                            @Html.DisplayFor(modelItem => item.MonitorLabel)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CurrentValue)
@@ -55,6 +46,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.TimeGenerated)
                         </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Duration)
+                        </td>*@
                         <td>
                             <div class="pull-right"> </div>
                         </td>

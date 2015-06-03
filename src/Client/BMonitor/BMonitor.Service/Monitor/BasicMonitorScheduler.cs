@@ -28,8 +28,8 @@ namespace BMonitor.Service.Monitor
         private bool _enablePerformanceMonitoring;
         private bool _started;
 
-        private BMonitorStatusHelper _statusHelper;
-        public BasicMonitorScheduler(IKernel kernel, BMonitorStatusHelper statusHelper)
+        private BMonitorStatusReporter _statusHelper;
+        public BasicMonitorScheduler(IKernel kernel, BMonitorStatusReporter statusHelper)
         {
             _kernel = kernel;
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -79,7 +79,7 @@ namespace BMonitor.Service.Monitor
 
                     // where am i going to get all the config info?
                     ResultData result = monitor.Execute(true);
-                    _statusHelper.SendResults(result);
+                    _statusHelper.SendResults(result, _deviceId,_enableStatusMonitoring, _enablePerformanceMonitoring);
                 }
             }
         }

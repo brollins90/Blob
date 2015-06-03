@@ -116,6 +116,7 @@ namespace Blob.Core.Services
                 CurrentValue = dto.CurrentValue,
                 DeviceId = dto.DeviceId,
                 MonitorDescription = dto.MonitorDescription,
+                MonitorLabel = dto.MonitorLabel,
                 MonitorId = dto.MonitorId,
                 MonitorName = dto.MonitorName,
                 TimeGeneratedUtc = dto.TimeGenerated,
@@ -222,7 +223,9 @@ namespace Blob.Core.Services
             return s.Select(s1 =>
                           new StatusRecordListItemVm
                           {
+                              CurrentValue = s1.CurrentValue,
                               MonitorDescription = s1.MonitorDescription,
+                              MonitorLabel = s1.MonitorLabel,
                               MonitorName = s1.MonitorName,
                               RecordId = s1.Id,
                               Status = s1.AlertLevel,
@@ -238,6 +241,7 @@ namespace Blob.Core.Services
                                    CurrentValue = s1.CurrentValue,
                                    MonitorDescription = s1.MonitorDescription,
                                    MonitorId = s1.MonitorId,
+                                   MonitorLabel = s1.MonitorLabel,
                                    MonitorName = s1.MonitorName,
                                    Status = s1.AlertLevel,
                                    TimeGenerated = s1.TimeGeneratedUtc

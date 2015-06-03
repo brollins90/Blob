@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using Blob.Proxies;
+using BMonitor.Service.Helpers;
 using log4net;
 using Ninject;
 
@@ -8,22 +9,25 @@ namespace BMonitor.Service.Connection
 {
     public class ConnectionThread : IConnectionThread
     {
-        private readonly IKernel _kernel;
         private readonly ILog _log;
+        private readonly BlobClientFactory _factory;
 
-        private readonly DeviceConnectionClient _commandClient;
+        private DeviceConnectionClient _commandClient;
         private readonly Guid _deviceId;
 
-        public ConnectionThread(IKernel kernel, Guid deviceId)
+        public ConnectionThread(ILog log, BlobClientFactory factory, Guid deviceId)
         {
-            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _kernel = kernel;
+            _log = log;
+            _factory = factory;
             _deviceId = deviceId;
 
             _log.Debug("ctor ConnectionThread");
-            var u = new Ninject.Parameters.ConstructorArgument("username", _deviceId.ToString());
-            var p = new Ninject.Parameters.ConstructorArgument("password", _deviceId.ToString());
-            _commandClient = _kernel.Get<DeviceConnectionClient>(u, p);
+            CreateClient();
+        }
+
+        public void CreateClient()
+        {
+            _commandClient = _factory.CreateDeviceConnectionClient(_deviceId);
             _commandClient.ClientErrorHandler += HandleException;
         }
 
@@ -51,6 +55,26 @@ namespace BMonitor.Service.Connection
         private void HandleException(Exception ex)
         {
             _log.Error(string.Format("Error from client proxy."), ex);
+            try
+            {
+                _commandClient.Close();
+            }
+            catch (CommunicationException)
+            {
+                _commandClient.Abort();
+            }
+            catch (TimeoutException)
+            {
+                _commandClient.Abort();
+            }
+            catch (Exception)
+            {
+                _commandClient.Abort();
+                //throw;
+            }
+            _commandClient = _factory.CreateDeviceConnectionClient(_deviceId);
+            Start();
+
         }
     }
 }

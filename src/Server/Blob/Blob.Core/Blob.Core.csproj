@@ -102,6 +102,10 @@
     <Compile Include="Command\CommandQueueManager.cs" />
     <Compile Include="Extensions\IdentityExtentions.cs" />
     <Compile Include="Extensions\Parsing.cs" />
+    <Compile Include="Migrations\201506030023545_MonitorLabel.cs" />
+    <Compile Include="Migrations\201506030023545_MonitorLabel.Designer.cs">
+      <DependentUpon>201506030023545_MonitorLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\DeviceProfile.cs" />
     <Compile Include="Services\BlobCustomerGroupManager.cs" />
     <Compile Include="Services\BlobDeviceCommandManager.cs" />
@@ -207,6 +211,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505301805442_RequireMonitorId.resx">
       <DependentUpon>201505301805442_RequireMonitorId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506030023545_MonitorLabel.resx">
+      <DependentUpon>201506030023545_MonitorLabel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
