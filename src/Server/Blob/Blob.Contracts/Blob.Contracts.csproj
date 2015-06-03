@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CmdExecuteCommand.cs" />
+    <Compile Include="Commands\WindowsServiceCommand.cs" />
     <Compile Include="Commands\IDeviceCommand.cs" />
     <Compile Include="Commands\IDeviceCommandHandler.cs" />
+    <Compile Include="Commands\RunMonitorCommand.cs" />
     <Compile Include="Commands\PrintLineCommand.cs" />
     <Compile Include="Commands\PsExecuteCommand.cs" />
     <Compile Include="Commands\WindowsUpdateCommand.cs" />

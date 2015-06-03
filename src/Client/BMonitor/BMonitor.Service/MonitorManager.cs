@@ -2,6 +2,7 @@
 using System.Configuration;
 using Blob.Contracts.Models;
 using Blob.Proxies;
+using BMonitor.Common.Interfaces;
 using BMonitor.Monitors;
 using BMonitor.Service.Configuration;
 using BMonitor.Service.Connection;

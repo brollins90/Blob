@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.IO;
 using System.Reflection;
+using BMonitor.Common.Interfaces;
 using BMonitor.Service.Configuration;
 using BMonitor.Service.Helpers;
 using log4net;
@@ -67,6 +68,12 @@ namespace BMonitor.Service.Monitor.Quartz
 
         public void Tick()
         {
+        }
+
+
+        public void RunJob(string jobKey)
+        {
+            _scheduler.TriggerJob(JobKey.Create(jobKey));
         }
     }
 }

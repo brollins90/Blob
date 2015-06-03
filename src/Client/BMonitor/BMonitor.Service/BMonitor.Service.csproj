@@ -111,7 +111,6 @@
     <Compile Include="Monitor\Quartz\SendStatusJobListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Monitor\BasicMonitorScheduler.cs" />
-    <Compile Include="Monitor\IMonitorScheduler.cs" />
     <Compile Include="Monitor\Quartz\NinjectJobFactory.cs" />
     <Compile Include="Monitor\Quartz\QuartzMonitorScheduler.cs" />
     <Compile Include="Monitor\Quartz\QuartzJob.cs" />

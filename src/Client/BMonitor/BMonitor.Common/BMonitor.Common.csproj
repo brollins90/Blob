@@ -49,6 +49,7 @@
     <Compile Include="Extensions\Prettify.cs" />
     <Compile Include="Extensions\ResultExtensions.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />
+    <Compile Include="Interfaces\IMonitorScheduler.cs" />
     <Compile Include="Models\AlertLevel.cs" />
     <Compile Include="Models\NotEqual.cs" />
     <Compile Include="Models\EvaluationOperation.cs" />

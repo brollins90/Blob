@@ -95,6 +95,8 @@ namespace BMonitor.Service.Monitor
             _started = false;
         }
 
-
+        public void RunJob(string jobName)
+        {
+        }
     }
 }

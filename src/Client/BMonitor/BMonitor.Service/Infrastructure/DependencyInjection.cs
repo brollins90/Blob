@@ -39,6 +39,8 @@ namespace BMonitor.Service.Infrastructure
             Bind<ServiceHostBase>().ToSelf();
             Bind<MonitorManager>().ToSelf();
 
+            Bind<IMonitorScheduler>().To<QuartzMonitorScheduler>().InSingletonScope();
+
             Bind<BlobClientFactory>().ToSelf();
 
             // Callback
@@ -49,7 +51,6 @@ namespace BMonitor.Service.Infrastructure
             Bind<DeviceStatusClient>().ToSelf()
                 .WithConstructorArgument("endpointName", "DeviceStatusService");
 
-            Bind<IMonitorScheduler>().To<QuartzMonitorScheduler>();
 
 
             // load monitors

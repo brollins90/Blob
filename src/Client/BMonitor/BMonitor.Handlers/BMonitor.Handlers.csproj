@@ -44,8 +44,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <COMReference Include="WUApiLib">
       <Guid>{B596CC9F-56E5-419E-A622-E01BB457431E}</Guid>
       <VersionMajor>2</VersionMajor>
@@ -65,10 +66,18 @@
     <Compile Include="PsExecuteCommandHandler.cs" />
     <Compile Include="UnknownCommandHandler.cs" />
     <Compile Include="WindowsBackupCommandHandler.cs" />
+    <Compile Include="RunMonitorCommandHandler.cs" />
+    <Compile Include="WindowsServiceCommandHandler.cs" />
     <Compile Include="WindowsUpdateCommandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BMonitor.Common\BMonitor.Common.csproj">
+      <Project>{4C1C9B97-E90D-45BF-BE89-48CFE705C211}</Project>
+      <Name>BMonitor.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

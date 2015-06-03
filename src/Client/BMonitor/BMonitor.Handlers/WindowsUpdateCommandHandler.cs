@@ -1,5 +1,6 @@
 ﻿using System;
 using Blob.Contracts.Commands;
+using log4net;
 using WUApiLib;
 
 namespace BMonitor.Handlers
@@ -7,40 +8,49 @@ namespace BMonitor.Handlers
     // http://www.nullskull.com/a/1592/install-windows-updates-using-c--wuapi.aspx
     public class WindowsUpdateCommandHandler : IDeviceCommandHandler<WindowsUpdateCommand>
     {
+        private ILog _log;
+
+        public WindowsUpdateCommandHandler(ILog log)
+        {
+            _log = log;
+        }
+
         public void Handle(WindowsUpdateCommand command)
         {
-            Console.WriteLine("Handling Windows Update Command");
+            _log.Debug("Handling Windows Update Command");
             // Find updates for this computer
             IUpdateSession3 uSession = new UpdateSession();
             IUpdateSearcher uSearcher = uSession.CreateUpdateSearcher();
-            ISearchResult uResult = uSearcher.Search("IsInstalled=0 and Type='Software'");
+            ISearchResult uResult = uSearcher.Search("IsInstalled=0 and IsHidden=0 and Type='Software'");
+            //ISearchResult uResult = uSearcher.Search("IsInstalled=0 and Type='Software'");
 
             // List results
-            Console.WriteLine("Found {0} updates:", uResult.Updates.Count);
+            _log.Debug(string.Format("Found {0} updates:", uResult.Updates.Count));
             foreach (IUpdate update in uResult.Updates)
             {
-                Console.WriteLine(update.Title);
+                _log.Debug(string.Format(update.Title));
             }
 
             // Optionally, remove unwanted updates from the list (or create a new list) before downloading
-            Console.WriteLine("Getting one");
-            int testOnlyGetOne = 0;
+            //_log.Debug(string.Format("Getting one"));
+            _log.Debug(string.Format("Getting updates"));
+            //int testOnlyGetOne = 0;
             UpdateCollection updatesToDownload = new UpdateCollection();
             foreach (IUpdate update in uResult.Updates)
             {
-                if (testOnlyGetOne++ == 0)
+                //if (testOnlyGetOne++ == 0)
                     updatesToDownload.Add(update);
             }
 
             // Download needed updates
-            Console.WriteLine("Downloading: {0}", updatesToDownload);
+            _log.Debug(string.Format("Downloading: {0}", updatesToDownload));
             UpdateDownloader downloader = uSession.CreateUpdateDownloader();
             downloader.Updates = updatesToDownload;
             //downloader.Updates = uResult.Updates;
             downloader.Download();
 
             // check if downloaded
-            Console.WriteLine("checking if downloaded");
+            _log.Debug(string.Format("checking if downloaded"));
             UpdateCollection updatesToInstall = new UpdateCollection();
             foreach (IUpdate update in updatesToDownload)
             {
@@ -49,7 +59,7 @@ namespace BMonitor.Handlers
             }
 
             // create installer
-            Console.WriteLine("create installer");
+            _log.Debug(string.Format("create installer"));
             IUpdateInstaller installer = uSession.CreateUpdateInstaller();
             installer.Updates = updatesToInstall;
 
@@ -62,11 +72,11 @@ namespace BMonitor.Handlers
             {
                 if (installationRes.GetUpdateResult(i).HResult == 0)
                 {
-                    Console.WriteLine("Installed : " + updatesToInstall[i].Title);
+                    _log.Debug(string.Format("Installed : " + updatesToInstall[i].Title));
                 }
                 else
                 {
-                    Console.WriteLine("Failed : " + updatesToInstall[i].Title);
+                    _log.Debug(string.Format("Failed : " + updatesToInstall[i].Title));
                 }
             }
         }

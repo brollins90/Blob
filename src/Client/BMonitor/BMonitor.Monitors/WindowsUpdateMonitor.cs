@@ -25,8 +25,9 @@ namespace BMonitor.Monitors
             try{
                 // Find updates for this computer
                 IUpdateSession3 uSession = new UpdateSession();
+                uSession.ClientApplicationID = "BMonitor Windows Update Monitor";
                 IUpdateSearcher uSearcher = uSession.CreateUpdateSearcher();
-                ISearchResult uResult = uSearcher.Search("IsInstalled=0 and IsHidden=0");
+                ISearchResult uResult = uSearcher.Search("IsInstalled=0 and IsHidden=0 and Type='Software'");
 
                 neededUpdateCount = uResult.Updates.Count;
                 alertLevel = base.CheckAlertLevel(neededUpdateCount);

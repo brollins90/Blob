@@ -1,5 +1,5 @@
 ﻿
-namespace BMonitor.Service.Monitor
+namespace BMonitor.Common.Interfaces
 {
     public interface IMonitorScheduler
     {
@@ -7,5 +7,6 @@ namespace BMonitor.Service.Monitor
         void Start();
         void Stop();
         void Tick();
+        void RunJob(string jobName);
     }
 }
