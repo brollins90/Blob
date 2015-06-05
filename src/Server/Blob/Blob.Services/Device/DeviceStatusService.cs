@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
+using Blob.Contracts.Services;
 using log4net;
 
 namespace Blob.Services.Device
@@ -15,10 +16,12 @@ namespace Blob.Services.Device
     {
         private readonly ILog _log;
         private readonly IBlobCommandManager _blobCommandManager;
+        private IDeviceService _deviceService;
 
-        public DeviceStatusService(IBlobCommandManager blobCommandManager, ILog log)
+        public DeviceStatusService(IBlobCommandManager blobCommandManager, ILog log, IDeviceService deviceService)
         {
             _log = log;
+            _deviceService = deviceService;
             _blobCommandManager = blobCommandManager;
         }
 
@@ -60,5 +63,11 @@ namespace Blob.Services.Device
         }
 
         #endregion
+
+        [OperationBehavior]
+        public async Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto)
+        {
+            return await _deviceService.AuthenticateDeviceAsync(dto).ConfigureAwait(false);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace BMonitor.Service
     {
         private readonly IKernel _kernel;
         private readonly ILog _log;
-        private IMonitorScheduler _jobHandler;
+        private IMonitorScheduler _monitorScheduler;
         private IConnectionThread _connectionThread;
         private Registrator _registrator;
 
@@ -76,7 +76,7 @@ namespace BMonitor.Service
             if (!_isRegistered)
             {
                 //if things are running, stop them
-                if (_jobHandler != null) _jobHandler.Stop();
+                if (_monitorScheduler != null) _monitorScheduler.Stop();
                 if (_connectionThread != null) _connectionThread.Stop();
                 if (!_registrator.IsRegistered())
                 {
@@ -102,7 +102,7 @@ namespace BMonitor.Service
 
                 if (_enableStatusMonitoring || _enablePerformanceMonitoring)
                 {
-                    _jobHandler.Tick();
+                    _monitorScheduler.Tick();
                 }
             }
         }
@@ -152,9 +152,9 @@ namespace BMonitor.Service
 
             if (_isRegistered && _enableStatusMonitoring || _enablePerformanceMonitoring)
             {
-                _jobHandler = _kernel.Get<IMonitorScheduler>();
-                _jobHandler.LoadConfig();
-                _jobHandler.Start();
+                _monitorScheduler = _kernel.Get<IMonitorScheduler>();
+                _monitorScheduler.LoadConfig();
+                _monitorScheduler.Start();
             }
         }
     }

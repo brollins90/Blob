@@ -8,6 +8,9 @@ namespace Blob.Contracts.ServiceContracts
     public interface IDeviceStatusService
     {
         [OperationContract]
+        Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto);
+
+        [OperationContract]
         Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto);
 
         [OperationContract]

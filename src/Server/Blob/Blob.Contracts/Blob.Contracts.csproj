@@ -54,6 +54,7 @@
     <Compile Include="Models\BlobResultDto.cs" />
     <Compile Include="Models\CreateUserIdentityDto.cs" />
     <Compile Include="Models\DeleteCustomerGroupDto.cs" />
+    <Compile Include="Models\AuthenticateDeviceDto.cs" />
     <Compile Include="Models\RegisterCustomerDto.cs" />
     <Compile Include="Models\DeletePerformanceRecordDto.cs" />
     <Compile Include="Models\DeleteStatusRecordDto.cs" />

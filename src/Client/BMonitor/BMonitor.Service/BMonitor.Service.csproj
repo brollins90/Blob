@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Configuration\JobElement.cs" />
     <Compile Include="Configuration\ServiceElement.cs" />
+    <Compile Include="Connection\ConnectionClient.cs" />
     <Compile Include="Connection\IConnectionThread.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="Helpers\BMonitorStatusReporter.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Infrastructure\DependencyInjection.cs" />
     <Compile Include="Connection\CommandServiceCallbackHandler.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="MonitorMain.cs" />
     <Compile Include="MonitorManager.cs" />
     <Compile Include="Monitor\Quartz\SendStatusJobListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

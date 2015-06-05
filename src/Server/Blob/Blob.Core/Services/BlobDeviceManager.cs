@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
@@ -232,6 +233,16 @@ namespace Blob.Core.Services
             _log.Debug(string.Format("CalculateDeviceAlertLevel({0})", deviceId));
             var records = _statusRecordManager.GetDeviceRecentStatusAsync(deviceId).Result;
             return records.Select(statusRecord => statusRecord.Status).Concat(new[] { 0 }).Max();
+        }
+
+        public async Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto)
+        {
+            _log.Debug(string.Format("AuthenticateDevice({0})", dto.DeviceId));
+            //Device device = await Devices.FindAsync(dto.DeviceId);
+
+            //if (device.Id == dto.DeviceId)
+                return await Task.FromResult(BlobResultDto.Success);
+            //else return new BlobResultDto("Not Authenticated");
         }
     }
 }

@@ -24,5 +24,8 @@ namespace Blob.Contracts.Services
         Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
 
         int CalculateDeviceAlertLevel(Guid deviceId);
+
+
+        Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto);
     }
 }

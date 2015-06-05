@@ -46,5 +46,18 @@ namespace Blob.Proxies
                 HandleError(ex);
             }
         }
+
+        public async Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto)
+        {
+            try
+            {
+                return await Channel.AuthenticateDeviceAsync(dto).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+            return new BlobResultDto("Failed");
+        }
     }
 }

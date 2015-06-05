@@ -44,7 +44,7 @@ namespace BMonitor.Service.Infrastructure
             Bind<BlobClientFactory>().ToSelf();
 
             // Callback
-            Bind<IDeviceConnectionServiceCallback>().To<CommandServiceCallbackHandler>();
+            Bind<IDeviceConnectionServiceCallback>().To<ConnectionServiceCallbackHandler>();
             Bind<DeviceConnectionClient>().ToSelf()
                 .WithConstructorArgument("callbackInstance", x => new InstanceContext((x.Kernel.Get<IDeviceConnectionServiceCallback>())))
                 .WithConstructorArgument("endpointName", "DeviceConnectionService");

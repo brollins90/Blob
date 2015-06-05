@@ -72,6 +72,10 @@ namespace Blob.Core.Blob
             return await _deviceManager.UpdateDeviceAsync(dto).ConfigureAwait(false);
         }
 
+        public async Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto)
+        {
+            return await _deviceManager.AuthenticateDeviceAsync(dto);
+        }
 
         // Performance Record
 

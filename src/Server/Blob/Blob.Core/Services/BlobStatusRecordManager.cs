@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.Services;
-using Blob.Core.Command;
-using Blob.Core.Extensions;
 using Blob.Core.Models;
 using EntityFramework.Extensions;
 using log4net;
@@ -19,7 +16,7 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private BlobPerformanceRecordManager _performanceRecordManager;
+        private readonly BlobPerformanceRecordManager _performanceRecordManager;
 
         public BlobStatusRecordManager(ILog log, BlobDbContext context, BlobPerformanceRecordManager performanceRecordManager)
         {

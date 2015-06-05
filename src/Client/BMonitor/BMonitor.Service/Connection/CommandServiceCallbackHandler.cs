@@ -14,14 +14,14 @@ namespace BMonitor.Service.Connection
         Other, Running, Completed, Failed
     }
 
-    public class CommandServiceCallbackHandler : IDeviceConnectionServiceCallback
+    public class ConnectionServiceCallbackHandler : IDeviceConnectionServiceCallback
     {
         private readonly IKernel _kernel;
         private readonly ILog _log;
         private readonly IDictionary<Guid, CommandStatus> _commandStatuses;
         // we need to keep an instance of the ninject container because we dont know what command handlers to 
         // load until we receive the commands
-        public CommandServiceCallbackHandler(IKernel kernel, ILog log)
+        public ConnectionServiceCallbackHandler(IKernel kernel, ILog log)
         {
             _kernel = kernel;
             _log = log;
