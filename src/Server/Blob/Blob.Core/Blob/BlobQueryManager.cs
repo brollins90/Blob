@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core.Services;
-using EntityFramework.Extensions;
 using log4net;
 
 namespace Blob.Core.Blob
@@ -14,116 +13,63 @@ namespace Blob.Core.Blob
     public class BlobQueryManager : IBlobQueryManager
     {
         private readonly ILog _log;
+        private readonly BlobDbContext _context;
         private readonly BlobCustomerManager _customerManager;
         private readonly BlobCustomerGroupManager _customerGroupManager;
+        private readonly BlobDashboardManager _blobDashboardManager;
         private readonly BlobDeviceManager _deviceManager;
         private readonly BlobDeviceCommandManager _deviceCommandManager;
-        private readonly BlobStatusRecordManager _statusRecordManager;
         private readonly BlobPerformanceRecordManager _performanceRecordManager;
+        private readonly BlobStatusRecordManager _statusRecordManager;
+        private readonly BlobUserManager2 _userManager;
 
-        public BlobQueryManager(ILog log, BlobDbContext context, BlobCustomerManager customerManager, BlobCustomerGroupManager customerGroupManager,
-            BlobDeviceManager deviceManager, BlobDeviceCommandManager deviceCommandManager, BlobStatusRecordManager statusRecordManager,
-            BlobPerformanceRecordManager performanceRecordManager)
+        public BlobQueryManager(
+            ILog log,
+            BlobDbContext context,
+            BlobCustomerManager customerManager,
+            BlobCustomerGroupManager customerGroupManager,
+            BlobDashboardManager blobDashboardManager,
+            BlobDeviceManager deviceManager,
+            BlobDeviceCommandManager deviceCommandManager,
+            BlobPerformanceRecordManager performanceRecordManager,
+            BlobStatusRecordManager statusRecordManager,
+            BlobUserManager2 userManager)
         {
             _log = log;
             _log.Debug("Constructing BlobQueryManager");
-            Context = context;
+            _context = context;
             _customerManager = customerManager;
             _customerGroupManager = customerGroupManager;
+            _blobDashboardManager = blobDashboardManager;
             _deviceManager = deviceManager;
             _deviceCommandManager = deviceCommandManager;
             _statusRecordManager = statusRecordManager;
             _performanceRecordManager = performanceRecordManager;
+            _userManager = userManager;
         }
-        public BlobDbContext Context { get; private set; }
-
 
         // Dash
         public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
-            var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
-            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
-            var pNum = pageNum < 1 ? 0 : pageNum - 1;
-
-            //var cust = Context.Customers.Where(x => x.Id.Equals(customerId));
-            var count = Context.Devices.Where(x => activeDeviceConnections.Contains(x.Id)).FutureCount();
-            var devices = Context.Devices.Where(x => activeDeviceConnections.Contains(x.Id))
-                .Include("Customer")
-                .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
-                .Skip(pNum * pageSize).Take(pageSize).Future();
-
-            // define future queries before any of them execute
-            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new DashCurrentConnectionsLargeVm
-            {
-                TotalCount = count,
-                PageCount = pCount,
-                PageNum = pNum + 1,
-                PageSize = pageSize,
-                Items = devices.Select(x => new DashCurrentConnectionsListItemVm
-                {
-                    AvailableCommands = availableCommands,
-                    CustomerId = x.CustomerId,
-                    CustomerName = x.Customer.Name,
-                    DeviceId = x.Id,
-                    DeviceName = x.DeviceName,
-                    Status = _deviceManager.CalculateDeviceAlertLevel(x.Id)
-                }),
-            }).ConfigureAwait(false);
+            return await _blobDashboardManager.GetDashCurrentConnectionsLargeVmAsync(searchId, pageNum, pageSize);
         }
 
         public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
-            var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
-            IEnumerable<DeviceCommandVm> availableCommands = GetDeviceCommandVmList();
-            var pNum = pageNum < 1 ? 0 : pageNum - 1;
-
-            //var cust = Context.Customers.Where(x => x.Id.Equals(customerId));
-            var count = Context.Devices.Where(x => x.CustomerId.Equals(searchId)).FutureCount();
-            var devices = Context.Devices
-                .Where(x => x.CustomerId.Equals(searchId))
-                .OrderByDescending(x => x.AlertLevel).ThenBy(x => x.DeviceName)
-                .Skip(pNum * pageSize).Take(pageSize).Future();
-
-            // define future queries before any of them execute
-            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-
-            List<DashDevicesLargeListItemVm> dItems = new List<DashDevicesLargeListItemVm>();
-            foreach (var x in devices)
-            {
-                var deviceRecent = await _statusRecordManager.GetDeviceRecentStatusAsync(x.Id);
-
-                var li = new DashDevicesLargeListItemVm
-                         {
-                             AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
-                             DeviceId = x.Id,
-                             DeviceName = x.DeviceName,
-                             Reason = ChangeStatusRecordsToReasonString(deviceRecent),
-                             Recomendations = new string[] { "not yet" },
-                             Status = ChangeStatusRecordsToStatusInt(deviceRecent)
-                         };
-                dItems.Add(li);
-            }
-            return await Task.FromResult(new DashDevicesLargeVm
-            {
-                TotalCount = count,
-                PageCount = pCount,
-                PageNum = pNum + 1,
-                PageSize = pageSize,
-                Items = dItems
-            });
-
+            return await _blobDashboardManager.GetDashDevicesLargeVmAsync(searchId, pageNum, pageSize);
         }
 
-        private string ChangeStatusRecordsToReasonString(IList<StatusRecordListItemVm> records)
+        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
         {
-            return records.Where(s => s.Status != 0).Aggregate<StatusRecordListItemVm, string>(null, (accum, r) => accum + (accum == null ? accum : ", ") + r.CurrentValue);
+            return await (from user in _context.Users
+                          where user.Id == userId
+                          select new UserUpdatePasswordVm
+                          {
+                              UserId = user.Id
+                          }).SingleAsync().ConfigureAwait(false);
         }
 
-        private int ChangeStatusRecordsToStatusInt(IList<StatusRecordListItemVm> records)
-        {
-            return records.Select(statusRecord => statusRecord.Status).Concat(new[] { 0 }).Max();
-        }
+
 
 
         #region DeviceCommand
@@ -182,122 +128,31 @@ namespace Blob.Core.Blob
 
 
         // User
-
         public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)
         {
-            return await (from user in Context.Users
-                          where user.Id == userId
-                          select new UserDisableVm
-                          {
-                              Email = user.Email,
-                              Enabled = user.Enabled,
-                              UserId = user.Id,
-                              UserName = user.UserName
-                          }).SingleAsync().ConfigureAwait(false);
+            return await _userManager.GetUserDisableVmAsync(userId);
         }
 
         public async Task<UserEnableVm> GetUserEnableVmAsync(Guid userId)
         {
-            return await (from user in Context.Users
-                          where user.Id == userId
-                          select new UserEnableVm
-                          {
-                              Email = user.Email,
-                              Enabled = user.Enabled,
-                              UserId = user.Id,
-                              UserName = user.UserName
-                          }).SingleAsync().ConfigureAwait(false);
+            return await _userManager.GetUserEnableVmAsync(userId);
         }
 
         public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
-            var pNum = pageNum < 1 ? 0 : pageNum - 1;
-
-            var count = Context.Users.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
-            var devices = Context.Users
-                .Where(x => x.CustomerId.Equals(customerId))
-                .OrderBy(x => x.UserName).ThenBy(x => x.Email)
-                .Skip(pNum * pageSize).Take(pageSize).Future();
-
-            // define future queries before any of them execute
-            var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new UserPageVm
-            {
-                TotalCount = count,
-                PageCount = pCount,
-                PageNum = pNum + 1,
-                PageSize = pageSize,
-                Items = devices.Select(x => new UserListItemVm
-                {
-                    Email = x.Email,
-                    Enabled = x.Enabled,
-                    UserId = x.Id,
-                    UserName = x.UserName
-                }),
-            }).ConfigureAwait(false);
+            return await _userManager.GetUserPageVmAsync(customerId, pageNum, pageSize);
         }
 
         public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
         {
-            // NotificationSchedule
-            return await (from user in Context.Users.Include("Customers")
-                          join p in Context.UserProfiles on user.Id equals p.UserId
-                          where user.Id == userId
-                          select new UserSingleVm
-                          {
-                              CreateDate = user.CreateDateUtc,
-                              CustomerName = user.Customer.Name,
-                              Email = user.Email,
-                              EmailConfirmed = user.EmailConfirmed,
-                              EmailNotificationsEnabled = p.SendEmailNotifications,
-                              Enabled = user.Enabled,
-                              HasPassword = (user.PasswordHash != null),
-                              HasSecurityStamp = (user.SecurityStamp != null),
-                              LastActivityDate = user.LastActivityDate,
-                              UserId = user.Id,
-                              UserName = user.UserName,
-                              NotificationSchedule = new NotificationScheduleListItemVm { Name = p.EmailNotificationSchedule.Name, ScheduleId = p.EmailNotificationSchedule.Id },
-                          }).SingleAsync().ConfigureAwait(false);
-        }
-
-        public async Task<IEnumerable<NotificationScheduleListItemVm>> GetAllNotificationSchedules()
-        {
-            return await (from x in Context.NotificationSchedules
-                          select new NotificationScheduleListItemVm
-                          {
-                              ScheduleId = x.Id,
-                              Name = x.Name
-                          }).ToListAsync().ConfigureAwait(false);
-            //return new List<NotificationScheduleListItemVm> { new NotificationScheduleListItemVm { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
+            return await _userManager.GetUserSingleVmAsync(userId);
         }
 
         public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
         {
-            var availableSchedules = await GetAllNotificationSchedules();
-            var u = await (from p in Context.UserProfiles.Include("User")
-                           where p.UserId == userId
-                           select new UserUpdateVm
-                           {
-                               UserId = p.User.Id,
-                               Email = p.User.Email,
-                               UserName = p.User.UserName,
-                               ScheduleId = p.EmailNotificationScheduleId
-                           }).SingleAsync().ConfigureAwait(false);
-            u.AvailableSchedules = availableSchedules;
-            return u;
+            return await _userManager.GetUserUpdateVmAsync(userId);
         }
-
-        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
-        {
-            return await (from user in Context.Users
-                          where user.Id == userId
-                          select new UserUpdatePasswordVm
-                          {
-                              UserId = user.Id
-                          }).SingleAsync().ConfigureAwait(false);
-        }
-
-
+        
         #region Device
 
         public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
@@ -390,17 +245,11 @@ namespace Blob.Core.Blob
         {
             return await _customerGroupManager.GetCustomerGroupUsersAsync(groupId).ConfigureAwait(false);
         }
-        #endregion
-
-
-
-
-
-
 
         public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             return await _customerManager.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
         }
+        #endregion
     }
 }

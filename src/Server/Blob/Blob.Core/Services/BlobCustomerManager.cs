@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +15,16 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
+        private readonly BlobCustomerGroupManager _customerGroupManager;
+        private readonly BlobUserManager2 _userManager;
 
-        public BlobCustomerManager(ILog log, BlobDbContext context)
+        public BlobCustomerManager(ILog log, BlobDbContext context,BlobCustomerGroupManager customerGroupManager,  BlobUserManager2 userManager)
         {
             _log = log;
             _log.Debug("Constructing BlobCustomerManager");
             _context = context;
+            _customerGroupManager = customerGroupManager;
+            _userManager = userManager;
         }
 
         public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
@@ -29,11 +32,7 @@ namespace Blob.Core.Services
             _log.Debug(string.Format("DisableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
             customer.Enabled = false;
-            
-            
             // todo: disable all devices and users for customer ?
-
-
 
             _context.Entry(customer).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -76,39 +75,40 @@ namespace Blob.Core.Services
             _log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
 
             
-            // create first user
-            User defaultUser = new User
+            //// create first user
+            //User defaultUser = new User
+            //{
+            //    AccessFailedCount = 0,
+            //    CreateDateUtc = DateTime.UtcNow,
+            //    EmailConfirmed = true,
+            //    Enabled = true,
+            //    LastActivityDate = DateTime.UtcNow,
+            //    LockoutEnabled = false,
+            //    LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
+            //};
+            //_context.Users.Add(defaultUser);
+            await _userManager.CreateUserAsync(new CreateUserDto
             {
-                AccessFailedCount = 0,
-                CreateDateUtc = DateTime.UtcNow,
                 CustomerId = dto.DefaultUser.CustomerId,
                 Email = dto.DefaultUser.Email,
-                EmailConfirmed = true,
-                Enabled = true,
-                Id = dto.DefaultUser.UserId,
-                LastActivityDate = DateTime.UtcNow,
-                LockoutEnabled = false,
-                LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
-                PasswordHash = dto.DefaultUser.Password,
+                Password = dto.DefaultUser.Password,
+                UserId = dto.DefaultUser.UserId,
                 UserName = dto.DefaultUser.UserName
-            };
-            _context.Users.Add(defaultUser);
+            });
 
 
             // create admin group
-            CustomerGroup adminGroup = new CustomerGroup
-                                       {
-                                           CustomerId = customer.Id,
-                                           Description = "Admins",
-                                           Id = Guid.NewGuid(),
-                                           Name = "Admins"
-                                       };
-            _context.Set<CustomerGroup>().Add(adminGroup);
-
+            Guid adminGroupId = Guid.NewGuid();
+            await _customerGroupManager.CreateCustomerGroupAsync(new CreateCustomerGroupDto
+                                                           {
+                                                               CustomerId = customer.Id,
+                                                               Description = "Admins",
+                                                               GroupId = adminGroupId,
+                                                               Name = "Admins"
+                                                           });
 
             // add user to admin group
-            var ur = new CustomerGroupUser { GroupId = adminGroup.Id, UserId = defaultUser.Id };
-            _context.Set<CustomerGroupUser>().Add(ur);
+            await _customerGroupManager.AddUserToCustomerGroupAsync(new AddUserToCustomerGroupDto {GroupId = adminGroupId, UserId = dto.DefaultUser.UserId});
             
             // save stuff
             await _context.SaveChangesAsync().ConfigureAwait(false);

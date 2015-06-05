@@ -108,7 +108,9 @@
     </Compile>
     <Compile Include="Models\DeviceProfile.cs" />
     <Compile Include="Services\BlobCustomerGroupManager.cs" />
+    <Compile Include="Services\BlobDashboardManager.cs" />
     <Compile Include="Services\BlobDeviceCommandManager.cs" />
+    <Compile Include="Services\BlobNotificationScheduleManager.cs" />
     <Compile Include="Services\BlobPerformanceRecordManager.cs" />
     <Compile Include="Services\BlobStatusRecordManager.cs" />
     <Compile Include="Services\BlobDeviceManager.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Command\ICommandConnectionManager.cs" />
     <Compile Include="Command\ICommandQueueManager.cs" />
+    <Compile Include="Services\BlobUserManager2.cs" />
     <Compile Include="Tokens\GenericUserNameSecurityTokenHandler.cs" />
   </ItemGroup>
   <ItemGroup>

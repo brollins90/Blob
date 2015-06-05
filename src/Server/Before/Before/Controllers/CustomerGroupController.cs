@@ -13,6 +13,7 @@ using Blob.Contracts.ServiceContracts;
 namespace Before.Controllers
 {
     [Authorize]
+    [HandleError]
     public class CustomerGroupController : Controller
     {
         protected IBlobQueryManager BlobQueryManager { get; set; }

@@ -142,6 +142,13 @@ namespace Blob.Core.Migrations
             };
             context.Set<User>().AddOrUpdate(x => x.UserName, userBeforeService1);
             context.SaveChanges();
+            context.Set<UserProfile>().AddOrUpdate(x => x.UserId, new UserProfile
+            {
+                EmailNotificationScheduleId = sched.First().Id,
+                SendEmailNotifications = true,
+                UserId = userBeforeService1.Id
+            });
+            context.SaveChanges();
 
             Customer rritc = new Customer
             {
@@ -189,16 +196,13 @@ namespace Blob.Core.Migrations
             };
             context.Set<User>().AddOrUpdate(x => x.UserName, rritc1);
             context.SaveChanges();
-
-            UserProfile up1 = new UserProfile
-                              {
-                                  EmailNotificationScheduleId = sched.First().Id,
-                                  SendEmailNotifications = true,
-                                  UserId = rritc1.Id
-                              };
-            context.Set<UserProfile>().AddOrUpdate(x => x.UserId, up1);
+            context.Set<UserProfile>().AddOrUpdate(x => x.UserId, new UserProfile
+            {
+                EmailNotificationScheduleId = sched.First().Id,
+                SendEmailNotifications = true,
+                UserId = rritc1.Id
+            });
             context.SaveChanges();
-
 
             List<CustomerGroupUser> groupUsers = new List<CustomerGroupUser>
                                                  {
@@ -229,6 +233,13 @@ namespace Blob.Core.Migrations
                 UserName = "customerUser1",
             };
             context.Set<User>().AddOrUpdate(x => x.Id, testUser1);
+            context.SaveChanges();
+            context.Set<UserProfile>().AddOrUpdate(x => x.UserId, new UserProfile
+            {
+                EmailNotificationScheduleId = sched.First().Id,
+                SendEmailNotifications = true,
+                UserId = testUser1.Id
+            });
             context.SaveChanges();
 
             // Devices

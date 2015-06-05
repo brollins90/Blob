@@ -1,9 +1,6 @@
-﻿using System;
-using System.Data.Entity;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Core.Models;
 using Blob.Core.Services;
 using log4net;
 
@@ -12,31 +9,38 @@ namespace Blob.Core.Blob
     public class BlobCommandManager : IBlobCommandManager
     {
         private readonly ILog _log;
+        private readonly BlobDbContext _context;
         private readonly BlobCustomerManager _customerManager;
         private readonly BlobCustomerGroupManager _customerGroupManager;
         private readonly BlobDeviceManager _deviceManager;
         private readonly BlobDeviceCommandManager _deviceCommandManager;
-        private readonly BlobStatusRecordManager _statusRecordManager;
         private readonly BlobPerformanceRecordManager _performanceRecordManager;
+        private readonly BlobStatusRecordManager _statusRecordManager;
+        private readonly BlobUserManager2 _userManager;
 
         public BlobCommandManager(
-            ILog log, BlobDbContext context, BlobCustomerManager customerManager, BlobCustomerGroupManager customerGroupManager,
-            BlobDeviceManager deviceManager, BlobDeviceCommandManager deviceCommandManager, BlobStatusRecordManager statusRecordManager, 
-            BlobPerformanceRecordManager performanceRecordManager)
+            ILog log,
+            BlobDbContext context,
+            BlobCustomerManager customerManager,
+            BlobCustomerGroupManager customerGroupManager,
+            BlobDeviceManager deviceManager,
+            BlobDeviceCommandManager deviceCommandManager,
+            BlobPerformanceRecordManager performanceRecordManager,
+            BlobStatusRecordManager statusRecordManager,
+            BlobUserManager2 userManager)
         {
             _log = log;
             _log.Debug("Constructing BlobManager");
-            Context = context;
+            _context = context;
             _customerManager = customerManager;
             _customerGroupManager = customerGroupManager;
             _deviceManager = deviceManager;
             _deviceCommandManager = deviceCommandManager;
-            _statusRecordManager = statusRecordManager;
             _performanceRecordManager = performanceRecordManager;
+            _statusRecordManager = statusRecordManager;
+            _userManager = userManager;
         }
-
-        protected BlobDbContext Context { get; private set; }
-
+        
 
         // Device Command
         public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
@@ -98,94 +102,23 @@ namespace Blob.Core.Blob
         // User
         public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
         {
-            User newUser = new User
-            {
-                AccessFailedCount = 0,
-                CreateDateUtc = Now(),
-                CustomerId = dto.CustomerId,
-                Email = dto.Email,
-                EmailConfirmed = false,
-                Enabled = true,
-                Id = dto.UserId,
-                LastActivityDate = OldestTime(),
-                LockoutEnabled = false,
-                LockoutEndDateUtc = OldestTime(),
-                PasswordHash = dto.Password,
-                UserName = dto.UserName
-            };
-            Context.Users.Add(newUser);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _userManager.CreateUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
         {
-            User user = Context.Users.Find(dto.UserId);
-            user.Enabled = false;
-
-            Context.Entry(user).State = EntityState.Modified;
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _userManager.DisableUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
         {
-            User user = Context.Users.Find(dto.UserId);
-            user.Enabled = true;
-
-            Context.Entry(user).State = EntityState.Modified;
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _userManager.EnableUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
         {
-            User user = Context.Users.Find(dto.UserId);
-            // todo: can username change?
-            //user.UserName = dto.UserName;
-            if (!string.IsNullOrEmpty(dto.Email) && !user.Email.Equals(dto.Email))
-            {
-                user.Email = dto.Email;
-                user.EmailConfirmed = false;
-                user.LastActivityDate = Now();
-            }
-
-            Context.Entry(user).State = EntityState.Modified;
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return await _userManager.UpdateUserAsync(dto).ConfigureAwait(false);
         }
-
-        private async Task<BlobResultDto> UpdateDeviceActivityTimeAsync(Guid deviceId)
-        {
-            Device device = Context.Devices.Find(deviceId);
-            device.LastActivityDateUtc = Now();
-
-            Context.Entry(device).State = EntityState.Modified;
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
-        }
-
-        private async Task<BlobResultDto> UpdateUserActivityTimeAsync(Guid userId)
-        {
-            User user = Context.Users.Find(userId);
-            user.LastActivityDate = Now();
-
-            Context.Entry(user).State = EntityState.Modified;
-            await Context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
-        }
-
-        public DateTime Now()
-        {
-            return DateTime.UtcNow;
-        }
-
-        public DateTime OldestTime()
-        {
-            return _oldestDateTime;
-        }
-        private readonly DateTime _oldestDateTime = DateTime.Parse("2010-01-01").ToUniversalTime();
-
 
         #region Customer
 

@@ -94,6 +94,10 @@ function bindForm(dialog) {
                     $("#myModalContent").html(result);
                     bindForm(dialog);
                 }
+            },
+            error: function (result) {
+                $("#myModalContent").html(result.responseText);
+                bindForm(dialog);                
             }
         });
         return false;

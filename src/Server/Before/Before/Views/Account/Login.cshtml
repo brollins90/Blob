@@ -1,4 +1,5 @@
-﻿@model Blob.Contracts.Models.ViewModels.LoginVm
+﻿@using System.Web.Configuration
+@model Blob.Contracts.Models.ViewModels.LoginVm
 @{
     ViewBag.Title = "Log in";
 }
@@ -42,11 +43,11 @@
                     </div>
                 </div>
                 <p>
-                    @Html.ActionLink("Register as a new user", "Register")
+                    @Html.ActionLink("Register as a new customer", "Register", "CustomerRegistration")
                 </p>
-                <p>
+                @*<p>
                     @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                </p>
+                </p>*@
             }
         </section>
     </div>

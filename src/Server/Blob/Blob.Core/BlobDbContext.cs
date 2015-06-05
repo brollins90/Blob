@@ -38,7 +38,6 @@ namespace Blob.Core
         public DbSet<CustomerGroupRole> Groups { get; set; }
         public DbSet<NotificationSchedule> NotificationSchedules { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
-        //public DbSet<KeyPair> Keys { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

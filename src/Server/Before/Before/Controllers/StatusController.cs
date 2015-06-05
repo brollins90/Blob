@@ -9,6 +9,7 @@ using Blob.Contracts.ServiceContracts;
 namespace Before.Controllers
 {
     [Authorize]
+    [HandleError]
     public class StatusController : Controller
     {
         protected IBlobQueryManager BlobQueryManager { get; set; }

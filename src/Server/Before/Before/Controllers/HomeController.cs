@@ -3,6 +3,7 @@
 namespace Before.Controllers
 {
     [Authorize]
+    [HandleError]
     public class HomeController : Controller
     {
         [AllowAnonymous]

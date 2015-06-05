@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Before.Controllers
 {
+    [HandleError]
     public class AccountController : Controller
     {
         protected IUserManagerService UserManager { get; set; }
