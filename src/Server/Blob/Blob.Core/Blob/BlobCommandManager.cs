@@ -9,36 +9,33 @@ namespace Blob.Core.Blob
     public class BlobCommandManager : IBlobCommandManager
     {
         private readonly ILog _log;
-        private readonly BlobDbContext _context;
         private readonly BlobCustomerManager _customerManager;
         private readonly BlobCustomerGroupManager _customerGroupManager;
         private readonly BlobDeviceManager _deviceManager;
         private readonly BlobDeviceCommandManager _deviceCommandManager;
         private readonly BlobPerformanceRecordManager _performanceRecordManager;
         private readonly BlobStatusRecordManager _statusRecordManager;
-        private readonly BlobUserManager2 _userManager;
+        private readonly BlobUserManager2 _userManager2;
 
         public BlobCommandManager(
             ILog log,
-            BlobDbContext context,
             BlobCustomerManager customerManager,
             BlobCustomerGroupManager customerGroupManager,
             BlobDeviceManager deviceManager,
             BlobDeviceCommandManager deviceCommandManager,
             BlobPerformanceRecordManager performanceRecordManager,
             BlobStatusRecordManager statusRecordManager,
-            BlobUserManager2 userManager)
+            BlobUserManager2 userManager2)
         {
             _log = log;
             _log.Debug("Constructing BlobManager");
-            _context = context;
             _customerManager = customerManager;
             _customerGroupManager = customerGroupManager;
             _deviceManager = deviceManager;
             _deviceCommandManager = deviceCommandManager;
             _performanceRecordManager = performanceRecordManager;
             _statusRecordManager = statusRecordManager;
-            _userManager = userManager;
+            _userManager2 = userManager2;
         }
         
 
@@ -78,7 +75,6 @@ namespace Blob.Core.Blob
         }
 
         // Performance Record
-
         public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
         {
             return await _performanceRecordManager.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
@@ -91,7 +87,6 @@ namespace Blob.Core.Blob
 
 
         // Status Record
-
         public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
         {
             return await _statusRecordManager.AddStatusRecordAsync(dto).ConfigureAwait(false);
@@ -106,22 +101,22 @@ namespace Blob.Core.Blob
         // User
         public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
         {
-            return await _userManager.CreateUserAsync(dto).ConfigureAwait(false);
+            return await _userManager2.CreateUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
         {
-            return await _userManager.DisableUserAsync(dto).ConfigureAwait(false);
+            return await _userManager2.DisableUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
         {
-            return await _userManager.EnableUserAsync(dto).ConfigureAwait(false);
+            return await _userManager2.EnableUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
         {
-            return await _userManager.UpdateUserAsync(dto).ConfigureAwait(false);
+            return await _userManager2.UpdateUserAsync(dto).ConfigureAwait(false);
         }
 
         #region Customer

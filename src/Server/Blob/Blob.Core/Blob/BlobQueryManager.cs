@@ -13,7 +13,6 @@ namespace Blob.Core.Blob
     public class BlobQueryManager : IBlobQueryManager
     {
         private readonly ILog _log;
-        private readonly BlobDbContext _context;
         private readonly BlobCustomerManager _customerManager;
         private readonly BlobCustomerGroupManager _customerGroupManager;
         private readonly BlobDashboardManager _blobDashboardManager;
@@ -21,11 +20,10 @@ namespace Blob.Core.Blob
         private readonly BlobDeviceCommandManager _deviceCommandManager;
         private readonly BlobPerformanceRecordManager _performanceRecordManager;
         private readonly BlobStatusRecordManager _statusRecordManager;
-        private readonly BlobUserManager2 _userManager;
+        private readonly BlobUserManager2 _userManager2;
 
         public BlobQueryManager(
             ILog log,
-            BlobDbContext context,
             BlobCustomerManager customerManager,
             BlobCustomerGroupManager customerGroupManager,
             BlobDashboardManager blobDashboardManager,
@@ -33,11 +31,10 @@ namespace Blob.Core.Blob
             BlobDeviceCommandManager deviceCommandManager,
             BlobPerformanceRecordManager performanceRecordManager,
             BlobStatusRecordManager statusRecordManager,
-            BlobUserManager2 userManager)
+            BlobUserManager2 userManager2)
         {
             _log = log;
             _log.Debug("Constructing BlobQueryManager");
-            _context = context;
             _customerManager = customerManager;
             _customerGroupManager = customerGroupManager;
             _blobDashboardManager = blobDashboardManager;
@@ -45,7 +42,7 @@ namespace Blob.Core.Blob
             _deviceCommandManager = deviceCommandManager;
             _statusRecordManager = statusRecordManager;
             _performanceRecordManager = performanceRecordManager;
-            _userManager = userManager;
+            _userManager2 = userManager2;
         }
 
         // Dash
@@ -61,12 +58,7 @@ namespace Blob.Core.Blob
 
         public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
         {
-            return await (from user in _context.Users
-                          where user.Id == userId
-                          select new UserUpdatePasswordVm
-                          {
-                              UserId = user.Id
-                          }).SingleAsync().ConfigureAwait(false);
+            return await _userManager2.GetUserUpdatePasswordVmAsync(userId);
         }
 
 
@@ -130,27 +122,27 @@ namespace Blob.Core.Blob
         // User
         public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)
         {
-            return await _userManager.GetUserDisableVmAsync(userId);
+            return await _userManager2.GetUserDisableVmAsync(userId);
         }
 
         public async Task<UserEnableVm> GetUserEnableVmAsync(Guid userId)
         {
-            return await _userManager.GetUserEnableVmAsync(userId);
+            return await _userManager2.GetUserEnableVmAsync(userId);
         }
 
         public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
-            return await _userManager.GetUserPageVmAsync(customerId, pageNum, pageSize);
+            return await _userManager2.GetUserPageVmAsync(customerId, pageNum, pageSize);
         }
 
         public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
         {
-            return await _userManager.GetUserSingleVmAsync(userId);
+            return await _userManager2.GetUserSingleVmAsync(userId);
         }
 
         public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
         {
-            return await _userManager.GetUserUpdateVmAsync(userId);
+            return await _userManager2.GetUserUpdateVmAsync(userId);
         }
         
         #region Device

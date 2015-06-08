@@ -191,5 +191,15 @@ namespace Blob.Core.Services
             u.AvailableSchedules = availableSchedules;
             return u;
         }
+
+        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
+        {
+            return await (from user in _context.Users
+                          where user.Id == userId
+                          select new UserUpdatePasswordVm
+                          {
+                              UserId = user.Id
+                          }).SingleAsync().ConfigureAwait(false);
+        }
     }
 }

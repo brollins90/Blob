@@ -23,6 +23,7 @@ namespace Blob.Contracts.Services
         Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
         Task<UserSingleVm> GetUserSingleVmAsync(Guid userId);
         Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId);
+        Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId);
 
 
     }
