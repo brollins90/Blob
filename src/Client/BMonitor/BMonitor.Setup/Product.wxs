@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?define Name = "BMonitor Service" ?>
 <?define Manufacturer = "RRITC" ?>
-<?define Version = "1.0.1" ?>
-<?define UpgradeCode = "{B1809171-983B-41D5-86F4-D9F6422ADE03}" ?>
+<?define Version = "0.2.1" ?>
+<?define UpgradeCode = "{47B6C366-1708-47D0-B353-A3DF9524FCAB}" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.ServiceModel;
 using Blob.Proxies;
 using BMonitor.Service.Helpers;
@@ -29,6 +30,7 @@ namespace BMonitor.Service.Connection
         {
             _commandClient = _factory.CreateDeviceConnectionClient(_deviceId);
             _commandClient.ClientErrorHandler += HandleException;
+            _commandClient.InnerChannel.Faulted += OnFail;
         }
 
         public bool IsConnected()
@@ -36,20 +38,38 @@ namespace BMonitor.Service.Connection
             return (_commandClient != null && _commandClient.State == CommunicationState.Opened);
         }
 
-        public void Start()
+        public bool Start()
         {
-            if (!IsConnected())
+            try
             {
-                _commandClient.Connect(_deviceId);
+                if (!IsConnected())
+                {
+                    CreateClient();
+                    _commandClient.Connect(_deviceId);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
         public void Stop()
         {
-            if (IsConnected())
+            try
             {
-                _commandClient.Close();
+                if (IsConnected())
+                {
+                    _commandClient.Close();
+                }
             }
+            catch { }
+        }
+
+        void OnFail(object sender, EventArgs args)
+        {
+            HandleException(new Exception(args.ToString()));
         }
 
         private void HandleException(Exception ex)
@@ -72,9 +92,8 @@ namespace BMonitor.Service.Connection
                 _commandClient.Abort();
                 //throw;
             }
-            _commandClient = _factory.CreateDeviceConnectionClient(_deviceId);
+            CreateClient();
             Start();
-
         }
     }
 }

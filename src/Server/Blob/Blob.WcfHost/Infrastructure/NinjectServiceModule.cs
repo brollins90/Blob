@@ -2,12 +2,14 @@
 using System.Configuration;
 using System.Data.Entity;
 using Blob.Contracts.ServiceContracts;
+using Blob.Contracts.Services;
 using Blob.Core;
 using Blob.Core.Audit;
 using Blob.Core.Blob;
 using Blob.Core.Identity;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
+using Blob.Core.Services;
 using Blob.Services.Before;
 using log4net;
 using Microsoft.AspNet.Identity;
@@ -47,6 +49,7 @@ namespace Blob.WcfHost.Infrastructure
             Bind<IRoleStore<Role, Guid>>().To<BlobRoleStore>();
             Bind<BlobRoleManager>().ToSelf();
 
+            Bind<IDeviceService>().To<BlobDeviceManager>();
             Bind<IBlobAuditor>().To<BlobAuditor>();
             Bind<IBlobCommandManager>().To<BlobCommandManager>();
             Bind<IBlobQueryManager>().To<BlobQueryManager>();

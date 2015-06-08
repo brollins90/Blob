@@ -45,10 +45,10 @@ namespace BMonitor.Service.Infrastructure
 
             // Callback
             Bind<IDeviceConnectionServiceCallback>().To<ConnectionServiceCallbackHandler>();
-            Bind<DeviceConnectionClient>().ToSelf()
+            Bind<DeviceConnectionClient>().ToSelf().InTransientScope()
                 .WithConstructorArgument("callbackInstance", x => new InstanceContext((x.Kernel.Get<IDeviceConnectionServiceCallback>())))
                 .WithConstructorArgument("endpointName", "DeviceConnectionService");
-            Bind<DeviceStatusClient>().ToSelf()
+            Bind<DeviceStatusClient>().ToSelf().InTransientScope()
                 .WithConstructorArgument("endpointName", "DeviceStatusService");
 
 

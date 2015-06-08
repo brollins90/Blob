@@ -3,7 +3,7 @@
     public interface IConnectionThread
     {
         bool IsConnected();
-        void Start();
+        bool Start();
         void Stop();
     }
 }
