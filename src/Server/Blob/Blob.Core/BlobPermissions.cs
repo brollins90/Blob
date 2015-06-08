@@ -4,19 +4,19 @@ namespace Blob.Core
     {
         public class Operations
         {
-            public const string Create = "Create";
-            public const string Edit = "Edit";
-            public const string View = "View";
-            public const string Delete = "Delete";
+            public const string CREATE = "Create";
+            public const string EDIT = "Edit";
+            public const string VIEW = "View";
+            public const string DELETE = "Delete";
         }
 
         public class Resources
         {
-            public const string Customer = "Customer";
-            public const string Device = "Device";
-            public const string User = "User";
-            public const string StatusRecord = "StatusRecord";
-            public const string PerformanceRecord = "PerformanceRecord";
+            public const string CUSTOMER = "Customer";
+            public const string DEVICE = "Device";
+            public const string USER = "User";
+            public const string STATUS_RECORD = "StatusRecord";
+            public const string PERFORMANCE_RECORD = "PerformanceRecord";
         }
     }
 }

@@ -95,6 +95,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BMonitor.Common\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="Configuration\JobElement.cs" />
     <Compile Include="Configuration\ServiceElement.cs" />
     <Compile Include="Connection\ConnectionClient.cs" />

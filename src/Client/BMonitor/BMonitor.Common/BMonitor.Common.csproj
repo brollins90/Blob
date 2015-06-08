@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Extensions\Prettify.cs" />
     <Compile Include="Extensions\ResultExtensions.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />

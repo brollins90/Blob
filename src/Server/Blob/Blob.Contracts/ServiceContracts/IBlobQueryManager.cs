@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
 
 namespace Blob.Contracts.ServiceContracts
 {

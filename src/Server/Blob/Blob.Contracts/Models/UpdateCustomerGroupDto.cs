@@ -17,5 +17,8 @@ namespace Blob.Contracts.Models
 
         [DataMember]
         public string[] RolesIdStrings { get; set; }
+
+        [DataMember]
+        public string[] UsersIdStrings { get; set; }
     }
 }

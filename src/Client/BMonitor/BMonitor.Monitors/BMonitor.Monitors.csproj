@@ -39,6 +39,9 @@
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BMonitor.Common\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="BaseMonitor.cs" />
     <Compile Include="PerfMonMonitor.cs" />
     <Compile Include="PerfmonCounterManager.cs" />

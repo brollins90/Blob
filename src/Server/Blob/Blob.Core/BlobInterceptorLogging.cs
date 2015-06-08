@@ -15,17 +15,17 @@ namespace Blob.Core
  
         public override void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
         {
-            CommandExecuting<int>(base.NonQueryExecuting, command, interceptionContext);
+            CommandExecuting(base.NonQueryExecuting, command, interceptionContext);
         }
  
         public override void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
         {
-            CommandExecuting<DbDataReader>(base.ReaderExecuting, command, interceptionContext);
+            CommandExecuting(base.ReaderExecuting, command, interceptionContext);
         }
  
         public override void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
         {
-            CommandExecuting<object>(base.ScalarExecuting, command, interceptionContext);
+            CommandExecuting(base.ScalarExecuting, command, interceptionContext);
         }
 
         private void CommandExecuting<T>(ExecutingMethod<T> executingMethod, DbCommand command, DbCommandInterceptionContext<T> interceptionContext)

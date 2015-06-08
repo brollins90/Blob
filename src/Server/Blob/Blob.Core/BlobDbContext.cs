@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure.Interception;
 using Blob.Core.Identity;
 using Blob.Core.Mapping;
 using Blob.Core.Migrations;

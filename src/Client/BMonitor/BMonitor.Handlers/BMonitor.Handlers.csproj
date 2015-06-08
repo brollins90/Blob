@@ -58,6 +58,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BMonitor.Common\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="CmdExecuteCommandHandler.cs" />
     <Compile Include="ExceptionCommandHandlerDecorator.cs" />
     <Compile Include="LoggingCommandHandlerDecorator.cs" />

@@ -19,30 +19,30 @@ namespace Blob.Core.Migrations
 
             List<BlobPermission> permissions = new List<BlobPermission>() 
             {
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Create, Resource = BlobPermissions.Resources.Customer},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Delete, Resource = BlobPermissions.Resources.Customer},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Edit, Resource = BlobPermissions.Resources.Customer},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.View, Resource = BlobPermissions.Resources.Customer},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.CREATE, Resource = BlobPermissions.Resources.CUSTOMER},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.DELETE, Resource = BlobPermissions.Resources.CUSTOMER},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.EDIT, Resource = BlobPermissions.Resources.CUSTOMER},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.VIEW, Resource = BlobPermissions.Resources.CUSTOMER},
 
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Create, Resource = BlobPermissions.Resources.Device},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Delete, Resource = BlobPermissions.Resources.Device},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Edit, Resource = BlobPermissions.Resources.Device},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.View, Resource = BlobPermissions.Resources.Device},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.CREATE, Resource = BlobPermissions.Resources.DEVICE},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.DELETE, Resource = BlobPermissions.Resources.DEVICE},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.EDIT, Resource = BlobPermissions.Resources.DEVICE},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.VIEW, Resource = BlobPermissions.Resources.DEVICE},
 
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Create, Resource = BlobPermissions.Resources.PerformanceRecord},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Delete, Resource = BlobPermissions.Resources.PerformanceRecord},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Edit, Resource = BlobPermissions.Resources.PerformanceRecord},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.View, Resource = BlobPermissions.Resources.PerformanceRecord},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.CREATE, Resource = BlobPermissions.Resources.PERFORMANCE_RECORD},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.DELETE, Resource = BlobPermissions.Resources.PERFORMANCE_RECORD},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.EDIT, Resource = BlobPermissions.Resources.PERFORMANCE_RECORD},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.VIEW, Resource = BlobPermissions.Resources.PERFORMANCE_RECORD},
 
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Create, Resource = BlobPermissions.Resources.StatusRecord},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Delete, Resource = BlobPermissions.Resources.StatusRecord},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Edit, Resource = BlobPermissions.Resources.StatusRecord},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.View, Resource = BlobPermissions.Resources.StatusRecord},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.CREATE, Resource = BlobPermissions.Resources.STATUS_RECORD},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.DELETE, Resource = BlobPermissions.Resources.STATUS_RECORD},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.EDIT, Resource = BlobPermissions.Resources.STATUS_RECORD},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.VIEW, Resource = BlobPermissions.Resources.STATUS_RECORD},
 
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Create, Resource = BlobPermissions.Resources.User},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Delete, Resource = BlobPermissions.Resources.User},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.Edit, Resource = BlobPermissions.Resources.User},
-                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.View, Resource = BlobPermissions.Resources.User},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.CREATE, Resource = BlobPermissions.Resources.USER},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.DELETE, Resource = BlobPermissions.Resources.USER},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.EDIT, Resource = BlobPermissions.Resources.USER},
+                new BlobPermission { Id=Guid.NewGuid(), Operation = BlobPermissions.Operations.VIEW, Resource = BlobPermissions.Resources.USER},
             };
 
             foreach (var permission in permissions)
