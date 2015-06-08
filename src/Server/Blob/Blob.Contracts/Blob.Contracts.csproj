@@ -163,6 +163,7 @@
     <Compile Include="Services\ICustomerGroupService.cs" />
     <Compile Include="Services\IDashboardService.cs" />
     <Compile Include="Services\INotificationScheduleService.cs" />
+    <Compile Include="Services\IPermissionService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\IPerformanceRecordService.cs" />
     <Compile Include="Services\IStatusRecordService.cs" />

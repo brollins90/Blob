@@ -17,23 +17,23 @@ namespace Before.Filters
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            return true;
-            //if (!string.IsNullOrWhiteSpace(Operation))
-            //{
-            //    return CheckAccess(httpContext, Operation, Resource);
-            //}
-            //else
-            //{
-            //    var controller = httpContext.Request.RequestContext.RouteData.Values["controller"] as string;
-            //    var action = httpContext.Request.RequestContext.RouteData.Values["action"] as string;
+            if (!string.IsNullOrWhiteSpace(Operation) && !string.IsNullOrWhiteSpace(Resource))
+            {
+                return CheckAccess(httpContext: httpContext, action: Operation, resource: Resource);
+            }
+            else
+            {
+                var controller = httpContext.Request.RequestContext.RouteData.Values["controller"] as string;
+                var action = httpContext.Request.RequestContext.RouteData.Values["action"] as string;
+                var resourceId = httpContext.Request.RequestContext.RouteData.Values["id"] as string;
 
-            //    return CheckAccess(httpContext, action, controller);
-            //}
+                return CheckAccess(httpContext, action, controller, resourceId);
+            }
         }
 
-        protected virtual bool CheckAccess(HttpContextBase httpContext, string action, string resource)
+        protected virtual bool CheckAccess(HttpContextBase httpContext, string action, string resource, string resourceId = null)
         {
-            AuthorizationContextDto context = new AuthorizationContextDto(action, resource, ClaimsPrincipal.Current);
+            AuthorizationContextDto context = new AuthorizationContextDto(action, resource, ClaimsPrincipal.Current, resourceId);
             Task<bool> task = httpContext.CheckAccessAsync(context);
 
             if (task.Wait(50000))

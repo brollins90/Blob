@@ -84,12 +84,23 @@ namespace Blob.Contracts.Models
         public IEnumerable<Claim> Resource { get; set; }
         [DataMember]
         public ClaimsPrincipal Principal { get; set; }
+        [DataMember]
+        public string ResourceId { get; set; }
 
         public AuthorizationContextDto(string action, string resource, ClaimsPrincipal principal)
         {
             Action = new List<Claim> { new Claim("action", action) };
             Principal = principal;
             Resource = new List<Claim> { new Claim("resource", resource) };
+            ResourceId = Guid.Empty.ToString();
+        }
+
+        public AuthorizationContextDto(string action, string resource, ClaimsPrincipal principal, string resourceId)
+        {
+            Action = new List<Claim> { new Claim("action", action) };
+            Principal = principal;
+            Resource = new List<Claim> { new Claim("resource", resource) };
+            ResourceId = resourceId;
         }
     }
 

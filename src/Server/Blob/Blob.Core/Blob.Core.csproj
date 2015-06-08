@@ -107,6 +107,7 @@
       <DependentUpon>201506030023545_MonitorLabel.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\DeviceProfile.cs" />
+    <Compile Include="Services\BlobPermissionManager.cs" />
     <Compile Include="Services\BlobCustomerGroupManager.cs" />
     <Compile Include="Services\BlobDashboardManager.cs" />
     <Compile Include="Services\BlobDeviceCommandManager.cs" />
