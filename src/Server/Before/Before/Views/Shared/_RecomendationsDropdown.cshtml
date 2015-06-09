@@ -1,0 +1,8 @@
+﻿@model IEnumerable<string>
+
+@if (Model.Any())
+{
+    <span>
+        <a href="#" class="btn btn-default" title="Recomendations: &#013; @Model.FirstOrDefault()"><span class='glyphicon glyphicon-briefcase'></span></a>
+    </span>
+}

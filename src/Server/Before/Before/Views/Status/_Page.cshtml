@@ -4,11 +4,11 @@
 @using PagedList.Mvc
 @model StatusRecordPageVm
 
-<div id="statusRecordPageContent">
+<div id="statusRecordPageContent" class="no-more-tables">
 
     @if (Model != null && Model.Items != null && Model.Items.Any())
     {
-        <table class="table table-hover table-striped table-responsive">
+        <table class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>
@@ -26,7 +26,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Items.First().TimeGenerated)
                     </th>
-                    <th> </th>
+                    <th>
+                        @Html.DisplayName("Actions")
+                    </th>
                 </tr>
             </thead>
 
@@ -34,25 +36,23 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr class="@Html.AlertLevelClass(item.Status)">
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.Status)">
                             @Html.AlertLevelValue(item.Status)
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.RecordId)">
                             @Html.DisplayFor(modelItem => item.RecordId)
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.MonitorName)">
                             <a href="@Url.Action("Single", "Status", new {id = item.RecordId})">@Html.DisplayFor(modelItem => item.MonitorName)</a>
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.MonitorDescription)">
                             @Html.DisplayFor(modelItem => item.MonitorDescription)
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.TimeGenerated)">
                             @Html.DisplayFor(modelItem => item.TimeGenerated)
                         </td>
-                        <td>
-                            <div class="pull-right">
-                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Delete", "Delete", "Status", routeValues: new { id = item.RecordId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
-                            </div>
+                        <td data-title="@Html.DisplayName("Actions")">
+                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-trash'></span>", "Delete", "Delete", "Status", routeValues: new { id = item.RecordId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
                         </td>
                     </tr>
                 }

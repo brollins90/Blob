@@ -2,20 +2,18 @@
 @using PagedList
 @model Blob.Contracts.Models.ViewModels.CustomerGroupPageVm
 
-<div id="customerGroupPageContent">
+<div id="customerGroupPageContent" class="no-more-tables">
 
     @if (Model != null && Model.Items != null && Model.Items.Any())
     {
-        <table class="table table-hover table-striped table-responsive">
+        <table class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Items.First().Name)
                     </th>
                     <th>
-                        <div class="pull-right">
-                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a group", "Create", "CustomerGroup", routeValues: null, htmlAttributes: new { data_modal = "", @class = "btn btn-primary" })
-                        </div>
+                        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a group", "Create", "CustomerGroup", routeValues: null, htmlAttributes: new { data_modal = "", @class = "btn btn-primary" })
                     </th>
                 </tr>
             </thead>
@@ -27,7 +25,7 @@
                         <td>
                             <a href="@Url.Action("Single", "CustomerGroup", new {id = item.GroupId})">@Html.DisplayFor(modelItem => item.Name)</a>
                         </td>
-                        <td> </td>
+                        <td data-title="@Html.DisplayName("Actions")"> </td>
                     </tr>
                 }
             </tbody>
@@ -39,8 +37,3 @@
     }
     @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "customerGroupPageContent")
 </div>
-
-@section Scripts {
-
-    bindPaginator("#customerGroupPageContentPager a[href]", "#customerGroupPageContent");
-}

@@ -39,14 +39,13 @@ namespace Before.Infrastructure.Extensions
                                                                                                        HttpMethod = "GET",
                                                                                                        InsertionMode = InsertionMode.Replace,
                                                                                                        LoadingElementId = "progressPnl",
-                                                                                                       OnComplete = "beforeAjaxOnComplete"
+                                                                                                       OnComplete = "PagedListAjaxOnComplete"
                                                                                                    });
 
             TagBuilder tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttribute("id", updateTargetId + "Pager");
             tagBuilder.InnerHtml = html.PagedListPager(new StaticPagedList<T>(subset, metaData), generatePageUrl, options).ToHtmlString();
             return new MvcHtmlString(tagBuilder.ToString());
-            //return html.PagedListPager(new StaticPagedList<T>(subset, metaData), generatePageUrl, options).ToHtmlString();
         }
     }
 }

@@ -1,25 +1,14 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@*<div class="jumbotron"></div>*@
+
 @if (Request.IsAuthenticated)
 {
-    <div class="jumbotron"></div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Active Connections</strong>
-        </div>
-        @{ Html.RenderAction("CurrentConnectionsLarge", "Dashboard", routeValues: null);}
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Devices</strong>
-        </div>
-        @{ Html.RenderAction("DevicesLarge", "Dashboard", routeValues: null);}
-    </div>
+    Html.RenderAction("CurrentConnectionsLarge", "Dashboard", routeValues: null);
+    Html.RenderAction("DevicesLarge", "Dashboard", routeValues: null);
 }
 else
 {
-    <div class="jumbotron">
-        <div>You need to @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to have any fun!</div>
-    </div>
+    <div>You need to @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to have any fun!</div>
 }

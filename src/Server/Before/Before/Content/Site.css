@@ -23,36 +23,57 @@ textarea {
     max-width: 280px;
 }
 
-/*.table > tbody > tr > .status-ok,
-.table > tbody > tr > .status-ok > td
-.table > tbody > tr > .status-ok > th*/
-/*tr.status-ok {
-  background-color: green !important;
-}*/
+/* No more tables
 
-/*.table > tbody > tr > .status-warning,
-.table > tbody > tr > .status-warning > td
-.table > tbody > tr > .status-warning > th*/
-/*tr.status-warning {
-  background-color: yellow !important;
-}*/
+*/
+@media only screen and (max-width: 800px) {
+    
+    /* Force table to not be like tables anymore */
+	.no-more-tables.no-more-tables thead, 
+	.no-more-tables.no-more-tables table, 
+	.no-more-tables.no-more-tables tbody, 
+	.no-more-tables.no-more-tables th, 
+	.no-more-tables.no-more-tables td, 
+	.no-more-tables.no-more-tables tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+	.no-more-tables.no-more-tables thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	.no-more-tables.no-more-tables tr { border: 1px solid #ccc; }
+ 
+	.no-more-tables.no-more-tables td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align:left;
 
-/*.table > tbody > tr > .status-critical,
-.table > tbody > tr > .status-critical > td
-.table > tbody > tr > .status-critical > th*/
-/*tr.status-critical {
-  background-color: red !important;
-}*/
-
-/*.table > tbody > tr > .status-unknown,
-.table > tbody > tr > .status-unknown > td
-.table > tbody > tr > .status-unknown > th*/
-/*tr.status-unknown {
-  background-color: orange !important;
-}*/
-
-/*.table-striped > tbody > tr > .danger,
-.table-striped > tbody > .danger > td,
-.table-striped > tbody > .danger > th {
-  background-color: #f2dede !important;
-}*/
+        min-height: 50px;
+	}
+ 
+	.no-more-tables.no-more-tables td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*
+	Label the data
+	*/
+	.no-more-tables.no-more-tables td:before { content: attr(data-title); }
+}

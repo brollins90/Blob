@@ -4,11 +4,11 @@
 @using PagedList.Mvc
 @model DevicePageVm
 
-<div id="devicePageContent">
+<div id="devicePageContent" class="no-more-tables">
 
     @if (Model != null && Model.Items != null && Model.Items.Any())
     {
-        <table class="table table-hover table-striped table-responsive">
+        <table class="table table-hover table-striped">
             <thead>
                 <tr>
                     <th>
@@ -27,9 +27,8 @@
                         @Html.DisplayNameFor(model => model.Items.First().Enabled)
                     </th>
                     <th>
-                        <div class="pull-right">
-                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a device", "Create", "Device", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })
-                        </div>
+                        <a href="~/Content/Download/BMonitorSetup.msi" class="btn btn-default" title="Add a device"><span class='glyphicon glyphicon-plus'></span></a>
+                        @*@Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a device", "Create", "Device", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })*@
                     </th>
                 </tr>
             </thead>
@@ -38,46 +37,34 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr class="@Html.AlertLevelClass(item.Status)">
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.Status)">
                             @Html.AlertLevelValue(item.Status)
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.DeviceName)">
                             <a href="@Url.Action("Single", "Device", new {id = item.DeviceId})">@Html.DisplayFor(modelItem => item.DeviceName)</a>
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.DeviceType)">
                             @Html.DisplayFor(modelItem => item.DeviceType)
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.LastActivityDate)">
                             @Html.DisplayFor(modelItem => item.LastActivityDate)
                         </td>
-                        <td>
+                        <td data-title="@Html.DisplayNameFor(model => item.Enabled)">
                             @Html.DisplayFor(modelItem => item.Enabled)
                         </td>
-                        <td>
-                            <div class="pull-right">
-                                <span class="dropdown">
-                                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Issue command"><span class='glyphicon glyphicon-arrow-down'></span> <span class="caret"></span></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        @foreach (var cmd in item.AvailableCommands)
-                                        {
-                                            <li>
-                                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-console'></span> " + cmd.ShortName, "Issue Command", "IssueCommand", "Device", routeValues: new { id = item.DeviceId, commandType = cmd.CommandType }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
-                                            </li>
-                                        }
-                                    </ul>
-                                </span>
-                                &nbsp;
-                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Device", routeValues: new { id = item.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
-                                &nbsp;
-                                @if (item.Enabled)
-                                {
-                                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-remove-sign'></span>", "Disable", "Disable", "Device", routeValues: new { id = item.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
-                                }
-                                else
-                                {
-                                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-ok-sign'></span>", "Enable", "Enable", "Device", routeValues: new { id = item.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
-                                }
-                            </div>
+                        <td data-title="@Html.DisplayName("Actions")">
+                            @{ Html.RenderPartial("_DeviceCommandDropdown", item.AvailableCommands, new ViewDataDictionary { { "deviceId", item.DeviceId } }); }
+                            &nbsp;
+                            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-pencil'></span>", "Edit", "Edit", "Device", routeValues: new { id = item.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
+                            &nbsp;
+                            @if (item.Enabled)
+                            {
+                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-remove-sign'></span>", "Disable", "Disable", "Device", routeValues: new { id = item.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-danger" })
+                            }
+                            else
+                            {
+                                @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-ok-sign'></span>", "Enable", "Enable", "Device", routeValues: new { id = item.DeviceId }, htmlAttributes: new { data_modal = "", @class = "btn btn-default" })
+                            }
                         </td>
                     </tr>
                 }
@@ -85,13 +72,8 @@
         </table>
     }
     else
-    {@:
+    {
         <div class="text-muted">&nbsp;No devices found.</div>
     }
     @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "devicePageContent")
 </div>
-
-@section Scripts {
-    
-    bindPaginator("#devicePageContentPager a[href]", "#devicePageContent");
-}
