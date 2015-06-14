@@ -13,7 +13,6 @@ namespace BMonitor.Monitors
         protected override string MonitorLabel { get { return Label ?? MonitorName; } }
 
         private static PerfmonCounterManager Manager { get { return PerfmonCounterManager.Instance; } }
-        private PerformanceCounter Counter { get { return Manager.GetCounter(CategoryName, CounterName, InstanceName); } }
 
         public string Label { get; set; }
         public string CategoryName { get; set; }
@@ -23,7 +22,8 @@ namespace BMonitor.Monitors
 
         public override ResultData Execute(bool collectPerfData = false)
         {
-            double executionValue = Counter.NextValue();
+
+            double executionValue = Manager.NextValue(CategoryName, CounterName, InstanceName);
             AlertLevel alertLevel = base.CheckAlertLevel(executionValue);
 
             string currentValueString = string.Empty;

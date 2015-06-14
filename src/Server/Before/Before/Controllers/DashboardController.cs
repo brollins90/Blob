@@ -22,6 +22,11 @@ namespace Before.Controllers
             BlobQueryManager = blobQueryManager;
         }
 
+        [BeforeAuthorize(Operation = "add", Resource = "device")]
+        public ActionResult AddDeviceLarge()
+        {
+            return PartialView("_DashAddDevice");
+        }
 
         [BeforeAuthorize(Operation = "view", Resource = "customer")]
         public ActionResult CurrentConnectionsLarge(Guid? id, int? page, int? pageSize)

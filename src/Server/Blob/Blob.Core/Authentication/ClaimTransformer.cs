@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using Blob.Contracts;
@@ -24,7 +25,7 @@ namespace Blob.Core.Authentication
         {
             _log.Debug(string.Format("Authenticating {0} for access to {1}", incomingPrincipal.Identity.GetUserName(), resourceName));
 
-            incomingPrincipal.Identities.First().AddClaim(new Claim("touchedat", DateTime.Now.ToString()));
+            incomingPrincipal.Identities.First().AddClaim(new Claim("touchedat", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
             incomingPrincipal.Identities.First().AddClaim(new Claim("touched", resourceName)); // this is the .svc url
 
 
@@ -32,7 +33,7 @@ namespace Blob.Core.Authentication
 
             using (BlobDbContext context = new BlobDbContext())
             {
-                var userName = incomingPrincipal.Identity.GetUserName();
+                string userName = incomingPrincipal.Identity.GetUserName();
 
                 Guid g;
                 if (Guid.TryParse(userName, out g))
@@ -42,7 +43,7 @@ namespace Blob.Core.Authentication
                     if (device != null && device.Enabled)
                     {
                         incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobIdClaimType, device.Id.ToString()));
-                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobNameClaimType, device.DeviceName.ToString()));
+                        incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobNameClaimType, device.DeviceName));
                         incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobPrincipalTypeClaimType, SecurityConstants.DeviceTypeClaimType));
                         incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.CustomerIdClaimType, device.CustomerId.ToString()));
                     }
@@ -56,7 +57,7 @@ namespace Blob.Core.Authentication
                         if (user != null)// && user.Enabled)
                         {
                             incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobIdClaimType, user.Id.ToString()));
-                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobNameClaimType, user.UserName.ToString()));
+                            incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobNameClaimType, user.UserName));
                             incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.BlobPrincipalTypeClaimType, SecurityConstants.UserTypeClaimType));
                             incomingPrincipal.Identities.First().AddClaim(new Claim(SecurityConstants.CustomerIdClaimType, user.CustomerId.ToString()));
                         }

@@ -353,6 +353,7 @@
     <Content Include="Views\Shared\_ErrorModal.cshtml" />
     <Content Include="Views\Shared\_DeviceCommandDropdown.cshtml" />
     <Content Include="Views\Shared\_RecomendationsDropdown.cshtml" />
+    <Content Include="Views\Dashboard\_DashAddDevice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

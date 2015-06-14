@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "Before2"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-Before2-c25124f8-e438-4a56-810f-764b732c7e93;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}

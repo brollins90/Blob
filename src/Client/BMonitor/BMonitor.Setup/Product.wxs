@@ -74,7 +74,7 @@
       <!-- BMonitor.WindowsService -->
       <Component Id="$(var.BMonitor.WindowsService.TargetFileName)" Guid="{D3D2F812-C585-46D0-AC1F-AB1FB4B1AE00}">
         <File Id="$(var.BMonitor.WindowsService.TargetFileName)" Name="$(var.BMonitor.WindowsService.TargetFileName)" Source="$(var.BMonitor.WindowsService.TargetPath)" Vital="yes" KeyPath="yes"/>
-        <File Id="$(var.BMonitor.WindowsService.TargetFileName).config" Name="$(var.BMonitor.WindowsService.TargetFileName).config" Source="$(var.BMonitor.WindowsService.TargetPath).config" Vital="yes" KeyPath="no"/>
+        <File Id="$(var.BMonitor.WindowsService.TargetFileName).config" Name="$(var.BMonitor.WindowsService.TargetFileName).config" Source="$(var.BMonitor.WindowsService.TargetDir)App.Base.config" Vital="yes" KeyPath="no"/>
 
         <ServiceInstall Id="ServiceInstaller"
                         Type="ownProcess"

@@ -67,7 +67,7 @@ namespace Blob.Core.Authentication
             ////{
             ////    id.AddClaims(await manager.GetClaimsAsync(user.Id).WithCurrentCulture());
             ////}
-            /// 
+            //
             return Task.FromResult(id);
         }
     }

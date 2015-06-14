@@ -1,14 +1,15 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-@*<div class="jumbotron"></div>*@
 
 @if (Request.IsAuthenticated)
 {
+    Html.RenderAction("AddDeviceLarge", "Dashboard", routeValues: null);
     Html.RenderAction("CurrentConnectionsLarge", "Dashboard", routeValues: null);
     Html.RenderAction("DevicesLarge", "Dashboard", routeValues: null);
 }
 else
 {
+    <div class="jumbotron"></div>
     <div>You need to @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to have any fun!</div>
 }
