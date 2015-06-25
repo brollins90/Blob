@@ -34,9 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Blob.Contracts">
-      <HintPath>..\..\..\Server\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,18 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\JobSettings.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
-    <Compile Include="Extensions\Prettify.cs" />
-    <Compile Include="Extensions\ResultExtensions.cs" />
+    <Compile Include="Extensions\ResultFormatUtils.cs" />
     <Compile Include="Interfaces\IMonitor.cs" />
     <Compile Include="Interfaces\IMonitorScheduler.cs" />
     <Compile Include="Models\AlertLevel.cs" />
-    <Compile Include="Models\NotEqual.cs" />
-    <Compile Include="Models\EvaluationOperation.cs" />
-    <Compile Include="Models\EvaluationOperationConverter.cs" />
-    <Compile Include="Models\Equal.cs" />
-    <Compile Include="Models\GreaterThan.cs" />
-    <Compile Include="Models\LessThan.cs" />
+    <Compile Include="Operations\NotEqual.cs" />
+    <Compile Include="Operations\EvaluationOperation.cs" />
+    <Compile Include="Operations\EvaluationOperationConverter.cs" />
+    <Compile Include="Operations\Equal.cs" />
+    <Compile Include="Operations\GreaterThan.cs" />
+    <Compile Include="Operations\LessThan.cs" />
     <Compile Include="Models\PerformanceData.cs" />
     <Compile Include="Models\ResultData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

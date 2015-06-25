@@ -10,10 +10,10 @@
         public string Value { get; set; }
         public string Warning { get; set; }
 
-        public override string ToString()
-        {
-            // 'label'=value[UOM];[warn];[crit];[min];[max]
-            return string.Format("'{0}'={1}{2};{3};{4};{5};{6}", Label, Value, UnitOfMeasure, Warning, Critical, Min, Max);
-        }
+        //public string ToNagiosPerformanceString()
+        //{
+        //    // 'label'=value[UOM];[warn];[crit];[min];[max]
+        //    return string.Format("'{0}'={1}{2};{3};{4};{5};{6}", Label, Value, UnitOfMeasure, Warning, Critical, Min, Max);
+        //}
     }
 }

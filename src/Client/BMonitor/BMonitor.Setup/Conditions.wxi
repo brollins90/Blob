@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <!-- Check that we have elevated permissions if installing -->
+  <Property Id="MSIUSEREALADMINDETECTION" Value="1" />
+  <Condition Message="!(loc.Administrator)">Installed OR (Privileged)</Condition>
+
+  <!-- .NET 4 Version Check -->
+  <PropertyRef Id="NETFRAMEWORK45"/>
+  <Condition Message="!(loc.DotNet45)"><![CDATA[Installed OR NETFRAMEWORK45]]></Condition>
+</Include>

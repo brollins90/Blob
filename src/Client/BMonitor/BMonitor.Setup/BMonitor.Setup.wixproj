@@ -22,9 +22,15 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DeviceIdDlg.wxs" />
+    <Compile Include="MyUI.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
@@ -63,6 +69,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\BMonitor.Setup.Ext\BMonitor.Setup.Ext.csproj">
+      <Name>BMonitor.Setup.Ext</Name>
+      <Project>{7b1a2f48-0010-4ee8-b032-45f36b59371f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\BMonitor.WindowsService\BMonitor.WindowsService.csproj">
       <Name>BMonitor.WindowsService</Name>
       <Project>{88832e91-33a4-42fb-b7c1-c90758e1cdfc}</Project>
@@ -71,6 +85,16 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="English.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Conditions.wxi" />
+    <Content Include="Settings.wxi" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

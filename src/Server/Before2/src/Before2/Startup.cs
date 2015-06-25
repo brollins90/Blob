@@ -15,6 +15,7 @@ using Microsoft.Framework.Logging;
 using Microsoft.Framework.Logging.Console;
 using Microsoft.Framework.Runtime;
 using Before2.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Before2
 {
@@ -28,8 +29,6 @@ namespace Before2
 
             if (env.IsEnvironment("Development"))
             {
-                // This reads the configuration keys from the secret store.
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 configuration.AddUserSecrets();
             }
             configuration.AddEnvironmentVariables();
@@ -43,16 +42,16 @@ namespace Before2
         {
             services.Configure<AppSettings>(Configuration.GetSubKey("AppSettings"));
 
-            //// Add EF services to the services container.
-            //services.AddEntityFramework()
-            //    .AddSqlServer()
-            //    .AddDbContext<ApplicationDbContext>(options =>
-            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            // Add EF services to the services container.
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            //// Add Identity services to the services container.
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
+            // Add Identity services to the services container.
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             //// Configure the options for the authentication middleware.
             //// You can add options for Google, Twitter and other middleware as shown below.
@@ -90,7 +89,7 @@ namespace Before2
             {
                 app.UseBrowserLink();
                 app.UseErrorPage(ErrorPageOptions.ShowAll);
-                //app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
+                app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }
             else
             {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Blob.Contracts.Models;
 using BMonitor.Common.Extensions;
 using BMonitor.Common.Models;
+using BMonitor.Service.Extensions;
 using log4net;
 
 namespace BMonitor.Service.Helpers

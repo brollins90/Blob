@@ -98,5 +98,16 @@ namespace BMonitor.Service.Monitor
         public void RunJob(string jobName)
         {
         }
+
+
+        public void AddJob(JobSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveJob(string jobName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="LANG">1033</String>
+  <String Id="Description">A service that reports computer status to the cloud</String>
+  <String Id="ProductName">BMonitor Service</String>
+  <String Id="CompanyName">RRITC</String>
+
+  <String Id="Administrator">You need elevated permissions to install</String>
+  <String Id="DotNet45">You need dotnet 4.5</String>
+  <String Id="DowngradeErrorMessage">A later version of !(loc.ProductName) is already installed. Setup will now exit.</String>
+
+  <String Id="SetDeviceIdTitle">Set the Device's Id</String>
+  <String Id="DeviceIdLabel">Device Id</String>
+  <String Id="Info1">Set the Id for the device if known.  Otherwise ...</String>
+  <String Id="Info2">Info2</String>
+</WixLocalization>

@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define Name = "BMonitor Service" ?>
-<?define Manufacturer = "RRITC" ?>
 <?define Version = "0.2.1" ?>
-<?define UpgradeCode = "{47B6C366-1708-47D0-B353-A3DF9524FCAB}" ?>
 
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  
-  <Product Id="*" Name="$(var.Name)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)" Version="$(var.Version)" Language="1033">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <Product Id="FFE6E1FE-B522-4E8D-A766-E8D4368A7AC9"
+           Language="!(loc.LANG)"
+           Manufacturer="!(loc.CompanyName)"
+           Name="!(loc.ProductName)"
+           UpgradeCode="47B6C366-1708-47D0-B353-A3DF9524FCAB"
+           Version="$(var.Version)">
     
-    <Package InstallerVersion="300" Compressed="yes"/>
+    <Package InstallerVersion="300" Compressed="yes" 
+             Description="!(loc.Description)"
+             Languages="!(loc.LANG)"
+             Manufacturer="!(loc.CompanyName)"/>
     <Media Id="1" Cabinet="$(var.BMonitor.WindowsService.ProjectName).cab" EmbedCab="yes" />
+
+    <?include Settings.wxi ?>
+    <?include Conditions.wxi ?>
+    <!--<?include MyUI.wxi ?>-->
     
-    <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
-    
-    <!-- Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <!-- Create a folder inside program files called Talk Sharp -->
-        <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
-          <!-- Create a folder inside Talk Sharp called Test Service -->
-          <Directory Id="INSTALLFOLDER" Name="$(var.Name)" />
+        <Directory Id="ROOTDIRECTORY" Name="!(loc.CompanyName)">
+          <Directory Id="INSTALLFOLDER" Name="!(loc.ProductName)" />
         </Directory>
       </Directory>
     </Directory>
@@ -31,8 +35,13 @@
       <Component Id="$(var.BMonitor.Common.TargetFileName)" Guid="{107E6DFA-B1C1-4BD5-A291-50AE51AE0734}">
         <File Id="$(var.BMonitor.Common.TargetFileName)" Name="$(var.BMonitor.Common.TargetFileName)" Source="$(var.BMonitor.Common.TargetPath)" Vital="yes" KeyPath="yes"/>
       </Component>
-      <Component Id="Blob.Contracts.dll" Guid="*">
-        <File Id="Blob.Contracts.dll" Name="Blob.Contracts.dll" Source="$(var.BMonitor.Common.TargetDir)\Blob.Contracts.dll" Vital="yes" KeyPath="yes"/>
+
+      <!-- BMonitor.Connection -->
+      <Component Id="$(var.BMonitor.Connection.TargetFileName)" Guid="*">
+        <File Id="$(var.BMonitor.Connection.TargetFileName)" Name="$(var.BMonitor.Connection.TargetFileName)" Source="$(var.BMonitor.Connection.TargetPath)" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Blob.Proxies.dll" Guid="*">
+        <File Id="Blob.Proxies.dll" Name="Blob.Proxies.dll" Source="$(var.BMonitor.Service.TargetDir)\Blob.Proxies.dll" Vital="yes" KeyPath="yes"/>
       </Component>
 
       <!-- BMonitor.Handlers -->
@@ -49,8 +58,8 @@
       <Component Id="$(var.BMonitor.Service.TargetFileName)" Guid="*">
         <File Id="$(var.BMonitor.Service.TargetFileName)" Name="$(var.BMonitor.Service.TargetFileName)" Source="$(var.BMonitor.Service.TargetPath)" Vital="yes" KeyPath="yes"/>
       </Component>
-      <Component Id="Blob.Proxies.dll" Guid="*">
-        <File Id="Blob.Proxies.dll" Name="Blob.Proxies.dll" Source="$(var.BMonitor.Service.TargetDir)\Blob.Proxies.dll" Vital="yes" KeyPath="yes"/>
+      <Component Id="Blob.Contracts.dll" Guid="*">
+        <File Id="Blob.Contracts.dll" Name="Blob.Contracts.dll" Source="$(var.BMonitor.Service.TargetDir)\Blob.Contracts.dll" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="Common.Logging.Core.dll" Guid="*">
         <File Id="Common.Logging.Core.dll" Name="Common.Logging.Core.dll" Source="$(var.BMonitor.Service.TargetDir)\Common.Logging.Core.dll" Vital="yes" KeyPath="yes"/>
@@ -80,7 +89,7 @@
                         Type="ownProcess"
                         Vital="yes"
                         Name="$(var.BMonitor.WindowsService.ProjectName)"
-                        DisplayName="$(var.Name)"
+                        DisplayName="!(loc.ProductName)"
                         Description="Monitors the state of the system and reports it to a BlobService."
                         Start="auto"
                         ErrorControl="normal"
@@ -92,7 +101,11 @@
 
     <ComponentGroup Id="$(var.BMonitor.Common.ProjectName)">
       <ComponentRef Id="$(var.BMonitor.Common.TargetFileName)" />
-      <ComponentRef Id="Blob.Contracts.dll" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="$(var.BMonitor.Connection.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.Connection.TargetFileName)" />
+      <ComponentRef Id="Blob.Proxies.dll" />
     </ComponentGroup>
 
     <ComponentGroup Id="$(var.BMonitor.Handlers.ProjectName)">
@@ -105,7 +118,7 @@
 
     <ComponentGroup Id="$(var.BMonitor.Service.ProjectName)">
       <ComponentRef Id="$(var.BMonitor.Service.TargetFileName)" />
-      <ComponentRef Id="Blob.Proxies.dll" />
+      <ComponentRef Id="Blob.Contracts.dll" />
       <ComponentRef Id="Common.Logging.Core.dll" />
       <ComponentRef Id="Common.Logging.dll" />
       <ComponentRef Id="jobs.config" />
@@ -119,8 +132,9 @@
     </ComponentGroup>
     
     <!-- Tell WiX to install the files -->
-    <Feature Id="BMonitor" Title="BMonitor Service" Level="1">
+    <Feature Id="ProductFeature" Title="!(loc.ProductName)" Level="1">
       <ComponentGroupRef Id="$(var.BMonitor.Common.ProjectName)"/>
+      <ComponentGroupRef Id="$(var.BMonitor.Connection.ProjectName)"/>
       <ComponentGroupRef Id="$(var.BMonitor.Handlers.ProjectName)"/>
       <ComponentGroupRef Id="$(var.BMonitor.Monitors.ProjectName)"/>
       <ComponentGroupRef Id="$(var.BMonitor.Service.ProjectName)"/>
@@ -128,7 +142,7 @@
     </Feature>
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
-    <UIRef Id="WixUI_InstallDir"/>
+    <UIRef Id="WixUI_BMonitorServiceUI"/>
     
   </Product>
 </Wix>

@@ -75,5 +75,16 @@ namespace BMonitor.Service.Monitor.Quartz
         {
             _scheduler.TriggerJob(JobKey.Create(jobKey));
         }
+
+
+        public void AddJob(Common.Models.JobSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveJob(string jobName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
