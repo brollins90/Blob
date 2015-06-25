@@ -34,7 +34,11 @@ namespace BMonitor.Service.Monitor.Quartz
                 //Assembly assembly = Assembly.LoadFrom(_monitorPath + "BMonitor.Monitors.Custom.dll");
                 Type monitorType = Type.GetType(monitorTypeString, throwOnError: true);
                 //Type monitorType = System.Reflection.Assembly.GetExecutingAssembly().GetType(monitorTypeString, throwOnError: true, ignoreCase: true);
-                var monitorInstance = Activator.CreateInstance(monitorType);
+
+                //var monitorInstance = Activator.CreateInstance(monitorType);
+
+
+                var monitorInstance = _kernel.Get(monitorType);
                 PropertyInfo[] properties = monitorType.GetProperties();
 
                 foreach (var property in properties)

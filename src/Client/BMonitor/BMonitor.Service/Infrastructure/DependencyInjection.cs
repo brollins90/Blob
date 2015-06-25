@@ -16,6 +16,7 @@ using BMonitor.Service.Monitor.Quartz;
 using log4net;
 using Ninject;
 using Ninject.Modules;
+using Quartz;
 
 namespace BMonitor.Service.Infrastructure
 {
@@ -39,8 +40,6 @@ namespace BMonitor.Service.Infrastructure
             Bind<ServiceHostBase>().ToSelf();
             Bind<MonitorManager>().ToSelf();
 
-            Bind<IMonitorScheduler>().To<QuartzMonitorScheduler>().InSingletonScope();
-
             Bind<BlobClientFactory>().ToSelf();
 
             // Callback
@@ -52,6 +51,10 @@ namespace BMonitor.Service.Infrastructure
                 .WithConstructorArgument("endpointName", "DeviceStatusService");
 
 
+            // Monitors
+            Bind<IMonitorScheduler>().To<QuartzMonitorScheduler>().InSingletonScope();
+            Bind<PerfmonCounterManager>().ToSelf().InSingletonScope();
+            Bind<IJob>().To<QuartzJob>();
 
             // load monitors
             var foundMonitors = typeof(BaseMonitor).Assembly.GetExportedTypes().Where(type => type.IsAssignableFrom(typeof(IMonitor)));
@@ -61,8 +64,8 @@ namespace BMonitor.Service.Infrastructure
             }
 
             // Command handlers
-            Type commandHandlerType = typeof (IDeviceCommandHandler<>);
-            Type openUnknownCommandHandler = typeof (UnknownCommandHandler<>);
+            Type commandHandlerType = typeof(IDeviceCommandHandler<>);
+            Type openUnknownCommandHandler = typeof(UnknownCommandHandler<>);
             Type openExceptionCommandHandler = typeof(ExceptionCommandHandlerDecorator<>);
             Type openLoggingCommandHandler = typeof(LoggingCommandHandlerDecorator<>);
 

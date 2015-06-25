@@ -9,33 +9,27 @@ namespace BMonitor.Monitors
         public string CategoryName { get; set; }
         public string CounterName { get; set; }
         public string InstanceName { get; set; }
-        public string Key { get; private set; }
+        public string Key => $"{CategoryName}_{CounterName}_{InstanceName}";
 
         public PerfmonCounterKey(string categoryName, string counterName, string instanceName = null)
         {
-            CategoryName = categoryName;
-            CounterName = counterName;
-            InstanceName = instanceName;
-            Key = string.Format("{0}_{1}_{2}", categoryName, counterName, instanceName);
+            CategoryName = categoryName.ToLowerInvariant();
+            CounterName = counterName.ToLowerInvariant();
+            InstanceName = instanceName?.ToLowerInvariant() ?? string.Empty;
         }
+
+        public override string ToString() => Key;
     }
 
     public class PerfmonCounterManager : IDisposable
     {
         private static ConcurrentDictionary<string, PerformanceCounter> _counters = new ConcurrentDictionary<string, PerformanceCounter>();
 
-        public static PerfmonCounterManager Instance
+        public float NextValue(PerfmonCounterKey key)
         {
-            get { return _instance ?? (_instance = new PerfmonCounterManager()); }
+            PerformanceCounter counter = GetCounter(key);
+            return counter.NextValue();
         }
-        private static PerfmonCounterManager _instance;
-
-
-        //public CounterSample NextSample(string categoryName, string counterName, string instanceName = null)
-        //{
-        //    PerformanceCounter counter = GetCounter(categoryName, counterName, instanceName);
-        //    return counter.NextSample();
-        //}
 
         public float NextValue(string categoryName, string counterName, string instanceName = null)
         {
@@ -43,21 +37,20 @@ namespace BMonitor.Monitors
             return counter.NextValue();
         }
 
-        //public long RawValue(string categoryName, string counterName, string instanceName = null)
-        //{
-        //    PerformanceCounter counter = GetCounter(categoryName, counterName, instanceName);
-        //    return counter.RawValue;
-        //}
-
         private PerformanceCounter GetCounter(string categoryName, string counterName, string instanceName)
         {
             PerfmonCounterKey key = new PerfmonCounterKey(categoryName, counterName, instanceName);
+            return GetCounter(key);
+        }
+
+        private PerformanceCounter GetCounter(PerfmonCounterKey key)
+        {
             if (!_counters.ContainsKey(key.Key))
             {
 
-                PerformanceCounter counter = (string.IsNullOrEmpty(instanceName))
-                                                 ? new PerformanceCounter(categoryName, counterName)
-                                                 : new PerformanceCounter(categoryName, counterName, instanceName);
+                PerformanceCounter counter = (string.IsNullOrEmpty(key.InstanceName))
+                                                 ? new PerformanceCounter(key.CategoryName, key.CounterName)
+                                                 : new PerformanceCounter(key.CategoryName, key.CounterName, key.InstanceName);
 
                 _counters.TryAdd(key.Key, counter);
             }

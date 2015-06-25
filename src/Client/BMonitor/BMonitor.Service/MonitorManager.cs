@@ -133,8 +133,8 @@ namespace BMonitor.Service
 
         public void Dispose()
         {
-            PerfmonCounterManager manager = PerfmonCounterManager.Instance;
-            manager.Dispose();
+            //PerfmonCounterManager manager = PerfmonCounterManager.Instance;
+            //manager.Dispose();
         }
 
         public void Start()

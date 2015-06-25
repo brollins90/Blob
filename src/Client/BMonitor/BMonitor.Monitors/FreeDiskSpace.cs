@@ -3,137 +3,99 @@ using System.Collections.Generic;
 using System.IO;
 using BMonitor.Common.Extensions;
 using BMonitor.Common.Models;
-using BMonitor.Common.Operations;
 
 namespace BMonitor.Monitors
 {
+    public interface IFreeDiskSpace
+    {
+        double GetFreePercent();
+        long GetTotalFreeSpace();
+        long GetTotalSize();
+    }
+
+    public class FreeDiskSpaceDriveInfo : IFreeDiskSpace
+    {
+        DriveInfo _driveInfo;
+
+        public FreeDiskSpaceDriveInfo(string driveLetter)
+        {
+            _driveInfo = new DriveInfo(driveLetter);
+        }
+
+        public double GetFreePercent() => Math.Round(((double)GetTotalFreeSpace() / (double)GetTotalSize()) * 100);
+        public long GetTotalFreeSpace() => _driveInfo.TotalFreeSpace;
+        public long GetTotalSize() => _driveInfo.TotalSize;
+    }
+
     public class FreeDiskSpace : BaseMonitor
     {
-        protected override string MonitorId { get { return MonitorName + DriveLetter; } }
-        protected override string MonitorName { get { return "FreeDiskSpace"; } }
-        protected override string MonitorDescription { get { return "Checks the amount of disk space available"; } }
-        protected override string MonitorLabel { get { return string.Format("Disk {0} - {1}", DriveLetter.ToUpperInvariant(), DriveDescription); } }
+        protected override string MonitorId => MonitorName + DriveLetter;
+        protected override string MonitorName => "FreeDiskSpace";
+        protected override string MonitorDescription => "Checks the amount of disk space available";
+        protected override string MonitorLabel => $"Disk {DriveLetter.ToUpperInvariant()} - {DriveDescription}";
 
-        public string DriveLetter { get; set; }
-        public string DriveDescription { get; set; }
+        private string _driveLetter = "C";
+        public string DriveLetter { get { return _driveLetter; } set { _driveLetter = $"{value.ToUpperInvariant()}:"; } }
+        public string DriveDescription { get; set; } = "OS-default";
 
-        public FreeDiskSpace() : this("C", "OS-default")
-        {
-            Operation = EvaluationOperation.LessThan;
-            Critical = 10d;
-            Warning = 20d;
-        }
-
-        public FreeDiskSpace(string driveLetter, string driveDescription)
-        {
-            DriveLetter = driveLetter;
-            DriveDescription = driveDescription;
-        }
 
         public override ResultData Execute(bool collectPerfData = false)
         {
-            string driveLetter = string.Format("{0}:", DriveLetter.ToUpper());
-            string driveName;
-            string driveLabel;
-            long totalFreeSpace;
-            long totalSize;
-            double freePercent;
-            double executionValue;
+            IFreeDiskSpace _diskSpace = new FreeDiskSpaceDriveInfo(DriveLetter);
 
-            DriveInfo driveInfo = new DriveInfo(driveLetter);
-            driveName = driveInfo.Name;
-            driveLabel = driveInfo.VolumeLabel;
-            totalFreeSpace = driveInfo.TotalFreeSpace;
-            totalSize = driveInfo.TotalSize;
-            freePercent = Math.Round(((double)totalFreeSpace / (double)totalSize) * 100);
-
-            executionValue = freePercent;
+            double executionValue = _diskSpace.GetFreePercent();
             AlertLevel alertLevel = base.CheckAlertLevel(executionValue);
 
             string currentValueString = string.Empty;
             switch (alertLevel)
             {
                 case AlertLevel.CRITICAL:
-                    currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) ({6}{7}%) : CRITICAL", 
-                        driveName,
-                        driveLabel,
-                        DriveDescription,
-                        freePercent,
-                        totalFreeSpace.BytesToGb(),
-                        totalSize.BytesToGb(),
-                        Operation.ShortString,
-                        base.Critical); // is this the correct value to display
+                    currentValueString = $"{DriveLetter} ({DriveDescription}): {executionValue}% left ({_diskSpace.GetTotalFreeSpace().BytesToGb()}GB/{_diskSpace.GetTotalSize().BytesToGb()}GB) ({Operation.ShortString}{Critical}%) : CRITICAL";
                     break;
                 case AlertLevel.OK:
-                    currentValueString = string.Format("{0}% free space ({1}GB) : OK", 
-                        freePercent,
-                        totalFreeSpace.BytesToGb());
+                    currentValueString = $"{executionValue}% free space ({_diskSpace.GetTotalSize().BytesToGb()}GB) : OK";
                     break;
                 case AlertLevel.UNKNOWN:
-                    currentValueString = string.Format("UNKNOWN");
+                    currentValueString = "UNKNOWN";
                     break;
                 case AlertLevel.WARNING:
-                    currentValueString = string.Format("{0}: {1} ({2}): {3}% left ({4}GB/{5}GB) ({6}{7}%) : WARNING", 
-                        driveName,
-                        driveLabel,
-                        DriveDescription,
-                        freePercent,
-                        totalFreeSpace.BytesToGb(),
-                        totalSize.BytesToGb(),
-                        Operation.ShortString,
-                        base.Warning); // is this the correct value to display
+                    currentValueString = $"{DriveLetter} ({DriveDescription}): {executionValue}% left ({_diskSpace.GetTotalFreeSpace().BytesToGb()}GB/{_diskSpace.GetTotalSize().BytesToGb()}GB) ({Operation.ShortString}{Critical}%) : WARNING";
                     break;
             }
 
             ResultData result = new ResultData()
-                                {
-                                    AlertLevel = alertLevel,
-                                    MonitorDescription = MonitorDescription,
-                                    MonitorId = MonitorId,
-                                    MonitorLabel = MonitorLabel,
-                                    MonitorName = MonitorName,
-                                    Perf = new List<PerformanceData>(),
-                                    TimeGenerated = DateTime.Now,
-                                    UnitOfMeasure = "",//Unit.ShortName,
-                                    Value = currentValueString
-                                };
+            {
+                AlertLevel = alertLevel,
+                MonitorDescription = MonitorDescription,
+                MonitorId = MonitorId,
+                MonitorLabel = MonitorLabel,
+                MonitorName = MonitorName,
+                Perf = new List<PerformanceData>(),
+                TimeGenerated = DateTime.Now,
+                UnitOfMeasure = "%",
+                Value = currentValueString
+            };
 
             if (collectPerfData)
             {
-                // perfdata for this monitor is always in GB
-                long crit = (long)base.Critical;
-                    //(base.Critical.Percent)
-                    //            ? ((long)(MonitorThreshold.Critical.Limit * .01d * totalSize))
-                    //            : ((long)(MonitorThreshold.Critical.Limit));
-                long warn = (long)base.Warning;
-                    //(MonitorThreshold.Warning.Percent)
-                    //            ? ((long)(MonitorThreshold.Warning.Limit * .01d * totalSize))
-                    //            : ((long)(MonitorThreshold.Warning.Limit));
+                long criticalBytesLeft = (long)((double)_diskSpace.GetTotalSize() * (Critical / 100));
+                long warningBytesLeft = (long)((double)_diskSpace.GetTotalSize() * (Warning / 100));
 
                 // also we want to invert the numbers in the results
                 PerformanceData perf = new PerformanceData
-                                       {
-                                           Critical = (totalSize - crit).BytesToGb().ToString(),
-                                           Label = DriveLetter,
-                                           Max = totalSize.BytesToGb().ToString(), // the largest a %value can be (not required for %)
-                                           Min = "0", // the smallest a %value can be (not required for %)
-                                           UnitOfMeasure = "GB",
-                                           Value = totalFreeSpace.BytesToGb().ToString(),
-                                           Warning = (totalSize - warn).BytesToGb().ToString()
-                                       };
+                {
+                    Critical = $"{(_diskSpace.GetTotalSize() - criticalBytesLeft)}",
+                    Label = DriveLetter,
+                    Max = $"{_diskSpace.GetTotalSize()}",
+                    Min = "0",
+                    UnitOfMeasure = "B",
+                    Value = $"{_diskSpace.GetTotalFreeSpace()}",
+                    Warning = $"{(_diskSpace.GetTotalSize() - warningBytesLeft)}",
+                };
                 result.Perf.Add(perf);
 
             }
             return result;
         }
-
-        //public string GetFreeSpace()
-        //{
-        //    ManagementObject disk = new ManagementObject("win32_logicaldisk.deviceid=\"c:\"");
-        //    disk.Get();
-        //    string freespace = disk["FreeSpace"].ToString();
-        //    Console.WriteLine(freespace);
-        //    return freespace;
-        //}
     }
 }

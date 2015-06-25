@@ -53,7 +53,7 @@ namespace BMonitor.Service.Monitor
             //_monitorPath = config.Service.MonitorPath;
             //_log.Info(string.Format("Loading monitors from {0}", _monitorPath));
             
-            _monitors.Add(new FreeDiskSpace(driveLetter: "C", driveDescription: "OS"));
+            _monitors.Add(new FreeDiskSpace { DriveLetter = "C", DriveDescription = "OS" });
             //,
             //unitOfMeasure: UoM.Percent,
             //warningLevel: 20,
