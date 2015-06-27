@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F84EDDD6-C75
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Contracts.Admin", "src\Blob.Contracts.Admin\Blob.Contracts.Admin.csproj", "{EAC4E8E8-692B-4B68-AF8E-D1C9858ACB9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Proxies.Admin", "src\Blob.Proxies.Admin\Blob.Proxies.Admin.csproj", "{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{EAC4E8E8-692B-4B68-AF8E-D1C9858ACB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAC4E8E8-692B-4B68-AF8E-D1C9858ACB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAC4E8E8-692B-4B68-AF8E-D1C9858ACB9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +71,6 @@ Global
 		{A8395CBD-FDD2-4A90-8A9E-719B8266773F} = {F84EDDD6-C756-407F-BFF5-2901FB400FEC}
 		{92B3D72D-41E9-45E5-9841-156392D16853} = {F84EDDD6-C756-407F-BFF5-2901FB400FEC}
 		{EAC4E8E8-692B-4B68-AF8E-D1C9858ACB9E} = {F84EDDD6-C756-407F-BFF5-2901FB400FEC}
+		{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC} = {F84EDDD6-C756-407F-BFF5-2901FB400FEC}
 	EndGlobalSection
 EndGlobal

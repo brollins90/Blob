@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{95485EC1-2480-4BCB-AED7-3722A1427CC4}</ProjectGuid>
+    <ProjectGuid>{1764B87E-9ABA-4E3D-B960-CE6D4BDFC2DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Blob.Proxies</RootNamespace>
-    <AssemblyName>Blob.Proxies</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AssemblyName>Blob.Proxies.Admin</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,22 +28,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.ServiceModel" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BaseClient.cs" />
-    <Compile Include="BaseDuplexClient.cs" />
-    <Compile Include="DeviceConnectionClient.cs" />
-    <Compile Include="DeviceStatusClient.cs" />
+    <Compile Include="BeforeAuthorizationClient.cs" />
+    <Compile Include="BeforeCommandClient.cs" />
+    <Compile Include="BeforeQueryClient.cs" />
+    <Compile Include="IdentityManagerClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Blob.Contracts.Admin\Blob.Contracts.Admin.csproj">
+      <Project>{eac4e8e8-692b-4b68-af8e-d1c9858acb9e}</Project>
+      <Name>Blob.Contracts.Admin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
@@ -55,9 +49,15 @@
       <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
       <Name>Blob.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blob.Proxies\Blob.Proxies.csproj">
+      <Project>{95485ec1-2480-4bcb-aed7-3722a1427cc4}</Project>
+      <Name>Blob.Proxies</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <Reference Include="System" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

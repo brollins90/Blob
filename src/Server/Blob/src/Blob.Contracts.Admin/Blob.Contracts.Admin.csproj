@@ -37,11 +37,28 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\ICustomerGroupService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceContracts\IAuthorizationManagerService.cs" />
     <Compile Include="ServiceContracts\IBlobAuditor.cs" />
+    <Compile Include="ServiceContracts\IBlobCommandManager.cs" />
+    <Compile Include="ServiceContracts\IBlobQueryManager.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserClaimStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserEmailStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserGroupStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserLockoutStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserLoginStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserPasswordStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserPhoneNumberStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserRoleStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserSecurityStampStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserStoreService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserTokenProviderService.cs" />
+    <Compile Include="ServiceContracts\IdentityStore\IUserTwoFactorStoreService.cs" />
+    <Compile Include="ServiceContracts\IIdentityStore.cs" />
+    <Compile Include="ServiceContracts\IUserManagerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +66,12 @@
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
