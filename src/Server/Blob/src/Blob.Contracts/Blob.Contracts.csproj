@@ -139,7 +139,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityConstants.cs" />
     <Compile Include="ServiceContracts\IAuthorizationManagerService.cs" />
-    <Compile Include="ServiceContracts\IBlobAuditor.cs" />
     <Compile Include="ServiceContracts\IBlobCommandManager.cs" />
     <Compile Include="ServiceContracts\IBlobQueryManager.cs" />
     <Compile Include="ServiceContracts\IdentityStore\IUserEmailStoreService.cs" />

@@ -55,6 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Blob.Contracts.Admin\Blob.Contracts.Admin.csproj">
+      <Project>{eac4e8e8-692b-4b68-af8e-d1c9858acb9e}</Project>
+      <Name>Blob.Contracts.Admin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">
       <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
       <Name>Blob.Contracts</Name>
