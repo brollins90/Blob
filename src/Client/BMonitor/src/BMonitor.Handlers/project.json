@@ -1,0 +1,27 @@
+﻿{
+    "version": "1.0.0-alpha1",
+    "description": "BMonitor.Handlers",
+    "authors": [ "RRITC" ],
+
+    "dependencies": {
+        "Blob.Contracts": "1.0.0-*",
+        "BMonitor.Common": "1.0.0-*",
+        "log4net": "2.0.3",
+        "WUApiLib": ""
+    },
+
+    "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.ServiceModel": "4.0.0.0",
+                "System.ServiceProcess": "4.0.0.0"
+            }
+        },
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.ServiceModel": "4.0.0.0",
+                "System.ServiceProcess": "4.0.0.0"
+            }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+﻿{
+    "version": "1.0.0-alpha1",
+    "description": "BMonitor.Service",
+    "authors": [ "RRITC" ],
+
+    "dependencies": {
+        "Blob.Contracts": "1.0.0-*",
+        "Blob.Proxies": "1.0.0-*",
+        "BMonitor.Common": "1.0.0-*",
+        "BMonitor.Configuration": "1.0.0-*",
+        "BMonitor.Handlers": "1.0.0-*",
+        "BMonitor.Monitors": "1.0.0-*",
+        "Castle.Core": "3.3.3",
+        "Common.Logging": "3.1.0",
+        "Common.Logging.Core": "3.1.0",
+        "log4net": "2.0.3",
+        "Ninject": "3.2.2",
+        "ninject.extensions.conventions": "3.2.0",
+        "Quartz": "2.3.2"
+    },
+
+    "frameworks": {
+        "net45": {
+
+            "frameworkAssemblies": {
+                "System.Configuration": "4.0.0.0"
+            }
+        },
+
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.Configuration": "4.0.0.0"
+            }
+        }
+    }
+}

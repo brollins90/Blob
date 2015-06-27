@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "frameworks": {
+    "net45": {
+      "bin": {
+        "assembly": "C:/_/src/Blake/Blob/src/Client/BMonitor/src/BMonitor.Handlers/obj/Debug/Interop.WUApiLib.dll"
+      }
+    }
+  }
+}
