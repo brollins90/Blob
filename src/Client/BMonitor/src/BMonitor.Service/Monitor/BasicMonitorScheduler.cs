@@ -37,31 +37,31 @@ namespace BMonitor.Service.Monitor
         public bool LoadConfig()
         {
             _log.Debug("LoadConfig");
-            //BMonitorConfigurationSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigurationSection;
-            //if (config == null)
-            //    throw new ConfigurationErrorsException();
+            BMonitorConfigurationSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigurationSection;
+            if (config == null)
+                throw new ConfigurationErrorsException();
 
-            //_deviceId = config.Service.DeviceId;
+            _deviceId = config.Service.DeviceId;
 
-            //_enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
-            //_enableStatusMonitoring = config.Service.EnableStatusMonitoring;
+            _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
+            _enableStatusMonitoring = config.Service.EnableStatusMonitoring;
 
-            ////_monitorPath = config.Service.MonitorPath;
-            ////_log.Info(string.Format("Loading monitors from {0}", _monitorPath));
-            
-            //_monitors.Add(new FreeDiskSpace { DriveLetter = "C", DriveDescription = "OS" });
-            ////,
-            ////unitOfMeasure: UoM.Percent,
-            ////warningLevel: 20,
-            ////criticalLevel: 10)
-            ////);
-            //_log.Info("Loaded FreeDiskSpace monitor");
+            //_monitorPath = config.Service.MonitorPath;
+            //_log.Info(string.Format("Loading monitors from {0}", _monitorPath));
 
-            ////_monitors.Add(new PerfMonMonitor("Memory", "Available Bytes"));
-            ////_log.Info("Loaded Memory monitor");
+            _monitors.Add(new FreeDiskSpace { DriveLetter = "C", DriveDescription = "OS" });
+            //,
+            //unitOfMeasure: UoM.Percent,
+            //warningLevel: 20,
+            //criticalLevel: 10)
+            //);
+            _log.Info("Loaded FreeDiskSpace monitor");
 
-            ////_monitors.Add(new PerfMonMonitor("Processor", "% Processor Time", "_Total"));
-            ////_log.Info("Loaded Processor monitor");
+            //_monitors.Add(new PerfMonMonitor("Memory", "Available Bytes"));
+            //_log.Info("Loaded Memory monitor");
+
+            //_monitors.Add(new PerfMonMonitor("Processor", "% Processor Time", "_Total"));
+            //_log.Info("Loaded Processor monitor");
             return true;
         }
 

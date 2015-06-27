@@ -1,12 +1,12 @@
 ﻿{
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha1",
     "description": "Blob.Core",
     "authors": [ "RRITC" ],
 
     "dependencies": {
         "Blob.Contracts": "1.0.0-*",
         "EntityFramework": "6.1.3",
-        "EntityFramework.Extended": "6.1.0.95",
+        "EntityFramework.Extended": "6.1.0.133",
         "log4net": "2.0.3",
         "Microsoft.AspNet.Identity.Core": "2.2.1",
         "Microsoft.AspNet.Identity.Owin": "2.2.1",
@@ -19,10 +19,18 @@
     },
 
     "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.Data": "4.0.0.0",
+                "System.IdentityModel": "4.0.0.0",
+                "System.Xml": "4.0.0.0"
+            }
+        },
         "dnx451": {
             "frameworkAssemblies": {
                 "System.Data": "4.0.0.0",
-                "System.IdentityModel": "4.0.0.0"
+                "System.IdentityModel": "4.0.0.0",
+                "System.Xml": "4.0.0.0"
             }
         }
     }

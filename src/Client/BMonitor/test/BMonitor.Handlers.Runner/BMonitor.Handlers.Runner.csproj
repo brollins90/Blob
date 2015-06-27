@@ -37,10 +37,15 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Blob.Contracts">
-      <HintPath>..\..\..\..\Server\Blob\Blob.Contracts\bin\Debug\Blob.Contracts.dll</HintPath>
+    <Reference Include="Blob.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Blob.Contracts.1.0.0-alpha1\lib\net45\Blob.Contracts.dll</HintPath>
+      <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\src\BMonitor.Common\Properties\AssemblyInfoCommon.cs">
@@ -51,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\BMonitor.Handlers\BMonitor.Handlers.csproj">

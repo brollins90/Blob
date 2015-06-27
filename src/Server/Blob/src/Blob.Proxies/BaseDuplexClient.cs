@@ -7,13 +7,13 @@ namespace Blob.Proxies
 
     // https://devzone.channeladam.com/articles/2014/09/how-to-easily-call-wcf-service-properly/
 
-    public class BaseClient<TChannel> : ClientBase<TChannel>
+    public class BaseDuplexClient<TChannel> : DuplexClientBase<TChannel>
         where TChannel : class
     {
         public Action<Exception> ClientErrorHandler = null;
-
-        public BaseClient(string endpointName, string username, string password)
-            : base(endpointName)
+        
+        public BaseDuplexClient(string endpointName, string username, string password, InstanceContext callbackInstance)
+            : base(callbackInstance, endpointName)
         {
             ConfigureCredentials(username, password);
         }

@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha1",
     "description": "Blob.Crypto",
     "authors": [ "RRITC" ],
 
@@ -7,6 +7,13 @@
     },
 
     "frameworks": {
-        "dnx451": { }
+        "net45": { },
+        "dnx451": { },
+        "dnxcore50": {
+            "dependencies": {
+                "System.Runtime.InteropServices": "4.0.20-beta-22816",
+                "System.Security.Cryptography.X509Certificates": "4.0.0-beta-22816"
+            }
+        }
     }
 }

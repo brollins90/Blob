@@ -1,6 +1,6 @@
 ﻿{
     "webroot": "wwwroot",
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha1",
     "description": "Blob.WcfHost",
     "authors": [ "RRITC" ],
 
@@ -44,6 +44,26 @@
     },
 
     "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.ComponentModel.DataAnnotations": "4.0.0.0",
+                "System.Configuration": "4.0.0.0",
+                "System.Data": "4.0.0.0",
+                "System.Data.DataSetExtensions": "4.0.0.0",
+                "System.Data.Services": "4.0.0.0",
+                "System.IdentityModel": "4.0.0.0",
+                "System.IdentityModel.Services": "4.0.0.0",
+                "System.ServiceModel": "4.0.0.0",
+                "System.ServiceModel.Activation": "4.0.0.0",
+                "System.ServiceModel.Web": "4.0.0.0",
+                "System.Web": "4.0.0.0",
+                "System.Web.ApplicationServices": "4.0.0.0",
+                "System.Web.DynamicData": "4.0.0.0",
+                "System.Web.Entity": "4.0.0.0",
+                "System.Web.Extensions": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
         "dnx451": {
             "frameworkAssemblies": {
                 "System.ComponentModel.DataAnnotations": "4.0.0.0",

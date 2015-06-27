@@ -36,7 +36,7 @@ namespace Blob.Core.Services
         public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
         {
             _log.Debug(string.Format("GetDeviceCommandVmList()"));
-            IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes(null);
+            IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes();
             return commandTypes.Select(t => new DeviceCommandVm
             {
                 CommandType = t.FullName,

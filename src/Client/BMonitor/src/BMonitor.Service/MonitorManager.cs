@@ -38,30 +38,30 @@ namespace BMonitor.Service
 
         public void LoadConfig()
         {
-            _log.Debug("LoadingConfig"); 
-            //System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //BMonitorConfigurationSection config = configFile.GetSection("BMonitor") as BMonitorConfigurationSection;
-            //if (config == null) { throw new ConfigurationErrorsException(); }
-            //ConfigurationManager.RefreshSection("BMonitor");
+            _log.Debug("LoadingConfig");
+            System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            BMonitorConfigurationSection config = configFile.GetSection("BMonitor") as BMonitorConfigurationSection;
+            if (config == null) { throw new ConfigurationErrorsException(); }
+            ConfigurationManager.RefreshSection("BMonitor");
 
-            //_deviceInfo.DeviceId = config.Service.DeviceId;
-            //if (_deviceInfo.DeviceId == Guid.Empty)
-            //{
-            //    _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
-            //    _isRegistered = false;
-            //    _deviceInfo.Username = config.Service.Username;
-            //    _deviceInfo.Password = config.Service.Password;
-            //}
-            //else
-            //{
-            //    _log.Info(string.Format("Loaded device id of {0}.", _deviceInfo.DeviceId));
-            //    _isRegistered = true;
-            //    _deviceInfo.Username = _deviceInfo.DeviceId.ToString();
-            //    _deviceInfo.Password = _deviceInfo.DeviceId.ToString();
-            //}
-            //_enableCommandConnection = config.Service.EnableCommandConnection;
-            //_enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
-            //_enableStatusMonitoring = config.Service.EnableStatusMonitoring;
+            _deviceInfo.DeviceId = config.Service.DeviceId;
+            if (_deviceInfo.DeviceId == Guid.Empty)
+            {
+                _log.Warn("Failed to load the DeviceId from the config file.  Registration required.");
+                _isRegistered = false;
+                _deviceInfo.Username = config.Service.Username;
+                _deviceInfo.Password = config.Service.Password;
+            }
+            else
+            {
+                _log.Info(string.Format("Loaded device id of {0}.", _deviceInfo.DeviceId));
+                _isRegistered = true;
+                _deviceInfo.Username = _deviceInfo.DeviceId.ToString();
+                _deviceInfo.Password = _deviceInfo.DeviceId.ToString();
+            }
+            _enableCommandConnection = config.Service.EnableCommandConnection;
+            _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
+            _enableStatusMonitoring = config.Service.EnableStatusMonitoring;
         }
 
         public void MonitorTick()
@@ -105,21 +105,21 @@ namespace BMonitor.Service
 
         private void SaveRegistration(RegisterDeviceResponseDto response)
         {
-            //System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //BMonitorConfigurationSection config = configFile.GetSection("BMonitor") as BMonitorConfigurationSection;
-            //if (config == null) { throw new ConfigurationErrorsException(); }
-            //ConfigurationManager.RefreshSection("BMonitor");
+            System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            BMonitorConfigurationSection config = configFile.GetSection("BMonitor") as BMonitorConfigurationSection;
+            if (config == null) { throw new ConfigurationErrorsException(); }
+            ConfigurationManager.RefreshSection("BMonitor");
 
-            //config.Service.DeviceId = response.DeviceId;
-            ////config.Service.Username = "";
-            ////config.Service.Password = "";
+            config.Service.DeviceId = response.DeviceId;
+            //config.Service.Username = "";
+            //config.Service.Password = "";
 
 
-            //configFile.Save(ConfigurationSaveMode.Full, true);
+            configFile.Save(ConfigurationSaveMode.Full, true);
 
             _isRegistered = true;
             LoadConfig();
-            //Start();
+            Start();
         }
         
         private void HandleException(Exception ex)

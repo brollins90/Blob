@@ -4,7 +4,7 @@ using Blob.Contracts.ServiceContracts;
 
 namespace Blob.Proxies
 {
-    public class DeviceConnectionClient : BaseClient<IDeviceConnectionService>, IDeviceConnectionService
+    public class DeviceConnectionClient : BaseDuplexClient<IDeviceConnectionService>, IDeviceConnectionService
     {
         public DeviceConnectionClient(string endpointName, string username, string password, InstanceContext callbackInstance)
             : base(endpointName, username, password, callbackInstance) { }

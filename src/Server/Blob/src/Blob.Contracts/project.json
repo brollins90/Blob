@@ -1,21 +1,44 @@
 ﻿{
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha1",
     "description": "Blob.Contracts",
     "authors": [ "RRITC" ],
 
     "dependencies": {
-        "System.Collections": "4.0.10-beta-22816",
-        "System.ComponentModel.Annotations": "4.0.10-beta-22816",
-        "System.Linq": "4.0.0-beta-22816",
-        "System.Runtime.Serialization.Xml": "4.0.10-beta-22816",
-        "System.Threading": "4.0.10-beta-22816",
-        "Microsoft.CSharp": "4.0.0-beta-22816"
     },
 
     "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.ServiceModel": "4.0.0.0",
+                "System.ComponentModel.DataAnnotations": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0"
+            }
+        },
         "dnx451": {
             "frameworkAssemblies": {
-                "System.ServiceModel": "4.0.0.0"
+                "System.ServiceModel": "4.0.0.0",
+                "System.ComponentModel.DataAnnotations": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0"
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "System.ComponentModel.Annotations": "4.0.10-beta-22816",
+                "System.Linq": "4.0.0-beta-22816",
+                "System.Reflection.TypeExtensions": "4.0.0-beta-22816",
+                "System.Runtime.Serialization.Xml": "4.0.10-beta-22816",
+                "System.Security.Claims": "4.0.0-beta-22816",
+                "System.ServiceModel.Primitives": "4.0.0-beta-22816",
+                "System.Threading": "4.0.10-beta-22816",
+                "Microsoft.CSharp": "4.0.0-beta-22816"
+
+                //"System.Reflection": "4.0.10-beta-22816",
+                //"System.Reflection.Emit": "4.0.0-beta-22816",
+                //"System.Reflection.Emit.ILGeneration": "4.0.0-beta-22816",
+                //"System.Reflection.Emit.Lightweight": "4.0.0-beta-22816",
+                //"System.Reflection.Extensions": "4.0.0-beta-22816",
+                //"System.Reflection.Primitives": "4.0.0-beta-22816",
+                //"System.Runtime": "4.0.20-beta-22816",                
             }
         }
     }

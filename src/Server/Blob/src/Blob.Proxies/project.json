@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha1",
     "description": "Blob.Proxies",
     "authors": [ "RRITC" ],
 
@@ -8,10 +8,22 @@
     },
 
     "frameworks": {
+        "net45": {
+            "frameworkAssemblies": {
+                "System.IdentityModel": "4.0.0.0",
+                "System.ServiceModel": "4.0.0.0"
+            }
+        },
         "dnx451": {
             "frameworkAssemblies": {
                 "System.IdentityModel": "4.0.0.0",
                 "System.ServiceModel": "4.0.0.0"
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "System.ServiceModel.Duplex": "4.0.0-beta-22816",
+                "System.ServiceModel.Primitives": "4.0.0-beta-22816",
             }
         }
     }

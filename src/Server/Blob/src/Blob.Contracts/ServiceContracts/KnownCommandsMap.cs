@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Blob.Contracts.Commands;
+#if DNXCORE50
+using ICustomAttributeProvider = System.Runtime.Serialization.DataContractSerializer;//Newtonsoft.Json.Utilities.CustomAttributeProvider;
+#endif
 
 namespace Blob.Contracts.ServiceContracts
 {
     public static class KnownCommandsMap
     {
         private static readonly Type CommandHandlerInterfaceType = typeof (IDeviceCommandHandler<>);
-        
-        public static IList<Type> GetKnownCommandTypes(ICustomAttributeProvider provider)
+
+        public static IList<Type> GetKnownCommandTypes(ICustomAttributeProvider knownTypeAttributeTarget)
+        {
+            return GetKnownCommandTypes();
+        }
+
+        public static IList<Type> GetKnownCommandTypes()
         {
             // Get the assembly that contains the ICommandHandler
             Assembly coreAssembly = GetCommandHandlerInterfaceAssembly();
@@ -25,7 +33,7 @@ namespace Blob.Contracts.ServiceContracts
 
         public static Assembly GetCommandHandlerInterfaceAssembly()
         {
-            return CommandHandlerInterfaceType.Assembly;
+            return CommandHandlerInterfaceType.GetTypeInfo().Assembly;
         }
     }
 }

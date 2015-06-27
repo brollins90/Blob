@@ -31,26 +31,26 @@ namespace BMonitor.Service.Monitor.Quartz
         public bool LoadConfig()
         {
             _log.Debug("LoadConfig");
-            //BMonitorConfigurationSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigurationSection;
-            //if (config == null)
-            //    throw new ConfigurationErrorsException();
+            BMonitorConfigurationSection config = ConfigurationManager.GetSection("BMonitor") as BMonitorConfigurationSection;
+            if (config == null)
+                throw new ConfigurationErrorsException();
 
-            //try
-            //{
-            //    _deviceId = config.Service.DeviceId;
-            //    _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
+            try
+            {
+                _deviceId = config.Service.DeviceId;
+                _enablePerformanceMonitoring = config.Service.EnablePerformanceMonitoring;
 
-            //    _scheduler = StdSchedulerFactory.GetDefaultScheduler();
-            //    _scheduler.JobFactory = new NinjectJobFactory(_kernel, _enablePerformanceMonitoring);
-            //    _scheduler.ListenerManager.AddJobListener(new SendStatusJobListener(_statusHelper, config.Service.DeviceId, config.Service.EnableStatusMonitoring, config.Service.EnablePerformanceMonitoring), GroupMatcher<JobKey>.AnyGroup());
+                _scheduler = StdSchedulerFactory.GetDefaultScheduler();
+                _scheduler.JobFactory = new NinjectJobFactory(_kernel, _enablePerformanceMonitoring);
+                _scheduler.ListenerManager.AddJobListener(new SendStatusJobListener(_statusHelper, config.Service.DeviceId, config.Service.EnableStatusMonitoring, config.Service.EnablePerformanceMonitoring), GroupMatcher<JobKey>.AnyGroup());
 
-            //    return true;
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
-            return false;
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            //return false;
         }
 
         public void Start()
