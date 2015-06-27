@@ -1,0 +1,18 @@
+﻿{
+    "version": "1.0.0-alpha.1",
+    "description": "Blob.Proxies",
+    "authors": [ "RRITC" ],
+
+    "dependencies": {
+        "Blob.Contracts": "1.0.0-*"
+    },
+
+    "frameworks": {
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.IdentityModel": "4.0.0.0",
+                "System.ServiceModel": "4.0.0.0"
+            }
+        }
+    }
+}

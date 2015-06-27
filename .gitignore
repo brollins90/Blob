@@ -1,4 +1,4 @@
-
+project.lock.json
 *.pubxml
 
 ## Ignore Visual Studio temporary files, build results, and

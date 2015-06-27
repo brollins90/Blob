@@ -1,0 +1,12 @@
+﻿{
+    "version": "1.0.0-alpha.1",
+    "description": "Blob.Crypto",
+    "authors": [ "RRITC" ],
+
+    "dependencies": {
+    },
+
+    "frameworks": {
+        "dnx451": { }
+    }
+}

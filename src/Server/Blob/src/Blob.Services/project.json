@@ -1,0 +1,19 @@
+﻿{
+    "version": "1.0.0-alpha.1",
+    "description": "Blob.Services",
+    "authors": [ "RRITC" ],
+
+    "dependencies": {
+        "Blob.Contracts": "1.0.0-*",
+        "Blob.Core": "1.0.0-*",
+        "log4net": "2.0.3"
+    },
+
+    "frameworks": {
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.IdentityModel.Services": "4.0.0.0"
+            }
+        }
+    }
+}
