@@ -148,7 +148,7 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
+        public async Task<BlobResult> AddPerformanceRecordAsync(AddPerformanceRecordRequest dto)
         {
             _log.Debug(string.Format("AddPerformanceRecordAsync({0} - {1})", dto.DeviceId, dto.MonitorId));
             _log.Debug("Storing status perf data " + dto);
@@ -160,7 +160,7 @@ namespace Blob.Core.Services
 
             //if (device != null)
             //{
-            foreach (PerformanceRecordValue value in dto.Data)
+            foreach (PerformanceRecordItem value in dto.Data)
             {
                 PerformanceRecords.Add(new PerformanceRecord
                 {
@@ -180,10 +180,10 @@ namespace Blob.Core.Services
                 await _context.SaveChangesAsync();
             }
             //}
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        public async Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
         {
             _log.Debug(string.Format("DeletePerformanceRecordAsync({0})", dto.RecordId));
             PerformanceRecord perf = PerformanceRecords.Find(dto.RecordId);
@@ -191,7 +191,7 @@ namespace Blob.Core.Services
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             //await UpdateDeviceActivityTimeAsync(perf.DeviceId);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
     }
 }

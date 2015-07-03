@@ -10,7 +10,7 @@ namespace Blob.Proxies
         public DeviceStatusClient(string endpointName, string username, string password)
             : base(endpointName, username, password) { }
 
-        public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
+        public async Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task AddStatusRecordAsync(AddStatusRecordDto dto)
+        public async Task AddStatusRecordAsync(AddStatusRecordRequest dto)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
+        public async Task AddPerformanceRecordAsync(AddPerformanceRecordRequest dto)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto)
+        public async Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest dto)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Failed");
+            return new BlobResult("Failed");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Blob.Proxies
     {
         public BeforeCommandClient(string endpointName, string username, string password) : base(endpointName, username, password) { }
 
-        public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
+        public async Task<BlobResult> DisableCustomerAsync(DisableCustomerDto dto)
         {
             try
             {
@@ -19,10 +19,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
+        public async Task<BlobResult> EnableCustomerAsync(EnableCustomerDto dto)
         {
             try
             {
@@ -32,10 +32,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResult> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             try
             {
@@ -45,10 +45,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
+        public async Task<BlobResult> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             try
             {
@@ -58,10 +58,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
+        public async Task<BlobResult> IssueCommandAsync(IssueDeviceCommandDto dto)
         {
             try
             {
@@ -71,10 +71,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto)
+        public async Task<BlobResult> DisableDeviceAsync(DisableDeviceDto dto)
         {
             try
             {
@@ -84,10 +84,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto)
+        public async Task<BlobResult> EnableDeviceAsync(EnableDeviceDto dto)
         {
             try
             {
@@ -97,10 +97,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
+        public async Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto)
         {
             try
             {
@@ -110,10 +110,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new RegisterDeviceResponseDto();
+            return new RegisterDeviceResponse();
         }
 
-        public async Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto)
+        public async Task<BlobResult> UpdateDeviceAsync(UpdateDeviceDto dto)
         {
             try
             {
@@ -123,10 +123,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
+        public async Task<BlobResult> AddPerformanceRecordAsync(AddPerformanceRecordRequest dto)
         {
             try
             {
@@ -136,10 +136,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        public async Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
         {
             try
             {
@@ -149,10 +149,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
+        public async Task<BlobResult> AddStatusRecordAsync(AddStatusRecordRequest dto)
         {
             try
             {
@@ -162,10 +162,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        public async Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
             try
             {
@@ -175,10 +175,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
+        public async Task<BlobResult> CreateUserAsync(CreateUserDto dto)
         {
             try
             {
@@ -188,10 +188,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
+        public async Task<BlobResult> DisableUserAsync(DisableUserDto dto)
         {
             try
             {
@@ -201,10 +201,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
+        public async Task<BlobResult> EnableUserAsync(EnableUserDto dto)
         {
             try
             {
@@ -214,10 +214,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
+        public async Task<BlobResult> UpdateUserAsync(UpdateUserDto dto)
         {
             try
             {
@@ -227,10 +227,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        public async Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
             try
             {
@@ -240,10 +240,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        public async Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
             try
             {
@@ -253,10 +253,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        public async Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
             try
             {
@@ -266,10 +266,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        public async Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
             try
             {
@@ -279,10 +279,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        public async Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
             try
             {
@@ -292,10 +292,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        public async Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
             try
             {
@@ -305,10 +305,10 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
 
-        public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        public async Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             try
             {
@@ -318,7 +318,7 @@ namespace Blob.Proxies
             {
                 HandleError(ex);
             }
-            return new BlobResultDto("Client proxy error.");
+            return new BlobResult("Client proxy error.");
         }
     }
 }

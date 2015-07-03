@@ -9,10 +9,10 @@ namespace Blob.Contracts.Services
     public interface IDeviceService
     {
         // Command
-        Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto);
-        Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto);
-        Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto);
-        Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto);
+        Task<BlobResult> DisableDeviceAsync(DisableDeviceDto dto);
+        Task<BlobResult> EnableDeviceAsync(EnableDeviceDto dto);
+        Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto);
+        Task<BlobResult> UpdateDeviceAsync(UpdateDeviceDto dto);
         
         // Query
         Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId);
@@ -26,6 +26,6 @@ namespace Blob.Contracts.Services
         int CalculateDeviceAlertLevel(Guid deviceId);
 
 
-        Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto);
+        Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest dto);
     }
 }

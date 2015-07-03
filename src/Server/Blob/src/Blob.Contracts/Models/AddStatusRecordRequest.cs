@@ -1,10 +1,10 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Blob.Contracts.Models
+﻿namespace Blob.Contracts.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
     [DataContract]
-    public class AddStatusRecordDto
+    public class AddStatusRecordRequest
     {
         [DataMember]
         public Guid DeviceId { get; set; }
@@ -34,6 +34,6 @@ namespace Blob.Contracts.Models
         public string CurrentValue { get; set; }
 
         [DataMember]
-        public AddPerformanceRecordDto PerformanceRecordDto { get; set; }
+        public AddPerformanceRecordRequest PerformanceRecordDto { get; set; }
     }
 }

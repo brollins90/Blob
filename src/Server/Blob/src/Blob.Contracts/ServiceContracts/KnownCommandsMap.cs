@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Blob.Contracts.Commands;
+﻿namespace Blob.Contracts.ServiceContracts
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Commands;
 #if DNXCORE50
 using ICustomAttributeProvider = System.Runtime.Serialization.DataContractSerializer;//Newtonsoft.Json.Utilities.CustomAttributeProvider;
 #endif
 
-namespace Blob.Contracts.ServiceContracts
-{
     public static class KnownCommandsMap
     {
-        private static readonly Type CommandHandlerInterfaceType = typeof (IDeviceCommandHandler<>);
+        private static readonly Type CommandHandlerInterfaceType = typeof(IDeviceCommandHandler<>);
 
         public static IList<Type> GetKnownCommandTypes(ICustomAttributeProvider knownTypeAttributeTarget)
         {

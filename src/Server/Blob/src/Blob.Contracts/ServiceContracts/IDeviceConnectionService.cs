@@ -1,8 +1,8 @@
-﻿using System;
-using System.ServiceModel;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System;
+    using System.ServiceModel;
+
     [ServiceContract(CallbackContract = typeof(IDeviceConnectionServiceCallback))]
     public interface IDeviceConnectionService
     {

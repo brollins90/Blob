@@ -1,8 +1,8 @@
-﻿using System;
-using System.ServiceModel;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System;
+    using System.ServiceModel;
+
     [ServiceContract]
     [ServiceKnownType("GetKnownCommandTypes", typeof(KnownCommandsMap))]
     public interface IDeviceConnectionServiceCallback

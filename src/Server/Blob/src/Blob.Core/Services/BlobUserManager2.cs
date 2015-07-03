@@ -28,7 +28,7 @@ namespace Blob.Core.Services
             _notificationScheduleService = notificationScheduleService;
         }
 
-        public async Task<BlobResultDto> CreateUserAsync(CreateUserDto dto)
+        public async Task<BlobResult> CreateUserAsync(CreateUserDto dto)
         {
             User newUser = new User
             {
@@ -59,30 +59,30 @@ namespace Blob.Core.Services
 
             _context.Set<UserProfile>().Add(up);
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
+        public async Task<BlobResult> DisableUserAsync(DisableUserDto dto)
         {
             User user = _context.Users.Find(dto.UserId);
             user.Enabled = false;
 
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
+        public async Task<BlobResult> EnableUserAsync(EnableUserDto dto)
         {
             User user = _context.Users.Find(dto.UserId);
             user.Enabled = true;
 
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
+        public async Task<BlobResult> UpdateUserAsync(UpdateUserDto dto)
         {
             User user = _context.Users.Find(dto.UserId);
             // todo: can username change?
@@ -96,7 +96,7 @@ namespace Blob.Core.Services
 
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
         public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)

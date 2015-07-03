@@ -72,7 +72,7 @@ namespace Blob.Core.Services
             return _connectionManager.GetActiveDeviceIds();
         }
 
-        public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
+        public async Task<BlobResult> IssueCommandAsync(IssueDeviceCommandDto dto)
         {
             _log.Debug(string.Format("IssueCommandAsync({0})", dto.DeviceId));
             string assemblyName = KnownCommandsMap.GetCommandHandlerInterfaceAssembly().FullName;
@@ -97,7 +97,7 @@ namespace Blob.Core.Services
             {
                 // todo: remove from table, or mark as not queued
             }
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
     }
 }

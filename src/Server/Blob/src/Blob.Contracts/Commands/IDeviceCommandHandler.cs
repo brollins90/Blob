@@ -1,4 +1,3 @@
-
 namespace Blob.Contracts.Commands
 {
     public interface IDeviceCommandHandler<in TCmd>

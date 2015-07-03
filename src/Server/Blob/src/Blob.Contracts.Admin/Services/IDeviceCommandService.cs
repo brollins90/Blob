@@ -12,7 +12,7 @@ namespace Blob.Contracts.Services
         DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType);
         IEnumerable<Guid> GetActiveDeviceIds();
 
-        Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto);
+        Task<BlobResult> IssueCommandAsync(IssueDeviceCommandDto dto);
 
     }
 }

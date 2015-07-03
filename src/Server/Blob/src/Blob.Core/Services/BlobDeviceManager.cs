@@ -35,7 +35,7 @@ namespace Blob.Core.Services
         public DbSet<DeviceType> DeviceTypes { get { return _context.Set<DeviceType>(); } }
 
 
-        public async Task<BlobResultDto> DisableDeviceAsync(DisableDeviceDto dto)
+        public async Task<BlobResult> DisableDeviceAsync(DisableDeviceDto dto)
         {
             _log.Debug(string.Format("DisableDeviceAsync({0})", dto.DeviceId));
             Device device = await _context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
@@ -43,10 +43,10 @@ namespace Blob.Core.Services
 
             _context.Entry(device).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> EnableDeviceAsync(EnableDeviceDto dto)
+        public async Task<BlobResult> EnableDeviceAsync(EnableDeviceDto dto)
         {
             _log.Debug(string.Format("EnableDeviceAsync({0})", dto.DeviceId));
             Device device = await _context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
@@ -54,10 +54,10 @@ namespace Blob.Core.Services
 
             _context.Entry(device).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
+        public async Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto)
         {
             _log.Debug(string.Format("RegisterDeviceAsync({0})", dto.DeviceId));
 
@@ -100,7 +100,7 @@ namespace Blob.Core.Services
                 _log.Error("Failed to register device", e);
                 succeeded = false;
             }
-            return new RegisterDeviceResponseDto
+            return new RegisterDeviceResponse
             {
                 DeviceId = deviceId,
                 Succeeded = succeeded,
@@ -108,7 +108,7 @@ namespace Blob.Core.Services
             };
         }
 
-        public async Task<BlobResultDto> UpdateDeviceAsync(UpdateDeviceDto dto)
+        public async Task<BlobResult> UpdateDeviceAsync(UpdateDeviceDto dto)
         {
             _log.Debug(string.Format("UpdateDeviceAsync({0})", dto.DeviceId));
             Device device = Devices.Find(dto.DeviceId);
@@ -119,7 +119,7 @@ namespace Blob.Core.Services
             _context.Entry(device).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
         public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
@@ -235,13 +235,13 @@ namespace Blob.Core.Services
             return records.Select(statusRecord => statusRecord.Status).Concat(new[] { 0 }).Max();
         }
 
-        public async Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto)
+        public async Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest dto)
         {
             _log.Debug(string.Format("AuthenticateDevice({0})", dto.DeviceId));
             //Device device = await Devices.FindAsync(dto.DeviceId);
 
             //if (device.Id == dto.DeviceId)
-                return await Task.FromResult(BlobResultDto.Success);
+                return await Task.FromResult(BlobResult.Success);
             //else return new BlobResultDto("Not Authenticated");
         }
     }

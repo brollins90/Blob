@@ -97,7 +97,7 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto)
+        public async Task<BlobResult> AddStatusRecordAsync(AddStatusRecordRequest dto)
         {
             _log.Debug(string.Format("AddStatusRecordAsync({0} - {1})", dto.DeviceId, dto.MonitorId));
             _log.Debug("Storing status data " + dto);
@@ -178,10 +178,10 @@ namespace Blob.Core.Services
             //}
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        public async Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
         {
             _log.Debug(string.Format("DeleteStatusRecordAsync({0})", dto.RecordId));
             StatusRecord status = StatusRecords.Find(dto.RecordId);
@@ -189,7 +189,7 @@ namespace Blob.Core.Services
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             //await UpdateDeviceActivityTimeAsync(status.DeviceId);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
 

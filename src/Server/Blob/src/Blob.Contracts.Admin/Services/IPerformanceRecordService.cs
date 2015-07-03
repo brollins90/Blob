@@ -13,7 +13,7 @@ namespace Blob.Contracts.Services
         Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10);
         Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId);
 
-        Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData);
-        Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
+        Task<BlobResult> AddPerformanceRecordAsync(AddPerformanceRecordRequest statusPerformanceData);
+        Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
     }
 }

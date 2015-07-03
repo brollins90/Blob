@@ -1,10 +1,10 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Blob.Contracts.Models
+﻿namespace Blob.Contracts.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
     [DataContract]
-    public class RegisterDeviceDto
+    public class RegisterDeviceRequest
     {
         [DataMember]
         public string CustomerId { get; set; }

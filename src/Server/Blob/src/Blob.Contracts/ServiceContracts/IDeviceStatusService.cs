@@ -1,22 +1,22 @@
-﻿using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System.ServiceModel;
+    using System.Threading.Tasks;
+    using Models;
+
     [ServiceContract]
     public interface IDeviceStatusService
     {
         [OperationContract]
-        Task<BlobResultDto> AuthenticateDeviceAsync(AuthenticateDeviceDto dto);
+        Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest dto);
 
         [OperationContract]
-        Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto);
+        Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto);
 
         [OperationContract]
-        Task AddStatusRecordAsync(AddStatusRecordDto dto);
+        Task AddStatusRecordAsync(AddStatusRecordRequest dto);
 
         [OperationContract]
-        Task AddPerformanceRecordAsync(AddPerformanceRecordDto dto);
+        Task AddPerformanceRecordAsync(AddPerformanceRecordRequest dto);
     }
 }

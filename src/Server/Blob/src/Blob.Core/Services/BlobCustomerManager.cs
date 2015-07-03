@@ -27,7 +27,7 @@ namespace Blob.Core.Services
             _userManager2 = userManager2;
         }
 
-        public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
+        public async Task<BlobResult> DisableCustomerAsync(DisableCustomerDto dto)
         {
             _log.Debug(string.Format("DisableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -37,10 +37,10 @@ namespace Blob.Core.Services
             _context.Entry(customer).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
+        public async Task<BlobResult> EnableCustomerAsync(EnableCustomerDto dto)
         {
             _log.Debug(string.Format("EnableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -48,10 +48,10 @@ namespace Blob.Core.Services
 
             _context.Entry(customer).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResult> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             _log.Debug(string.Format("RegisterCustomerAsync({0})", dto.CustomerName));
 
@@ -59,7 +59,7 @@ namespace Blob.Core.Services
             Customer customer = _context.Customers.Find(dto.CustomerId);
             if (customer != null)
             {
-                return new BlobResultDto("Customer id already exists");
+                return new BlobResult("Customer id already exists");
             }
 
             // create the customer
@@ -113,10 +113,10 @@ namespace Blob.Core.Services
             // save stuff
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
+        public async Task<BlobResult> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             _log.Debug(string.Format("UpdateCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -124,7 +124,7 @@ namespace Blob.Core.Services
 
             _context.Entry(customer).State = EntityState.Modified;
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
         public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)

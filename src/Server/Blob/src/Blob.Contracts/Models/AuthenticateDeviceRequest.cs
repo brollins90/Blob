@@ -1,10 +1,10 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Blob.Contracts.Models
+﻿namespace Blob.Contracts.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
     [DataContract]
-    public class AuthenticateDeviceDto
+    public class AuthenticateDeviceRequest
     {
         [DataMember]
         public Guid DeviceId { get; set; }

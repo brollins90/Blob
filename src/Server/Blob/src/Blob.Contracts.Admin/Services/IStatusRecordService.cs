@@ -16,7 +16,7 @@ namespace Blob.Contracts.Services
 
         Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId);
 
-        Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto statusData);
-        Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
+        Task<BlobResult> AddStatusRecordAsync(AddStatusRecordRequest statusData);
+        Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
     }
 }

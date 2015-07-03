@@ -35,7 +35,7 @@ namespace Blob.Core.Services
 
 
 
-        public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
+        public async Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
             _log.Debug(string.Format("CreateCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -49,10 +49,10 @@ namespace Blob.Core.Services
             CustomerGroups.Add(group);
             await _context.SaveChangesAsync().ConfigureAwait(false);
            
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
+        public async Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
             _log.Debug(string.Format("DeleteCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -82,10 +82,10 @@ namespace Blob.Core.Services
             ////{
             ////    await this.RefreshUserGroupRolesAsync(user.Id);
             ////}
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
+        public async Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
             _log.Debug(string.Format("UpdateCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -135,10 +135,10 @@ namespace Blob.Core.Services
             //{
             //    await this.RefreshUserGroupRolesAsync(groupUser.UserId);
             //}
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
+        public async Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
             _log.Debug(string.Format("AddRoleToCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -149,11 +149,11 @@ namespace Blob.Core.Services
             CustomerGroupRoles.Add(ur);
             await _context.SaveChangesAsync();
         
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
 
-        public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
+        public async Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
             _log.Debug(string.Format("AddUserToCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -162,10 +162,10 @@ namespace Blob.Core.Services
             _context.Set<CustomerGroupUser>().Add(ur);
             await _context.SaveChangesAsync();
 
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
+        public async Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
             _log.Debug(string.Format("RemoveRoleFromCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -174,10 +174,10 @@ namespace Blob.Core.Services
             _context.Set<CustomerGroupRole>().Remove(cgr);
             await _context.SaveChangesAsync();
 
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
-        public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
+        public async Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             _log.Debug(string.Format("RemoveUserFromCustomerGroupAsync"));
             ThrowIfDisposed();
@@ -186,7 +186,7 @@ namespace Blob.Core.Services
             _context.Set<CustomerGroupUser>().Remove(cgr);
             await _context.SaveChangesAsync();
 
-            return BlobResultDto.Success;
+            return BlobResult.Success;
         }
 
         public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)

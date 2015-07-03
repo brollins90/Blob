@@ -9,13 +9,13 @@ namespace Blob.Contracts.Services
     public interface ICustomerGroupService
     {
         // Command
-        Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto);
-        Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto);
-        Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto);
-        Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto);
-        Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto);
-        Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto);
-        Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto); 
+        Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupDto dto);
+        Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto);
+        Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto);
+        Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto);
+        Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto);
+        Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto);
+        Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto); 
         
         // Query
         Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId);

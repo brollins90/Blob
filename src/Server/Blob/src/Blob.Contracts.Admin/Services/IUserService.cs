@@ -12,10 +12,10 @@ namespace Blob.Contracts.Services
 
         //Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
         // Command
-        Task<BlobResultDto> DisableUserAsync(DisableUserDto dto);
-        Task<BlobResultDto> EnableUserAsync(EnableUserDto dto);
-        Task<BlobResultDto> CreateUserAsync(CreateUserDto dto);
-        Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto);
+        Task<BlobResult> DisableUserAsync(DisableUserDto dto);
+        Task<BlobResult> EnableUserAsync(EnableUserDto dto);
+        Task<BlobResult> CreateUserAsync(CreateUserDto dto);
+        Task<BlobResult> UpdateUserAsync(UpdateUserDto dto);
 
         // Query
         Task<UserDisableVm> GetUserDisableVmAsync(Guid userId);
