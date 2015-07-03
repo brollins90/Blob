@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Blob.Core.Models
+﻿namespace Blob.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class StatusRecord
     {
-        public StatusRecord()
-        {
-            PerformanceRecords = new List<PerformanceRecord>();
-        }
-
         public long Id { get; set; }
         public string MonitorId { get; set; }
         public string MonitorName { get; set; }
@@ -23,6 +18,6 @@ namespace Blob.Core.Models
         public Guid DeviceId { get; set; }
         public virtual Device Device { get; set; }
 
-        public virtual ICollection<PerformanceRecord> PerformanceRecords { get; set; }
+        public virtual ICollection<PerformanceRecord> PerformanceRecords { get; set; } = new List<PerformanceRecord>();
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Blob.Contracts.ServiceContracts;
-
-namespace Blob.Core.Command
+﻿namespace Blob.Core.Command
 {
+    using System;
+    using System.Collections.Generic;
+    using Contracts.ServiceContracts;
+
     public interface ICommandConnectionManager : IDisposable
     {
         void AddCallback(Guid deviceId, IDeviceConnectionServiceCallback callback);

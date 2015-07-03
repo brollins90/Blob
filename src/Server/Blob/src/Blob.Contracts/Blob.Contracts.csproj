@@ -41,15 +41,21 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CmdExecuteCommand.cs" />
     <Compile Include="Commands\IDeviceCommand.cs" />
     <Compile Include="Commands\IDeviceCommandHandler.cs" />
-    <Compile Include="Models\AddPerformanceRecordRequest.cs" />
-    <Compile Include="Models\AddStatusRecordRequest.cs" />
-    <Compile Include="Models\AuthenticateDeviceRequest.cs" />
-    <Compile Include="Models\BlobResult.cs" />
-    <Compile Include="Models\PerformanceRecordItem.cs" />
-    <Compile Include="Models\RegisterDeviceRequest.cs" />
-    <Compile Include="Models\RegisterDeviceResponse.cs" />
+    <Compile Include="Commands\PrintLineCommand.cs" />
+    <Compile Include="Commands\PsExecuteCommand.cs" />
+    <Compile Include="Commands\RunMonitorCommand.cs" />
+    <Compile Include="Commands\WindowsServiceCommand.cs" />
+    <Compile Include="Commands\WindowsUpdateCommand.cs" />
+    <Compile Include="Request\AddPerformanceRecordRequest.cs" />
+    <Compile Include="Request\AddStatusRecordRequest.cs" />
+    <Compile Include="Request\AuthenticateDeviceRequest.cs" />
+    <Compile Include="Response\BlobResult.cs" />
+    <Compile Include="Request\PerformanceRecordItem.cs" />
+    <Compile Include="Request\RegisterDeviceRequest.cs" />
+    <Compile Include="Response\RegisterDeviceResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContracts\IDeviceConnectionService.cs" />
     <Compile Include="ServiceContracts\IDeviceConnectionServiceCallback.cs" />

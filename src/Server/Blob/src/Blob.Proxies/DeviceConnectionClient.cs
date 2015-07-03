@@ -1,13 +1,14 @@
-﻿using System;
-using System.ServiceModel;
-using Blob.Contracts.ServiceContracts;
-
-namespace Blob.Proxies
+﻿namespace Blob.Proxies
 {
+    using System;
+    using System.ServiceModel;
+    using Contracts.ServiceContracts;
+
     public class DeviceConnectionClient : BaseDuplexClient<IDeviceConnectionService>, IDeviceConnectionService
     {
         public DeviceConnectionClient(string endpointName, string username, string password, InstanceContext callbackInstance)
-            : base(endpointName, username, password, callbackInstance) { }
+            : base(endpointName, username, password, callbackInstance)
+        { }
 
         public void Connect(Guid deviceId)
         {

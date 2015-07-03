@@ -11,7 +11,6 @@ using BMonitor.Monitors;
 using BMonitor.Service.Connection;
 using BMonitor.Service.Extensions;
 using BMonitor.Service.Helpers;
-using BMonitor.Service.Monitor;
 using BMonitor.Service.Monitor.Quartz;
 using log4net;
 using Ninject;

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ServiceModel;
-using Blob.Contracts.ServiceContracts;
-using log4net;
-
-namespace Blob.Core.Command
+﻿namespace Blob.Core.Command
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ServiceModel;
+    using Contracts.ServiceContracts;
+    using log4net;
+
     public class CommandConnectionManager : ICommandConnectionManager
     {
         private readonly ILog _log;
@@ -29,7 +29,7 @@ namespace Blob.Core.Command
                 }
             }
         }
-        
+
         /// <summary>
         /// Adds a callback to the CommandManager
         /// </summary>

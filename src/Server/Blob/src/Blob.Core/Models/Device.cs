@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Blob.Core.Models
+﻿namespace Blob.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Device
     {
-        public Device()
-        {
-            StatusRecords = new List<StatusRecord>();
-            PerformanceRecords = new List<PerformanceRecord>();
-        }
-
         public Guid Id { get; set; }
         public string DeviceName { get; set; }
         public DateTime LastActivityDateUtc { get; set; }
@@ -24,7 +18,7 @@ namespace Blob.Core.Models
         public Guid CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public virtual ICollection<StatusRecord> StatusRecords { get; set; }
-        public virtual ICollection<PerformanceRecord> PerformanceRecords { get; set; }
+        public virtual ICollection<StatusRecord> StatusRecords { get; set; } = new List<StatusRecord>();
+        public virtual ICollection<PerformanceRecord> PerformanceRecords { get; set; } = new List<PerformanceRecord>();
     }
 }

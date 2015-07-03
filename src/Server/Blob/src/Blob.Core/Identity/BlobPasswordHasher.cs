@@ -1,8 +1,8 @@
-﻿using log4net;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity
+﻿namespace Blob.Core.Identity
 {
+    using log4net;
+    using Microsoft.AspNet.Identity;
+
     public class BlobPasswordHasher : IPasswordHasher
     {
         private readonly ILog _log;

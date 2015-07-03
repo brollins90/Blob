@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
-using Blob.Core.Identity;
-using log4net;
-
-namespace Blob.Services.Before
+﻿namespace Blob.Services.Before
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Claims;
+    using System.ServiceModel;
+    using System.Threading.Tasks;
+    using Contracts.Models;
+    using Contracts.ServiceContracts;
+    using Core.Identity;
+    using log4net;
+
     [ServiceBehavior]
     [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     public class BeforeUserManagerService : IUserManagerService

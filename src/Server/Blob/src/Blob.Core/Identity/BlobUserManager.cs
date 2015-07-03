@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Utilities;
-using System.Globalization;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
-using Blob.Core.Authentication;
-using Blob.Core.Extensions;
-using Blob.Core.Identity.Store;
-using Blob.Core.Models;
-using log4net;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity
+﻿namespace Blob.Core.Identity
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity.Utilities;
+    using System.Globalization;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Authentication;
+    using Contracts.Models;
+    using Contracts.ServiceContracts;
+    using Core.Models;
+    using Extensions;
+    using log4net;
+    using Microsoft.AspNet.Identity;
+    using Store;
+
     public class BlobUserManager : IUserManagerService<Guid>
     {
         private readonly ILog _log;
@@ -31,13 +31,13 @@ namespace Blob.Core.Identity
             Store = store;
             UserValidator = new BlobUserValidator(this);
             PasswordValidator = new PasswordValidator
-                                {
-                                    RequireDigit = false,
-                                    RequiredLength = 0,
-                                    RequireLowercase = false,
-                                    RequireNonLetterOrDigit = false,
-                                    RequireUppercase = false
-                                };
+            {
+                RequireDigit = false,
+                RequiredLength = 0,
+                RequireLowercase = false,
+                RequireNonLetterOrDigit = false,
+                RequireUppercase = false
+            };
             PasswordHasher = new BlobPasswordHasher();
             ClaimsIdentityFactory = new BlobClaimsIdentityFactory();
         }
@@ -725,7 +725,7 @@ namespace Blob.Core.Identity
         #endregion
 
         #region IUserLoginStoreService
-        
+
         ///// <summary>
         /////     Associate a login with a user
         ///// </summary>
@@ -812,7 +812,7 @@ namespace Blob.Core.Identity
         //    //await UpdateSecurityStampInternal(user).WithCurrentCulture();
         //    await UpdateAsync2(user).WithCurrentCulture();
         //}
-        
+
         //protected IUserLoginStore<User, Guid> GetLoginStore()
         //{
         //    _log.Debug(string.Format("GetLoginStore()"));
@@ -1074,7 +1074,7 @@ namespace Blob.Core.Identity
         #endregion
 
         #region IUserSecurityStampStoreService
-        
+
         ///// <summary>
         /////     Returns the current security stamp for a user
         ///// </summary>
@@ -1260,7 +1260,7 @@ namespace Blob.Core.Identity
             }
             return userDto.ToUser();
         }
-        
+
         public async Task<User> FindDomainUserByIdAsync(Guid userId)
         {
             _log.Debug(string.Format("FindDomainUserByIdAsync({0})", userId));
@@ -1363,7 +1363,7 @@ namespace Blob.Core.Identity
             User user = await FindByNameAsync2(userName);
             return await CheckPasswordAsync(user, password).WithCurrentCulture();
         }
-        
+
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
             _log.Debug(string.Format("CheckPasswordAsync({0}, {1})", user, password));
@@ -1475,7 +1475,7 @@ namespace Blob.Core.Identity
             var result = await PasswordValidator.ValidateAsync(newPassword).WithCurrentCulture();
             if (!result.Succeeded)
             {
-                return new IdentityResultDto {Succeeded = false, Errors = result.Errors};
+                return new IdentityResultDto { Succeeded = false, Errors = result.Errors };
             }
             await
                 SetPasswordHashAsync(Guid.Parse(user.Id), PasswordHasher.HashPassword(newPassword));
@@ -1647,7 +1647,7 @@ namespace Blob.Core.Identity
         public async Task<ClaimsIdentity> CreateIdentityAsync(UserDto userDto, string authenticationType)
         {
             _log.Debug(string.Format("CreateIdentityAsync({0}, {1})", userDto, authenticationType));
-            ThrowIfDisposed(); 
+            ThrowIfDisposed();
             User user = await FindDomainUserByIdAsync(userDto.Id.ToGuid());
             if (user == null)
             {
@@ -1693,7 +1693,7 @@ namespace Blob.Core.Identity
             {
                 return result;
             }
-            return new IdentityResultDto {Succeeded = true};
+            return new IdentityResultDto { Succeeded = true };
         }
 
         public async Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
@@ -1708,13 +1708,13 @@ namespace Blob.Core.Identity
             }
             //if (await VerifyPasswordAsync(passwordStore, user, currentPassword).WithCurrentCulture())
             //{
-                var result = await UpdatePassword(user, newPassword).WithCurrentCulture();
-                if (!result.Succeeded)
-                {
-                    return result;
-                }
-                await UpdateAsync(user).WithCurrentCulture();
-                return new IdentityResultDto { Succeeded = true };
+            var result = await UpdatePassword(user, newPassword).WithCurrentCulture();
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            await UpdateAsync(user).WithCurrentCulture();
+            return new IdentityResultDto { Succeeded = true };
             //}
             //return IdentityResult.Failed(Resources.PasswordMismatch);
         }
@@ -2586,5 +2586,4 @@ namespace Blob.Core.Identity
         //    throw new NotImplementedException();
         //}
     }
-
 }

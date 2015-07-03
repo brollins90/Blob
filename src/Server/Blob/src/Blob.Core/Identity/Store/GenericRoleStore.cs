@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Core.Identity.Models;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity.Store
+﻿namespace Blob.Core.Identity.Store
 {
+    using System;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNet.Identity;
+    using Models;
+
     public class GenericRoleStore<TRole, TKey, TUserRole> : IQueryableRoleStore<TRole, TKey>
         where TUserRole : GenericUserRole<TKey>, new()
         where TRole : GenericRole<TKey, TUserRole>, new()

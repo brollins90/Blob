@@ -1,7 +1,7 @@
-using System;
-using Blob.Core.Identity.Store;
-
 namespace Blob.Core.Models
 {
+    using System;
+    using Identity.Store;
+
     public class BlobUserRole : GenericUserRole<Guid> { }
 }

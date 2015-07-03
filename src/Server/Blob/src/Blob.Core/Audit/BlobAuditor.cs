@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Blob.Contracts.ServiceContracts;
-using Blob.Core.Models;
-using log4net;
-
-namespace Blob.Core.Audit
+﻿namespace Blob.Core.Audit
 {
+    using System;
+    using System.Threading.Tasks;
+    using Contracts.ServiceContracts;
+    using log4net;
+    using Models;
+
     public class BlobAuditor : IBlobAuditor
     {
         private readonly ILog _log;
@@ -23,16 +23,16 @@ namespace Blob.Core.Audit
         {
             _log.Debug("Adding audit entry");
             AuditRecord ae = new AuditRecord
-                            {
-                                AuditLevel = (int)level,
-                                Initiator = initiator,
-                                Operation = operation,
-                                Resource = resourceId,
-                                ResourceType = resource,
-                                RecordTimeUtc = DateTime.UtcNow
-                            };
-                Context.AuditLog.Add(ae);
-                await Context.SaveChangesAsync();
+            {
+                AuditLevel = (int)level,
+                Initiator = initiator,
+                Operation = operation,
+                Resource = resourceId,
+                ResourceType = resource,
+                RecordTimeUtc = DateTime.UtcNow
+            };
+            Context.AuditLog.Add(ae);
+            await Context.SaveChangesAsync();
         }
     }
 }

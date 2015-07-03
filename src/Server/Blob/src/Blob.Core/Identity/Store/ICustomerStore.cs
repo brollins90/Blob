@@ -1,9 +1,9 @@
-﻿//using System;
-//using System.Threading.Tasks;
-//using Blob.Core.Models;
-
-//namespace Blob.Core.Identity.Store
+﻿//namespace Blob.Core.Identity.Store
 //{
+//    using System;
+//    using System.Threading.Tasks;
+//    using Core.Models;
+
 //    public interface ICustomerStore : IDisposable
 //    {
 //        Task CreateCustomerAsync(Customer customer);

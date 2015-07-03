@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System.Threading.Tasks;
+
     public enum AuditLevel
     {
         Create,

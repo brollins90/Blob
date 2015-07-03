@@ -3,15 +3,15 @@
  * see LICENSE
  */
 
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Xml;
-
 namespace Blob.Core.Tokens
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IdentityModel.Tokens;
+    using System.Security.Claims;
+    using System.Xml;
+
     /// <summary>
     /// Generic security token handler for username/password type credentials
     /// </summary>

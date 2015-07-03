@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Blob.Core.Models
+﻿namespace Blob.Core.Models
 {
+    using System;
+
     public class PerformanceRecord
     {
         public long Id { get; set; }

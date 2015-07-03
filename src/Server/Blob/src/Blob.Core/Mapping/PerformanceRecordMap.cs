@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Blob.Core.Models;
-using Blob.Data.Mapping;
-
-namespace Blob.Core.Mapping
+﻿namespace Blob.Core.Mapping
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Data.Mapping;
+    using Models;
+
     public class PerformanceRecordMap : BlobEntityTypeConfiguration<PerformanceRecord>
     {
         public PerformanceRecordMap()

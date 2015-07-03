@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.ServiceModel.Channels;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
-using Blob.Core.Extensions;
-using Blob.Core.Models;
-using EntityFramework.Extensions;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ViewModel;
+    using Extensions;
+    using Models;
+    using EntityFramework.Extensions;
+    using log4net;
+
     public class BlobDeviceManager : IDeviceService
     {
         private readonly ILog _log;
@@ -35,7 +35,7 @@ namespace Blob.Core.Services
         public DbSet<DeviceType> DeviceTypes { get { return _context.Set<DeviceType>(); } }
 
 
-        public async Task<BlobResult> DisableDeviceAsync(DisableDeviceDto dto)
+        public async Task<BlobResult> DisableDeviceAsync(DisableDeviceRequest dto)
         {
             _log.Debug(string.Format("DisableDeviceAsync({0})", dto.DeviceId));
             Device device = await _context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
@@ -46,7 +46,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> EnableDeviceAsync(EnableDeviceDto dto)
+        public async Task<BlobResult> EnableDeviceAsync(EnableDeviceRequest dto)
         {
             _log.Debug(string.Format("EnableDeviceAsync({0})", dto.DeviceId));
             Device device = await _context.Devices.FindAsync(dto.DeviceId).ConfigureAwait(false);
@@ -108,7 +108,7 @@ namespace Blob.Core.Services
             };
         }
 
-        public async Task<BlobResult> UpdateDeviceAsync(UpdateDeviceDto dto)
+        public async Task<BlobResult> UpdateDeviceAsync(UpdateDeviceRequest dto)
         {
             _log.Debug(string.Format("UpdateDeviceAsync({0})", dto.DeviceId));
             Device device = Devices.Find(dto.DeviceId);
@@ -122,12 +122,12 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
+        public async Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceDisableVmAsync({0})", deviceId));
             return await (from device in Devices
                           where device.Id == deviceId
-                          select new DeviceDisableVm
+                          select new DeviceDisableViewModel
                           {
                               DeviceId = device.Id,
                               DeviceName = device.DeviceName,
@@ -135,12 +135,12 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId)
+        public async Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceEnableVmAsync({0})", deviceId));
             return await (from device in Devices
                           where device.Id == deviceId
-                          select new DeviceEnableVm
+                          select new DeviceEnableViewModel
                           {
                               DeviceId = device.Id,
                               DeviceName = device.DeviceName,
@@ -148,51 +148,51 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
+        public async Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceSingleVmAsync({0})", deviceId));
-            var d = await(from device in Devices.Include("DeviceType")
-                          where device.Id == deviceId
-                          select new DeviceSingleVm
-                          {
-                              CreateDate = device.CreateDateUtc,
-                              DeviceId = device.Id,
-                              DeviceName = device.DeviceName,
-                              DeviceType = device.DeviceType.Name,
-                              Enabled = device.Enabled,
-                              LastActivityDate = device.LastActivityDateUtc,
-                              //Status = device.AlertLevel,
-                          }).SingleAsync();
+            var d = await (from device in Devices.Include("DeviceType")
+                           where device.Id == deviceId
+                           select new DeviceSingleViewModel
+                           {
+                               CreateDate = device.CreateDateUtc,
+                               DeviceId = device.Id,
+                               DeviceName = device.DeviceName,
+                               DeviceType = device.DeviceType.Name,
+                               Enabled = device.Enabled,
+                               LastActivityDate = device.LastActivityDateUtc,
+                               //Status = device.AlertLevel,
+                           }).SingleAsync();
             d.Status = CalculateDeviceAlertLevel(d.DeviceId);
 
             return d;
         }
 
-        public async Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId)
+        public async Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceUpdateVmAsync({0})", deviceId));
-            return await(from device in Devices.Include("DeviceTypes")
-                         where device.Id == deviceId
-                         select new DeviceUpdateVm
-                         {
-                             AvailableTypes = (from type in DeviceTypes
-                                               select new DeviceTypeSingleVm
-                                               {
-                                                   DeviceTypeId = type.Id,
-                                                   Value = type.Name
-                                               }),
-                             DeviceId = device.Id,
-                             DeviceTypeId = device.DeviceTypeId,
-                             DeviceName = device.DeviceName
-                         }).SingleAsync().ConfigureAwait(false);
+            return await (from device in Devices.Include("DeviceTypes")
+                          where device.Id == deviceId
+                          select new DeviceUpdateViewModel
+                          {
+                              AvailableTypes = (from type in DeviceTypes
+                                                select new DeviceTypeSingleViewModel
+                                                {
+                                                    DeviceTypeId = type.Id,
+                                                    Value = type.Name
+                                                }),
+                              DeviceId = device.Id,
+                              DeviceTypeId = device.DeviceTypeId,
+                              DeviceName = device.DeviceName
+                          }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetDevicePageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds();
 
-            IEnumerable<DeviceCommandVm> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
+            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             var count = Devices.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
@@ -204,15 +204,15 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            var items = await Task.FromResult(new DevicePageVm
+            var items = await Task.FromResult(new DevicePageViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new DeviceListItemVm
+                Items = devices.Select(x => new DeviceListItem
                 {
-                    AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
+                    AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandViewModel>(),
                     DeviceId = x.Id,
                     DeviceName = x.DeviceName,
                     DeviceType = x.DeviceType.Name,
@@ -241,7 +241,7 @@ namespace Blob.Core.Services
             //Device device = await Devices.FindAsync(dto.DeviceId);
 
             //if (device.Id == dto.DeviceId)
-                return await Task.FromResult(BlobResult.Success);
+            return await Task.FromResult(BlobResult.Success);
             //else return new BlobResultDto("Not Authenticated");
         }
     }

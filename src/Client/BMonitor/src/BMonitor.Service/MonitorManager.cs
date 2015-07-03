@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using Blob.Contracts.Models;
+using Blob.Contracts.Response;
 using Blob.Proxies;
 using BMonitor.Common.Interfaces;
 using BMonitor.Configuration;
@@ -80,7 +80,7 @@ namespace BMonitor.Service
                     var p = new Ninject.Parameters.ConstructorArgument("password", _deviceInfo.Password);
                     Guid devId = _registrator.RegisterDevice(_kernel.Get<DeviceStatusClient>(u, p));
                     _log.Debug(devId);
-                    SaveRegistration(new RegisterDeviceResponseDto {DeviceId = devId});
+                    SaveRegistration(new RegisterDeviceResponse {DeviceId = devId});
 
                     Start();
                 }
@@ -103,7 +103,7 @@ namespace BMonitor.Service
             }
         }
 
-        private void SaveRegistration(RegisterDeviceResponseDto response)
+        private void SaveRegistration(RegisterDeviceResponse response)
         {
             System.Configuration.Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             BMonitorConfigurationSection config = configFile.GetSection("BMonitor") as BMonitorConfigurationSection;

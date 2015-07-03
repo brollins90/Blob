@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Blob.Core.Identity.Models
+﻿namespace Blob.Core.Identity.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class GenericGroup : GenericGroup<string, GenericUserGroup, GenericGroupRole>
     {
         public GenericGroup()

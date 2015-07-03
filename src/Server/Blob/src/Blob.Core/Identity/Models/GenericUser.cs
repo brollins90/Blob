@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Blob.Core.Identity.Store;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity.Models
+﻿namespace Blob.Core.Identity.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.AspNet.Identity;
+    using Store;
+
     public class GenericUser : GenericUser<string, GenericUserLogin, GenericUserRole, GenericUserClaim>, IUser
     {
         public GenericUser()

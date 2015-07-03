@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ServiceModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Blob.Contracts.Commands;
-using log4net;
-
-namespace Blob.Core.Command
+﻿namespace Blob.Core.Command
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.ServiceModel;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Contracts.Commands;
+    using log4net;
+
     public class CommandQueueManager : ICommandQueueManager
     {
         private readonly ILog _log;
@@ -44,7 +44,7 @@ namespace Blob.Core.Command
                 }
             }
         }
-        
+
         private ICommandConnectionManager ConnectionManager
         {
             get { return CommandConnectionManager.Instance; }

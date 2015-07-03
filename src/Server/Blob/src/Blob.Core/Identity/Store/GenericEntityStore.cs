@@ -1,9 +1,9 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Blob.Core.Identity.Store
+﻿namespace Blob.Core.Identity.Store
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     internal class GenericEntityStore<TEntity> where TEntity : class
     {
         public GenericEntityStore(DbContext context)

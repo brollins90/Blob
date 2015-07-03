@@ -2,7 +2,8 @@
 {
     using System.ServiceModel;
     using System.Threading.Tasks;
-    using Models;
+    using Request;
+    using Response;
 
     [ServiceContract]
     public interface IDeviceStatusService

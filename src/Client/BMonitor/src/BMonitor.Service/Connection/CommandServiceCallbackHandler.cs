@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Blob.Contracts.Commands;
 using Blob.Contracts.ServiceContracts;
 using log4net;
 using Ninject;
@@ -58,7 +59,7 @@ namespace BMonitor.Service.Connection
                 using (IActivationBlock activation = _kernel.BeginBlock())
                 {
                     Type commandType = command.GetType();
-                    Type commandHandlerType = typeof(Blob.Contracts.Commands.IDeviceCommandHandler<>).MakeGenericType(commandType);
+                    Type commandHandlerType = typeof(IDeviceCommandHandler<>).MakeGenericType(commandType);
 
                     // Load the correct handler for the resolved command
                     dynamic commandHandler = _kernel.Get(commandHandlerType);

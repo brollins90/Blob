@@ -1,5 +1,4 @@
-﻿
-namespace Blob.Core.Identity.Models
+﻿namespace Blob.Core.Identity.Models
 {
     public class GenericGroupRole : GenericGroupRole<string> { }
 

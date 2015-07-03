@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Common;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Infrastructure.Annotations;
-using System.Data.Entity.Validation;
-using System.Globalization;
-using System.Linq;
-using Blob.Core.Identity.Models;
-using Blob.Core.Identity.Store;
-
-namespace Blob.Core.Identity
+﻿namespace Blob.Core.Identity
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Common;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Infrastructure.Annotations;
+    using System.Data.Entity.Validation;
+    using System.Globalization;
+    using System.Linq;
+    using Models;
+    using Store;
+
     public class GenericDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> : DbContext
         where TUser : GenericUser<TKey, TUserLogin, TUserRole, TUserClaim>
         where TRole : GenericRole<TKey, TUserRole>
@@ -21,19 +21,24 @@ namespace Blob.Core.Identity
         where TUserClaim : GenericUserClaim<TKey>
     {
         public GenericDbContext(string connectionString)
-            : base(connectionString) { }
+            : base(connectionString)
+        { }
 
         public GenericDbContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
-            : base(existingConnection, model, contextOwnsConnection) { }
+            : base(existingConnection, model, contextOwnsConnection)
+        { }
 
         public GenericDbContext(DbCompiledModel model)
-            : base(model) { }
+            : base(model)
+        { }
 
         public GenericDbContext(DbConnection existingConnection, bool contextOwnsConnection)
-            : base(existingConnection, contextOwnsConnection) { }
+            : base(existingConnection, contextOwnsConnection)
+        { }
 
         public GenericDbContext(string connectionString, DbCompiledModel model)
-            : base(connectionString, model) { }
+            : base(connectionString, model)
+        { }
 
         public virtual IDbSet<TUser> Users { get; set; }
         public virtual IDbSet<TRole> Roles { get; set; }

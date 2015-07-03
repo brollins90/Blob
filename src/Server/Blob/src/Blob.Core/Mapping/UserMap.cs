@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Infrastructure.Annotations;
-using Blob.Core.Models;
-using Blob.Data.Mapping;
-
-namespace Blob.Core.Mapping
+﻿namespace Blob.Core.Mapping
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Infrastructure.Annotations;
+    using Data.Mapping;
+    using Models;
+
     public class UserMap : BlobEntityTypeConfiguration<User>
     {
         public UserMap()

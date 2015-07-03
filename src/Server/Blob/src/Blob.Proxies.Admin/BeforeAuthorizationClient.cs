@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
-
-namespace Blob.Proxies
+﻿namespace Blob.Proxies
 {
+    using System;
+    using System.Threading.Tasks;
+    using Contracts.Models;
+    using Contracts.ServiceContracts;
+
     public class BeforeAuthorizationClient : BaseClient<IAuthorizationManagerService>, IAuthorizationManagerService
     {
         public BeforeAuthorizationClient(string endpointName, string username, string password) : base(endpointName, username, password) { }

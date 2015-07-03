@@ -1,20 +1,22 @@
-﻿using System;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
-
-namespace Blob.Proxies
+﻿namespace Blob.Proxies
 {
+    using System;
+    using System.Threading.Tasks;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ServiceContracts;
+
     public class DeviceStatusClient : BaseClient<IDeviceStatusService>, IDeviceStatusService
     {
         public DeviceStatusClient(string endpointName, string username, string password)
-            : base(endpointName, username, password) { }
+            : base(endpointName, username, password)
+        { }
 
-        public async Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto)
+        public async Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest request)
         {
             try
             {
-                return await Channel.RegisterDeviceAsync(dto).ConfigureAwait(false);
+                return await Channel.RegisterDeviceAsync(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -23,11 +25,11 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task AddStatusRecordAsync(AddStatusRecordRequest dto)
+        public async Task AddStatusRecordAsync(AddStatusRecordRequest request)
         {
             try
             {
-                await Channel.AddStatusRecordAsync(dto).ConfigureAwait(false);
+                await Channel.AddStatusRecordAsync(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -35,11 +37,11 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task AddPerformanceRecordAsync(AddPerformanceRecordRequest dto)
+        public async Task AddPerformanceRecordAsync(AddPerformanceRecordRequest request)
         {
             try
             {
-                await Channel.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
+                await Channel.AddPerformanceRecordAsync(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -47,11 +49,11 @@ namespace Blob.Proxies
             }
         }
 
-        public async Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest dto)
+        public async Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest request)
         {
             try
             {
-                return await Channel.AuthenticateDeviceAsync(dto).ConfigureAwait(false);
+                return await Channel.AuthenticateDeviceAsync(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

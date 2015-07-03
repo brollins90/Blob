@@ -1,17 +1,15 @@
-﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Security;
+﻿// https://devzone.channeladam.com/articles/2014/09/how-to-easily-call-wcf-service-properly/
 
 namespace Blob.Proxies
 {
-
-    // https://devzone.channeladam.com/articles/2014/09/how-to-easily-call-wcf-service-properly/
+    using System;
+    using System.ServiceModel;
 
     public class BaseDuplexClient<TChannel> : DuplexClientBase<TChannel>
         where TChannel : class
     {
         public Action<Exception> ClientErrorHandler = null;
-        
+
         public BaseDuplexClient(string endpointName, string username, string password, InstanceContext callbackInstance)
             : base(callbackInstance, endpointName)
         {

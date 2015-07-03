@@ -1,12 +1,7 @@
-﻿//
-// This code was written by Keith Brown, and may be freely used.
-// Want to learn more about .NET? Visit pluralsight.com today!
-// http://blog.pluralsight.com/selfcert-create-a-self-signed-certificate-interactively-gui-or-programmatically-in-net
-//
-using System;
-
-namespace Blob.Crypto.Crypto
+﻿namespace Blob.Crypto.Crypto
 {
+    using System;
+
     public abstract class CryptKey : DisposeableObject
     {
         readonly CryptContext _ctx;

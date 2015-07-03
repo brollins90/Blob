@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.ServiceContracts;
-using Blob.Core.Services;
-using log4net;
-
-namespace Blob.Core.Blob
+﻿namespace Blob.Core.Blob
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Contracts.ViewModel;
+    using Contracts.ServiceContracts;
+    using Services;
+    using log4net;
+
     public class BlobQueryManager : IBlobQueryManager
     {
         private readonly ILog _log;
@@ -46,17 +44,17 @@ namespace Blob.Core.Blob
         }
 
         // Dash
-        public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             return await _blobDashboardManager.GetDashCurrentConnectionsLargeVmAsync(searchId, pageNum, pageSize);
         }
 
-        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             return await _blobDashboardManager.GetDashDevicesLargeVmAsync(searchId, pageNum, pageSize);
         }
 
-        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
+        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId)
         {
             return await _userManager2.GetUserUpdatePasswordVmAsync(userId);
         }
@@ -65,12 +63,12 @@ namespace Blob.Core.Blob
 
 
         #region DeviceCommand
-        public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
+        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList()
         {
             return _deviceCommandManager.GetDeviceCommandVmList();
         }
 
-        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        public DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType)
         {
             return _deviceCommandManager.GetDeviceCommandIssueVm(deviceId, commandType);
         }
@@ -78,64 +76,64 @@ namespace Blob.Core.Blob
 
 
         // Performance
-        public async Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId)
+        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId)
         {
             return await _performanceRecordManager.GetPerformanceRecordDeleteVmAsync(recordId).ConfigureAwait(false);
         }
 
-        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
         {
             return await _performanceRecordManager.GetPerformanceRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
         }
 
-        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10)
         {
             return await _performanceRecordManager.GetPerformanceRecordPageVmForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
         }
 
-        public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
+        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             return await _performanceRecordManager.GetPerformanceRecordSingleVmAsync(recordId).ConfigureAwait(false);
         }
 
         // Status
-        public async Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId)
+        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId)
         {
             return await _statusRecordManager.GetStatusRecordDeleteVmAsync(recordId).ConfigureAwait(false);
         }
 
-        public async Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
+        public async Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
         {
             return await _statusRecordManager.GetStatusRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
         }
 
-        public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
+        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId)
         {
             return await _statusRecordManager.GetStatusRecordSingleVmAsync(recordId).ConfigureAwait(false);
         }
-        public async Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId)
+        public async Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId)
         {
             return await _statusRecordManager.GetMonitorListVmAsync(deviceId).ConfigureAwait(false);
         }
 
 
         // User
-        public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)
+        public async Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId)
         {
             return await _userManager2.GetUserDisableVmAsync(userId);
         }
 
-        public async Task<UserEnableVm> GetUserEnableVmAsync(Guid userId)
+        public async Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId)
         {
             return await _userManager2.GetUserEnableVmAsync(userId);
         }
 
-        public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             return await _userManager2.GetUserPageVmAsync(customerId, pageNum, pageSize);
         }
 
-        public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
+        public async Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId)
         {
             return await _userManager2.GetUserSingleVmAsync(userId);
         }
@@ -144,30 +142,30 @@ namespace Blob.Core.Blob
         {
             return await _userManager2.GetUserUpdateVmAsync(userId);
         }
-        
+
         #region Device
 
-        public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
+        public async Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId)
         {
             return await _deviceManager.GetDeviceDisableVmAsync(deviceId).ConfigureAwait(false);
         }
 
-        public async Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId)
+        public async Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId)
         {
             return await _deviceManager.GetDeviceEnableVmAsync(deviceId).ConfigureAwait(false);
         }
 
-        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             return await _deviceManager.GetDevicePageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
-        
-        public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
+
+        public async Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId)
         {
             return await _deviceManager.GetDeviceSingleVmAsync(deviceId).ConfigureAwait(false);
         }
-        
-        public async Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId)
+
+        public async Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId)
         {
             return await _deviceManager.GetDeviceUpdateVmAsync(deviceId).ConfigureAwait(false);
         }
@@ -175,22 +173,22 @@ namespace Blob.Core.Blob
         #endregion
 
         #region Customer
-        public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
+        public async Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId)
         {
             return await _customerManager.GetCustomerDisableVmAsync(customerId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId)
+        public async Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId)
         {
             return await _customerManager.GetCustomerEnableVmAsync(customerId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
+        public async Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId)
         {
             return await _customerManager.GetCustomerSingleVmAsync(customerId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
+        public async Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId)
         {
             return await _customerManager.GetCustomerUpdateVmAsync(customerId).ConfigureAwait(false);
         }
@@ -198,22 +196,22 @@ namespace Blob.Core.Blob
 
         #region Customer Group
 
-        public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
+        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId)
         {
             return await _customerGroupManager.GetCustomerGroupCreateVmAsync(customerId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
+        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId)
         {
-            return await _customerGroupManager.GetCustomerGroupDeleteVmAsync(groupId).ConfigureAwait(false); 
+            return await _customerGroupManager.GetCustomerGroupDeleteVmAsync(groupId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
+        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId)
         {
             return await _customerGroupManager.GetCustomerGroupSingleVmAsync(groupId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId)
+        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId)
         {
             return await _customerGroupManager.GetCustomerGroupUpdateVmAsync(groupId).ConfigureAwait(false);
         }
@@ -223,7 +221,7 @@ namespace Blob.Core.Blob
             return await _customerGroupManager.GetCustomerRolesAsync(customerId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             return await _customerGroupManager.GetCustomerGroupPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
@@ -238,7 +236,7 @@ namespace Blob.Core.Blob
             return await _customerGroupManager.GetCustomerGroupUsersAsync(groupId).ConfigureAwait(false);
         }
 
-        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             return await _customerManager.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
         }

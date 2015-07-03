@@ -1,17 +1,17 @@
-﻿using System;
-using System.Data.Entity.Infrastructure.Interception;
-using System.IdentityModel.Configuration;
-using System.IdentityModel.Tokens;
-using System.ServiceModel;
-using System.ServiceModel.Description;
-using Blob.Core;
-using Blob.Core.Tokens;
-using log4net;
-using Ninject;
-using Ninject.Extensions.Wcf;
-
-namespace Blob.WcfHost.Infrastructure
+﻿namespace Blob.WcfHost.Infrastructure
 {
+    using System;
+    using System.Data.Entity.Infrastructure.Interception;
+    using System.IdentityModel.Configuration;
+    using System.IdentityModel.Tokens;
+    using System.ServiceModel;
+    using System.ServiceModel.Description;
+    using Core;
+    using Core.Tokens;
+    using log4net;
+    using Ninject;
+    using Ninject.Extensions.Wcf;
+
     public class BlobHostFactory : NinjectServiceHostFactory
     {
         private readonly ILog _log;

@@ -1,73 +1,74 @@
-﻿using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System.ServiceModel;
+    using System.Threading.Tasks;
+    using Request;
+    using Response;
+
     [ServiceContract]
     public interface IBlobCommandManager
     {
         // Customer
         [OperationContract]
-        Task<BlobResult> DisableCustomerAsync(DisableCustomerDto dto);
+        Task<BlobResult> DisableCustomerAsync(DisableCustomerRequest dto);
         [OperationContract]
-        Task<BlobResult> EnableCustomerAsync(EnableCustomerDto dto);
+        Task<BlobResult> EnableCustomerAsync(EnableCustomerRequest dto);
         [OperationContract]
-        Task<BlobResult> RegisterCustomerAsync(RegisterCustomerDto dto);
+        Task<BlobResult> RegisterCustomerAsync(RegisterCustomerRequest dto);
         [OperationContract]
-        Task<BlobResult> UpdateCustomerAsync(UpdateCustomerDto dto);
+        Task<BlobResult> UpdateCustomerAsync(UpdateCustomerRequest dto);
 
         // Customer Group
         [OperationContract]
-        Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupDto dto);
+        Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupRequest dto);
         [OperationContract]
-        Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto);
+        Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupRequest dto);
         [OperationContract]
-        Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto);
+        Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupRequest dto);
         [OperationContract]
-        Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto);
+        Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupRequest dto);
         [OperationContract]
-        Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto);
+        Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupRequest dto);
         [OperationContract]
-        Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto);
+        Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupRequest dto);
         [OperationContract]
-        Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto);
+        Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupRequest dto);
 
         // Commands
         [OperationContract]
-        Task<BlobResult> IssueCommandAsync(IssueDeviceCommandDto dto);
+        Task<BlobResult> IssueCommandAsync(IssueDeviceCommandRequest dto);
 
         // Device
         [OperationContract]
-        Task<BlobResult> DisableDeviceAsync(DisableDeviceDto dto);
+        Task<BlobResult> DisableDeviceAsync(DisableDeviceRequest dto);
         [OperationContract]
-        Task<BlobResult> EnableDeviceAsync(EnableDeviceDto dto);
+        Task<BlobResult> EnableDeviceAsync(EnableDeviceRequest dto);
         [OperationContract]
         Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto);
         [OperationContract]
-        Task<BlobResult> UpdateDeviceAsync(UpdateDeviceDto dto);
+        Task<BlobResult> UpdateDeviceAsync(UpdateDeviceRequest dto);
 
         // PerformanceRecord
         [OperationContract]
         Task<BlobResult> AddPerformanceRecordAsync(AddPerformanceRecordRequest statusPerformanceData);
         [OperationContract]
-        Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
+        Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordRequest dto);
 
         // StatusRecord
         [OperationContract]
         Task<BlobResult> AddStatusRecordAsync(AddStatusRecordRequest statusData);
         [OperationContract]
-        Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
+        Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordRequest dto);
 
         // User
         [OperationContract]
-        Task<BlobResult> CreateUserAsync(CreateUserDto dto);
+        Task<BlobResult> CreateUserAsync(CreateUserRequest dto);
         [OperationContract]
-        Task<BlobResult> DisableUserAsync(DisableUserDto dto);
+        Task<BlobResult> DisableUserAsync(DisableUserRequest dto);
         [OperationContract]
-        Task<BlobResult> EnableUserAsync(EnableUserDto dto);
+        Task<BlobResult> EnableUserAsync(EnableUserRequest dto);
         [OperationContract]
-        Task<BlobResult> UpdateUserAsync(UpdateUserDto dto);
+        Task<BlobResult> UpdateUserAsync(UpdateUserRequest dto);
 
         //Task<BlobResultDto> UpdateUserActivityTimeAsync(Guid userId);
     }

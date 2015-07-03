@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using log4net;
-
-namespace Blob.Core.Notification
+﻿namespace Blob.Core.Notification
 {
+    using System.Collections.Generic;
+    using log4net;
+
     public interface INotificationManager
     {
         void AddNotificationToBatch(INotification notification);
@@ -28,21 +28,6 @@ namespace Blob.Core.Notification
             _log.Debug("Constructing NotificationManager");
             _notificationsToSend = new Dictionary<string, IList<INotification>>();
         }
-        //public NotificationManager(BlobDbContext context, ILog log, IBlobQueryManager queryManager)
-        //{
-        //    _log = log;
-        //    _log.Debug("Constructing NotificationManager");
-        //    Context = context;
-        //    _queryManager = queryManager;
-        //    _notificationsToSend = new Dictionary<string, IList<INotification>>();
-        //}
-        //protected BlobDbContext Context { get; private set; }
-
-        //protected IBlobQueryManager QueryManager
-        //{
-        //    get { return _queryManager; }
-        //}
-        //private IBlobQueryManager _queryManager;
 
         public void AddNotificationToBatch(INotification notification)
         {
@@ -56,7 +41,7 @@ namespace Blob.Core.Notification
                 else
                 {
                     _log.Debug("adding");
-                    _notificationsToSend.Add(notification.GetRecipient(), new List<INotification> {notification});
+                    _notificationsToSend.Add(notification.GetRecipient(), new List<INotification> { notification });
                 }
             }
         }

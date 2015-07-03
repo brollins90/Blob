@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Infrastructure.Annotations;
-using Blob.Core.Models;
-using Blob.Data.Mapping;
-
-namespace Blob.Core.Mapping
+﻿namespace Blob.Core.Mapping
 {
+    using Data.Mapping;
+    using Models;
+
     public class UserProfileMap : BlobEntityTypeConfiguration<UserProfile>
     {
         public UserProfileMap()
@@ -12,7 +10,7 @@ namespace Blob.Core.Mapping
             ToTable("UsersProfiles");
 
             HasKey(x => x.UserId);
-            
+
             Property(x => x.UserId).HasColumnType("uniqueidentifier").IsRequired();
             HasRequired(x => x.User).WithOptional();
 

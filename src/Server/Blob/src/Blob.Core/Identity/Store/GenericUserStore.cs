@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Blob.Core.Identity.Models;
-using Blob.Core.Models;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity.Store
+﻿namespace Blob.Core.Identity.Store
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Globalization;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Core.Models;
+    using Microsoft.AspNet.Identity;
+    using Models;
+
     public class GenericUserStore<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IUserLoginStore<TUser, TKey>,
         IUserClaimStore<TUser, TKey>,
@@ -84,7 +84,7 @@ namespace Blob.Core.Identity.Store
             if (claim == null)
                 throw new ArgumentNullException("claim");
 
-            _userClaims.Add(new TUserClaim {UserId = user.Id, ClaimType = claim.Type, ClaimValue = claim.Value});
+            _userClaims.Add(new TUserClaim { UserId = user.Id, ClaimType = claim.Type, ClaimValue = claim.Value });
             return Task.FromResult(0);
         }
 
@@ -196,7 +196,7 @@ namespace Blob.Core.Identity.Store
             user.LastActivityDate = DateTime.Now; // change this to 0
             user.LockoutEnabled = false; //todo:
             user.LockoutEndDateUtc = DateTime.Now;
-            
+
             User user1 = user as User;
             //if (user1 != null) 
             //    user1.CustomerId = Guid.Parse("79720728-171c-48a4-a866-5f905c8fdb9f");
@@ -251,11 +251,11 @@ namespace Blob.Core.Identity.Store
                 throw new ArgumentNullException("login");
             }
             _logins.Add(new TUserLogin
-                        {
-                            UserId = user.Id,
-                            ProviderKey = login.ProviderKey,
-                            LoginProvider = login.LoginProvider
-                        });
+            {
+                UserId = user.Id,
+                ProviderKey = login.ProviderKey,
+                LoginProvider = login.LoginProvider
+            });
             return Task.FromResult(0);
         }
 
@@ -338,7 +338,7 @@ namespace Blob.Core.Identity.Store
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, "IdentityResource.RoleNotFound", roleName));
             }
 
-            var ur = new TUserRole {UserId = user.Id, RoleId = roleEntity.Id};
+            var ur = new TUserRole { UserId = user.Id, RoleId = roleEntity.Id };
             _userRoles.Add(ur);
         }
 
@@ -535,7 +535,7 @@ namespace Blob.Core.Identity.Store
             {
                 throw new ArgumentNullException("user");
             }
-            user.LockoutEndDateUtc = lockoutEnd == DateTimeOffset.MinValue ? (DateTime?) null : lockoutEnd.UtcDateTime;
+            user.LockoutEndDateUtc = lockoutEnd == DateTimeOffset.MinValue ? (DateTime?)null : lockoutEnd.UtcDateTime;
             return Task.FromResult(0);
         }
 
@@ -679,9 +679,9 @@ namespace Blob.Core.Identity.Store
             // expression pattern we need to match
             private static readonly Expression<Func<TUser, bool>> Predicate = u => u.Id.Equals(default(TKey));
             // method we need to match: Object.Equals() 
-            private static readonly MethodInfo EqualsMethodInfo = ((MethodCallExpression) Predicate.Body).Method;
+            private static readonly MethodInfo EqualsMethodInfo = ((MethodCallExpression)Predicate.Body).Method;
             // property access we need to match: User.Id 
-            private static readonly MemberInfo UserIdMemberInfo = ((MemberExpression) ((MethodCallExpression) Predicate.Body).Object).Member;
+            private static readonly MemberInfo UserIdMemberInfo = ((MemberExpression)((MethodCallExpression)Predicate.Body).Object).Member;
 
             internal static bool TryMatchAndGetId(Expression<Func<TUser, bool>> filter, out TKey id)
             {
@@ -695,7 +695,7 @@ namespace Blob.Core.Identity.Store
                 }
 
                 // actually a call to object.Equals(object)
-                var callExpression = (MethodCallExpression) filter.Body;
+                var callExpression = (MethodCallExpression)filter.Body;
                 if (callExpression.Method != EqualsMethodInfo)
                 {
                     return false;
@@ -703,7 +703,7 @@ namespace Blob.Core.Identity.Store
                 // left side of Equals() should be an access to User.Id
                 if (callExpression.Object == null
                     || callExpression.Object.NodeType != ExpressionType.MemberAccess
-                    || ((MemberExpression) callExpression.Object).Member != UserIdMemberInfo)
+                    || ((MemberExpression)callExpression.Object).Member != UserIdMemberInfo)
                 {
                     return false;
                 }
@@ -719,17 +719,17 @@ namespace Blob.Core.Identity.Store
                 {
                     // convert node should have an member access access node
                     // This is for cases when primary key is a value type
-                    var convert = (UnaryExpression) callExpression.Arguments[0];
+                    var convert = (UnaryExpression)callExpression.Arguments[0];
                     if (convert.Operand.NodeType != ExpressionType.MemberAccess)
                     {
                         return false;
                     }
-                    fieldAccess = (MemberExpression) convert.Operand;
+                    fieldAccess = (MemberExpression)convert.Operand;
                 }
                 else if (callExpression.Arguments[0].NodeType == ExpressionType.MemberAccess)
                 {
                     // Get field member for when key is reference type
-                    fieldAccess = (MemberExpression) callExpression.Arguments[0];
+                    fieldAccess = (MemberExpression)callExpression.Arguments[0];
                 }
                 else
                 {
@@ -744,10 +744,10 @@ namespace Blob.Core.Identity.Store
                 }
 
                 // expression tree matched so we can now just get the value of the id 
-                var fieldInfo = (FieldInfo) fieldAccess.Member;
-                var closure = ((ConstantExpression) fieldAccess.Expression).Value;
+                var fieldInfo = (FieldInfo)fieldAccess.Member;
+                var closure = ((ConstantExpression)fieldAccess.Expression).Value;
 
-                id = (TKey) fieldInfo.GetValue(closure);
+                id = (TKey)fieldInfo.GetValue(closure);
                 return true;
             }
         }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Blob.Core.Models
+﻿namespace Blob.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class CustomerGroup
     {
-        public CustomerGroup()
-        {
-            Roles = new List<CustomerGroupRole>();
-            Users = new List<CustomerGroupUser>();
-        }
-
         public Guid Id { get; set; }
 
         public Guid CustomerId { get; set; }
@@ -19,7 +13,7 @@ namespace Blob.Core.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<CustomerGroupRole> Roles { get; set; }
-        public virtual ICollection<CustomerGroupUser> Users { get; set; }
+        public virtual ICollection<CustomerGroupRole> Roles { get; set; } = new List<CustomerGroupRole>();
+        public virtual ICollection<CustomerGroupUser> Users { get; set; } = new List<CustomerGroupUser>();
     }
 }

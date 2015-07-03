@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Blob.Contracts.Commands;
-using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.ServiceContracts;
-using Blob.Contracts.Services;
-using Blob.Core.Command;
-using Blob.Core.Models;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.Commands;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ViewModel;
+    using Contracts.ServiceContracts;
+    using Command;
+    using log4net;
+
     public class BlobDeviceCommandManager : IDeviceCommandService
     {
         private readonly ILog _log;
@@ -33,16 +32,16 @@ namespace Blob.Core.Services
         }
 
 
-        public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
+        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList()
         {
             _log.Debug(string.Format("GetDeviceCommandVmList()"));
             IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes();
-            return commandTypes.Select(t => new DeviceCommandVm
+            return commandTypes.Select(t => new DeviceCommandViewModel
             {
                 CommandType = t.FullName,
                 ShortName = t.Name,
                 CommandParamters = t.GetProperties()//BindingFlags.Public & BindingFlags.Instance)
-                .Select(p => new DeviceCommandParameterPairVm
+                .Select(p => new DeviceCommandParameterPair
                 {
                     Key = p.Name,
                     Value = ""
@@ -50,13 +49,13 @@ namespace Blob.Core.Services
             });
         }
 
-        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        public DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType)
         {
             _log.Debug(string.Format("GetDeviceCommandIssueVm({0}, {1})", deviceId, commandType));
             var commandTypes = GetDeviceCommandVmList();
             var command = commandTypes.Single(type => type.CommandType.Equals(commandType));
 
-            DeviceCommandIssueVm result = new DeviceCommandIssueVm
+            DeviceCommandIssueViewModel result = new DeviceCommandIssueViewModel
             {
                 DeviceId = deviceId,
                 CommandType = command.CommandType,
@@ -72,7 +71,7 @@ namespace Blob.Core.Services
             return _connectionManager.GetActiveDeviceIds();
         }
 
-        public async Task<BlobResult> IssueCommandAsync(IssueDeviceCommandDto dto)
+        public async Task<BlobResult> IssueCommandAsync(IssueDeviceCommandRequest dto)
         {
             _log.Debug(string.Format("IssueCommandAsync({0})", dto.DeviceId));
             string assemblyName = KnownCommandsMap.GetCommandHandlerInterfaceAssembly().FullName;

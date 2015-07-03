@@ -1,13 +1,13 @@
-﻿using System;
-using System.IdentityModel.Selectors;
-using System.ServiceModel;
-using Blob.Core.Identity;
-using Blob.Core.Identity.Store;
-using Blob.Core.Models;
-using log4net;
-
-namespace Blob.Core.Authentication
+﻿namespace Blob.Core.Authentication
 {
+    using System;
+    using System.IdentityModel.Selectors;
+    using System.ServiceModel;
+    using Identity;
+    using Identity.Store;
+    using log4net;
+    using Models;
+
     public class BlobUserNamePasswordValidator : UserNamePasswordValidator
     {
         private readonly ILog _log;
@@ -33,7 +33,7 @@ namespace Blob.Core.Authentication
                 {
                     // assume this is a device and not a user
                     Device device = context.Devices.Find(g);
-                    if (device != null && device.Enabled) 
+                    if (device != null && device.Enabled)
                         return;
 
                     msg = String.Format("Username {0} is a guid, but not a valid device or the device is not enabled", userName);

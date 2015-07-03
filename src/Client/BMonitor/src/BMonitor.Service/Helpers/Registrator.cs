@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blob.Contracts.Models;
+using Blob.Contracts.Request;
+using Blob.Contracts.Response;
 using Blob.Contracts.ServiceContracts;
 using log4net;
 
@@ -27,7 +28,7 @@ namespace BMonitor.Service
             Guid deviceGuid = Guid.NewGuid();
             _log.Info(string.Format("Registering this agent with the BlobService with id:{0}.", deviceGuid));
 
-            RegisterDeviceDto regMessage = new RegisterDeviceDto
+            RegisterDeviceRequest regMessage = new RegisterDeviceRequest
             {
                 DeviceId = deviceGuid.ToString(),
                 DeviceKey1 = "FutureUse",
@@ -40,7 +41,7 @@ namespace BMonitor.Service
             };
             _log.Debug(string.Format("RegistrationMessage request: {0}", regMessage));
             
-            RegisterDeviceResponseDto regInfo = Task.Run(() => statusClient.RegisterDeviceAsync(regMessage)).Result;
+            RegisterDeviceResponse regInfo = Task.Run(() => statusClient.RegisterDeviceAsync(regMessage)).Result;
 
             //WcfServiceInvoker invoker = new WcfServiceInvoker();
             //RegisterDeviceResponseDto regInfo = invoker.InvokeService<IDeviceStatusService, RegisterDeviceResponseDto>(

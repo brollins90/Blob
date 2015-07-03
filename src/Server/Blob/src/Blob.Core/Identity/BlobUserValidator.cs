@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Utilities;
-using System.Globalization;
-using System.Net.Mail;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Blob.Core.Models;
-using log4net;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity
+﻿namespace Blob.Core.Identity
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity.Utilities;
+    using System.Globalization;
+    using System.Net.Mail;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using Core.Models;
+    using log4net;
+    using Microsoft.AspNet.Identity;
+
     public class BlobUserValidator : IIdentityValidator<User>
     {
         private readonly ILog _log;
@@ -45,8 +45,8 @@ namespace Blob.Core.Identity
             {
                 await ValidateEmailAsync(item, errors).WithCurrentCulture();
             }
-            return errors.Count > 0 
-                ? IdentityResult.Failed(errors.ToArray()) 
+            return errors.Count > 0
+                ? IdentityResult.Failed(errors.ToArray())
                 : IdentityResult.Success;
         }
 

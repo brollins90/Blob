@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
-using EntityFramework.Extensions;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.ViewModel;
+    using EntityFramework.Extensions;
+    using log4net;
+
     public class BlobDashboardManager : IDashboardService
     {
         private readonly ILog _log;
@@ -27,11 +27,11 @@ namespace Blob.Core.Services
             _deviceCommandManager = deviceCommandManager;
             _statusRecordManager = statusRecordManager;
         }
-    
-        public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+
+        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
-            IEnumerable<DeviceCommandVm> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
+            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             //var cust = _context.Customers.Where(x => x.Id.Equals(customerId));
@@ -43,13 +43,13 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new DashCurrentConnectionsLargeVm
+            return await Task.FromResult(new DashCurrentConnectionsLargeViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new DashCurrentConnectionsListItemVm
+                Items = devices.Select(x => new DashCurrentConnectionsListItem
                 {
                     AvailableCommands = availableCommands,
                     CustomerId = x.CustomerId,
@@ -61,10 +61,10 @@ namespace Blob.Core.Services
             }).ConfigureAwait(false);
         }
 
-        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
-            IEnumerable<DeviceCommandVm> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
+            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             //var cust = _context.Customers.Where(x => x.Id.Equals(customerId));
@@ -77,23 +77,23 @@ namespace Blob.Core.Services
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
 
-            List<DashDevicesLargeListItemVm> dItems = new List<DashDevicesLargeListItemVm>();
+            List<DashDevicesListItem> dItems = new List<DashDevicesListItem>();
             foreach (var x in devices)
             {
                 var deviceRecent = await _statusRecordManager.GetDeviceRecentStatusAsync(x.Id);
 
-                var li = new DashDevicesLargeListItemVm
-                         {
-                             AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandVm>(),
-                             DeviceId = x.Id,
-                             DeviceName = x.DeviceName,
-                             Reason = ChangeStatusRecordsToReasonString(deviceRecent),
-                             Recomendations = new string[] { "not yet" },
-                             Status = ChangeStatusRecordsToStatusInt(deviceRecent)
-                         };
+                var li = new DashDevicesListItem
+                {
+                    AvailableCommands = (activeDeviceConnections.Contains(x.Id)) ? availableCommands : new List<DeviceCommandViewModel>(),
+                    DeviceId = x.Id,
+                    DeviceName = x.DeviceName,
+                    Reason = ChangeStatusRecordsToReasonString(deviceRecent),
+                    Recomendations = new string[] { "not yet" },
+                    Status = ChangeStatusRecordsToStatusInt(deviceRecent)
+                };
                 dItems.Add(li);
             }
-            return await Task.FromResult(new DashDevicesLargeVm
+            return await Task.FromResult(new DashDevicesLargeViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
@@ -103,12 +103,12 @@ namespace Blob.Core.Services
             });
         }
 
-        private string ChangeStatusRecordsToReasonString(IList<StatusRecordListItemVm> records)
+        private string ChangeStatusRecordsToReasonString(IList<StatusRecordListItem> records)
         {
-            return records.Where(s => s.Status != 0).Aggregate<StatusRecordListItemVm, string>(null, (accum, r) => accum + (accum == null ? accum : ", ") + r.CurrentValue);
+            return records.Where(s => s.Status != 0).Aggregate<StatusRecordListItem, string>(null, (accum, r) => accum + (accum == null ? accum : ", ") + r.CurrentValue);
         }
 
-        private int ChangeStatusRecordsToStatusInt(IList<StatusRecordListItemVm> records)
+        private int ChangeStatusRecordsToStatusInt(IList<StatusRecordListItem> records)
         {
             return records.Select(statusRecord => statusRecord.Status).Concat(new[] { 0 }).Max();
         }

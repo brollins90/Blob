@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Blob.Contracts.Models;
+using Blob.Contracts.Request;
 using BMonitor.Common.Models;
 
 namespace BMonitor.Service.Extensions
 {
     public static class ResultExtensions
     {
-        public static AddStatusRecordDto ToAddStatusRecordDto(this ResultData result, Guid deviceId)
+        public static AddStatusRecordRequest ToAddStatusRecordDto(this ResultData result, Guid deviceId)
         {
 
-            AddStatusRecordDto statusDto = new AddStatusRecordDto()
+            AddStatusRecordRequest statusDto = new AddStatusRecordRequest()
             {
                 AlertLevel = (int)result.AlertLevel,
                 CurrentValue = result.Value,
@@ -25,7 +25,7 @@ namespace BMonitor.Service.Extensions
 
             if (result.Perf.Any())
             {
-                AddPerformanceRecordDto perfDto = new AddPerformanceRecordDto
+                AddPerformanceRecordRequest perfDto = new AddPerformanceRecordRequest
                 {
                     DeviceId = deviceId,
                     MonitorDescription = result.MonitorDescription,
@@ -37,7 +37,7 @@ namespace BMonitor.Service.Extensions
 
                 foreach (PerformanceData perf in result.Perf)
                 {
-                    perfDto.Data.Add(new PerformanceRecordValue
+                    perfDto.Data.Add(new PerformanceRecordItem
                     {
                         Critical = perf.Critical,
                         Label = perf.Label,

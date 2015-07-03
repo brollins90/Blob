@@ -1,9 +1,9 @@
-﻿using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System.ServiceModel;
+    using System.Threading.Tasks;
+    using Models;
+
     [ServiceContract]
     public interface IAuthorizationManagerService
     {

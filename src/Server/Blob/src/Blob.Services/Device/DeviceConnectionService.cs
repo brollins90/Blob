@@ -1,13 +1,13 @@
-﻿using System;
-using System.IdentityModel.Services;
-using System.Security.Permissions;
-using System.ServiceModel;
-using Blob.Contracts.ServiceContracts;
-using Blob.Core.Command;
-using log4net;
-
-namespace Blob.Services.Device
+﻿namespace Blob.Services.Device
 {
+    using System;
+    using System.IdentityModel.Services;
+    using System.Security.Permissions;
+    using System.ServiceModel;
+    using Contracts.ServiceContracts;
+    using Core.Command;
+    using log4net;
+
     [ServiceBehavior]
     [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     //[ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "service", Operation = "create")]

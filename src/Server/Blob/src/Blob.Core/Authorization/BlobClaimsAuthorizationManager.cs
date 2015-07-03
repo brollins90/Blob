@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Security.Claims;
-using System.Xml;
-using log4net;
-
-namespace Blob.Core.Authorization
+﻿namespace Blob.Core.Authorization
 {
+    using System.Security.Claims;
+    using System.Xml;
+    using log4net;
+
     public class BlobClaimsAuthorizationManager : ClaimsAuthorizationManager
     {
         private readonly ILog _log;

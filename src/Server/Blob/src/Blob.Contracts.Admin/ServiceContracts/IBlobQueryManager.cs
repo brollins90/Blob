@@ -1,98 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models.ViewModels;
-
-namespace Blob.Contracts.ServiceContracts
+﻿namespace Blob.Contracts.ServiceContracts
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ServiceModel;
+    using System.Threading.Tasks;
+    using ViewModel;
+
     [ServiceContract]
     public interface IBlobQueryManager
     {
         // Customer
         [OperationContract]
-        Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId);
+        Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId);
         [OperationContract]
-        Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId);
+        Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId);
         [OperationContract]
-        Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+        Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
         [OperationContract]
-        Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId);
+        Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId);
         [OperationContract]
-        Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId);
+        Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId);
         [OperationContract]
         Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId);
         [OperationContract]
-        Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
 
         // Customer Group
         [OperationContract]
-        Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId);
+        Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId);
         [OperationContract]
-        Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId);
+        Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId);
         [OperationContract]
-        Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId);
+        Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId);
         [OperationContract]
-        Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId);
+        Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId);
         [OperationContract]
         Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId);
         [OperationContract]
         Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId);
 
         [OperationContract]
-        Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+        Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
         [OperationContract]
-        Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
-        
-        
-        [OperationContract]
-        IEnumerable<DeviceCommandVm> GetDeviceCommandVmList();
-        [OperationContract]
-        DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType);
+        Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+
 
         [OperationContract]
-        Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId);
+        IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList();
         [OperationContract]
-        Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId);
-        [OperationContract]
-        Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
-        [OperationContract]
-        Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId);
-        [OperationContract]
-        Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId);
+        DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType);
 
         [OperationContract]
-        Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId);
+        Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId);
         [OperationContract]
-        Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
+        Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId);
+        [OperationContract]
+        Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
+        Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId);
+        [OperationContract]
+        Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId);
 
         [OperationContract]
-        Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10);
+        Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId);
         [OperationContract]
-        Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId);
+        Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
 
         [OperationContract]
-        Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId);
+        Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10);
         [OperationContract]
-        Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
-        [OperationContract]
-        Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId);
+        Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId);
 
         [OperationContract]
-        Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId);
+        Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId);
+        [OperationContract]
+        Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
+        Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId);
 
         [OperationContract]
-        Task<UserDisableVm> GetUserDisableVmAsync(Guid userId);
+        Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId);
+
         [OperationContract]
-        Task<UserEnableVm> GetUserEnableVmAsync(Guid userId);
+        Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId);
         [OperationContract]
-        Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId);
         [OperationContract]
-        Task<UserSingleVm> GetUserSingleVmAsync(Guid userId);
+        Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        [OperationContract]
+        Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId);
         [OperationContract]
         Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId);
         [OperationContract]
-        Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId);
-        
+        Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId);
     }
 }

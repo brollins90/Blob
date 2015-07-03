@@ -1,16 +1,16 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using Blob.Contracts;
-using Blob.Core.Identity;
-using Blob.Core.Identity.Store;
-using Blob.Core.Models;
-using log4net;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Authentication
+﻿namespace Blob.Core.Authentication
 {
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Security.Claims;
+    using Contracts;
+    using Identity;
+    using Identity.Store;
+    using log4net;
+    using Microsoft.AspNet.Identity;
+    using Models;
+
     class ClaimTransformer : ClaimsAuthenticationManager
     {
         private readonly ILog _log;

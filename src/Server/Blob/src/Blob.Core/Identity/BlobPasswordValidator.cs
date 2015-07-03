@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using log4net;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Identity
+﻿namespace Blob.Core.Identity
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using log4net;
+    using Microsoft.AspNet.Identity;
+
     public class BlobPasswordValidator : IIdentityValidator<string>
     {
         private readonly ILog _log;
@@ -21,13 +21,13 @@ namespace Blob.Core.Identity
         public int RequiredLength { get; set; }
 
         public bool RequireNonLetterOrDigit { get; set; }
-        
+
         public bool RequireLowercase { get; set; }
 
         public bool RequireUppercase { get; set; }
 
         public bool RequireDigit { get; set; }
-        
+
         public virtual Task<IdentityResult> ValidateAsync(string item)
         {
             _log.Debug("ValidateAsync");

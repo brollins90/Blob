@@ -1,13 +1,13 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Data.Entity;
-//using System.Globalization;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Blob.Core.Models;
-
-//namespace Blob.Core.Identity.Store
+﻿//namespace Blob.Core.Identity.Store
 //{
+//    using System;
+//    using System.Collections.Generic;
+//    using System.Data.Entity;
+//    using System.Globalization;
+//    using System.Linq;
+//    using System.Threading.Tasks;
+//    using Core.Models;
+
 //    public class BlobCustomerStore : ICustomerStore, ICustomerGroupStore, ICustomerGroupRoleStore, ICustomerGroupUserStore
 //    {
 //        private bool _disposed;

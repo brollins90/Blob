@@ -1,22 +1,24 @@
-﻿using System;
-using System.Data.Entity;
-using Blob.Core.Identity;
-using Blob.Core.Mapping;
-using Blob.Core.Migrations;
-using Blob.Core.Models;
-using log4net;
-
-namespace Blob.Core
+﻿namespace Blob.Core
 {
+    using System;
+    using System.Data.Entity;
+    using Identity;
+    using Mapping;
+    using Migrations;
+    using Models;
+    using log4net;
+
     public class BlobDbContext : GenericDbContext<User, Role, Guid, BlobUserLogin, BlobUserRole, BlobUserClaim>
     {
         private readonly ILog _log;
 
         public BlobDbContext()
-            : this("BlobDbContext") { }
+            : this("BlobDbContext")
+        { }
 
         public BlobDbContext(string connectionString)
-            : this(connectionString, LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)) { }
+            : this(connectionString, LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType))
+        { }
 
         public BlobDbContext(string connectionString, ILog log)
             : base(connectionString)

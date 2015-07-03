@@ -1,8 +1,8 @@
-﻿using Blob.Core.Models;
-using Blob.Data.Mapping;
-
-namespace Blob.Core.Mapping
+﻿namespace Blob.Core.Mapping
 {
+    using Data.Mapping;
+    using Models;
+
     public class CustomerGroupUserMap : BlobEntityTypeConfiguration<CustomerGroupUser>
     {
         public CustomerGroupUserMap()

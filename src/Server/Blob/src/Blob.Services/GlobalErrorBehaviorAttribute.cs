@@ -1,12 +1,12 @@
-﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
-using System.ServiceModel.Dispatcher;
+﻿// http://www.codeproject.com/Articles/801898/WCF-Global-Exception-Handling-using-IErrorHandler
 
 namespace Blob.Services
 {
-    // http://www.codeproject.com/Articles/801898/WCF-Global-Exception-Handling-using-IErrorHandler
+    using System;
+    using System.ServiceModel;
+    using System.ServiceModel.Channels;
+    using System.ServiceModel.Description;
+    using System.ServiceModel.Dispatcher;
 
     public class GlobalErrorBehaviorAttribute : Attribute, IServiceBehavior
     {

@@ -1,28 +1,28 @@
-﻿using System;
-using System.Data.Common;
-using System.Data.Entity.Infrastructure.Interception;
-using System.Diagnostics;
-using log4net;
-
-namespace Blob.Core
+﻿namespace Blob.Core
 {
+    using System;
+    using System.Data.Common;
+    using System.Data.Entity.Infrastructure.Interception;
+    using System.Diagnostics;
+    using log4net;
+
     public class BlobInterceptorLogging : DbCommandInterceptor
     {
         private readonly ILog _log = LogManager.GetLogger("dblog");
         private readonly Stopwatch _stopwatch = new Stopwatch();
 
         private delegate void ExecutingMethod<T>(DbCommand command, DbCommandInterceptionContext<T> interceptionContext);
- 
+
         public override void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
         {
             CommandExecuting(base.NonQueryExecuting, command, interceptionContext);
         }
- 
+
         public override void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
         {
             CommandExecuting(base.ReaderExecuting, command, interceptionContext);
         }
- 
+
         public override void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
         {
             CommandExecuting(base.ScalarExecuting, command, interceptionContext);

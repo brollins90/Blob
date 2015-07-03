@@ -1,14 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security.Claims;
-using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.ServiceContracts;
-using Blob.Core.Authorization;
-
-namespace Blob.Services.Before
+﻿namespace Blob.Services.Before
 {
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.ServiceModel;
+    using System.Threading.Tasks;
+    using Contracts.Models;
+    using Contracts.ServiceContracts;
+    using Core.Authorization;
+
     [ServiceBehavior]
     [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     public class BeforeAuthorizationService : IAuthorizationManagerService

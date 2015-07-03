@@ -1,5 +1,4 @@
-﻿
-namespace Blob.Contracts
+﻿namespace Blob.Contracts
 {
     public static class SecurityConstants
     {

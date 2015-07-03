@@ -1,11 +1,11 @@
-﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Dispatcher;
-using log4net;
-
-namespace Blob.Services
+﻿namespace Blob.Services
 {
+    using System;
+    using System.ServiceModel;
+    using System.ServiceModel.Channels;
+    using System.ServiceModel.Dispatcher;
+    using log4net;
+
     public class GlobalErrorHandler : IErrorHandler
     {
         private readonly ILog _log;

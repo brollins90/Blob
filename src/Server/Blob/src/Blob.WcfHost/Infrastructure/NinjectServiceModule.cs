@@ -1,23 +1,23 @@
-﻿using System;
-using System.Configuration;
-using System.Data.Entity;
-using Blob.Contracts.ServiceContracts;
-using Blob.Contracts.Services;
-using Blob.Core;
-using Blob.Core.Audit;
-using Blob.Core.Blob;
-using Blob.Core.Identity;
-using Blob.Core.Identity.Store;
-using Blob.Core.Models;
-using Blob.Core.Services;
-using Blob.Services.Before;
-using log4net;
-using Microsoft.AspNet.Identity;
-using Ninject.Modules;
-using Ninject.Web.Common;
-
-namespace Blob.WcfHost.Infrastructure
+﻿namespace Blob.WcfHost.Infrastructure
 {
+    using System;
+    using System.Configuration;
+    using System.Data.Entity;
+    using Common.Services;
+    using Contracts.ServiceContracts;
+    using Core;
+    using Core.Audit;
+    using Core.Blob;
+    using Core.Identity;
+    using Core.Identity.Store;
+    using Core.Models;
+    using Core.Services;
+    using log4net;
+    using Microsoft.AspNet.Identity;
+    using Ninject.Modules;
+    using Ninject.Web.Common;
+    using Services.Before;
+
     /// <summary>
     /// Ninject Container
     /// </summary>
@@ -38,7 +38,7 @@ namespace Blob.WcfHost.Infrastructure
             _log.Info("Registering Ninject dependencies");
 
             String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
-            
+
             Bind<BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 

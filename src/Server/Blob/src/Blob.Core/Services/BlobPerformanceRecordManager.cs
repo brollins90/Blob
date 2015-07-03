@@ -1,17 +1,18 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
-using Blob.Core.Extensions;
-using Blob.Core.Models;
-using EntityFramework.Extensions;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ViewModel;
+    using Extensions;
+    using Models;
+    using EntityFramework.Extensions;
+    using log4net;
+
     public class BlobPerformanceRecordManager : IPerformanceRecordService
     {
         private readonly ILog _log;
@@ -41,12 +42,12 @@ namespace Blob.Core.Services
 
 
 
-        public async Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId)
+        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId)
         {
             _log.Debug(string.Format("GetPerformanceRecordDeleteVmAsync({0})", recordId));
             return await (from perf in PerformanceRecords.Include("Devices")
                           where perf.Id == recordId
-                          select new PerformanceRecordDeleteVm
+                          select new PerformanceRecordDeleteViewModel
                           {
                               DeviceName = perf.Device.DeviceName,
                               MonitorName = perf.MonitorName,
@@ -55,7 +56,7 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetPerformanceRecordPageVmAsync({0})", deviceId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
@@ -68,13 +69,13 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new PerformanceRecordPageVm
+            return await Task.FromResult(new PerformanceRecordPageViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new PerformanceRecordListItemVm
+                Items = devices.Select(x => new PerformanceRecordListItem
                 {
                     Critical = x.Critical.Value.ToString(),
                     Label = x.Label,
@@ -91,7 +92,7 @@ namespace Blob.Core.Services
             }).ConfigureAwait(false);
         }
 
-        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetPerformanceRecordPageVmForStatusAsync({0})", recordId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
@@ -104,13 +105,13 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new PerformanceRecordPageVm
+            return await Task.FromResult(new PerformanceRecordPageViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = data.Select(x => new PerformanceRecordListItemVm
+                Items = data.Select(x => new PerformanceRecordListItem
                 {
                     Critical = x.Critical.Value.ToString(),
                     Label = x.Label,
@@ -127,12 +128,12 @@ namespace Blob.Core.Services
             }).ConfigureAwait(false);
         }
 
-        public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
+        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             _log.Debug(string.Format("GetPerformanceRecordSingleVmAsync({0})", recordId));
             return await (from perf in PerformanceRecords
                           where perf.Id == recordId
-                          select new PerformanceRecordSingleVm
+                          select new PerformanceRecordSingleViewModel
                           {
                               Critical = perf.Max.ToString(),
                               Label = perf.Label,
@@ -183,7 +184,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto)
+        public async Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordRequest dto)
         {
             _log.Debug(string.Format("DeletePerformanceRecordAsync({0})", dto.RecordId));
             PerformanceRecord perf = PerformanceRecords.Find(dto.RecordId);

@@ -1,16 +1,17 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
-using Blob.Core.Models;
-using EntityFramework.Extensions;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ViewModel;
+    using Models;
+    using EntityFramework.Extensions;
+    using log4net;
+
     public class BlobCustomerManager : ICustomerService
     {
         private readonly ILog _log;
@@ -18,7 +19,7 @@ namespace Blob.Core.Services
         private readonly BlobCustomerGroupManager _customerGroupManager;
         private readonly BlobUserManager2 _userManager2;
 
-        public BlobCustomerManager(ILog log, BlobDbContext context, BlobCustomerGroupManager customerGroupManager,  BlobUserManager2 userManager2)
+        public BlobCustomerManager(ILog log, BlobDbContext context, BlobCustomerGroupManager customerGroupManager, BlobUserManager2 userManager2)
         {
             _log = log;
             _log.Debug("Constructing BlobCustomerManager");
@@ -27,7 +28,7 @@ namespace Blob.Core.Services
             _userManager2 = userManager2;
         }
 
-        public async Task<BlobResult> DisableCustomerAsync(DisableCustomerDto dto)
+        public async Task<BlobResult> DisableCustomerAsync(DisableCustomerRequest dto)
         {
             _log.Debug(string.Format("DisableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -40,7 +41,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> EnableCustomerAsync(EnableCustomerDto dto)
+        public async Task<BlobResult> EnableCustomerAsync(EnableCustomerRequest dto)
         {
             _log.Debug(string.Format("EnableCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -51,7 +52,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> RegisterCustomerAsync(RegisterCustomerDto dto)
+        public async Task<BlobResult> RegisterCustomerAsync(RegisterCustomerRequest dto)
         {
             _log.Debug(string.Format("RegisterCustomerAsync({0})", dto.CustomerName));
 
@@ -74,7 +75,7 @@ namespace Blob.Core.Services
             _context.Customers.Add(customer);
             _log.Info(string.Format("Customer {0} created with id {1}", dto.CustomerName, dto.CustomerId));
 
-            
+
             //// create first user
             //User defaultUser = new User
             //{
@@ -87,7 +88,7 @@ namespace Blob.Core.Services
             //    LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
             //};
             //_context.Users.Add(defaultUser);
-            await _userManager2.CreateUserAsync(new CreateUserDto
+            await _userManager2.CreateUserAsync(new CreateUserRequest
             {
                 CustomerId = dto.DefaultUser.CustomerId,
                 Email = dto.DefaultUser.Email,
@@ -99,24 +100,24 @@ namespace Blob.Core.Services
 
             // create admin group
             Guid adminGroupId = Guid.NewGuid();
-            await _customerGroupManager.CreateCustomerGroupAsync(new CreateCustomerGroupDto
-                                                           {
-                                                               CustomerId = customer.Id,
-                                                               Description = "Admins",
-                                                               GroupId = adminGroupId,
-                                                               Name = "Admins"
-                                                           });
+            await _customerGroupManager.CreateCustomerGroupAsync(new CreateCustomerGroupRequest
+            {
+                CustomerId = customer.Id,
+                Description = "Admins",
+                GroupId = adminGroupId,
+                Name = "Admins"
+            });
 
             // add user to admin group
-            await _customerGroupManager.AddUserToCustomerGroupAsync(new AddUserToCustomerGroupDto {GroupId = adminGroupId, UserId = dto.DefaultUser.UserId});
-            
+            await _customerGroupManager.AddUserToCustomerGroupAsync(new AddUserToCustomerGroupRequest { GroupId = adminGroupId, UserId = dto.DefaultUser.UserId });
+
             // save stuff
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> UpdateCustomerAsync(UpdateCustomerDto dto)
+        public async Task<BlobResult> UpdateCustomerAsync(UpdateCustomerRequest dto)
         {
             _log.Debug(string.Format("UpdateCustomerAsync({0})", dto.CustomerId));
             Customer customer = _context.Customers.Find(dto.CustomerId);
@@ -127,12 +128,12 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
+        public async Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerDisableVmAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
-                          select new CustomerDisableVm
+                          select new CustomerDisableViewModel
                           {
                               CustomerId = customer.Id,
                               CustomerName = customer.Name,
@@ -140,12 +141,12 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId)
+        public async Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerEnableVmAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
-                          select new CustomerEnableVm
+                          select new CustomerEnableViewModel
                           {
                               CustomerId = customer.Id,
                               CustomerName = customer.Name,
@@ -153,13 +154,13 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
+        public async Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerSingleVmAsync({0})", customerId));
             return await _context.Customers
                 .Include("Devices").Include("Users")
                                 .Where(x => x.Id == customerId)
-                                .Select(cust => new CustomerSingleVm
+                                .Select(cust => new CustomerSingleViewModel
                                 {
                                     CreateDate = cust.CreateDateUtc,
                                     CustomerId = cust.Id,
@@ -168,12 +169,12 @@ namespace Blob.Core.Services
                                 }).SingleAsync();
         }
 
-        public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
+        public async Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerUpdateVmAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
-                          select new CustomerUpdateVm
+                          select new CustomerUpdateViewModel
                           {
                               CustomerId = customer.Id,
                               CustomerName = customer.Name
@@ -181,7 +182,7 @@ namespace Blob.Core.Services
         }
 
 
-        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum, int pageSize)
+        public async Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetCustomerPageVmAsync({0}, {1}, {2})", searchId, pageNum, pageSize));
 
@@ -195,13 +196,13 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            var items = await Task.FromResult(new CustomerPageVm
+            var items = await Task.FromResult(new CustomerPageViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new CustomerListItemVm
+                Items = devices.Select(x => new CustomerListItem
                 {
                     CreateDate = x.CreateDateUtc,
                     CustomerId = x.Id,

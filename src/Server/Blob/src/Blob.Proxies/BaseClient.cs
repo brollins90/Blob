@@ -1,11 +1,9 @@
-﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Security;
+﻿// https://devzone.channeladam.com/articles/2014/09/how-to-easily-call-wcf-service-properly/
 
 namespace Blob.Proxies
 {
-
-    // https://devzone.channeladam.com/articles/2014/09/how-to-easily-call-wcf-service-properly/
+    using System;
+    using System.ServiceModel;
 
     public class BaseClient<TChannel> : ClientBase<TChannel>
         where TChannel : class

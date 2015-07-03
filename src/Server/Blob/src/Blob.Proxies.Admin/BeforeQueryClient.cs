@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.ServiceContracts;
-
-namespace Blob.Proxies
+﻿namespace Blob.Proxies
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Contracts.ViewModel;
+    using Contracts.ServiceContracts;
+
     public class BeforeQueryClient : BaseClient<IBlobQueryManager>, IBlobQueryManager
     {
         public BeforeQueryClient(string endpointName, string username, string password) : base(endpointName, username, password) { }
 
-        public async Task<DashDevicesLargeVm> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum, int pageSize)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<DashCurrentConnectionsLargeVm> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum, int pageSize)
+        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum, int pageSize)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerDisableVm> GetCustomerDisableVmAsync(Guid customerId)
+        public async Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerEnableVm> GetCustomerEnableVmAsync(Guid customerId)
+        public async Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerSingleVm> GetCustomerSingleVmAsync(Guid customerId)
+        public async Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerUpdateVm> GetCustomerUpdateVmAsync(Guid customerId)
+        public async Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public IEnumerable<DeviceCommandVm> GetDeviceCommandVmList()
+        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList()
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public DeviceCommandIssueVm GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        public DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<DeviceDisableVm> GetDeviceDisableVmAsync(Guid deviceId)
+        public async Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<DeviceEnableVm> GetDeviceEnableVmAsync(Guid deviceId)
+        public async Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<DevicePageVm> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<DeviceSingleVm> GetDeviceSingleVmAsync(Guid deviceId)
+        public async Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<DeviceUpdateVm> GetDeviceUpdateVmAsync(Guid deviceId)
+        public async Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId)
         {
             try
             {
@@ -179,7 +179,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<PerformanceRecordDeleteVm> GetPerformanceRecordDeleteVmAsync(long recordId)
+        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
         {
             try
             {
@@ -205,7 +205,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<PerformanceRecordPageVm> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
         {
             try
             {
@@ -218,7 +218,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<PerformanceRecordSingleVm> GetPerformanceRecordSingleVmAsync(long recordId)
+        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId)
         {
             try
             {
@@ -231,7 +231,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId)
+        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId)
         {
             try
             {
@@ -244,7 +244,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
         {
             try
             {
@@ -257,7 +257,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
+        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId)
         {
             try
             {
@@ -270,7 +270,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)
+        public async Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId)
         {
             try
             {
@@ -283,7 +283,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<UserEnableVm> GetUserEnableVmAsync(Guid userId)
+        public async Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId)
         {
             try
             {
@@ -296,7 +296,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum, int pageSize)
         {
             try
             {
@@ -309,7 +309,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
+        public async Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId)
         {
             try
             {
@@ -335,7 +335,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
+        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId)
         {
             try
             {
@@ -348,7 +348,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerGroupDeleteVm> GetCustomerGroupDeleteVmAsync(Guid groupId)
+        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId)
         {
             try
             {
@@ -361,7 +361,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerGroupSingleVm> GetCustomerGroupSingleVmAsync(Guid groupId)
+        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId)
         {
             try
             {
@@ -374,7 +374,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerGroupUpdateVm> GetCustomerGroupUpdateVmAsync(Guid groupId)
+        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId)
         {
             try
             {
@@ -402,7 +402,7 @@ namespace Blob.Proxies
         }
 
 
-        public async Task<CustomerGroupPageVm> GetCustomerGroupPageVmAsync(Guid groupId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid groupId, int pageNum = 1, int pageSize = 10)
         {
             try
             {
@@ -415,7 +415,7 @@ namespace Blob.Proxies
             return null;
         }
 
-        public async Task<CustomerGroupCreateVm> GetCustomerGroupCreateVmAsync(Guid customerId)
+        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId)
         {
             try
             {
@@ -455,7 +455,7 @@ namespace Blob.Proxies
         }
 
 
-        public async Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId)
+        public async Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId)
         {
             try
             {
@@ -469,7 +469,7 @@ namespace Blob.Proxies
         }
 
 
-        public async Task<CustomerPageVm> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             try
             {

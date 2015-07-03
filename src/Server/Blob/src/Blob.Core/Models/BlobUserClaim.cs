@@ -1,7 +1,7 @@
-﻿using System;
-using Blob.Core.Identity.Models;
-
-namespace Blob.Core.Models
+﻿namespace Blob.Core.Models
 {
+    using System;
+    using Identity.Models;
+
     public class BlobUserClaim : GenericUserClaim<Guid> { }
 }

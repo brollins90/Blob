@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
-using Blob.Core.Models;
-using EntityFramework.Extensions;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ViewModel;
+    using Models;
+    using EntityFramework.Extensions;
+    using log4net;
+
     public class BlobStatusRecordManager : IStatusRecordService
     {
         private readonly ILog _log;
@@ -37,12 +38,12 @@ namespace Blob.Core.Services
 
 
 
-        public async Task<StatusRecordDeleteVm> GetStatusRecordDeleteVmAsync(long recordId)
+        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId)
         {
             _log.Debug(string.Format("GetStatusRecordDeleteVmAsync({0})", recordId));
             return await (from status in StatusRecords.Include("Devices")
                           where status.Id == recordId
-                          select new StatusRecordDeleteVm
+                          select new StatusRecordDeleteViewModel
                           {
                               DeviceName = status.Device.DeviceName,
                               MonitorName = status.MonitorName,
@@ -52,7 +53,7 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<StatusRecordPageVm> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
+        public async Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
         {
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
@@ -64,13 +65,13 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new StatusRecordPageVm
+            return await Task.FromResult(new StatusRecordPageViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new StatusRecordListItemVm
+                Items = devices.Select(x => new StatusRecordListItem
                 {
                     MonitorDescription = x.MonitorDescription,
                     MonitorName = x.MonitorName,
@@ -81,12 +82,12 @@ namespace Blob.Core.Services
             }).ConfigureAwait(false);
         }
 
-        public async Task<StatusRecordSingleVm> GetStatusRecordSingleVmAsync(long recordId)
+        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId)
         {
             _log.Debug(string.Format("GetStatusRecordSingleVmAsync({0})", recordId));
             return await (from status in StatusRecords
                           where status.Id == recordId
-                          select new StatusRecordSingleVm
+                          select new StatusRecordSingleViewModel
                           {
                               MonitorDescription = status.MonitorDescription,
                               MonitorName = status.MonitorName,
@@ -181,7 +182,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordDto dto)
+        public async Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordRequest dto)
         {
             _log.Debug(string.Format("DeleteStatusRecordAsync({0})", dto.RecordId));
             StatusRecord status = StatusRecords.Find(dto.RecordId);
@@ -206,19 +207,19 @@ namespace Blob.Core.Services
                                 where s.DeviceId == deviceId
                                 group s by s.MonitorId
                                     into r
-                                    select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
+                                select new { MonitorId = r.Key, TimeGeneratedUtc = r.Max(x => x.TimeGeneratedUtc) }
                             )
                             on new { s1.MonitorId, s1.TimeGeneratedUtc } equals new { s2.MonitorId, s2.TimeGeneratedUtc }
                         select s1).ToList();
             }
         }
 
-        public async Task<IList<StatusRecordListItemVm>> GetDeviceRecentStatusAsync(Guid deviceId)
+        public async Task<IList<StatusRecordListItem>> GetDeviceRecentStatusAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceRecentStatusAsync({0})", deviceId));
             var s = await Task.FromResult(GetRecentStatus(deviceId));
             return s.Select(s1 =>
-                          new StatusRecordListItemVm
+                          new StatusRecordListItem
                           {
                               CurrentValue = s1.CurrentValue,
                               MonitorDescription = s1.MonitorDescription,
@@ -230,23 +231,23 @@ namespace Blob.Core.Services
                           }).ToList();
         }
 
-        public async Task<MonitorListVm> GetMonitorListVmAsync(Guid deviceId)
+        public async Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetMonitorListVmAsync({0})", deviceId));
-            var items = GetRecentStatus(deviceId).Select(s1 => new MonitorListListItemVm
-                               {
-                                   CurrentValue = s1.CurrentValue,
-                                   MonitorDescription = s1.MonitorDescription,
-                                   MonitorId = s1.MonitorId,
-                                   MonitorLabel = s1.MonitorLabel,
-                                   MonitorName = s1.MonitorName,
-                                   Status = s1.AlertLevel,
-                                   TimeGenerated = s1.TimeGeneratedUtc
-                               });
-            return await Task.FromResult(new MonitorListVm
-                   {
-                       Items = items
-                   });
+            var items = GetRecentStatus(deviceId).Select(s1 => new MonitorListListItem
+            {
+                CurrentValue = s1.CurrentValue,
+                MonitorDescription = s1.MonitorDescription,
+                MonitorId = s1.MonitorId,
+                MonitorLabel = s1.MonitorLabel,
+                MonitorName = s1.MonitorName,
+                Status = s1.AlertLevel,
+                TimeGenerated = s1.TimeGeneratedUtc
+            });
+            return await Task.FromResult(new MonitorListViewModel
+            {
+                Items = items
+            });
         }
 
 

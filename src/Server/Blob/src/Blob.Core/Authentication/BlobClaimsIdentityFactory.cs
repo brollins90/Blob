@@ -1,13 +1,13 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Blob.Contracts;
-using Blob.Core.Identity;
-using Blob.Core.Models;
-using log4net;
-
-namespace Blob.Core.Authentication
+﻿namespace Blob.Core.Authentication
 {
+    using System;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Contracts;
+    using Identity;
+    using log4net;
+    using Models;
+
     public class BlobClaimsIdentityFactory
     {
         private ILog _log;
@@ -41,7 +41,7 @@ namespace Blob.Core.Authentication
 
             //// Allowed customers
             id.AddClaim(new Claim(SecurityConstants.CustomerIdClaimType, user.CustomerId.ToString(), ClaimValueTypes.String));
-            
+
             ////id.AddClaim(new Claim(SecurityConstants.BlobIdClaimType, user.Id.ToString(), ClaimValueTypes.String));
             ////id.AddClaim(new Claim(SecurityConstants.CustomerIdClaimType, user.CustomerId.ToString(), ClaimValueTypes.String));
 

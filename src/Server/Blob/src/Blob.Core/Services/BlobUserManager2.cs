@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
-using Blob.Contracts.Models.ViewModels;
-using Blob.Contracts.Services;
-using Blob.Core.Models;
-using EntityFramework.Extensions;
-using log4net;
-
-namespace Blob.Core.Services
+﻿namespace Blob.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Services;
+    using Contracts.Request;
+    using Contracts.Response;
+    using Contracts.ViewModel;
+    using Models;
+    using EntityFramework.Extensions;
+    using log4net;
+
     public class BlobUserManager2 : IUserService
     {
         private readonly ILog _log;
@@ -28,7 +29,7 @@ namespace Blob.Core.Services
             _notificationScheduleService = notificationScheduleService;
         }
 
-        public async Task<BlobResult> CreateUserAsync(CreateUserDto dto)
+        public async Task<BlobResult> CreateUserAsync(CreateUserRequest dto)
         {
             User newUser = new User
             {
@@ -48,21 +49,21 @@ namespace Blob.Core.Services
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            IEnumerable<NotificationScheduleListItemVm> schedules = await _notificationScheduleService.GetAllNotificationSchedules();
+            IEnumerable<NotificationScheduleListItem> schedules = await _notificationScheduleService.GetAllNotificationSchedules();
 
             UserProfile up = new UserProfile
-                             {
-                                 EmailNotificationScheduleId = schedules.First().ScheduleId,
-                                 SendEmailNotifications = false,
-                                 UserId = newUser.Id
-                             };
+            {
+                EmailNotificationScheduleId = schedules.First().ScheduleId,
+                SendEmailNotifications = false,
+                UserId = newUser.Id
+            };
 
             _context.Set<UserProfile>().Add(up);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> DisableUserAsync(DisableUserDto dto)
+        public async Task<BlobResult> DisableUserAsync(DisableUserRequest dto)
         {
             User user = _context.Users.Find(dto.UserId);
             user.Enabled = false;
@@ -72,7 +73,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> EnableUserAsync(EnableUserDto dto)
+        public async Task<BlobResult> EnableUserAsync(EnableUserRequest dto)
         {
             User user = _context.Users.Find(dto.UserId);
             user.Enabled = true;
@@ -82,7 +83,7 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<BlobResult> UpdateUserAsync(UpdateUserDto dto)
+        public async Task<BlobResult> UpdateUserAsync(UpdateUserRequest dto)
         {
             User user = _context.Users.Find(dto.UserId);
             // todo: can username change?
@@ -99,11 +100,11 @@ namespace Blob.Core.Services
             return BlobResult.Success;
         }
 
-        public async Task<UserDisableVm> GetUserDisableVmAsync(Guid userId)
+        public async Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId)
         {
             return await (from user in _context.Users
                           where user.Id == userId
-                          select new UserDisableVm
+                          select new UserDisableViewModel
                           {
                               Email = user.Email,
                               Enabled = user.Enabled,
@@ -112,11 +113,11 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<UserEnableVm> GetUserEnableVmAsync(Guid userId)
+        public async Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId)
         {
             return await (from user in _context.Users
                           where user.Id == userId
-                          select new UserEnableVm
+                          select new UserEnableViewModel
                           {
                               Email = user.Email,
                               Enabled = user.Enabled,
@@ -125,7 +126,7 @@ namespace Blob.Core.Services
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<UserPageVm> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
@@ -137,13 +138,13 @@ namespace Blob.Core.Services
 
             // define future queries before any of them execute
             var pCount = ((count / pageSize) + (count % pageSize) == 0 ? 0 : 1);
-            return await Task.FromResult(new UserPageVm
+            return await Task.FromResult(new UserPageViewModel
             {
                 TotalCount = count,
                 PageCount = pCount,
                 PageNum = pNum + 1,
                 PageSize = pageSize,
-                Items = devices.Select(x => new UserListItemVm
+                Items = devices.Select(x => new UserListItem
                 {
                     Email = x.Email,
                     Enabled = x.Enabled,
@@ -153,13 +154,13 @@ namespace Blob.Core.Services
             }).ConfigureAwait(false);
         }
 
-        public async Task<UserSingleVm> GetUserSingleVmAsync(Guid userId)
+        public async Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId)
         {
             // NotificationSchedule
             return await (from user in _context.Users.Include("Customers")
                           join p in _context.UserProfiles on user.Id equals p.UserId
                           where user.Id == userId
-                          select new UserSingleVm
+                          select new UserSingleViewModel
                           {
                               CreateDate = user.CreateDateUtc,
                               CustomerName = user.Customer.Name,
@@ -172,7 +173,7 @@ namespace Blob.Core.Services
                               LastActivityDate = user.LastActivityDate,
                               UserId = user.Id,
                               UserName = user.UserName,
-                              NotificationSchedule = new NotificationScheduleListItemVm { Name = p.EmailNotificationSchedule.Name, ScheduleId = p.EmailNotificationSchedule.Id },
+                              NotificationSchedule = new NotificationScheduleListItem { Name = p.EmailNotificationSchedule.Name, ScheduleId = p.EmailNotificationSchedule.Id },
                           }).SingleAsync().ConfigureAwait(false);
         }
 
@@ -192,11 +193,11 @@ namespace Blob.Core.Services
             return u;
         }
 
-        public async Task<UserUpdatePasswordVm> GetUserUpdatePasswordVmAsync(Guid userId)
+        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId)
         {
             return await (from user in _context.Users
                           where user.Id == userId
-                          select new UserUpdatePasswordVm
+                          select new UserUpdatePasswordViewModel
                           {
                               UserId = user.Id
                           }).SingleAsync().ConfigureAwait(false);

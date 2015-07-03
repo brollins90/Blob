@@ -1,13 +1,13 @@
-﻿using System;
-using System.Security.Claims;
-using System.Security.Principal;
-using Blob.Contracts;
-using Blob.Contracts.Models;
-using Blob.Core.Models;
-using Microsoft.AspNet.Identity;
-
-namespace Blob.Core.Extensions
+﻿namespace Blob.Core.Extensions
 {
+    using System;
+    using System.Security.Claims;
+    using System.Security.Principal;
+    using Contracts;
+    using Contracts.Models;
+    using Microsoft.AspNet.Identity;
+    using Models;
+
     public static class UserLoginExtensions
     {
         public static UserLoginInfo ToLoginInfo(this UserLoginInfoDto res)
@@ -28,12 +28,12 @@ namespace Blob.Core.Extensions
         {
             return new UserDto { Id = user.Id.ToString(), UserName = user.UserName };
         }
-        
+
         public static User ToUser(this UserDto user)
         {
             return new User { Id = Guid.Parse(user.Id), UserName = user.UserName };
         }
-        
+
         public static Guid ToGuid(this string s)
         {
             return Guid.Parse(s);
@@ -66,7 +66,7 @@ namespace Blob.Core.Extensions
         //    }
         //    return null;
         //}
-        
+
         public static string GetCustomerId(this IIdentity identity)
         {
             if (identity == null)

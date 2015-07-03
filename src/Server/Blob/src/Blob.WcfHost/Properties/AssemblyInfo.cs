@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿#if NET45
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -36,3 +37,4 @@ using System.Runtime.InteropServices;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "Log4Net.config", Watch = true)]
 
+#endif
