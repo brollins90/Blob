@@ -122,7 +122,7 @@
             return BlobResult.Success;
         }
 
-        public async Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId)
+        public async Task<DeviceDisableViewModel> GetDeviceDisableViewModelAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceDisableVmAsync({0})", deviceId));
             return await (from device in Devices
@@ -135,7 +135,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId)
+        public async Task<DeviceEnableViewModel> GetDeviceEnableViewModelAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceEnableVmAsync({0})", deviceId));
             return await (from device in Devices
@@ -148,7 +148,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId)
+        public async Task<DeviceSingleViewModel> GetDeviceSingleViewModelAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceSingleVmAsync({0})", deviceId));
             var d = await (from device in Devices.Include("DeviceType")
@@ -168,7 +168,7 @@
             return d;
         }
 
-        public async Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId)
+        public async Task<DeviceUpdateViewModel> GetDeviceUpdateViewModelAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetDeviceUpdateVmAsync({0})", deviceId));
             return await (from device in Devices.Include("DeviceTypes")
@@ -187,12 +187,12 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DevicePageViewModel> GetDevicePageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetDevicePageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds();
 
-            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
+            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandViewModelList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             var count = Devices.Where(x => x.CustomerId.Equals(customerId)).FutureCount();

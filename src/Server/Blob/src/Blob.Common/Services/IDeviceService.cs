@@ -9,22 +9,22 @@
     public interface IDeviceService
     {
         // Command
-        Task<BlobResult> DisableDeviceAsync(DisableDeviceRequest dto);
-        Task<BlobResult> EnableDeviceAsync(EnableDeviceRequest dto);
-        Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest dto);
-        Task<BlobResult> UpdateDeviceAsync(UpdateDeviceRequest dto);
+        Task<BlobResult> DisableDeviceAsync(DisableDeviceRequest request);
+        Task<BlobResult> EnableDeviceAsync(EnableDeviceRequest request);
+        Task<RegisterDeviceResponse> RegisterDeviceAsync(RegisterDeviceRequest request);
+        Task<BlobResult> UpdateDeviceAsync(UpdateDeviceRequest request);
 
         // Query
-        Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId);
-        Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId);
-        Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId);
-        Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId);
+        Task<DeviceDisableViewModel> GetDeviceDisableViewModelAsync(Guid id);
+        Task<DeviceEnableViewModel> GetDeviceEnableViewModelAsync(Guid id);
+        Task<DeviceSingleViewModel> GetDeviceSingleViewModelAsync(Guid id);
+        Task<DeviceUpdateViewModel> GetDeviceUpdateViewModelAsync(Guid id);
 
         //Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId);
-        Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        Task<DevicePageViewModel> GetDevicePageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
 
-        int CalculateDeviceAlertLevel(Guid deviceId);
+        int CalculateDeviceAlertLevel(Guid id);
 
-        Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest dto);
+        Task<BlobResult> AuthenticateDeviceAsync(AuthenticateDeviceRequest request);
     }
 }

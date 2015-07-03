@@ -100,7 +100,7 @@
             return BlobResult.Success;
         }
 
-        public async Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId)
+        public async Task<UserDisableViewModel> GetUserDisableViewModelAsync(Guid userId)
         {
             return await (from user in _context.Users
                           where user.Id == userId
@@ -113,7 +113,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId)
+        public async Task<UserEnableViewModel> GetUserEnableViewModelAsync(Guid userId)
         {
             return await (from user in _context.Users
                           where user.Id == userId
@@ -126,7 +126,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<UserPageViewModel> GetUserPageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
@@ -154,7 +154,7 @@
             }).ConfigureAwait(false);
         }
 
-        public async Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId)
+        public async Task<UserSingleViewModel> GetUserSingleViewModelAsync(Guid userId)
         {
             // NotificationSchedule
             return await (from user in _context.Users.Include("Customers")
@@ -177,7 +177,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
+        public async Task<UserUpdateVm> GetUserUpdateViewModelAsync(Guid userId)
         {
             var availableSchedules = await _notificationScheduleService.GetAllNotificationSchedules();
             var u = await (from p in _context.UserProfiles.Include("User")
@@ -193,7 +193,7 @@
             return u;
         }
 
-        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId)
+        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordViewModelAsync(Guid userId)
         {
             return await (from user in _context.Users
                           where user.Id == userId

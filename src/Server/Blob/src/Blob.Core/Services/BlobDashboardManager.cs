@@ -28,10 +28,10 @@
             _statusRecordManager = statusRecordManager;
         }
 
-        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeViewModelAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
-            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
+            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandViewModelList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             //var cust = _context.Customers.Where(x => x.Id.Equals(customerId));
@@ -61,10 +61,10 @@
             }).ConfigureAwait(false);
         }
 
-        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeViewModelAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds().ToList();
-            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandVmList();
+            IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandViewModelList();
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             //var cust = _context.Customers.Where(x => x.Id.Equals(customerId));

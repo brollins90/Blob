@@ -9,16 +9,16 @@
     public interface ICustomerService
     {
         // Command
-        Task<BlobResult> DisableCustomerAsync(DisableCustomerRequest dto);
-        Task<BlobResult> EnableCustomerAsync(EnableCustomerRequest dto);
-        Task<BlobResult> RegisterCustomerAsync(RegisterCustomerRequest dto);
-        Task<BlobResult> UpdateCustomerAsync(UpdateCustomerRequest dto);
+        Task<BlobResult> DisableCustomerAsync(DisableCustomerRequest request);
+        Task<BlobResult> EnableCustomerAsync(EnableCustomerRequest request);
+        Task<BlobResult> RegisterCustomerAsync(RegisterCustomerRequest request);
+        Task<BlobResult> UpdateCustomerAsync(UpdateCustomerRequest request);
 
         // Query
-        Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId);
-        Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId);
-        Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
-        Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId);
-        Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId);
+        Task<CustomerDisableViewModel> GetCustomerDisableViewModelAsync(Guid id);
+        Task<CustomerEnableViewModel> GetCustomerEnableViewModelAsync(Guid id);
+        Task<CustomerPageViewModel> GetCustomerPageViewModelAsync(Guid searchId, int pageNum = 1, int pageSize = 10);
+        Task<CustomerSingleViewModel> GetCustomerSingleViewModelAsync(Guid id);
+        Task<CustomerUpdateViewModel> GetCustomerUpdateViewModelAsync(Guid id);
     }
 }

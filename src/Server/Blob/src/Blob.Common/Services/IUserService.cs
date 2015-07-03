@@ -8,22 +8,16 @@
 
     public interface IUserService
     {
-        //Task<ClaimsIdentity> CreateUserIdentityAsync(CreateUserIdentityDto dto);
-        //Task<IdentityResultDto> CreateAsync(UserDto user, string password);
+        Task<BlobResult> CreateUserAsync(CreateUserRequest request);
+        Task<BlobResult> DisableUserAsync(DisableUserRequest request);
+        Task<BlobResult> EnableUserAsync(EnableUserRequest request);
+        Task<BlobResult> UpdateUserAsync(UpdateUserRequest request);
 
-        //Task<IdentityResultDto> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
-        // Command
-        Task<BlobResult> DisableUserAsync(DisableUserRequest dto);
-        Task<BlobResult> EnableUserAsync(EnableUserRequest dto);
-        Task<BlobResult> CreateUserAsync(CreateUserRequest dto);
-        Task<BlobResult> UpdateUserAsync(UpdateUserRequest dto);
-
-        // Query
-        Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId);
-        Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId);
-        Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
-        Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId);
-        Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId);
-        Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId);
+        Task<UserDisableViewModel> GetUserDisableViewModelAsync(Guid id);
+        Task<UserEnableViewModel> GetUserEnableViewModelAsync(Guid id);
+        Task<UserPageViewModel> GetUserPageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        Task<UserSingleViewModel> GetUserSingleViewModelAsync(Guid id);
+        Task<UserUpdateVm> GetUserUpdateViewModelAsync(Guid id);
+        Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordViewModelAsync(Guid id);
     }
 }

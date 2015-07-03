@@ -38,7 +38,7 @@
 
 
 
-        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId)
+        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteViewModelAsync(long recordId)
         {
             _log.Debug(string.Format("GetStatusRecordDeleteVmAsync({0})", recordId));
             return await (from status in StatusRecords.Include("Devices")
@@ -53,7 +53,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
+        public async Task<StatusRecordPageViewModel> GetStatusRecordPageViewModelAsync(Guid deviceId, int pageNum = 1, int pageSize = 10)
         {
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
@@ -82,7 +82,7 @@
             }).ConfigureAwait(false);
         }
 
-        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId)
+        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleViewModelAsync(long recordId)
         {
             _log.Debug(string.Format("GetStatusRecordSingleVmAsync({0})", recordId));
             return await (from status in StatusRecords
@@ -231,7 +231,7 @@
                           }).ToList();
         }
 
-        public async Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId)
+        public async Task<MonitorListViewModel> GetMonitorListViewModelAsync(Guid deviceId)
         {
             _log.Debug(string.Format("GetMonitorListVmAsync({0})", deviceId));
             var items = GetRecentStatus(deviceId).Select(s1 => new MonitorListListItem

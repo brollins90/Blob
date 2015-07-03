@@ -128,7 +128,7 @@
             return BlobResult.Success;
         }
 
-        public async Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId)
+        public async Task<CustomerDisableViewModel> GetCustomerDisableViewModelAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerDisableVmAsync({0})", customerId));
             return await (from customer in _context.Customers
@@ -141,7 +141,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId)
+        public async Task<CustomerEnableViewModel> GetCustomerEnableViewModelAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerEnableVmAsync({0})", customerId));
             return await (from customer in _context.Customers
@@ -154,7 +154,7 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId)
+        public async Task<CustomerSingleViewModel> GetCustomerSingleViewModelAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerSingleVmAsync({0})", customerId));
             return await _context.Customers
@@ -169,7 +169,7 @@
                                 }).SingleAsync();
         }
 
-        public async Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId)
+        public async Task<CustomerUpdateViewModel> GetCustomerUpdateViewModelAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerUpdateVmAsync({0})", customerId));
             return await (from customer in _context.Customers
@@ -182,7 +182,7 @@
         }
 
 
-        public async Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum, int pageSize)
+        public async Task<CustomerPageViewModel> GetCustomerPageViewModelAsync(Guid searchId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetCustomerPageVmAsync({0}, {1}, {2})", searchId, pageNum, pageSize));
 

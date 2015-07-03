@@ -32,7 +32,7 @@
         }
 
 
-        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList()
+        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandViewModelList()
         {
             _log.Debug(string.Format("GetDeviceCommandVmList()"));
             IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes();
@@ -49,10 +49,10 @@
             });
         }
 
-        public DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        public DeviceCommandIssueViewModel GetDeviceCommandIssueViewModel(Guid deviceId, string commandType)
         {
             _log.Debug(string.Format("GetDeviceCommandIssueVm({0}, {1})", deviceId, commandType));
-            var commandTypes = GetDeviceCommandVmList();
+            var commandTypes = GetDeviceCommandViewModelList();
             var command = commandTypes.Single(type => type.CommandType.Equals(commandType));
 
             DeviceCommandIssueViewModel result = new DeviceCommandIssueViewModel

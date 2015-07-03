@@ -8,12 +8,12 @@
 
     public interface IPerformanceRecordService
     {
-        Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId);
-        Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
-        Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum = 1, int pageSize = 10);
-        Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId);
+        Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteViewModelAsync(long id);
+        Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
+        Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelForStatusAsync(long id, int pageNum = 1, int pageSize = 10);
+        Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleViewModelAsync(long id);
 
-        Task<BlobResult> AddPerformanceRecordAsync(AddPerformanceRecordRequest statusPerformanceData);
-        Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordRequest dto);
+        Task<BlobResult> AddPerformanceRecordAsync(AddPerformanceRecordRequest request);
+        Task<BlobResult> DeletePerformanceRecordAsync(DeletePerformanceRecordRequest request);
     }
 }

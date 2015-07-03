@@ -190,7 +190,7 @@
             return BlobResult.Success;
         }
 
-        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId)
+        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateViewModelAsync(Guid customerId)
         {
             _log.Debug(string.Format("GetCustomerGroupCreateVmAsync({0})", customerId));
             ThrowIfDisposed();
@@ -203,7 +203,7 @@
             };
         }
 
-        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId)
+        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteViewModelAsync(Guid groupId)
         {
             _log.Debug(string.Format("GetCustomerGroupDeleteVmAsync({0})", groupId));
             ThrowIfDisposed();
@@ -214,7 +214,7 @@
                 Name = group.Name
             };
         }
-        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             _log.Debug(string.Format("GetCustomerGroupPageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
@@ -241,7 +241,7 @@
             }).ConfigureAwait(false);
         }
 
-        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId)
+        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleViewModelAsync(Guid groupId)
         {
             _log.Debug(string.Format("GetCustomerGroupSingleVmAsync({0})", groupId));
             ThrowIfDisposed();
@@ -261,7 +261,7 @@
             };
         }
 
-        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId)
+        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateViewModelAsync(Guid groupId)
         {
             _log.Debug(string.Format("GetCustomerGroupUpdateVmAsync({0})", groupId));
             ThrowIfDisposed();

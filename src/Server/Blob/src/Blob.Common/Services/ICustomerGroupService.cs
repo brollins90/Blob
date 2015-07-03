@@ -10,24 +10,24 @@
     public interface ICustomerGroupService
     {
         // Command
-        Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupRequest dto);
-        Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupRequest dto);
-        Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupRequest dto);
-        Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupRequest dto);
-        Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupRequest dto);
-        Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupRequest dto);
-        Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupRequest dto);
+        Task<BlobResult> CreateCustomerGroupAsync(CreateCustomerGroupRequest request);
+        Task<BlobResult> DeleteCustomerGroupAsync(DeleteCustomerGroupRequest request);
+        Task<BlobResult> UpdateCustomerGroupAsync(UpdateCustomerGroupRequest request);
+        Task<BlobResult> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupRequest request);
+        Task<BlobResult> AddUserToCustomerGroupAsync(AddUserToCustomerGroupRequest request);
+        Task<BlobResult> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupRequest request);
+        Task<BlobResult> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupRequest request);
 
         // Query
-        Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId);
-        Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId);
-        Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId);
-        Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId);
+        Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateViewModelAsync(Guid customerId);
+        Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteViewModelAsync(Guid groupId);
+        Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleViewModelAsync(Guid groupId);
+        Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateViewModelAsync(Guid groupId);
         Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerGroupRolesAsync(Guid groupId);
         Task<IEnumerable<CustomerGroupUserListItem>> GetCustomerGroupUsersAsync(Guid groupId);
 
 
         Task<IEnumerable<CustomerGroupRoleListItem>> GetCustomerRolesAsync(Guid customerId);
-        Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
+        Task<CustomerGroupPageViewModel> GetCustomerGroupPageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
     }
 }

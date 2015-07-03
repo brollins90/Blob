@@ -9,15 +9,15 @@
 
     public interface IStatusRecordService
     {
-        Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId);
-        Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
-        Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId);
+        Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteViewModelAsync(long id);
+        Task<StatusRecordPageViewModel> GetStatusRecordPageViewModelAsync(Guid deviceId, int pageNum = 1, int pageSize = 10);
+        Task<StatusRecordSingleViewModel> GetStatusRecordSingleViewModelAsync(long id);
 
-        Task<IList<StatusRecordListItem>> GetDeviceRecentStatusAsync(Guid deviceId);
+        Task<IList<StatusRecordListItem>> GetDeviceRecentStatusAsync(Guid id);
 
-        Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId);
+        Task<MonitorListViewModel> GetMonitorListViewModelAsync(Guid id);
 
-        Task<BlobResult> AddStatusRecordAsync(AddStatusRecordRequest statusData);
-        Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordRequest dto);
+        Task<BlobResult> AddStatusRecordAsync(AddStatusRecordRequest request);
+        Task<BlobResult> DeleteStatusRecordAsync(DeleteStatusRecordRequest request);
     }
 }

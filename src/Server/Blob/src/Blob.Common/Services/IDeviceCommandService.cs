@@ -9,10 +9,10 @@
 
     public interface IDeviceCommandService
     {
-        IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList();
-        DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType);
+        IEnumerable<DeviceCommandViewModel> GetDeviceCommandViewModelList();
+        DeviceCommandIssueViewModel GetDeviceCommandIssueViewModel(Guid id, string commandType);
         IEnumerable<Guid> GetActiveDeviceIds();
 
-        Task<BlobResult> IssueCommandAsync(IssueDeviceCommandRequest dto);
+        Task<BlobResult> IssueCommandAsync(IssueDeviceCommandRequest request);
     }
 }
