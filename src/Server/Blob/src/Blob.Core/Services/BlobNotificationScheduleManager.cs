@@ -28,7 +28,7 @@
                               ScheduleId = x.Id,
                               Name = x.Name
                           }).ToListAsync().ConfigureAwait(false);
-            //return new List<NotificationScheduleListItemVm> { new NotificationScheduleListItemVm { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
+            //return new List<NotificationScheduleListItemViewModel> { new NotificationScheduleListItemViewModel { ScheduleId = Guid.Parse("76AA040A-253C-4AD3-838F-ADE186F40F47"), Name = "FirstSchedule" } };
         }
     }
 }

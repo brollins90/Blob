@@ -10,11 +10,11 @@
     {
         public BeforeQueryClient(string endpointName, string username, string password) : base(endpointName, username, password) { }
 
-        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetDashDevicesLargeVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetDashDevicesLargeViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -23,11 +23,11 @@
             return null;
         }
 
-        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid searchId, int pageNum, int pageSize)
+        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeViewModelAsync(Guid searchId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetDashCurrentConnectionsLargeVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetDashCurrentConnectionsLargeViewModelAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -36,11 +36,11 @@
             return null;
         }
 
-        public async Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId)
+        public async Task<CustomerDisableViewModel> GetCustomerDisableViewModelAsync(Guid customerId)
         {
             try
             {
-                return await Channel.GetCustomerDisableVmAsync(customerId).ConfigureAwait(false);
+                return await Channel.GetCustomerDisableViewModelAsync(customerId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -49,11 +49,11 @@
             return null;
         }
 
-        public async Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId)
+        public async Task<CustomerEnableViewModel> GetCustomerEnableViewModelAsync(Guid customerId)
         {
             try
             {
-                return await Channel.GetCustomerEnableVmAsync(customerId).ConfigureAwait(false);
+                return await Channel.GetCustomerEnableViewModelAsync(customerId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -62,11 +62,11 @@
             return null;
         }
 
-        public async Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId)
+        public async Task<CustomerSingleViewModel> GetCustomerSingleViewModelAsync(Guid customerId)
         {
             try
             {
-                return await Channel.GetCustomerSingleVmAsync(customerId).ConfigureAwait(false);
+                return await Channel.GetCustomerSingleViewModelAsync(customerId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -75,11 +75,11 @@
             return null;
         }
 
-        public async Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId)
+        public async Task<CustomerUpdateViewModel> GetCustomerUpdateViewModelAsync(Guid customerId)
         {
             try
             {
-                return await Channel.GetCustomerUpdateVmAsync(customerId).ConfigureAwait(false);
+                return await Channel.GetCustomerUpdateViewModelAsync(customerId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -88,11 +88,11 @@
             return null;
         }
 
-        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList()
+        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandViewModelList()
         {
             try
             {
-                return Channel.GetDeviceCommandVmList();
+                return Channel.GetDeviceCommandViewModelList();
             }
             catch (Exception ex)
             {
@@ -101,11 +101,11 @@
             return null;
         }
 
-        public DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        public DeviceCommandIssueViewModel GetDeviceCommandIssueViewModel(Guid deviceId, string commandType)
         {
             try
             {
-                return Channel.GetDeviceCommandIssueVm(deviceId, commandType);
+                return Channel.GetDeviceCommandIssueViewModel(deviceId, commandType);
             }
             catch (Exception ex)
             {
@@ -114,11 +114,11 @@
             return null;
         }
 
-        public async Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId)
+        public async Task<DeviceDisableViewModel> GetDeviceDisableViewModelAsync(Guid deviceId)
         {
             try
             {
-                return await Channel.GetDeviceDisableVmAsync(deviceId).ConfigureAwait(false);
+                return await Channel.GetDeviceDisableViewModelAsync(deviceId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -127,11 +127,11 @@
             return null;
         }
 
-        public async Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId)
+        public async Task<DeviceEnableViewModel> GetDeviceEnableViewModelAsync(Guid deviceId)
         {
             try
             {
-                return await Channel.GetDeviceEnableVmAsync(deviceId).ConfigureAwait(false);
+                return await Channel.GetDeviceEnableViewModelAsync(deviceId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -140,11 +140,11 @@
             return null;
         }
 
-        public async Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DevicePageViewModel> GetDevicePageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetDevicePageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetDevicePageViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -153,11 +153,11 @@
             return null;
         }
 
-        public async Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId)
+        public async Task<DeviceSingleViewModel> GetDeviceSingleViewModelAsync(Guid deviceId)
         {
             try
             {
-                return await Channel.GetDeviceSingleVmAsync(deviceId).ConfigureAwait(false);
+                return await Channel.GetDeviceSingleViewModelAsync(deviceId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -166,11 +166,11 @@
             return null;
         }
 
-        public async Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId)
+        public async Task<DeviceUpdateViewModel> GetDeviceUpdateViewModelAsync(Guid deviceId)
         {
             try
             {
-                return await Channel.GetDeviceUpdateVmAsync(deviceId).ConfigureAwait(false);
+                return await Channel.GetDeviceUpdateViewModelAsync(deviceId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -179,11 +179,11 @@
             return null;
         }
 
-        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId)
+        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteViewModelAsync(long recordId)
         {
             try
             {
-                return await Channel.GetPerformanceRecordDeleteVmAsync(recordId).ConfigureAwait(false);
+                return await Channel.GetPerformanceRecordDeleteViewModelAsync(recordId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -192,11 +192,11 @@
             return null;
         }
 
-        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelAsync(Guid deviceId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetPerformanceRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetPerformanceRecordPageViewModelAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -205,11 +205,11 @@
             return null;
         }
 
-        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelForStatusAsync(long recordId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetPerformanceRecordPageVmForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetPerformanceRecordPageViewModelForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -218,11 +218,11 @@
             return null;
         }
 
-        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId)
+        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleViewModelAsync(long recordId)
         {
             try
             {
-                return await Channel.GetPerformanceRecordSingleVmAsync(recordId).ConfigureAwait(false);
+                return await Channel.GetPerformanceRecordSingleViewModelAsync(recordId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -231,11 +231,11 @@
             return null;
         }
 
-        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId)
+        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteViewModelAsync(long recordId)
         {
             try
             {
-                return await Channel.GetStatusRecordDeleteVmAsync(recordId).ConfigureAwait(false);
+                return await Channel.GetStatusRecordDeleteViewModelAsync(recordId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -244,11 +244,11 @@
             return null;
         }
 
-        public async Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<StatusRecordPageViewModel> GetStatusRecordPageViewModelAsync(Guid deviceId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetStatusRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetStatusRecordPageViewModelAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -257,11 +257,11 @@
             return null;
         }
 
-        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId)
+        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleViewModelAsync(long recordId)
         {
             try
             {
-                return await Channel.GetStatusRecordSingleVmAsync(recordId).ConfigureAwait(false);
+                return await Channel.GetStatusRecordSingleViewModelAsync(recordId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -270,11 +270,11 @@
             return null;
         }
 
-        public async Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId)
+        public async Task<UserDisableViewModel> GetUserDisableViewModelAsync(Guid userId)
         {
             try
             {
-                return await Channel.GetUserDisableVmAsync(userId).ConfigureAwait(false);
+                return await Channel.GetUserDisableViewModelAsync(userId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -283,11 +283,11 @@
             return null;
         }
 
-        public async Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId)
+        public async Task<UserEnableViewModel> GetUserEnableViewModelAsync(Guid userId)
         {
             try
             {
-                return await Channel.GetUserEnableVmAsync(userId).ConfigureAwait(false);
+                return await Channel.GetUserEnableViewModelAsync(userId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -296,11 +296,11 @@
             return null;
         }
 
-        public async Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<UserPageViewModel> GetUserPageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             try
             {
-                return await Channel.GetUserPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetUserPageViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -309,11 +309,11 @@
             return null;
         }
 
-        public async Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId)
+        public async Task<UserSingleViewModel> GetUserSingleViewModelAsync(Guid userId)
         {
             try
             {
-                return await Channel.GetUserSingleVmAsync(userId).ConfigureAwait(false);
+                return await Channel.GetUserSingleViewModelAsync(userId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -322,11 +322,11 @@
             return null;
         }
 
-        public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
+        public async Task<UserUpdateViewModel> GetUserUpdateViewModelAsync(Guid userId)
         {
             try
             {
-                return await Channel.GetUserUpdateVmAsync(userId).ConfigureAwait(false);
+                return await Channel.GetUserUpdateViewModelAsync(userId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -335,11 +335,11 @@
             return null;
         }
 
-        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId)
+        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordViewModelAsync(Guid userId)
         {
             try
             {
-                return await Channel.GetUserUpdatePasswordVmAsync(userId).ConfigureAwait(false);
+                return await Channel.GetUserUpdatePasswordViewModelAsync(userId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -348,11 +348,11 @@
             return null;
         }
 
-        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId)
+        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteViewModelAsync(Guid groupId)
         {
             try
             {
-                return await Channel.GetCustomerGroupDeleteVmAsync(groupId).ConfigureAwait(false);
+                return await Channel.GetCustomerGroupDeleteViewModelAsync(groupId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -361,11 +361,11 @@
             return null;
         }
 
-        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId)
+        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleViewModelAsync(Guid groupId)
         {
             try
             {
-                return await Channel.GetCustomerGroupSingleVmAsync(groupId).ConfigureAwait(false);
+                return await Channel.GetCustomerGroupSingleViewModelAsync(groupId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -374,11 +374,11 @@
             return null;
         }
 
-        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId)
+        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateViewModelAsync(Guid groupId)
         {
             try
             {
-                return await Channel.GetCustomerGroupUpdateVmAsync(groupId).ConfigureAwait(false);
+                return await Channel.GetCustomerGroupUpdateViewModelAsync(groupId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -402,11 +402,11 @@
         }
 
 
-        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid groupId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageViewModelAsync(Guid groupId, int pageNum = 1, int pageSize = 10)
         {
             try
             {
-                return await Channel.GetCustomerGroupPageVmAsync(groupId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetCustomerGroupPageViewModelAsync(groupId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -415,11 +415,11 @@
             return null;
         }
 
-        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId)
+        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateViewModelAsync(Guid customerId)
         {
             try
             {
-                return await Channel.GetCustomerGroupCreateVmAsync(customerId).ConfigureAwait(false);
+                return await Channel.GetCustomerGroupCreateViewModelAsync(customerId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -455,11 +455,11 @@
         }
 
 
-        public async Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId)
+        public async Task<MonitorListViewModel> GetMonitorListViewModelAsync(Guid deviceId)
         {
             try
             {
-                return await Channel.GetMonitorListVmAsync(deviceId).ConfigureAwait(false);
+                return await Channel.GetMonitorListViewModelAsync(deviceId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -469,11 +469,11 @@
         }
 
 
-        public async Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerPageViewModel> GetCustomerPageViewModelAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             try
             {
-                return await Channel.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+                return await Channel.GetCustomerPageViewModelAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

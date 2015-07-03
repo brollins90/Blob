@@ -18,7 +18,7 @@ namespace Blob.Contracts.ViewModel
 
         [DataMember]
         [Required]
-        public UserRegisterVm UserRegistration { get; set; }
+        public UserRegisterViewModel UserRegistration { get; set; }
 
         public RegisterCustomerRequest ToRequest()
         {

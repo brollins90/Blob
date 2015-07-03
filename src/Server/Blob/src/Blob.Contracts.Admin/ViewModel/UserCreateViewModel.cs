@@ -6,7 +6,7 @@ namespace Blob.Contracts.ViewModel
     using Request;
 
     [DataContract]
-    public class UserCreateVm
+    public class UserCreateViewModel
     {
         [DataMember]
         public Guid CustomerId { get; set; }

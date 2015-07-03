@@ -192,7 +192,7 @@
 
         public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateViewModelAsync(Guid customerId)
         {
-            _log.Debug(string.Format("GetCustomerGroupCreateVmAsync({0})", customerId));
+            _log.Debug(string.Format("GetCustomerGroupCreateViewModelAsync({0})", customerId));
             ThrowIfDisposed();
             var roles = await GetCustomerRolesAsync(customerId);
             return new CustomerGroupCreateViewModel
@@ -205,7 +205,7 @@
 
         public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteViewModelAsync(Guid groupId)
         {
-            _log.Debug(string.Format("GetCustomerGroupDeleteVmAsync({0})", groupId));
+            _log.Debug(string.Format("GetCustomerGroupDeleteViewModelAsync({0})", groupId));
             ThrowIfDisposed();
             CustomerGroup group = await CustomerGroups.FindAsync(groupId);
             return new CustomerGroupDeleteViewModel
@@ -216,7 +216,7 @@
         }
         public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
-            _log.Debug(string.Format("GetCustomerGroupPageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
+            _log.Debug(string.Format("GetCustomerGroupPageViewModelAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             var count = CustomerGroups.Where(x => x.CustomerId.Equals(customerId)).FutureCount();
@@ -243,7 +243,7 @@
 
         public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleViewModelAsync(Guid groupId)
         {
-            _log.Debug(string.Format("GetCustomerGroupSingleVmAsync({0})", groupId));
+            _log.Debug(string.Format("GetCustomerGroupSingleViewModelAsync({0})", groupId));
             ThrowIfDisposed();
             CustomerGroup group = CustomerGroups.Find(groupId);
             var roles = await GetCustomerGroupRolesAsync(groupId);
@@ -263,7 +263,7 @@
 
         public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateViewModelAsync(Guid groupId)
         {
-            _log.Debug(string.Format("GetCustomerGroupUpdateVmAsync({0})", groupId));
+            _log.Debug(string.Format("GetCustomerGroupUpdateViewModelAsync({0})", groupId));
             ThrowIfDisposed();
             CustomerGroup group = await CustomerGroups.FindAsync(groupId);
             return new CustomerGroupUpdateViewModel

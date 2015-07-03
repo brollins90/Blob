@@ -40,7 +40,7 @@
 
         public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteViewModelAsync(long recordId)
         {
-            _log.Debug(string.Format("GetStatusRecordDeleteVmAsync({0})", recordId));
+            _log.Debug(string.Format("GetStatusRecordDeleteViewModelAsync({0})", recordId));
             return await (from status in StatusRecords.Include("Devices")
                           where status.Id == recordId
                           select new StatusRecordDeleteViewModel
@@ -84,7 +84,7 @@
 
         public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleViewModelAsync(long recordId)
         {
-            _log.Debug(string.Format("GetStatusRecordSingleVmAsync({0})", recordId));
+            _log.Debug(string.Format("GetStatusRecordSingleViewModelAsync({0})", recordId));
             return await (from status in StatusRecords
                           where status.Id == recordId
                           select new StatusRecordSingleViewModel
@@ -233,7 +233,7 @@
 
         public async Task<MonitorListViewModel> GetMonitorListViewModelAsync(Guid deviceId)
         {
-            _log.Debug(string.Format("GetMonitorListVmAsync({0})", deviceId));
+            _log.Debug(string.Format("GetMonitorListViewModelAsync({0})", deviceId));
             var items = GetRecentStatus(deviceId).Select(s1 => new MonitorListListItem
             {
                 CurrentValue = s1.CurrentValue,

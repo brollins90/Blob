@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class UserForgotPasswordVm
+    public class UserForgotPasswordViewModel
     {
         [DataMember]
         [Display(Name = "Email")]

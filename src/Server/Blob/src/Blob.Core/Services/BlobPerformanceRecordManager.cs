@@ -44,7 +44,7 @@
 
         public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteViewModelAsync(long recordId)
         {
-            _log.Debug(string.Format("GetPerformanceRecordDeleteVmAsync({0})", recordId));
+            _log.Debug(string.Format("GetPerformanceRecordDeleteViewModelAsync({0})", recordId));
             return await (from perf in PerformanceRecords.Include("Devices")
                           where perf.Id == recordId
                           select new PerformanceRecordDeleteViewModel
@@ -58,7 +58,7 @@
 
         public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelAsync(Guid deviceId, int pageNum, int pageSize)
         {
-            _log.Debug(string.Format("GetPerformanceRecordPageVmAsync({0})", deviceId, pageNum, pageSize));
+            _log.Debug(string.Format("GetPerformanceRecordPageViewModelAsync({0})", deviceId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             var count = PerformanceRecords.Where(x => x.DeviceId.Equals(deviceId)).FutureCount();
@@ -94,7 +94,7 @@
 
         public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelForStatusAsync(long recordId, int pageNum, int pageSize)
         {
-            _log.Debug(string.Format("GetPerformanceRecordPageVmForStatusAsync({0})", recordId, pageNum, pageSize));
+            _log.Debug(string.Format("GetPerformanceRecordPageViewModelForStatusAsync({0})", recordId, pageNum, pageSize));
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 
             var count = PerformanceRecords.Where(x => x.StatusId == recordId).FutureCount();
@@ -130,7 +130,7 @@
 
         public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleViewModelAsync(long recordId)
         {
-            _log.Debug(string.Format("GetPerformanceRecordSingleVmAsync({0})", recordId));
+            _log.Debug(string.Format("GetPerformanceRecordSingleViewModelAsync({0})", recordId));
             return await (from perf in PerformanceRecords
                           where perf.Id == recordId
                           select new PerformanceRecordSingleViewModel

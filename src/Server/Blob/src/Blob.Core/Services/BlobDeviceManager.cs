@@ -124,7 +124,7 @@
 
         public async Task<DeviceDisableViewModel> GetDeviceDisableViewModelAsync(Guid deviceId)
         {
-            _log.Debug(string.Format("GetDeviceDisableVmAsync({0})", deviceId));
+            _log.Debug(string.Format("GetDeviceDisableViewModelAsync({0})", deviceId));
             return await (from device in Devices
                           where device.Id == deviceId
                           select new DeviceDisableViewModel
@@ -137,7 +137,7 @@
 
         public async Task<DeviceEnableViewModel> GetDeviceEnableViewModelAsync(Guid deviceId)
         {
-            _log.Debug(string.Format("GetDeviceEnableVmAsync({0})", deviceId));
+            _log.Debug(string.Format("GetDeviceEnableViewModelAsync({0})", deviceId));
             return await (from device in Devices
                           where device.Id == deviceId
                           select new DeviceEnableViewModel
@@ -150,7 +150,7 @@
 
         public async Task<DeviceSingleViewModel> GetDeviceSingleViewModelAsync(Guid deviceId)
         {
-            _log.Debug(string.Format("GetDeviceSingleVmAsync({0})", deviceId));
+            _log.Debug(string.Format("GetDeviceSingleViewModelAsync({0})", deviceId));
             var d = await (from device in Devices.Include("DeviceType")
                            where device.Id == deviceId
                            select new DeviceSingleViewModel
@@ -170,7 +170,7 @@
 
         public async Task<DeviceUpdateViewModel> GetDeviceUpdateViewModelAsync(Guid deviceId)
         {
-            _log.Debug(string.Format("GetDeviceUpdateVmAsync({0})", deviceId));
+            _log.Debug(string.Format("GetDeviceUpdateViewModelAsync({0})", deviceId));
             return await (from device in Devices.Include("DeviceTypes")
                           where device.Id == deviceId
                           select new DeviceUpdateViewModel
@@ -189,7 +189,7 @@
 
         public async Task<DevicePageViewModel> GetDevicePageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
-            _log.Debug(string.Format("GetDevicePageVmAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
+            _log.Debug(string.Format("GetDevicePageViewModelAsync({0}, {1}, {2})", customerId, pageNum, pageSize));
             var activeDeviceConnections = _deviceCommandManager.GetActiveDeviceIds();
 
             IEnumerable<DeviceCommandViewModel> availableCommands = _deviceCommandManager.GetDeviceCommandViewModelList();

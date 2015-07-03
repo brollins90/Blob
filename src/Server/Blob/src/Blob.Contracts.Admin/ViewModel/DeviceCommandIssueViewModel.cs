@@ -34,7 +34,7 @@
                 DeviceId = DeviceId,
                 Command = CommandType,
                 CommandParameters = (CommandParameters != null)
-                    ? CommandParameters.ToDictionary(kvp => kvp.Key, deviceCommandParameterPairVm => deviceCommandParameterPairVm.Value)
+                    ? CommandParameters.ToDictionary(kvp => kvp.Key, deviceCommandParameterPairViewModel => deviceCommandParameterPairViewModel.Value)
                     : new Dictionary<string, string>(),
                 TimeSent = DateTime.Now
             };

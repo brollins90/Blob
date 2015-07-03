@@ -177,12 +177,12 @@
                           }).SingleAsync().ConfigureAwait(false);
         }
 
-        public async Task<UserUpdateVm> GetUserUpdateViewModelAsync(Guid userId)
+        public async Task<UserUpdateViewModel> GetUserUpdateViewModelAsync(Guid userId)
         {
             var availableSchedules = await _notificationScheduleService.GetAllNotificationSchedules();
             var u = await (from p in _context.UserProfiles.Include("User")
                            where p.UserId == userId
-                           select new UserUpdateVm
+                           select new UserUpdateViewModel
                            {
                                UserId = p.User.Id,
                                Email = p.User.Email,

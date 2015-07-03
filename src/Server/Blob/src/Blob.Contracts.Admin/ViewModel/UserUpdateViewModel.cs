@@ -7,7 +7,7 @@ namespace Blob.Contracts.ViewModel
     using Request;
 
     [DataContract]
-    public class UserUpdateVm
+    public class UserUpdateViewModel
     {
         [DataMember]
         [Display(Name = "Id")]

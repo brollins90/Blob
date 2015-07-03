@@ -27,262 +27,262 @@
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
-        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DashCurrentConnectionsLargeViewModel> GetDashCurrentConnectionsLargeViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "customer", customerId.ToString());
-            return await _blobQueryManager.GetDashCurrentConnectionsLargeVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetDashCurrentConnectionsLargeViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
-        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DashDevicesLargeViewModel> GetDashDevicesLargeViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "customer", customerId.ToString());
-            return await _blobQueryManager.GetDashDevicesLargeVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetDashDevicesLargeViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "disable")]
-        public async Task<CustomerDisableViewModel> GetCustomerDisableVmAsync(Guid customerId)
+        public async Task<CustomerDisableViewModel> GetCustomerDisableViewModelAsync(Guid customerId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "disableview", "customer", customerId.ToString());
-            return await _blobQueryManager.GetCustomerDisableVmAsync(customerId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerDisableViewModelAsync(customerId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "enable")]
-        public async Task<CustomerEnableViewModel> GetCustomerEnableVmAsync(Guid customerId)
+        public async Task<CustomerEnableViewModel> GetCustomerEnableViewModelAsync(Guid customerId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "enableview", "customer", customerId.ToString());
-            return await _blobQueryManager.GetCustomerEnableVmAsync(customerId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerEnableViewModelAsync(customerId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
-        public async Task<CustomerSingleViewModel> GetCustomerSingleVmAsync(Guid customerId)//, int devicePageSize, int devicePageNum, int userPageSize, int userPageNum)
+        public async Task<CustomerSingleViewModel> GetCustomerSingleViewModelAsync(Guid customerId)//, int devicePageSize, int devicePageNum, int userPageSize, int userPageNum)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "customer", customerId.ToString());
-            return await _blobQueryManager.GetCustomerSingleVmAsync(customerId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerSingleViewModelAsync(customerId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "update")]
-        public async Task<CustomerUpdateViewModel> GetCustomerUpdateVmAsync(Guid customerId)
+        public async Task<CustomerUpdateViewModel> GetCustomerUpdateViewModelAsync(Guid customerId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "editview", "customer", customerId.ToString());
-            return await _blobQueryManager.GetCustomerUpdateVmAsync(customerId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerUpdateViewModelAsync(customerId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "issueCommand")]
-        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandVmList()
+        public IEnumerable<DeviceCommandViewModel> GetDeviceCommandViewModelList()
         {
             var identity = ClaimsPrincipal.Current.Identity;
             Task.WaitAll(_blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "list", "deviceCommand", "all"));
-            return _blobQueryManager.GetDeviceCommandVmList();
+            return _blobQueryManager.GetDeviceCommandViewModelList();
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "issueCommand")]
-        public DeviceCommandIssueViewModel GetDeviceCommandIssueVm(Guid deviceId, string commandType)
+        public DeviceCommandIssueViewModel GetDeviceCommandIssueViewModel(Guid deviceId, string commandType)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             Task.WaitAll(_blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "deviceCommand", commandType));
-            return _blobQueryManager.GetDeviceCommandIssueVm(deviceId, commandType);
+            return _blobQueryManager.GetDeviceCommandIssueViewModel(deviceId, commandType);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "disable")]
-        public async Task<DeviceDisableViewModel> GetDeviceDisableVmAsync(Guid deviceId)
+        public async Task<DeviceDisableViewModel> GetDeviceDisableViewModelAsync(Guid deviceId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "disableview", "device", deviceId.ToString());
-            return await _blobQueryManager.GetDeviceDisableVmAsync(deviceId).ConfigureAwait(false);
+            return await _blobQueryManager.GetDeviceDisableViewModelAsync(deviceId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "enable")]
-        public async Task<DeviceEnableViewModel> GetDeviceEnableVmAsync(Guid deviceId)
+        public async Task<DeviceEnableViewModel> GetDeviceEnableViewModelAsync(Guid deviceId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "enableview", "device", deviceId.ToString());
-            return await _blobQueryManager.GetDeviceEnableVmAsync(deviceId).ConfigureAwait(false);
+            return await _blobQueryManager.GetDeviceEnableViewModelAsync(deviceId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "view")]
-        public async Task<DevicePageViewModel> GetDevicePageVmAsync(Guid customerId, int pageNum, int pageSize)
+        public async Task<DevicePageViewModel> GetDevicePageViewModelAsync(Guid customerId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "device", customerId.ToString());
-            return await _blobQueryManager.GetDevicePageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetDevicePageViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "view")]
-        public async Task<DeviceSingleViewModel> GetDeviceSingleVmAsync(Guid deviceId)
+        public async Task<DeviceSingleViewModel> GetDeviceSingleViewModelAsync(Guid deviceId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "device", deviceId.ToString());
-            return await _blobQueryManager.GetDeviceSingleVmAsync(deviceId).ConfigureAwait(false);
+            return await _blobQueryManager.GetDeviceSingleViewModelAsync(deviceId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "update")]
-        public async Task<DeviceUpdateViewModel> GetDeviceUpdateVmAsync(Guid deviceId)
+        public async Task<DeviceUpdateViewModel> GetDeviceUpdateViewModelAsync(Guid deviceId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "updateview", "device", deviceId.ToString());
-            return await _blobQueryManager.GetDeviceUpdateVmAsync(deviceId).ConfigureAwait(false);
+            return await _blobQueryManager.GetDeviceUpdateViewModelAsync(deviceId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "delete")]
-        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteVmAsync(long recordId)
+        public async Task<PerformanceRecordDeleteViewModel> GetPerformanceRecordDeleteViewModelAsync(long recordId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "deleteview", "performance", recordId.ToString());
-            return await _blobQueryManager.GetPerformanceRecordDeleteVmAsync(recordId).ConfigureAwait(false);
+            return await _blobQueryManager.GetPerformanceRecordDeleteViewModelAsync(recordId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
-        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelAsync(Guid deviceId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "performance", deviceId.ToString());
-            return await _blobQueryManager.GetPerformanceRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetPerformanceRecordPageViewModelAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
-        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageVmForStatusAsync(long recordId, int pageNum, int pageSize)
+        public async Task<PerformanceRecordPageViewModel> GetPerformanceRecordPageViewModelForStatusAsync(long recordId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "performance", recordId.ToString());
-            return await _blobQueryManager.GetPerformanceRecordPageVmForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetPerformanceRecordPageViewModelForStatusAsync(recordId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "performance", Operation = "view")]
-        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleVmAsync(long recordId)
+        public async Task<PerformanceRecordSingleViewModel> GetPerformanceRecordSingleViewModelAsync(long recordId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "performance", recordId.ToString());
-            return await _blobQueryManager.GetPerformanceRecordSingleVmAsync(recordId).ConfigureAwait(false);
+            return await _blobQueryManager.GetPerformanceRecordSingleViewModelAsync(recordId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "status", Operation = "delete")]
-        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteVmAsync(long recordId)
+        public async Task<StatusRecordDeleteViewModel> GetStatusRecordDeleteViewModelAsync(long recordId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "deleteview", "status", recordId.ToString());
-            return await _blobQueryManager.GetStatusRecordDeleteVmAsync(recordId).ConfigureAwait(false);
+            return await _blobQueryManager.GetStatusRecordDeleteViewModelAsync(recordId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "status", Operation = "view")]
-        public async Task<StatusRecordPageViewModel> GetStatusRecordPageVmAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<StatusRecordPageViewModel> GetStatusRecordPageViewModelAsync(Guid deviceId, int pageNum, int pageSize)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "status", deviceId.ToString());
-            return await _blobQueryManager.GetStatusRecordPageVmAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetStatusRecordPageViewModelAsync(deviceId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "status", Operation = "view")]
-        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleVmAsync(long recordId)
+        public async Task<StatusRecordSingleViewModel> GetStatusRecordSingleViewModelAsync(long recordId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "status", recordId.ToString());
-            return await _blobQueryManager.GetStatusRecordSingleVmAsync(recordId).ConfigureAwait(false);
+            return await _blobQueryManager.GetStatusRecordSingleViewModelAsync(recordId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "disable")]
-        public async Task<UserDisableViewModel> GetUserDisableVmAsync(Guid userId)
+        public async Task<UserDisableViewModel> GetUserDisableViewModelAsync(Guid userId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "disableview", "user", userId.ToString());
-            return await _blobQueryManager.GetUserDisableVmAsync(userId).ConfigureAwait(false);
+            return await _blobQueryManager.GetUserDisableViewModelAsync(userId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "enable")]
-        public async Task<UserEnableViewModel> GetUserEnableVmAsync(Guid userId)
+        public async Task<UserEnableViewModel> GetUserEnableViewModelAsync(Guid userId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "enableview", "user", userId.ToString());
-            return await _blobQueryManager.GetUserEnableVmAsync(userId).ConfigureAwait(false);
+            return await _blobQueryManager.GetUserEnableViewModelAsync(userId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "view")]
-        public async Task<UserPageViewModel> GetUserPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<UserPageViewModel> GetUserPageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "user", customerId.ToString());
-            return await _blobQueryManager.GetUserPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetUserPageViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "view")]
-        public async Task<UserSingleViewModel> GetUserSingleVmAsync(Guid userId)
+        public async Task<UserSingleViewModel> GetUserSingleViewModelAsync(Guid userId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "user", userId.ToString());
-            return await _blobQueryManager.GetUserSingleVmAsync(userId).ConfigureAwait(false);
+            return await _blobQueryManager.GetUserSingleViewModelAsync(userId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "update")]
-        public async Task<UserUpdateVm> GetUserUpdateVmAsync(Guid userId)
+        public async Task<UserUpdateViewModel> GetUserUpdateViewModelAsync(Guid userId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "updateview", "user", userId.ToString());
-            return await _blobQueryManager.GetUserUpdateVmAsync(userId).ConfigureAwait(false);
+            return await _blobQueryManager.GetUserUpdateViewModelAsync(userId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "user", Operation = "update")]
-        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordVmAsync(Guid userId)
+        public async Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordViewModelAsync(Guid userId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "updateview", "user", userId.ToString());
-            return await _blobQueryManager.GetUserUpdatePasswordVmAsync(userId).ConfigureAwait(false);
+            return await _blobQueryManager.GetUserUpdatePasswordViewModelAsync(userId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "delete")]
-        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteVmAsync(Guid groupId)
+        public async Task<CustomerGroupDeleteViewModel> GetCustomerGroupDeleteViewModelAsync(Guid groupId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "delete", "group", groupId.ToString());
-            return await _blobQueryManager.GetCustomerGroupDeleteVmAsync(groupId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerGroupDeleteViewModelAsync(groupId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "view")]
-        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleVmAsync(Guid groupId)
+        public async Task<CustomerGroupSingleViewModel> GetCustomerGroupSingleViewModelAsync(Guid groupId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "group", groupId.ToString());
-            return await _blobQueryManager.GetCustomerGroupSingleVmAsync(groupId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerGroupSingleViewModelAsync(groupId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "update")]
-        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateVmAsync(Guid groupId)
+        public async Task<CustomerGroupUpdateViewModel> GetCustomerGroupUpdateViewModelAsync(Guid groupId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "update", "group", groupId.ToString());
-            return await _blobQueryManager.GetCustomerGroupUpdateVmAsync(groupId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerGroupUpdateViewModelAsync(groupId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
@@ -296,20 +296,20 @@
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "view")]
-        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageVmAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerGroupPageViewModel> GetCustomerGroupPageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "group", customerId.ToString());
-            return await _blobQueryManager.GetCustomerGroupPageVmAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerGroupPageViewModelAsync(customerId, pageNum, pageSize).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "group", Operation = "create")]
-        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateVmAsync(Guid customerId)
+        public async Task<CustomerGroupCreateViewModel> GetCustomerGroupCreateViewModelAsync(Guid customerId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "create", "group", customerId.ToString());
-            return await _blobQueryManager.GetCustomerGroupCreateVmAsync(customerId).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerGroupCreateViewModelAsync(customerId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
@@ -332,20 +332,20 @@
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "device", Operation = "view")]
-        public async Task<MonitorListViewModel> GetMonitorListVmAsync(Guid deviceId)
+        public async Task<MonitorListViewModel> GetMonitorListViewModelAsync(Guid deviceId)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "device", deviceId.ToString());
-            return await _blobQueryManager.GetMonitorListVmAsync(deviceId).ConfigureAwait(false);
+            return await _blobQueryManager.GetMonitorListViewModelAsync(deviceId).ConfigureAwait(false);
         }
 
         [OperationBehavior]
         [ClaimsPrincipalPermission(SecurityAction.Demand, Resource = "customer", Operation = "view")]
-        public async Task<CustomerPageViewModel> GetCustomerPageVmAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
+        public async Task<CustomerPageViewModel> GetCustomerPageViewModelAsync(Guid searchId, int pageNum = 1, int pageSize = 10)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), Blob.Contracts.ServiceContracts.AuditLevel.View, "view", "device", searchId.ToString());
-            return await _blobQueryManager.GetCustomerPageVmAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
+            return await _blobQueryManager.GetCustomerPageViewModelAsync(searchId, pageNum, pageSize).ConfigureAwait(false);
         }
     }
 }

@@ -130,7 +130,7 @@
 
         public async Task<CustomerDisableViewModel> GetCustomerDisableViewModelAsync(Guid customerId)
         {
-            _log.Debug(string.Format("GetCustomerDisableVmAsync({0})", customerId));
+            _log.Debug(string.Format("GetCustomerDisableViewModelAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
                           select new CustomerDisableViewModel
@@ -143,7 +143,7 @@
 
         public async Task<CustomerEnableViewModel> GetCustomerEnableViewModelAsync(Guid customerId)
         {
-            _log.Debug(string.Format("GetCustomerEnableVmAsync({0})", customerId));
+            _log.Debug(string.Format("GetCustomerEnableViewModelAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
                           select new CustomerEnableViewModel
@@ -156,7 +156,7 @@
 
         public async Task<CustomerSingleViewModel> GetCustomerSingleViewModelAsync(Guid customerId)
         {
-            _log.Debug(string.Format("GetCustomerSingleVmAsync({0})", customerId));
+            _log.Debug(string.Format("GetCustomerSingleViewModelAsync({0})", customerId));
             return await _context.Customers
                 .Include("Devices").Include("Users")
                                 .Where(x => x.Id == customerId)
@@ -171,7 +171,7 @@
 
         public async Task<CustomerUpdateViewModel> GetCustomerUpdateViewModelAsync(Guid customerId)
         {
-            _log.Debug(string.Format("GetCustomerUpdateVmAsync({0})", customerId));
+            _log.Debug(string.Format("GetCustomerUpdateViewModelAsync({0})", customerId));
             return await (from customer in _context.Customers
                           where customer.Id == customerId
                           select new CustomerUpdateViewModel
@@ -184,7 +184,7 @@
 
         public async Task<CustomerPageViewModel> GetCustomerPageViewModelAsync(Guid searchId, int pageNum, int pageSize)
         {
-            _log.Debug(string.Format("GetCustomerPageVmAsync({0}, {1}, {2})", searchId, pageNum, pageSize));
+            _log.Debug(string.Format("GetCustomerPageViewModelAsync({0}, {1}, {2})", searchId, pageNum, pageSize));
 
             var pNum = pageNum < 1 ? 0 : pageNum - 1;
 

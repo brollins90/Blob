@@ -5,7 +5,7 @@
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class UserRegisterVm
+    public class UserRegisterViewModel
     {
         [DataMember]
         [Display(Name = "Id")]

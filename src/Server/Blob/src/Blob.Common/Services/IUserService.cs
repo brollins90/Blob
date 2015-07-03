@@ -17,7 +17,7 @@
         Task<UserEnableViewModel> GetUserEnableViewModelAsync(Guid id);
         Task<UserPageViewModel> GetUserPageViewModelAsync(Guid customerId, int pageNum = 1, int pageSize = 10);
         Task<UserSingleViewModel> GetUserSingleViewModelAsync(Guid id);
-        Task<UserUpdateVm> GetUserUpdateViewModelAsync(Guid id);
+        Task<UserUpdateViewModel> GetUserUpdateViewModelAsync(Guid id);
         Task<UserUpdatePasswordViewModel> GetUserUpdatePasswordViewModelAsync(Guid id);
     }
 }

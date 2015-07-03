@@ -1,0 +1,61 @@
+﻿@model Blob.Contracts.ViewModel.CustomerGroupUpdateViewModel
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Edit</h4>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Customer</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.GroupId)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @if (Model.AvailableRoles != null)
+                {
+                    <div class="form-group">
+                        <label class="control-label col-md-2">
+                            Select Roles
+                        </label>
+                        <div class="col-md-10">
+                            @foreach (var item in Model.AvailableRoles)
+                            {
+                                <div>
+                                    <input type="checkbox" name="selectedRoles" value="@item.RoleId" checked="@item.Selected" class="checkbox-inline" />
+                                    @Html.Label(item.Name, new { @class = "control-label" })
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="True">Cancel</button>
+            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+        </div>
+    }
+</div>

@@ -34,7 +34,7 @@
 
         public IEnumerable<DeviceCommandViewModel> GetDeviceCommandViewModelList()
         {
-            _log.Debug(string.Format("GetDeviceCommandVmList()"));
+            _log.Debug(string.Format("GetDeviceCommandViewModelList()"));
             IList<Type> commandTypes = KnownCommandsMap.GetKnownCommandTypes();
             return commandTypes.Select(t => new DeviceCommandViewModel
             {
@@ -51,7 +51,7 @@
 
         public DeviceCommandIssueViewModel GetDeviceCommandIssueViewModel(Guid deviceId, string commandType)
         {
-            _log.Debug(string.Format("GetDeviceCommandIssueVm({0}, {1})", deviceId, commandType));
+            _log.Debug(string.Format("GetDeviceCommandIssueViewModel({0}, {1})", deviceId, commandType));
             var commandTypes = GetDeviceCommandViewModelList();
             var command = commandTypes.Single(type => type.CommandType.Equals(commandType));
 
