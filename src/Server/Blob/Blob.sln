@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Contracts", "Blob.Contracts\Blob.Contracts.csproj", "{378A8760-5046-44D2-8F28-C0F3A842D094}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosting", "Hosting", "{56545371-8116-4B81-867D-2CA8725AF00A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.WcfHost", "Blob.WcfHost\Blob.WcfHost.csproj", "{FFF2EF9C-8655-428A-AA0F-5F33C4746B26}"
 EndProject
@@ -44,8 +42,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FFF2EF9C-8655-428A-AA0F-5F33C4746B26} = {56545371-8116-4B81-867D-2CA8725AF00A}
 	EndGlobalSection
 EndGlobal
