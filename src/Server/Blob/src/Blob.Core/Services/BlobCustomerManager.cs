@@ -15,16 +15,16 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private readonly BlobCustomerGroupManager _customerGroupManager;
-        private readonly BlobUserManager2 _userManager2;
+        private readonly ICustomerGroupService _customerGroupManager;
+        private readonly IUserService _userManager;
 
-        public BlobCustomerManager(ILog log, BlobDbContext context, BlobCustomerGroupManager customerGroupManager,  BlobUserManager2 userManager2)
+        public BlobCustomerManager(ILog log, BlobDbContext context, ICustomerGroupService customerGroupManager, IUserService userManager)
         {
             _log = log;
             _log.Debug("Constructing BlobCustomerManager");
             _context = context;
             _customerGroupManager = customerGroupManager;
-            _userManager2 = userManager2;
+            _userManager = userManager;
         }
 
         public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
@@ -87,7 +87,7 @@ namespace Blob.Core.Services
             //    LockoutEndDateUtc = DateTime.UtcNow.AddDays(-1),
             //};
             //_context.Users.Add(defaultUser);
-            await _userManager2.CreateUserAsync(new CreateUserDto
+            await _userManager.CreateUserAsync(new CreateUserDto
             {
                 CustomerId = dto.DefaultUser.CustomerId,
                 Email = dto.DefaultUser.Email,

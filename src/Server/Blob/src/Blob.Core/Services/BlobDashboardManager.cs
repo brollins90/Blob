@@ -14,11 +14,11 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private readonly BlobDeviceManager _deviceManager;
-        private readonly BlobDeviceCommandManager _deviceCommandManager;
-        private readonly BlobStatusRecordManager _statusRecordManager;
+        private readonly IDeviceService _deviceManager;
+        private readonly IDeviceCommandService _deviceCommandManager;
+        private readonly IStatusRecordService _statusRecordManager;
 
-        public BlobDashboardManager(ILog log, BlobDbContext context, BlobDeviceManager deviceManager, BlobDeviceCommandManager deviceCommandManager, BlobStatusRecordManager statusRecordManager)
+        public BlobDashboardManager(ILog log, BlobDbContext context, IDeviceService deviceManager, IDeviceCommandService deviceCommandManager, IStatusRecordService statusRecordManager)
         {
             _log = log;
             _log.Debug("Constructing BlobDashboardManager");

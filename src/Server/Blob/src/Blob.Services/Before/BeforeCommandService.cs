@@ -11,19 +11,15 @@ namespace Blob.Services.Before
     public class BeforeCommandService : IBlobCommandManager
     {
         private readonly IBlobAuditor _blobAuditor;
-        //private readonly IBlobCommandManager _blobCommandManager;
-
-
         private readonly ICustomerService _customerManager;
         private readonly ICustomerGroupService _customerGroupManager;
         private readonly IDeviceService _deviceManager;
         private readonly IDeviceCommandService _deviceCommandManager;
         private readonly IPerformanceRecordService _performanceRecordManager;
         private readonly IStatusRecordService _statusRecordManager;
-        private readonly IUserService _userManager2;
+        private readonly IUserService _userManager;
 
         public BeforeCommandService(
-            //IBlobCommandManager blobCommandManager, 
             IBlobAuditor blobAuditor,
             ICustomerService customerManager,
             ICustomerGroupService customerGroupManager,
@@ -31,9 +27,8 @@ namespace Blob.Services.Before
             IDeviceCommandService deviceCommandManager,
             IPerformanceRecordService performanceRecordManager,
             IStatusRecordService statusRecordManager,
-            IUserService userManager2)
+            IUserService userManager)
         {
-            //_blobCommandManager = blobCommandManager;
             _blobAuditor = blobAuditor;
 
             _customerManager = customerManager;
@@ -42,7 +37,7 @@ namespace Blob.Services.Before
             _deviceCommandManager = deviceCommandManager;
             _performanceRecordManager = performanceRecordManager;
             _statusRecordManager = statusRecordManager;
-            _userManager2 = userManager2;
+            _userManager = userManager;
         }
 
         public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
@@ -140,28 +135,28 @@ namespace Blob.Services.Before
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "user", dto.UserId.ToString());
-            return await _userManager2.CreateUserAsync(dto).ConfigureAwait(false);
+            return await _userManager.CreateUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> DisableUserAsync(DisableUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "disable", "user", dto.UserId.ToString());
-            return await _userManager2.DisableUserAsync(dto).ConfigureAwait(false);
+            return await _userManager.DisableUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> EnableUserAsync(EnableUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "enable", "user", dto.UserId.ToString());
-            return await _userManager2.EnableUserAsync(dto).ConfigureAwait(false);
+            return await _userManager.EnableUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> UpdateUserAsync(UpdateUserDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "user", dto.UserId.ToString());
-            return await _userManager2.UpdateUserAsync(dto).ConfigureAwait(false);
+            return await _userManager.UpdateUserAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)

@@ -16,11 +16,11 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private readonly BlobNotificationScheduleManager _notificationScheduleService;
+        private readonly INotificationScheduleService _notificationScheduleService;
 
         private readonly DateTime _oldestDateTime = DateTime.Parse("2010-01-01").ToUniversalTime();
 
-        public BlobUserManager2(ILog log, BlobDbContext context, BlobNotificationScheduleManager notificationScheduleService)
+        public BlobUserManager2(ILog log, BlobDbContext context, INotificationScheduleService notificationScheduleService)
         {
             _log = log;
             _log.Debug("Constructing BlobUserManager2");

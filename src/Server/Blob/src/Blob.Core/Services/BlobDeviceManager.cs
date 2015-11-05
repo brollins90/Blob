@@ -19,10 +19,10 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private readonly BlobDeviceCommandManager _deviceCommandManager;
-        private readonly BlobStatusRecordManager _statusRecordManager;
+        private readonly IDeviceCommandService _deviceCommandManager;
+        private readonly IStatusRecordService _statusRecordManager;
 
-        public BlobDeviceManager(ILog log, BlobDbContext context, BlobDeviceCommandManager deviceCommandManager, BlobStatusRecordManager statusRecordManager)
+        public BlobDeviceManager(ILog log, BlobDbContext context, IDeviceCommandService deviceCommandManager, IStatusRecordService statusRecordManager)
         {
             _log = log;
             _log.Debug("Constructing BlobDeviceManager");

@@ -5,7 +5,7 @@ using Blob.Contracts.ServiceContracts;
 using Blob.Contracts.Services;
 using Blob.Core;
 using Blob.Core.Audit;
-using Blob.Core.Blob;
+//using Blob.Core.Blob;
 using Blob.Core.Identity;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
@@ -15,6 +15,7 @@ using log4net;
 using Microsoft.AspNet.Identity;
 using Ninject.Modules;
 using Ninject.Web.Common;
+using Blob.Services.Device;
 
 namespace Blob.WcfHost.Infrastructure
 {
@@ -48,16 +49,22 @@ namespace Blob.WcfHost.Infrastructure
             Bind<IRoleStore<Role, Guid>>().To<BlobRoleStore>();
             Bind<BlobRoleManager>().ToSelf();
 
-            Bind<IDeviceService>().To<BlobDeviceManager>();
-            Bind<IBlobAuditor>().To<BlobAuditor>();
-            Bind<IBlobQueryManager>().To<BlobQueryManager>();
+            Bind<IBlobCommandManager>().To<BeforeCommandService>();
+            Bind<IBlobQueryManager>().To<BeforeQueryService>();
 
+            Bind<IBlobAuditor>().To<BlobAuditor>();
+            Bind<ICustomerGroupService>().To<BlobCustomerGroupManager>();
+            Bind<ICustomerService>().To<BlobCustomerManager>();
+            Bind<IDashboardService>().To<BlobDashboardManager>();
+            Bind<IDeviceCommandService>().To<BlobDeviceCommandManager>();
+            Bind<IDeviceConnectionService>().To<DeviceConnectionService>();
+            Bind<IDeviceService>().To<BlobDeviceManager>();
+            Bind<IDeviceStatusService>().To<DeviceStatusService>();
+            Bind<INotificationScheduleService>().To<BlobNotificationScheduleManager>();
             Bind<IPerformanceRecordService>().To<BlobPerformanceRecordManager>();
             Bind<IStatusRecordService>().To<BlobStatusRecordManager>();
-
-            Bind<IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
-            Bind<IDeviceStatusService>().To<Services.Device.DeviceStatusService>();
             Bind<IUserManagerService>().To<BeforeUserManagerService>();
+            Bind<IUserService>().To<BlobUserManager2>();
 
             // logging
             Bind<ILog>().ToMethod(context => LogManager.GetLogger(context.Request.Target.Member.ReflectedType));

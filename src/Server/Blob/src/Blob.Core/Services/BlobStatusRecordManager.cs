@@ -16,9 +16,9 @@ namespace Blob.Core.Services
     {
         private readonly ILog _log;
         private readonly BlobDbContext _context;
-        private readonly BlobPerformanceRecordManager _performanceRecordManager;
+        private readonly IPerformanceRecordService _performanceRecordManager;
 
-        public BlobStatusRecordManager(ILog log, BlobDbContext context, BlobPerformanceRecordManager performanceRecordManager)
+        public BlobStatusRecordManager(ILog log, BlobDbContext context, IPerformanceRecordService performanceRecordManager)
         {
             _log = log;
             _context = context;
