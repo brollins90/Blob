@@ -9,8 +9,8 @@ namespace Blob.Core.Blob
     public class BlobCommandManager : IBlobCommandManager
     {
         private readonly ILog _log;
-        private readonly BlobCustomerManager _customerManager;
-        private readonly BlobCustomerGroupManager _customerGroupManager;
+        //private readonly BlobCustomerManager _customerManager;
+        //private readonly BlobCustomerGroupManager _customerGroupManager;
         private readonly BlobDeviceManager _deviceManager;
         private readonly BlobDeviceCommandManager _deviceCommandManager;
         private readonly BlobPerformanceRecordManager _performanceRecordManager;
@@ -19,8 +19,8 @@ namespace Blob.Core.Blob
 
         public BlobCommandManager(
             ILog log,
-            BlobCustomerManager customerManager,
-            BlobCustomerGroupManager customerGroupManager,
+            //BlobCustomerManager customerManager,
+            //BlobCustomerGroupManager customerGroupManager,
             BlobDeviceManager deviceManager,
             BlobDeviceCommandManager deviceCommandManager,
             BlobPerformanceRecordManager performanceRecordManager,
@@ -29,15 +29,15 @@ namespace Blob.Core.Blob
         {
             _log = log;
             _log.Debug("Constructing BlobManager");
-            _customerManager = customerManager;
-            _customerGroupManager = customerGroupManager;
+            //_customerManager = customerManager;
+            //_customerGroupManager = customerGroupManager;
             _deviceManager = deviceManager;
             _deviceCommandManager = deviceCommandManager;
             _performanceRecordManager = performanceRecordManager;
             _statusRecordManager = statusRecordManager;
             _userManager2 = userManager2;
         }
-        
+
 
         // Device Command
         public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
@@ -124,22 +124,26 @@ namespace Blob.Core.Blob
         // Customer
         public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
         {
-            return await _customerManager.DisableCustomerAsync(dto).ConfigureAwait(false);
+            //return await _customerManager.DisableCustomerAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
         {
-            return await _customerManager.EnableCustomerAsync(dto).ConfigureAwait(false);
+            //return await _customerManager.EnableCustomerAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
-            return await _customerManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
+            //return await _customerManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
-            return await _customerManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
+            //return await _customerManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
+            return null;
         }
         #endregion
 
@@ -147,37 +151,44 @@ namespace Blob.Core.Blob
 
         public async Task<BlobResultDto> CreateCustomerGroupAsync(CreateCustomerGroupDto dto)
         {
-            return await _customerGroupManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
-            return await _customerGroupManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
-            return await _customerGroupManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
-            return await _customerGroupManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
-            return await _customerGroupManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
-            return await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
-            return await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return null;
         }
         #endregion
     }

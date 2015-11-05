@@ -1,6 +1,8 @@
 ﻿using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
+using Blob.Contracts.Services;
 using Blob.Core.Extensions;
+using Blob.Core.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AuditLevel = Blob.Contracts.ServiceContracts.AuditLevel;
@@ -12,38 +14,51 @@ namespace Blob.Services.Before
         private readonly IBlobAuditor _blobAuditor;
         private readonly IBlobCommandManager _blobCommandManager;
 
-        public BeforeCommandService(IBlobCommandManager blobCommandManager, IBlobAuditor blobAuditor)
+
+        private readonly ICustomerService _customerManager;
+        private readonly ICustomerGroupService _customerGroupManager;
+
+        public BeforeCommandService(IBlobCommandManager blobCommandManager, IBlobAuditor blobAuditor,
+            ICustomerService customerManager,
+            ICustomerGroupService customerGroupManager)
         {
             _blobCommandManager = blobCommandManager;
             _blobAuditor = blobAuditor;
+
+            _customerManager = customerManager;
+            _customerGroupManager = customerGroupManager;
         }
 
         public async Task<BlobResultDto> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "customer", dto.CustomerId.ToString());
-            return await _blobCommandManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
+            return await _customerManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.RegisterCustomerAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> DisableCustomerAsync(DisableCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "disable", "customer", dto.CustomerId.ToString());
-            return await _blobCommandManager.DisableCustomerAsync(dto).ConfigureAwait(false);
+            return await _customerManager.DisableCustomerAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.DisableCustomerAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> EnableCustomerAsync(EnableCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "enable", "customer", dto.CustomerId.ToString());
-            return await _blobCommandManager.EnableCustomerAsync(dto).ConfigureAwait(false);
+            return await _customerManager.EnableCustomerAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.EnableCustomerAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "customer", dto.CustomerId.ToString());
-            return await _blobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
+            return await _customerManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.UpdateCustomerAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> IssueCommandAsync(IssueDeviceCommandDto dto)
@@ -141,49 +156,56 @@ namespace Blob.Services.Before
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "create", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.CreateCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> DeleteCustomerGroupAsync(DeleteCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "delete", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.DeleteCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> UpdateCustomerGroupAsync(UpdateCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "update", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.UpdateCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> AddRoleToCustomerGroupAsync(AddRoleToCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.AddRoleToCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> AddUserToCustomerGroupAsync(AddUserToCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.AddUserToCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> RemoveRoleFromCustomerGroupAsync(RemoveRoleFromCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.RemoveRoleFromCustomerGroupAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<BlobResultDto> RemoveUserFromCustomerGroupAsync(RemoveUserFromCustomerGroupDto dto)
         {
             var identity = ClaimsPrincipal.Current.Identity;
             await _blobAuditor.AddAuditEntryAsync(identity.GetBlobId(), AuditLevel.Edit, "edit", "group", dto.GroupId.ToString());
-            return await _blobCommandManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            return await _customerGroupManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
+            //return await _blobCommandManager.RemoveUserFromCustomerGroupAsync(dto).ConfigureAwait(false);
         }
     }
 }
