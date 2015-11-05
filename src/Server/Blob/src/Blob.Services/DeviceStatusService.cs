@@ -4,7 +4,7 @@ using Blob.Contracts.Services;
 using log4net;
 using System.Threading.Tasks;
 
-namespace Blob.Services.Device
+namespace Blob.Services
 {
     public class DeviceStatusService : IDeviceStatusService
     {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Blob.Services.Before
+namespace Blob.Services
 {
     public class BeforeUserManagerService : IUserManagerService
     {

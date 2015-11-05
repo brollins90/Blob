@@ -44,10 +44,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Before\BeforeAuthorizationService.cs" />
-    <Compile Include="Before\BeforeUserManagerService.cs" />
-    <Compile Include="Device\DeviceConnectionService.cs" />
-    <Compile Include="Device\DeviceStatusService.cs" />
+    <Compile Include="BeforeAuthorizationService.cs" />
+    <Compile Include="BeforeUserManagerService.cs" />
+    <Compile Include="DeviceConnectionService.cs" />
+    <Compile Include="DeviceStatusService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +61,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

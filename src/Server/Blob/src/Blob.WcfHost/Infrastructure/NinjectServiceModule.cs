@@ -1,21 +1,19 @@
-﻿using System;
-using System.Configuration;
-using System.Data.Entity;
-using Blob.Contracts.ServiceContracts;
+﻿using Blob.Contracts.ServiceContracts;
 using Blob.Contracts.Services;
 using Blob.Core;
 using Blob.Core.Audit;
-//using Blob.Core.Blob;
 using Blob.Core.Identity;
 using Blob.Core.Identity.Store;
 using Blob.Core.Models;
 using Blob.Core.Services;
-using Blob.Services.Before;
+using Blob.Services;
 using log4net;
 using Microsoft.AspNet.Identity;
 using Ninject.Modules;
 using Ninject.Web.Common;
-using Blob.Services.Device;
+using System;
+using System.Configuration;
+using System.Data.Entity;
 
 namespace Blob.WcfHost.Infrastructure
 {

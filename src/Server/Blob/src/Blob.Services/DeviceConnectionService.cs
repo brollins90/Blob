@@ -4,7 +4,7 @@ using log4net;
 using System;
 using System.ServiceModel;
 
-namespace Blob.Services.Device
+namespace Blob.Services
 {
     public class DeviceConnectionService : IDeviceConnectionService
     {
