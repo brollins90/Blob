@@ -49,13 +49,13 @@ namespace Blob.Contracts.ServiceContracts
 
         // PerformanceRecord
         [OperationContract]
-        Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto statusPerformanceData);
+        Task<BlobResultDto> AddPerformanceRecordAsync(AddPerformanceRecordDto dto);
         [OperationContract]
         Task<BlobResultDto> DeletePerformanceRecordAsync(DeletePerformanceRecordDto dto);
 
         // StatusRecord
         [OperationContract]
-        Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto statusData);
+        Task<BlobResultDto> AddStatusRecordAsync(AddStatusRecordDto dto);
         [OperationContract]
         Task<BlobResultDto> DeleteStatusRecordAsync(DeleteStatusRecordDto dto);
 
