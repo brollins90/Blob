@@ -38,7 +38,7 @@ namespace Blob.WcfHost.Infrastructure
         {
             _log.Info("Registering Ninject dependencies");
 
-            String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
 
             Bind<BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
@@ -49,21 +49,20 @@ namespace Blob.WcfHost.Infrastructure
             Bind<IRoleStore<Role, Guid>>().To<BlobRoleStore>();
             Bind<BlobRoleManager>().ToSelf();
 
-            Bind<IBlobCommandManager>().To<BeforeCommandService>();
-            Bind<IBlobQueryManager>().To<BeforeQueryService>();
+            Bind<IDeviceConnectionService>().To<DeviceConnectionService>();
+            Bind<IDeviceStatusService>().To<DeviceStatusService>();
+
+            Bind<IUserManagerService>().To<BeforeUserManagerService>();
 
             Bind<IBlobAuditor>().To<BlobAuditor>();
             Bind<ICustomerGroupService>().To<BlobCustomerGroupManager>();
             Bind<ICustomerService>().To<BlobCustomerManager>();
             Bind<IDashboardService>().To<BlobDashboardManager>();
             Bind<IDeviceCommandService>().To<BlobDeviceCommandManager>();
-            Bind<IDeviceConnectionService>().To<DeviceConnectionService>();
             Bind<IDeviceService>().To<BlobDeviceManager>();
-            Bind<IDeviceStatusService>().To<DeviceStatusService>();
             Bind<INotificationScheduleService>().To<BlobNotificationScheduleManager>();
             Bind<IPerformanceRecordService>().To<BlobPerformanceRecordManager>();
             Bind<IStatusRecordService>().To<BlobStatusRecordManager>();
-            Bind<IUserManagerService>().To<BeforeUserManagerService>();
             Bind<IUserService>().To<BlobUserManager2>();
 
             // logging
