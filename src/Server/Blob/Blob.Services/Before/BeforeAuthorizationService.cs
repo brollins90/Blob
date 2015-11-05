@@ -1,19 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security.Claims;
-using System.ServiceModel;
-using System.Threading.Tasks;
-using Blob.Contracts.Models;
+﻿using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
 using Blob.Core.Authorization;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Blob.Services.Before
 {
-    [ServiceBehavior]
-    [GlobalErrorBehavior(typeof(GlobalErrorHandler))]
     public class BeforeAuthorizationService : IAuthorizationManagerService
     {
-        [OperationBehavior]
         public Task<bool> CheckAccessAsync(AuthorizationContextDto context)
         {
             BlobClaimsAuthorizationManager am = new BlobClaimsAuthorizationManager();

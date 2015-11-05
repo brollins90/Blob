@@ -50,8 +50,6 @@
     <Compile Include="Before\BeforeUserManagerService.cs" />
     <Compile Include="Device\DeviceConnectionService.cs" />
     <Compile Include="Device\DeviceStatusService.cs" />
-    <Compile Include="GlobalErrorBehaviorAttribute.cs" />
-    <Compile Include="GlobalErrorHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
