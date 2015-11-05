@@ -34,11 +34,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Blob.Core\Blob.Core.csproj">
+    <ProjectReference Include="..\Blob.Core\Blob.Core.csproj">
       <Project>{a8395cbd-fdd2-4a90-8a9e-719b8266773f}</Project>
       <Name>Blob.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\DeviceStatus.Core\DeviceStatus.Core.csproj">
+    <ProjectReference Include="..\DeviceStatus.Core\DeviceStatus.Core.csproj">
       <Project>{83701fef-a995-41d8-bb71-cd592e31cbe7}</Project>
       <Name>DeviceStatus.Core</Name>
     </ProjectReference>

@@ -38,7 +38,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\DeviceStatus.Core\DeviceStatus.Core.csproj">
+    <ProjectReference Include="..\DeviceStatus.Core\DeviceStatus.Core.csproj">
       <Project>{83701fef-a995-41d8-bb71-cd592e31cbe7}</Project>
       <Name>DeviceStatus.Core</Name>
     </ProjectReference>
