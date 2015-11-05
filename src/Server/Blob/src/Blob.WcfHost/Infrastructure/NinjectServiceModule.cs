@@ -38,21 +38,22 @@ namespace Blob.WcfHost.Infrastructure
             _log.Info("Registering Ninject dependencies");
 
             String connectionString = ConfigurationManager.ConnectionStrings["BlobDbContext"].ConnectionString;
-            
+
             Bind<BlobDbContext>().ToSelf().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
             Bind<DbContext>().To<BlobDbContext>().InRequestScope() // each request will instantiate its own DBContext
                 .WithConstructorArgument("connectionString", connectionString);
 
-            //Bind<BlobCustomerStore>().ToSelf();
             Bind<IRoleStore<Role, Guid>>().To<BlobRoleStore>();
             Bind<BlobRoleManager>().ToSelf();
 
             Bind<IDeviceService>().To<BlobDeviceManager>();
             Bind<IBlobAuditor>().To<BlobAuditor>();
-            Bind<IBlobCommandManager>().To<BlobCommandManager>();
             Bind<IBlobQueryManager>().To<BlobQueryManager>();
+
+            Bind<IPerformanceRecordService>().To<BlobPerformanceRecordManager>();
+            Bind<IStatusRecordService>().To<BlobStatusRecordManager>();
 
             Bind<IDeviceConnectionService>().To<Services.Device.DeviceConnectionService>();
             Bind<IDeviceStatusService>().To<Services.Device.DeviceStatusService>();

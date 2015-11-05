@@ -9,14 +9,19 @@ namespace Blob.Services.Device
     public class DeviceStatusService : IDeviceStatusService
     {
         private readonly ILog _log;
-        private readonly IBlobCommandManager _blobCommandManager;
         private IDeviceService _deviceService;
+        private IPerformanceRecordService _performanceRecordService;
+        private IStatusRecordService _statusRecordService;
 
-        public DeviceStatusService(IBlobCommandManager blobCommandManager, ILog log, IDeviceService deviceService)
+        public DeviceStatusService(
+            ILog log, IDeviceService deviceService,
+            IPerformanceRecordService performanceRecordService,
+            IStatusRecordService statusRecordService)
         {
             _log = log;
             _deviceService = deviceService;
-            _blobCommandManager = blobCommandManager;
+            _performanceRecordService = performanceRecordService;
+            _statusRecordService = statusRecordService;
         }
 
         #region Customer
@@ -24,7 +29,7 @@ namespace Blob.Services.Device
         public async Task<RegisterDeviceResponseDto> RegisterDeviceAsync(RegisterDeviceDto dto)
         {
             _log.Debug("RegistrationService received registration message: " + dto);
-            return await _blobCommandManager.RegisterDeviceAsync(dto).ConfigureAwait(false);
+            return await _deviceService.RegisterDeviceAsync(dto).ConfigureAwait(false);
         }
 
         #endregion
@@ -35,13 +40,13 @@ namespace Blob.Services.Device
         public async Task AddPerformanceRecordAsync(AddPerformanceRecordDto dto)
         {
             _log.Debug("Server received perf: " + dto);
-            await _blobCommandManager.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
+            await _performanceRecordService.AddPerformanceRecordAsync(dto).ConfigureAwait(false);
         }
 
         public async Task AddStatusRecordAsync(AddStatusRecordDto dto)
         {
             _log.Debug("Server received status: " + dto);
-            await _blobCommandManager.AddStatusRecordAsync(dto).ConfigureAwait(false);
+            await _statusRecordService.AddStatusRecordAsync(dto).ConfigureAwait(false);
         }
 
         #endregion
