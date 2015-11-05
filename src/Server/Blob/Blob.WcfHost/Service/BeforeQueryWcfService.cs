@@ -1,6 +1,5 @@
 ﻿using Blob.Contracts.Models.ViewModels;
 using Blob.Contracts.ServiceContracts;
-using Blob.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Services;

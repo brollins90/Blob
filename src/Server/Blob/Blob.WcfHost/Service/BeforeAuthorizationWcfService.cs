@@ -1,6 +1,5 @@
 ﻿using Blob.Contracts.Models;
 using Blob.Contracts.ServiceContracts;
-using Blob.Services;
 using System.ServiceModel;
 using System.Threading.Tasks;
 

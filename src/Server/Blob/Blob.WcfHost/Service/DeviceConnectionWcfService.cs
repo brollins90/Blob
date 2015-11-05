@@ -1,5 +1,4 @@
 ﻿using Blob.Contracts.ServiceContracts;
-using Blob.Services;
 using System;
 using System.IdentityModel.Services;
 using System.Security.Permissions;
