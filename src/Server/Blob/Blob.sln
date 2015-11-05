@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Contracts", "Blob.Contracts\Blob.Contracts.csproj", "{378A8760-5046-44D2-8F28-C0F3A842D094}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Contracts", "src\Blob.Contracts\Blob.Contracts.csproj", "{378A8760-5046-44D2-8F28-C0F3A842D094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.WcfHost", "Blob.WcfHost\Blob.WcfHost.csproj", "{FFF2EF9C-8655-428A-AA0F-5F33C4746B26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Core", "src\Blob.Core\Blob.Core.csproj", "{A8395CBD-FDD2-4A90-8A9E-719B8266773F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Proxies", "Blob.Proxies\Blob.Proxies.csproj", "{95485EC1-2480-4BCB-AED7-3722A1427CC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Proxies", "src\Blob.Proxies\Blob.Proxies.csproj", "{95485EC1-2480-4BCB-AED7-3722A1427CC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Services", "Blob.Services\Blob.Services.csproj", "{0CA5CC90-D2BB-4847-98B4-3849CC5D422D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Services", "src\Blob.Services\Blob.Services.csproj", "{0CA5CC90-D2BB-4847-98B4-3849CC5D422D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.Core", "Blob.Core\Blob.Core.csproj", "{A8395CBD-FDD2-4A90-8A9E-719B8266773F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blob.WcfHost", "src\Blob.WcfHost\Blob.WcfHost.csproj", "{FFF2EF9C-8655-428A-AA0F-5F33C4746B26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
