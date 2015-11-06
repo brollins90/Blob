@@ -1,4 +1,4 @@
-project.lock.json
+
 *.pubxml
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -201,4 +201,3 @@ FakesAssemblies/
 /src/Server/Before/Before/ConnectionStrings.config
 /src/Server/Before/Before/Web.config
 *.diagsession
-/src/Server/dev.blobstsservice.rritc.com.cer

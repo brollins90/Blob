@@ -1,0 +1,53 @@
+﻿@using Before.Infrastructure.Extensions
+@using Blob.Contracts.Models.ViewModels
+@using PagedList
+@using PagedList.Mvc
+@model CustomerPageVm
+
+<div id="customerPageContent" class="no-more-tables">
+
+    @if (Model != null && Model.Items != null && Model.Items.Any())
+    {
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().Enabled)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().CreateDate)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Actions")
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td data-title="@Html.DisplayNameFor(model => item.Name)">
+                            <a href="@Url.Action("Single", "Customer", new {id = item.CustomerId})">@Html.DisplayFor(modelItem => item.Name)</a>
+                        </td>
+                        <td data-title="@Html.DisplayNameFor(model => item.Enabled)">
+                            @Html.DisplayFor(modelItem => item.CreateDate)
+                        </td>
+                        <td data-title="@Html.DisplayNameFor(model => item.CreateDate)">
+                            @Html.DisplayFor(modelItem => item.Enabled)
+                        </td>
+                        <td data-title="@Html.DisplayName("Actions")"> </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {@:
+        <div class="text-muted">&nbsp;No customers found.</div>
+    }
+    @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "customerPageContent")
+</div>

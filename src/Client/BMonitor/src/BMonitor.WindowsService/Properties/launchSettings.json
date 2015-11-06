@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "BMonitor.WindowsService": {
-      "commandName": "BMonitor.WindowsService",
-      "commandLineArgs": "-console"
-    }
-  }
-}

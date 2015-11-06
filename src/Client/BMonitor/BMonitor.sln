@@ -3,29 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Common", "src\BMonitor.Common\BMonitor.Common.csproj", "{4C1C9B97-E90D-45BF-BE89-48CFE705C211}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Common", "BMonitor.Common\BMonitor.Common.csproj", "{4C1C9B97-E90D-45BF-BE89-48CFE705C211}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Common.Tests", "test\BMonitor.Common.Tests\BMonitor.Common.Tests.csproj", "{5D77AACD-632F-4110-9BA1-E67D70223734}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Service", "BMonitor.Service\BMonitor.Service.csproj", "{2D20637B-6603-434A-B05F-C67C27BCB639}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Configuration", "src\BMonitor.Configuration\BMonitor.Configuration.csproj", "{31D818F8-E787-45F8-9FD1-4CF27285D289}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.WindowsService", "BMonitor.WindowsService\BMonitor.WindowsService.csproj", "{88832E91-33A4-42FB-B7C1-C90758E1CDFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers", "src\BMonitor.Handlers\BMonitor.Handlers.csproj", "{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Monitors", "BMonitor.Monitors\BMonitor.Monitors.csproj", "{A7811934-D990-4F77-9013-E66FE9513144}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers.Runner", "test\BMonitor.Handlers.Runner\BMonitor.Handlers.Runner.csproj", "{8EF350CC-D2C0-4D48-9200-3E05C9CDD503}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers", "BMonitor.Handlers\BMonitor.Handlers.csproj", "{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Monitors", "src\BMonitor.Monitors\BMonitor.Monitors.csproj", "{A7811934-D990-4F77-9013-E66FE9513144}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Handlers.Runner", "BMonitor.Handlers.Runner\BMonitor.Handlers.Runner.csproj", "{8EF350CC-D2C0-4D48-9200-3E05C9CDD503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Service", "src\BMonitor.Service\BMonitor.Service.csproj", "{2D20637B-6603-434A-B05F-C67C27BCB639}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "BMonitor.Setup", "BMonitor.Setup\BMonitor.Setup.wixproj", "{DD8A2D35-7928-474A-B40C-A709B8276A06}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "BMonitor.Setup", "src\BMonitor.Setup\BMonitor.Setup.wixproj", "{DD8A2D35-7928-474A-B40C-A709B8276A06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Setup.Ext", "BMonitor.Setup.Ext\BMonitor.Setup.Ext.csproj", "{7B1A2F48-0010-4EE8-B032-45F36B59371F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Setup.Ext", "src\BMonitor.Setup.Ext\BMonitor.Setup.Ext.csproj", "{7B1A2F48-0010-4EE8-B032-45F36B59371F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.WindowsService", "src\BMonitor.WindowsService\BMonitor.WindowsService.csproj", "{88832E91-33A4-42FB-B7C1-C90758E1CDFC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{016FF91B-97AF-448E-B116-886D0FED3068}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMonitor.Common.Tests", "BMonitor.Common.Tests\BMonitor.Common.Tests.csproj", "{5D77AACD-632F-4110-9BA1-E67D70223734}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,32 +121,11 @@ Global
 		{5D77AACD-632F-4110-9BA1-E67D70223734}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5D77AACD-632F-4110-9BA1-E67D70223734}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5D77AACD-632F-4110-9BA1-E67D70223734}.Release|x86.ActiveCfg = Release|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Debug|x86.Build.0 = Debug|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Release|x86.ActiveCfg = Release|Any CPU
-		{31D818F8-E787-45F8-9FD1-4CF27285D289}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4C1C9B97-E90D-45BF-BE89-48CFE705C211} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{2D20637B-6603-434A-B05F-C67C27BCB639} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{88832E91-33A4-42FB-B7C1-C90758E1CDFC} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{A7811934-D990-4F77-9013-E66FE9513144} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{639A1B6C-B4F4-4ACB-9562-A48BBEE8AA74} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{8EF350CC-D2C0-4D48-9200-3E05C9CDD503} = {016FF91B-97AF-448E-B116-886D0FED3068}
-		{DD8A2D35-7928-474A-B40C-A709B8276A06} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{7B1A2F48-0010-4EE8-B032-45F36B59371F} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
-		{5D77AACD-632F-4110-9BA1-E67D70223734} = {016FF91B-97AF-448E-B116-886D0FED3068}
-		{31D818F8-E787-45F8-9FD1-4CF27285D289} = {B7DA686A-4D3A-45FB-ACDC-55CB843B04AC}
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

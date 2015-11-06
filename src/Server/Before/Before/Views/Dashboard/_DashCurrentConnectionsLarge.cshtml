@@ -1,0 +1,56 @@
+﻿@using Before.Infrastructure.Extensions
+@using PagedList
+@model Blob.Contracts.Models.ViewModels.DashCurrentConnectionsLargeVm
+
+<div class="panel panel-default">
+    <div class="panel-heading">Active Connections</div>
+    <div id="dashCurrentConnectionsLargeContent" class="panel-body no-more-tables">
+
+        @if (Model != null && Model.Items != null && Model.Items.Any())
+        {
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Items.First().CustomerName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Items.First().Status)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Items.First().DeviceName)
+                        </th>
+                        <th>
+                            @Html.DisplayName("Actions")
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class="@Html.AlertLevelClass(item.Status)">
+                            <td data-title="@Html.DisplayNameFor(model => item.CustomerName)">
+                                @Html.DisplayFor(model => item.CustomerName)
+                            </td>
+                            <td data-title="@Html.DisplayNameFor(model => item.Status)">
+                                @Html.AlertLevelValue(item.Status)
+                            </td>
+                            <td data-title="@Html.DisplayNameFor(model => item.DeviceName)">
+                                <a href="@Url.Action("Single", "Device", new {id = item.DeviceId})">@Html.DisplayFor(modelItem => item.DeviceName)</a>
+                            </td>
+                            <td data-title="@Html.DisplayName("Actions")">
+                                @{ Html.RenderPartial("_DeviceCommandDropdown", item.AvailableCommands, new ViewDataDictionary {{"deviceId", item.DeviceId}}); }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="text-muted">&nbsp;There are no active connections.</div>
+        }
+        @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "dashCurrentConnectionsLargeContent")
+    </div>
+</div>

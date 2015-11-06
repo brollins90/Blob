@@ -1,0 +1,39 @@
+﻿@using Before.Infrastructure.Extensions
+@using PagedList
+@model Blob.Contracts.Models.ViewModels.CustomerGroupPageVm
+
+<div id="customerGroupPageContent" class="no-more-tables">
+
+    @if (Model != null && Model.Items != null && Model.Items.Any())
+    {
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items.First().Name)
+                    </th>
+                    <th>
+                        @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span>", "Add a group", "Create", "CustomerGroup", routeValues: null, htmlAttributes: new { data_modal = "", @class = "btn btn-primary" })
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Single", "CustomerGroup", new {id = item.GroupId})">@Html.DisplayFor(modelItem => item.Name)</a>
+                        </td>
+                        <td data-title="@Html.DisplayName("Actions")"> </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {@:
+        <div class="text-muted">&nbsp;No devices found.</div>
+    }
+    @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "customerGroupPageContent")
+</div>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define Version = "0.2.1" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <Product Id="FFE6E1FE-B522-4E8D-A766-E8D4368A7AC9"
+           Language="!(loc.LANG)"
+           Manufacturer="!(loc.CompanyName)"
+           Name="!(loc.ProductName)"
+           UpgradeCode="47B6C366-1708-47D0-B353-A3DF9524FCAB"
+           Version="$(var.Version)">
+    
+    <Package InstallerVersion="300" Compressed="yes" 
+             Description="!(loc.Description)"
+             Languages="!(loc.LANG)"
+             Manufacturer="!(loc.CompanyName)"/>
+    <Media Id="1" Cabinet="$(var.BMonitor.WindowsService.ProjectName).cab" EmbedCab="yes" />
+
+    <?include Settings.wxi ?>
+    <?include Conditions.wxi ?>
+    <!--<?include MyUI.wxi ?>-->
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ROOTDIRECTORY" Name="!(loc.CompanyName)">
+          <Directory Id="INSTALLFOLDER" Name="!(loc.ProductName)" />
+        </Directory>
+      </Directory>
+    </Directory>
+    
+    <!-- The files inside this DirectoryRef are linked to the Test Service directory via INSTALLFOLDER -->
+    <DirectoryRef Id="INSTALLFOLDER">
+
+      <!-- BMonitor.Common -->
+      <Component Id="$(var.BMonitor.Common.TargetFileName)" Guid="{107E6DFA-B1C1-4BD5-A291-50AE51AE0734}">
+        <File Id="$(var.BMonitor.Common.TargetFileName)" Name="$(var.BMonitor.Common.TargetFileName)" Source="$(var.BMonitor.Common.TargetPath)" Vital="yes" KeyPath="yes"/>
+      </Component>
+
+      <!-- BMonitor.Connection -->
+      <Component Id="$(var.BMonitor.Connection.TargetFileName)" Guid="*">
+        <File Id="$(var.BMonitor.Connection.TargetFileName)" Name="$(var.BMonitor.Connection.TargetFileName)" Source="$(var.BMonitor.Connection.TargetPath)" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Blob.Proxies.dll" Guid="*">
+        <File Id="Blob.Proxies.dll" Name="Blob.Proxies.dll" Source="$(var.BMonitor.Service.TargetDir)\Blob.Proxies.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+
+      <!-- BMonitor.Handlers -->
+      <Component Id="$(var.BMonitor.Handlers.TargetFileName)" Guid="*">
+        <File Id="$(var.BMonitor.Handlers.TargetFileName)" Name="$(var.BMonitor.Handlers.TargetFileName)" Source="$(var.BMonitor.Handlers.TargetPath)" Vital="yes" KeyPath="yes"/>
+      </Component>
+
+      <!-- BMonitor.Monitors -->
+      <Component Id="$(var.BMonitor.Monitors.TargetFileName)" Guid="*">
+        <File Id="$(var.BMonitor.Monitors.TargetFileName)" Name="$(var.BMonitor.Monitors.TargetFileName)" Source="$(var.BMonitor.Monitors.TargetPath)" Vital="yes" KeyPath="yes"/>
+      </Component>
+
+      <!-- BMonitor.Service -->
+      <Component Id="$(var.BMonitor.Service.TargetFileName)" Guid="*">
+        <File Id="$(var.BMonitor.Service.TargetFileName)" Name="$(var.BMonitor.Service.TargetFileName)" Source="$(var.BMonitor.Service.TargetPath)" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Blob.Contracts.dll" Guid="*">
+        <File Id="Blob.Contracts.dll" Name="Blob.Contracts.dll" Source="$(var.BMonitor.Service.TargetDir)\Blob.Contracts.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Common.Logging.Core.dll" Guid="*">
+        <File Id="Common.Logging.Core.dll" Name="Common.Logging.Core.dll" Source="$(var.BMonitor.Service.TargetDir)\Common.Logging.Core.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Common.Logging.dll" Guid="*">
+        <File Id="Common.Logging.dll" Name="Common.Logging.dll" Source="$(var.BMonitor.Service.TargetDir)\Common.Logging.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="log4net.dll" Guid="*">
+        <File Id="log4net.dll" Name="log4net.dll" Source="$(var.BMonitor.Service.TargetDir)\log4net.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Ninject.dll" Guid="*">
+        <File Id="Ninject.dll" Name="Ninject.dll" Source="$(var.BMonitor.Service.TargetDir)\Ninject.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="Quartz.dll" Guid="*">
+        <File Id="Quartz.dll" Name="Quartz.dll" Source="$(var.BMonitor.Service.TargetDir)\Quartz.dll" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="jobs.config" Guid="*">
+        <File Id="jobs.config" Name="jobs.config" Source="$(var.BMonitor.WindowsService.TargetDir)\jobs.config" Vital="yes" KeyPath="yes"/>
+      </Component>
+
+      <!-- BMonitor.WindowsService -->
+      <Component Id="$(var.BMonitor.WindowsService.TargetFileName)" Guid="{D3D2F812-C585-46D0-AC1F-AB1FB4B1AE00}">
+        <File Id="$(var.BMonitor.WindowsService.TargetFileName)" Name="$(var.BMonitor.WindowsService.TargetFileName)" Source="$(var.BMonitor.WindowsService.TargetPath)" Vital="yes" KeyPath="yes"/>
+        <File Id="$(var.BMonitor.WindowsService.TargetFileName).config" Name="$(var.BMonitor.WindowsService.TargetFileName).config" Source="$(var.BMonitor.WindowsService.TargetDir)App.Base.config" Vital="yes" KeyPath="no"/>
+
+        <ServiceInstall Id="ServiceInstaller"
+                        Type="ownProcess"
+                        Vital="yes"
+                        Name="$(var.BMonitor.WindowsService.ProjectName)"
+                        DisplayName="!(loc.ProductName)"
+                        Description="Monitors the state of the system and reports it to a BlobService."
+                        Start="auto"
+                        ErrorControl="normal"
+                        Interactive="no"
+                        Account="LocalSystem"/>
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.BMonitor.WindowsService.ProjectName)" Wait="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <ComponentGroup Id="$(var.BMonitor.Common.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.Common.TargetFileName)" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="$(var.BMonitor.Connection.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.Connection.TargetFileName)" />
+      <ComponentRef Id="Blob.Proxies.dll" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="$(var.BMonitor.Handlers.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.Handlers.TargetFileName)" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="$(var.BMonitor.Monitors.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.Monitors.TargetFileName)" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="$(var.BMonitor.Service.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.Service.TargetFileName)" />
+      <ComponentRef Id="Blob.Contracts.dll" />
+      <ComponentRef Id="Common.Logging.Core.dll" />
+      <ComponentRef Id="Common.Logging.dll" />
+      <ComponentRef Id="jobs.config" />
+      <ComponentRef Id="log4net.dll" />
+      <ComponentRef Id="Ninject.dll" />
+      <ComponentRef Id="Quartz.dll" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="$(var.BMonitor.WindowsService.ProjectName)">
+      <ComponentRef Id="$(var.BMonitor.WindowsService.TargetFileName)" />
+    </ComponentGroup>
+    
+    <!-- Tell WiX to install the files -->
+    <Feature Id="ProductFeature" Title="!(loc.ProductName)" Level="1">
+      <ComponentGroupRef Id="$(var.BMonitor.Common.ProjectName)"/>
+      <ComponentGroupRef Id="$(var.BMonitor.Connection.ProjectName)"/>
+      <ComponentGroupRef Id="$(var.BMonitor.Handlers.ProjectName)"/>
+      <ComponentGroupRef Id="$(var.BMonitor.Monitors.ProjectName)"/>
+      <ComponentGroupRef Id="$(var.BMonitor.Service.ProjectName)"/>
+      <ComponentGroupRef Id="$(var.BMonitor.WindowsService.ProjectName)"/>
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
+    <UIRef Id="WixUI_BMonitorServiceUI"/>
+    
+  </Product>
+</Wix>

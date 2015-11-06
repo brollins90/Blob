@@ -1,0 +1,7 @@
+﻿@model Blob.Contracts.Models.ViewModels.CustomerPageVm
+@{
+    ViewBag.Title = "Customers";
+}
+
+<h2>@ViewBag.Title.</h2>
+@{ Html.RenderAction("PageForUser", "Customer", routeValues: new { id = ViewBag.SearchId, page = ViewBag.PageNum, pageNum = ViewBag.PageNum });}

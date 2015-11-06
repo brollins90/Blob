@@ -1,0 +1,61 @@
+﻿@using Before.Infrastructure.Extensions
+@using PagedList
+@model Blob.Contracts.Models.ViewModels.DashDevicesLargeVm
+
+<div class="panel panel-default">
+    <div class="panel-heading">Devices</div>
+    <div id="dashDevicesLargeContent" class="panel-body no-more-tables">
+
+        @if (Model != null && Model.Items != null && Model.Items.Any())
+        {
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Items.First().Status)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Items.First().DeviceName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Items.First().Reason)
+                        </th>
+                        <th>
+                            @Html.DisplayName("Actions")
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class="@Html.AlertLevelClass(item.Status)">
+                            <td data-title="@Html.DisplayNameFor(model => item.Status)">
+                                @Html.AlertLevelValue(item.Status)
+                            </td>
+                            <td data-title="@Html.DisplayNameFor(model => item.DeviceName)">
+                                <a href="@Url.Action("Single", "Device", new { id = item.DeviceId })">@Html.DisplayFor(modelItem => item.DeviceName)</a>
+                            </td>
+                            <td data-title="@Html.DisplayNameFor(model => item.Reason)">
+                                @Html.DisplayFor(model => item.Reason)
+                            </td>
+                            <td data-title="@Html.DisplayName("Actions")">
+                                @if (item.Status != 0)
+                                {
+                                    Html.RenderPartial("_DeviceCommandDropdown", item.AvailableCommands, new ViewDataDictionary { { "deviceId", item.DeviceId } });
+                                    Html.Raw("&nbsp");
+                                    Html.RenderPartial("_RecomendationsDropdown", item.Recomendations);
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="text-muted">&nbsp;No devices found.</div>
+        }
+        @Html.BeforePagedListPager(Model.Items, (IPagedList)ViewBag.PagingMetaData, (Func<int, string>)ViewBag.PageUrl, "dashDevicesLargeContent")
+    </div>
+</div>

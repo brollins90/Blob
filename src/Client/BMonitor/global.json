@@ -1,6 +1,0 @@
-﻿{
-    "projects": [ "src", "test", "wrap" ],  // "C:/_/src/Blake/Blob/src/Server/Blob/artifacts/bin"
-    "sdk": {
-        "version": "1.0.0-beta4"
-    }
-}
