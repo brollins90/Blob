@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8395CBD-FDD2-4A90-8A9E-719B8266773F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Blob.Core</RootNamespace>
+    <AssemblyName>Blob.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audit\BlobAuditor.cs" />
+    <Compile Include="Authentication\BlobClaimsIdentityFactory.cs" />
+    <Compile Include="Authentication\BlobUserNamePasswordValidator.cs" />
+    <Compile Include="Authentication\ClaimTransformer.cs" />
+    <Compile Include="Authorization\BlobClaimsAuthorizationManager.cs" />
+    <Compile Include="BlobDbContext.cs" />
+    <Compile Include="BlobInterceptorLogging.cs" />
+    <Compile Include="BlobPermissions.cs" />
+    <Compile Include="Command\CommandConnectionManager.cs" />
+    <Compile Include="Command\CommandQueueManager.cs" />
+    <Compile Include="Extensions\IdentityExtentions.cs" />
+    <Compile Include="Extensions\Parsing.cs" />
+    <Compile Include="Migrations\201506030023545_MonitorLabel.cs" />
+    <Compile Include="Migrations\201506030023545_MonitorLabel.Designer.cs">
+      <DependentUpon>201506030023545_MonitorLabel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DeviceProfile.cs" />
+    <Compile Include="Services\BlobCustomerGroupManager.cs" />
+    <Compile Include="Services\BlobDashboardManager.cs" />
+    <Compile Include="Services\BlobDeviceCommandManager.cs" />
+    <Compile Include="Services\BlobNotificationScheduleManager.cs" />
+    <Compile Include="Services\BlobPerformanceRecordManager.cs" />
+    <Compile Include="Services\BlobStatusRecordManager.cs" />
+    <Compile Include="Services\BlobDeviceManager.cs" />
+    <Compile Include="Services\BlobCustomerManager.cs" />
+    <Compile Include="Identity\BlobPasswordHasher.cs" />
+    <Compile Include="Identity\BlobPasswordValidator.cs" />
+    <Compile Include="Identity\BlobRoleManager.cs" />
+    <Compile Include="Identity\BlobUserManager.cs" />
+    <Compile Include="Identity\BlobUserValidator.cs" />
+    <Compile Include="Identity\GenericDbContext.cs" />
+    <Compile Include="Identity\Store\ICustomerGroupUserStore.cs" />
+    <Compile Include="Identity\Store\ICustomerGroupRoleStore.cs" />
+    <Compile Include="Identity\Store\ICustomerGroupStore.cs" />
+    <Compile Include="Identity\Store\ICustomerStore.cs" />
+    <Compile Include="Identity\Models\GenericGroup.cs" />
+    <Compile Include="Identity\Models\GenericGroupRole.cs" />
+    <Compile Include="Identity\Models\GenericRole.cs" />
+    <Compile Include="Identity\Models\GenericUser.cs" />
+    <Compile Include="Identity\Models\GenericUserClaim.cs" />
+    <Compile Include="Identity\Models\GenericUserGroup.cs" />
+    <Compile Include="Identity\Models\GenericUserLogin.cs" />
+    <Compile Include="Identity\Models\IGroup.cs" />
+    <Compile Include="Identity\Store\BlobCustomerStore.cs" />
+    <Compile Include="Identity\Store\BlobRoleStore.cs" />
+    <Compile Include="Identity\Store\BlobUserStore.cs" />
+    <Compile Include="Identity\Store\GenericEntityStore.cs" />
+    <Compile Include="Identity\Store\GenericRoleStore.cs" />
+    <Compile Include="Identity\Store\GenericUserRole.cs" />
+    <Compile Include="Identity\Store\GenericUserStore.cs" />
+    <Compile Include="Mapping\AuditRecordMap.cs" />
+    <Compile Include="Mapping\BlobEntityTypeConfiguration.cs" />
+    <Compile Include="Mapping\BlobPermissionMap.cs" />
+    <Compile Include="Mapping\BlobUserClaimMap.cs" />
+    <Compile Include="Mapping\BlobUserLoginMap.cs" />
+    <Compile Include="Mapping\BlobUserRoleMap.cs" />
+    <Compile Include="Mapping\CustomerGroupMap.cs" />
+    <Compile Include="Mapping\CustomerMap.cs" />
+    <Compile Include="Mapping\CustomerGroupRoleMap.cs" />
+    <Compile Include="Mapping\CustomerGroupUserMap.cs" />
+    <Compile Include="Mapping\DeviceMap.cs" />
+    <Compile Include="Mapping\NotificationSchedule.cs" />
+    <Compile Include="Mapping\DeviceTypeMap.cs" />
+    <Compile Include="Mapping\PerformanceRecordMap.cs" />
+    <Compile Include="Mapping\RoleMap.cs" />
+    <Compile Include="Mapping\StatusRecordMap.cs" />
+    <Compile Include="Mapping\UserProfileMap.cs" />
+    <Compile Include="Mapping\UserMap.cs" />
+    <Compile Include="Migrations\201505262349291_Initial.cs" />
+    <Compile Include="Migrations\201505262349291_Initial.Designer.cs">
+      <DependentUpon>201505262349291_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281815236_Schedule.cs" />
+    <Compile Include="Migrations\201505281815236_Schedule.Designer.cs">
+      <DependentUpon>201505281815236_Schedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505301805442_RequireMonitorId.cs" />
+    <Compile Include="Migrations\201505301805442_RequireMonitorId.Designer.cs">
+      <DependentUpon>201505301805442_RequireMonitorId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AuditRecord.cs" />
+    <Compile Include="Models\BlobUserClaim.cs" />
+    <Compile Include="Models\BlobUserLogin.cs" />
+    <Compile Include="Models\BlobUserRole.cs" />
+    <Compile Include="Models\CustomerGroup.cs" />
+    <Compile Include="Models\CustomerGroupRole.cs" />
+    <Compile Include="Models\CustomerGroupUser.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\BlobPermission.cs" />
+    <Compile Include="Models\Device.cs" />
+    <Compile Include="Models\DeviceType.cs" />
+    <Compile Include="Models\NotificationSchedule.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\StatusRecord.cs" />
+    <Compile Include="Models\PerformanceRecord.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Notification\NotificationManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Command\ICommandConnectionManager.cs" />
+    <Compile Include="Command\ICommandQueueManager.cs" />
+    <Compile Include="Services\BlobUserManager2.cs" />
+    <Compile Include="Tokens\GenericUserNameSecurityTokenHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Blob.Contracts\Blob.Contracts.csproj">
+      <Project>{378a8760-5046-44d2-8f28-c0f3a842d094}</Project>
+      <Name>Blob.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505262349291_Initial.resx">
+      <DependentUpon>201505262349291_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281815236_Schedule.resx">
+      <DependentUpon>201505281815236_Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505301805442_RequireMonitorId.resx">
+      <DependentUpon>201505301805442_RequireMonitorId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506030023545_MonitorLabel.resx">
+      <DependentUpon>201506030023545_MonitorLabel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
